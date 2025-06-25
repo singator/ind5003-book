@@ -1,175 +1,176 @@
 ---
-title: Introduction
-jupyter: python3
-ipynb-shell-interactivity: all
+title: Introduction to Python
 ---
 
-There are several ways of working with Python. We include three of them here,
-but we only insist on these two points:
+## Introduction
 
-1.  We must insist that you set up a virtual environment specifically for our
-    course. All our notebooks are tested with python 3.10.12.
-2.  Set up [VScode](https://code.visualstudio.com/download), and obtain a free
-    github copilot license using your NUS student account (see references). Although
-    you will not be able to use copilot during our quizzes, it will be very helpful
-    for your project. It can increase your productivity greatly.
+Python is a general-purpose programming language. It is a higher-level language
+than C, C++ and Java in the sense that a Python program does not have to be
+compiled before execution.
 
-## Python Programming 
+It was originally conceived back in the 1980s by Guido van Rossum at Centrum
+Wiskunde & Informatica (CWI) in the Netherlands. The language is named after a
+BBC TV show (Guido’s favorite program) “Monty Python's Flying Circus”.
 
-Python does not use braces to mark code blocks. It uses indentation to match up
-code segments. It also does not require any character to terminate the end of
-the line.
+Python reached version 1.0 in January 1994. Python 2.0 was released on October
+16, 2000. Python 3.0, which is backwards-*incompatible* with earlier versions,
+was released on 3 December 2008.
+
+Python is a very flexible language; it is simple to learn yet is fast enough to 
+be used in production. Over the past ten years, more and more comprehensive data 
+science toolkits (e.g. scikit-learn, NTLK, tensorflow, keras) have been written 
+in Python and are now the standard frameworks for those models. 
+
+Just like R, Python is an open-source software. It is free to use and extend.
+
+## Installing Python and Jupyter Lab
+
+To install Python, navigate to the official 
+[Python download page](https://www.python.org/downloads/) to obtain the 
+appropriate installer for your operating system. 
+
+::: {.callout-important}
+For our class, please ensure that you are using Python 3.10.12.
+:::
+
+The next step is to create a virtual environment for this course. Virtual 
+environments are specific to Python. They allow you to retain multiple versions 
+of Python, and of packages, on the same computer. Go through the videos on Canvas
+relevant to your operating system to create a virtual environment and install 
+Jupyter Lab on your machine.
+
+Jupyter notebooks are great for interactive work with Python, but more advanced
+users may prefer a full-fledged IDE. If you are an advanced user, and are
+comfortable with an IDE of your own choice (e.g. Spyder or VSCode), feel free to
+continue using that to run the codes for this course. 
+
+::: {.callout-important}
+Even if you are using Anaconda/Spyder/VSCode, you still need to create a virtual
+environment.
+:::
+
+Jupyter notebooks consist of cells, which can be of three main types: 
+
+* code cells,
+* output cells, and 
+* markdown cells. 
+
+![Jupyter Lab](figs/jupyter_lab2.png){#fig-jupyter fig-alt="Jupyter Lab" fig-align="center"}
+
+In @fig-jupyter, the red box labelled 1 is a markdown cell. It can be used to
+contain descriptions or summary of the code. The cells in the box labelled 2 are
+code cells. To run the codes from our notes, you can copy and paste the codes
+into a new cell, and then execute them with Ctrl-Enter. 
+
+Try out this Easter egg that comes with any Python installation:
 
 ```{python}
-the_world_is_flat = True
+import this
 
-if the_world_is_flat:
-    print("Be careful not to fall off!")
 ```
 
-In interactive mode, Python can serve as a calculator. Try out the following
-commands:
+More information on using Jupyter notebooks can be obtained from 
+[this link](https://jupyterlab.readthedocs.io/en/stable/user/interface.html). 
 
-```{python}
-#| eval: false
-2 + 2
+## Basic Data Structures in Python
 
-17/ 3
+The main objects in native[^02-python-1] Python that contain data are
 
-w = 4.0
-h = w * 2.3
-```
+[^02-python-1]: i.e., Python without any packages imported.
 
-Strings can be created using single or double quotes, and they are indexed
-starting from 0.
+* **Lists**, which are defined with [ ]. Lists are mutable.
+* **Tuples**, which are defined with ( ). Tuples are immutable.
+* **Dictionaries**,  which are defined with { }. Dictionaries have keys and 
+  items. They are also mutable.
+  
+Very soon, we shall see that for data analysis, the more common objects we shall
+deal with are dataframes (from pandas) and arrays (from numpy). However, the
+latter two require add-on packages; the three object classes listed above are
+baked into Python.
 
-```{python}
-word = 'Python'
-word[0]
-```
+By the way, this is what mean by (im)mutable:
 
-```{python}
-word[2]
-```
+```{python mutable-1}
+x = [1, 3, 5, 7, 8, 9, 10]
 
-```{python}
-len(word)
-```
-
-### Slicing Operator
-
-The slicing operator ':' is used in Python to pick out subsequences from collections of items. Here's a pictorial representation of how slice indices should be envisioned:
-
-![Indexing with slice operator](figs/python_slice.png){width=40%}
-
-* With a single index (without the colon), the index determines which single element is returned.
-* With an index of the form `i:j`, it determines the start and end point to be returned.
-* With an index of the form `i:j:k`, it determines the start (i), the end (j) and the spacing between the positions of items returned (k).
-
-Try to guess what these will output before running them.
-
-```{python}
-#| eval: false
-word[0::2]
-word[-3:-1]
-word[1::2]
-```
-
-### Inbuilt Data Structures 
-
-There are three main types of containers for data in Python. They can be
-distinguished by the character that denotes them:
-* `[  ]` for lists.
-* `(  )` for tuples.
-* `{  }` for dictionaries.
-
-Lists and dictionaries are mutable, meaning that you can change individual
-elements within them. Tuples are not mutable. Looping over these containers are
-very common operations in Python. This looping can be performed with very
-succinct syntax.
-
-```{python}
-x = [ 1, 3, 5, 7, 8, 9, 10]
-for xx in x:
-    print(xx)
-```
-
-Here's what we mean by mutable. The entries in a list (or dictionary) can be
-overwritten, but not those in a tuple:
-
-```{python}
-# This is ok, because x is a list.
+# The following is OK, because "x" is a list, and hence mutable
 x[3] = 17     
-print(x)
+print(x)  
 ```
 
-```{python}
+```{python mutable-2}
 #| eval: false
-# This is not ok, because x_tuple is a tuple
+
+# The following will return an error, because x_tuple is a tuple, and hence 
+# immutable.
 x_tuple = (1, 3, 5, 6, 8, 9, 10)
 x_tuple[3] = 17 
 ```
 
-Lists, tuples and dictionaries are *iterables*. When you know an object is an
-iterable, it can be *iterated over* in `for` loops. This is a convenient concept
-in Python.
+Here is how we create lists, tuples and dictionaries.
 
-```{python}
-# the object xr is not a list, but it is an iterable.
-xr = range(1, 11, 2)
-# xr
-# convert to a list, if preferred
-# list(xr)
-
-# iterate over xr
-for xx in xr:
-    print(xx)
+```{python create-obj}
+x_list = [1, 2, 3]
+x_tuple = (1, 2, 3)
+x_dict = {'a': 1, 'b': 2, 'c': 3} # access with x_dict['a']
 ```
 
-Dictionaries contain keys and values tied to them. We can retrieve values
-through their associated keys, or we can iterate over all items in the
-dictionary.
+## Slice Operator in Python
 
-```{python}
-comics = {'marvel': 1, 'dc':0}
-# comics.keys()
-# list(comics.keys())
-# comics.values()
-comics['marvel']
+One important point to take note is that, Python begins indexing of objects
+starting with 0. Second, indexing is aided by the slicing operator ':'. It is
+used in Python to extract regular sequences from a list, tuple or string easily.
+
+In general, the syntax is `<list-like object>[a:b]`, where `a` and `b` are integers. 
+Such a call would return the elements at indices `a`, `a+1` until `b-1`. Take note that 
+the end point index is not included.
+
+```{python slice-1}
+char_list = ['P', 'y', 't', 'h', 'o', 'n']
+char_list[0]           # returns first element
+char_list[-1]          # returns last element
+len(char_list)         # returns number of elements in list-like object.
+char_list[::2]         # from first to last, every 2 apart.
 ```
 
-When we iterate over the items of a dictionary, we get back 2-tuples of
-key-value pairs. We can unpack them immediately using the following code:
+This indexing syntax is used in the additional packages we use as well, so it is
+good to know about it. @fig-py-slice displays a pictorial representation of how
+positive and negative indexes work together.
 
-```{python}
-#for x,y in comics.items():
-for _,y in comics.items():
-    print(f"This leaves only {y}.")
-    
-#for x,(k,v) in enumerate(comics.items()):
+![Positive and negative indices](figs/python_slice.png){#fig-py-slice fig-alt="Python slice" fig-align="center" width="55%"}
+
+## Loops in Python
+
+It is extremely efficient to execute "for" loops in Python. Many objects in
+Python are *iterators*, which means they can be iterated over. Lists, tuples and
+dictionaries can all be iterated over very easily.
+
+Before getting down to examples, take note that Python does not use curly braces
+to denote code blocks. Instead, these are defined by the number of indentations
+in a line.
+
+```{python iter-1}
+for i in x[:2]:
+  print(f"The current element is {i}.")
 ```
 
-That's much more convenient than doing this:
+Notice how we do not need to set up any running index; the object is just iterated 
+over directly. The argument to the `print()` function is an f-string. It is the 
+recommended way to create string literals that can vary according to arguments.
 
-```{python}
-for z in comics.items():
-    x = z[0]
-    y = z[1]
-    print(f"This prints only {y}.")
+Here is another example of iteration, this time using dictionaries which have
+key-value pairs. In this case, we iterate over the keys.
+
+```{python iter-2}
+dict1 = {'holmes': 'male', 'watson': 'male', 'mycroft': 'male', 
+         'hudson': 'female', 'moriarty': 'male', 'adler': 'female'}
+# dict1['hudson']
+
+for x in dict1.keys():
+    print(f"The gender of {x} is {dict1[x]}")
 ```
 
-Above, we used f-strings to print formatted strings.
-
-If the expression to be applied to the individual objects is not too
-sophisticated, one convenient approach in Python is to use a *list comprehension* 
-to iterate over an object and a return a list containing the output.
-
-```{python}
-y = ['a', 'b', 'd']
-['You typed ' + x for x in y]
-```
-
-### Strings
+## Strings
 
 Text data in Python is handled with `str` objects. A string object is an
 **immutable** sequence of characters. Here are some useful string methods and
@@ -246,7 +247,7 @@ mini-language known as regular expressions. These are used in several other
 languages such as R and Perl, so it is worth knowing about them if you have
 time.
 
-### Functions, Modules and Packages 
+## Functions, Modules and Packages 
 
 Functions provide a way to package code that you can re-use several times. To
 define a function in Python, use the `def` keyword.
@@ -288,7 +289,7 @@ from math import pi
 pi
 ```
 
-### Object-Oriented Programming
+## Object-Oriented Programming
 
 Python has been developed as both a functional and object-oriented programming
 language. Much of the code we will soon use involves creation of an instance,
@@ -340,32 +341,40 @@ from itables import show
 
 The basic object in this package is the `ndarray` object, which can represent
 *n*-dimensional arrays of homogeneous data types. This is the key difference
-between NumPy and Pandas objects -- while Pandas objects are also tabular in
-nature, they allow you to deal with inhomogenous objects. Specifically, Pandas'
-`DataFrame`s allow columns to be of different types.
+between NumPy and Pandas objects, which we shall encounter later on in this
+chapter. While Pandas objects are also tabular in nature, they allow you to deal
+with inhomogenous objects. Specifically, Pandas' `DataFrame`s allow columns to
+be of different types.
 
 An `ndarray` object is an *n*-dimensional array (i.e., a
 [tensor](https://www.i2tutorials.com/wp-content/uploads/2019/09/Tensor-Datatype-and-Ranks-1i2tutorials.jpg))
 of elements, indexed by a tuple of non-negative integers.
 
-The dimensions of the array are referred to as **axes** in NumPy: a
+The dimensions of the array are referred to as **axes** in NumPy: a 
 three-dimensional array will have three axes.
 
 Each array has several attributes. These include:
 
 *   `ndim`: the number of axes/dimensions.
 *   `shape`: a tuple describing the length of each dimension.
-*   `size`: the total number of elements in the array. This is a product of the integers in the       shape attribute.
+*   `size`: the total number of elements in the array. This is a product of the 
+            integers in the shape attribute.
 
 ```{python}
 arr = np.array([(1.5, 2, 3), (4, 5, 6)])
 
 # number of axes
 arr.ndim
+```
 
+
+```{python}
 # the length of each axis
 arr.shape
+```
 
+
+```{python}
 # number of elements in the array
 arr.size
 ```
@@ -520,6 +529,17 @@ resulting array.
 arr_real[0].mean(axis=1).argmax()
 ```
 
+Here is a table with some common operations that you can apply on a numpy array. 
+
+| Method      | Description                                 |
+|-------------|---------------------------------------------|
+| `shape`     | Returns dimensions, e.g. `matrix1.shape`    |
+| `T`         | Transposes the array, e.g. `matrix1.T`      |
+| `mean`      | Computes col- or row-wise means, e.g. `matrix1.mean(axis=0)` or `matrix1.mean(axis=1)` |
+| `sum`       | Computes col- or row-wise means, e.g. `matrix1.sum(axis=0)` or `matrix1.sum(axis=1)` |
+| `argmax`    | Return the index corresponding to the max within the specified dimension, e.g. `matrix1.argmax(axis=0)` for the position with the max within each column.  |
+| `reshape`   | To change the dimensions, e.g. `array1.reshape((5,1))` converts the array into a 5x1 matrix |
+
 ## Pandas
 
 ### Series 
@@ -527,6 +547,10 @@ arr_real[0].mean(axis=1).argmax()
 A *Series* is a one-dimensional labeled array. The axis labels are referred to
 as the **index**. The simplest way to create a Series is to pass a sequence and
 an index to `pd.Series()`.
+
+::: {#exm-pd-series-1 style="background-color: #D5D1D164; padding: 20px"}
+
+### Creating Pandas Series
 
 ```{python}
 year = pd.Series(list(range(2010, 2013) ) * 3)
@@ -542,6 +566,8 @@ losses = pd.Series([2, 3, 2, 4, 2, 5, 9, 11, 11])
 #wins.index
 #wins.values
 ```
+
+:::
 
 To access particular values, we can use the slice operator.
 
@@ -577,9 +603,13 @@ s['a':'d']
 
 ### DataFrames
 
-A *DataFrame* is a 2-dimensional labeled data structure with possibly **different** data types. It is the most commonly used Pandas object. The *index* of a DataFrame refers to the row labels (axis 0). The *columns* refer to the column labels (axis 1).
+A *DataFrame* is a 2-dimensional labeled data structure with possibly
+**different** data types. It is the most commonly used Pandas object. The
+*index* of a DataFrame refers to the row labels (axis 0). The *columns* refer to
+the column labels (axis 1).
 
-DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays. For our course, we will typically create a DataFrame directly from a file.
+DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays.
+For our course, we will typically create a DataFrame directly from a file.
 
 We can create a DataFrame from the earlier series.
 
@@ -599,29 +629,37 @@ To inspect a DataFrame, we can use `info()`, `head()` and `tail()` methods.
 # laliga.head()
 ```
 
-#### Reading in Data
+### Reading in Data
 
-The CSV file read here contains the happiness scores of 164 countries from 2015 to 2017. Click [here](https://worldhappiness.report/ed/2017/) for a full report on the dataset. The final score was based on many other factors (such as GDP per capita, family, freedom etc) which is included in the file as well. We will simplify things by just reading in the country, final score computed and year.
+Pandas can read in data stored in multiple formats, including CSV, tab-separated
+files, Excel files and HDF5 files.
 
-In each year, not all of the 164 countries had their scores surveyed and taken. This results in some countries having missing values (`NaN`) in certain years.
+::: {#exm-pd-happ-1 style="background-color: #D5D1D164; padding: 20px"}
 
-Besides reading in CSV formats, pandas can read in tab-separated files, Excel files and HDF5 files.
+The CSV file read in here contains the happiness scores of 164 countries from
+2015 to 2017. Click [here](https://worldhappiness.report/ed/2017/) for a full
+report on the dataset. The final score was based on many other factors (such as
+GDP per capita, family, freedom etc) which is included in the file as well. We
+will simplify things by just reading in the country, final score computed and
+year.
+
+In each year, not all of the 164 countries had their scores surveyed and taken.
+This results in some countries having missing values (`NaN`) in certain years.
 
 ```{python}
 happ = pd.read_csv('data/happiness_report.csv', header=0, 
                     na_values='NA')
 #show(happ)
-```
-
-```{python}
 happ.info()
 ```
 
-#### Basic Selection
+:::
 
-Row selection can be done with integers in with the slice operator. In practice,
-this is not used, because we typically wish to select a set of rows based on a
-condition.
+### Basic Selection
+
+In dataframes, row selection can be done with integers in with the slice
+operator. In practice, this is not used, because we typically wish to select a
+set of rows based on a condition.
 
 ```{python}
 #| scrolled: true
@@ -637,11 +675,12 @@ happ[['GDP', 'Freedom']] # note the difference with happ['GDP']
 
 Remember that we are not working with numpy arrays, so this will not work:
 
-```
+```{python}
+#| eval: false
 happ[0:10, 2:4]
 ```
 
-#### Indexing and Selecting Data
+### Indexing and Selecting Data
 
 The two main methods of advanced data selection use the `.loc` and `.iloc`
 functions. Although we call them functions, they are summoned using the `[ ]`
@@ -666,18 +705,16 @@ comma-separated index, just as with NumPy. It is good to keep this
 [reference](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html)
 page bookmarked.
 
-*Take note that this next command will only work if the Index is made up of integers!*
+*Take note that this next command will only work if the index is made up of integers!*
 
 ```{python}
 happ.loc[2:5]
+
+# happ.loc[[2,3,4,5]]
 ```
 
-```{python}
-happ.loc[[2,3,4,5]]
-```
-
-Notice how the slice operator inclusive when we use `.loc`, but not inclusive
-when we use `.iloc`.
+Notice below how the slice operator is inclusive when we use `.loc`, but not
+inclusive when we use `.iloc`.
 
 ```{python}
 happ.loc[2:10:4, "GDP":"Generosity":2]
@@ -688,11 +725,10 @@ happ.loc[2:10:4, "GDP":"Generosity":2]
 happ.iloc[2:11:4, 3:8:2] # Same as above, but with .iloc
 ```
 
-#### Filtering Data
+### Filtering Data
 
-It looks like Happiness Score is a left-skewed distribution. Suppose we are
-interested in the very happy countries. Here is how we can filter the data with
-a boolean array.
+Suppose we are interested in the very happy countries. Here is how we can filter
+the data with a boolean array.
 
 ```{python}
 happiest = happ[happ['Happiness.Score'] > 6.95]
@@ -702,16 +738,17 @@ happiest = happ[happ['Happiness.Score'] > 6.95]
 happiest.Country.unique()
 ```
 
-There isn't a single Asian or African country in the happiest 10% of countries!
+Notice that there isn't a single Asian or African country in the happiest 10% of
+countries!
 
-We can also combine Boolean indices.
+When filtering, we can also combine Boolean indices.
 
 ```{python}
 # Top 3 happiest countries in 2015
 happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)]
 ```
 
-#### Missing Values
+### Missing Values
 
 The `.info()` method will yield information on missing values, column by column.
 We can see there are 21 rows with missing values.
@@ -726,25 +763,35 @@ with the `.dropna` method. Remember that it returns a new dataframe. The origina
 one remains unchanged, unless you include the `inplace=True` argument.
 
 ```{python}
-happ.dropna()
-```
+new_df = happ.dropna()
 
-```{python}
-pd.isna(happ)
+# pd.isna(happ)
 ```
 
 ## References
 
-What we have done in this chapter is to introduce the following data science tools:
+In this chapter, we have introduced the following data science tools:
 
  * Python programming language
  * Jupyter notebooks for working with Python
  * Computer set-up for data science with Python
 
-Python is very widely used for data science, and especially for the machine learning aspect of it. For those of you with intentions to take up the GC in Deep Learning or Data Mining, it will be critical to be familiar with the language. It will be used again in at least DSA5102.
+Python is very widely used for data science, and especially for the machine
+learning aspect of it. For those of you with intentions to take up the GC in
+Deep Learning or Data Mining, it will be critical to be familiar with the
+language. It will be used again in at least DSA5102.
 
-1. [Regular expression HOWTO](https://docs.python.org/3.10/howto/regex.html) A tutorial with examples on regular expressions (for manipulating and searching through strings).
+1. [Regular expression HOWTO](https://docs.python.org/3.10/howto/regex.html) A
+   tutorial with examples on regular expressions (for manipulating and searching
+   through strings).
 2. [Formatting string literals](https://docs.python.org/3/reference/lexical_analysis.html#f-strings): Or just f-strings
-3. [Python documentation](https://docs.python.org/3/): This is the official Python documentation page. It contains a tutorial, detailed description of the usual libraries and HOWTOs for many specific tasks. Most sections contain working examples that you can learn from, or modify to suit your task. It is good to bookmark it.
-4. [Obtaining a github copilot license](https://education.github.com/discount_requests/application?type=student) For proof of student status, access EduRec -> Academics -> Academic Records -> View Student Status Letter, then take a photo of the pdf. Your application status should be shown in the same GitHub page. It will take a few days for the copilot access to be granted after your application is approved. 
-
+3. [Python documentation](https://docs.python.org/3/): This is the official
+   Python documentation page. It contains a tutorial, detailed description of the
+   usual libraries and HOWTOs for many specific tasks. Most sections contain
+   working examples that you can learn from, or modify to suit your task. It is
+   good to bookmark it.
+4. [Obtaining a github copilot license](https://education.github.com/discount_requests/application?type=student)
+   For proof of student status, access EduRec -> Academics -> Academic Records ->
+   View Student Status Letter, then take a photo of the pdf. Your application
+   status should be shown in the same GitHub page. It will take a few days for the
+   copilot access to be granted after your application is approved.

@@ -3,12 +3,12 @@ project:
 
 book:
   title: "Data Analytics for Sense-Making"
+  cover-image: figs/IND5003_logo.png
   author: "Vik Gopal, Lim Tiong Wee"
   date: today
   chapters:
     - index.qmd
     - 01-intro.qmd
-    - references.qmd
 
 bibliography: references.bib
 
