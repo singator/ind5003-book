@@ -9,6 +9,7 @@ book:
   chapters:
     - index.qmd
     - 01-intro.qmd
+    - 02-inference.qmd
 
 bibliography: references.bib
 

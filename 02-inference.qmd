@@ -1,0 +1,228 @@
+---
+title: Statistical Inference
+---
+
+## Introduction
+
+In statistics, we often wish to make inference about a *population*, using a
+*sample*. The sample typically has uncertainty associated with it, because the
+precise values will differ each time we draw a sample from the population. The
+process of utilising the observations from the sample to make conclusions
+regarding population characteristics, is known as **statistical inference**.
+This topic introduces two main techniques for statistical inference in common
+application contexts. The two techniques are (1) hypothesis tests and (2)
+confidence intervals.
+
+### Hypothesis Tests
+
+You might have been introduced to hypothesis tests in an introductory course
+before, but just to get us all on the same page, here is the general approach
+for conducting a hypothesis test:
+
+#### Step 1: Assumptions
+
+In this step, we make a note of the assumptions required for the test to be
+valid. In some tests, this step is carried out last, but, it is nonetheless
+essential to perform as it could invalidate the test. Some tests are very
+sensitive to the assumptions - this is in fact the main reason that the class of
+[*robust statistics*](https://statisticsbyjim.com/basics/robust-statistics/) was invented.
+
+#### Step 2: State the hypotheses and significance level
+
+The purpose of hypothesis testing is to make an inferential statement about the
+population from which the data arose. This inferential statement is what we
+refer to as the hypothesis regarding the population. 
+
+The hypotheses will be stated as a pair: The first hypothesis is the null
+hypothesis $H_0$ and the second is the alternative hypothesis $H_1$. Both
+statements will involve the **population parameter** (not the data summary) of
+interest. For example, if we have a sample of observations from two groups $A$
+and $B$, and we wish to assess if the mean of the populations is different, the
+hypotheses would be
+
+
+\begin{eqnarray}
+H_0: & \mu_A = \mu_B \\
+H_1: & \mu_A \ne \mu_B 
+\end{eqnarray}
+
+
+$H_0$ is usually a statement that indicates "no difference", and $H_1$ is the
+complement of $H_0$, or a subset of it.
+
+At this stage, it is also crucial to state the significance level of the test.
+The significance level corresponds to the Type I error of the test - the
+probability of rejecting $H_0$ when in fact it was true. This level is usually
+denoted as $\alpha$, and is usually taken to be 5%, but there is no reason to
+adopt this blindly. Where possible, the significance level should be chosen to be appropriate for
+the problem at hand.
+
+> Think of the choice of 5% as corresponding to accepting an error at a rate of 1 in 20 - that's how it was originally decided upon by [R A Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher).
+
+
+#### Step 3: Compute the test statistic
+
+The test statistic is usually a measure of how far the observed data deviates 
+from the scenario defined by $H_0$. Usually, the larger it is, the more evidence 
+we have against $H_0$. The construction of a hypothesis test (by theoretical statisticians) involves the derivation of the exact or
+approximate distribution of the test statistic under $H_0$. Deviations from the 
+assumption could render this distribution incorrect.
+
+#### Step 4: Compute the $p$-value
+
+The $p$-value quantifies the chance of occurrence of a dataset as extreme as the
+one observed, under the assumptions of $H_0$. The distribution of the test
+statistic under $H_0$ is used to compute this value between 0 and 1. A value
+closer to 0 indicates stronger evidence against $H_0$.
+
+#### Step 5: State your conclusion
+
+This is the binary decision stage - either we reject $H_0$, or we do not reject
+$H_0$. It is conventional to use this terminology (instead of "accepting $H_1$")
+since our $p$-value is a measure of evidence *against* $H_0$ (not *for* it).
+
+### Confidence Intervals
+
+Confidence intervals are an alternative method of inference for population parameters.
+Instead of yielding a binary reject/do-not-reject result, they return an  
+interval that contains the plausible values for the population parameter. Many 
+confidence intervals are derived by inverting hypothesis tests, and almost all
+confidence intervals are of the form 
+
+
+> Sample estimate $\pm$ margin of error
+
+For instance, if we observe $x_1, \ldots, x_n$ from a Normal distribution, and
+wish to estimate the mean of the distribution, the 95% confidence interval based
+on the the $t$ distribution is
+
+\begin{equation*}
+\bar{x} \pm t_{0.025, n-1} \times \frac{s}{\sqrt{n}}
+\end{equation*}
+
+where 
+
+* $\bar{x}$ is the sample mean,
+* $s$ is the sample standard deviation, and 
+* $t_{0.025, n-1}$ is the 0.025-quantile from the $t$ distribution with $n-1$ degrees
+of freedom.
+
+The formulas for many confidence intervals rely on asymptotic Normality of the 
+estimator. However, this is an assumption that can be overcome with the technique 
+of bootstrapping. If time permits, we shall touch on this in a later topic of our course. 
+Bootstrapping can also be used to sidestep the distributional assumptions in hypothesis
+tests, but I still much prefer confidence intervals to tests because they yield an 
+interval; they provide much more information than a binary outcome.
+
+## Comparing Means
+
+### 2-sample Tests
+
+In an independent samples $t$-test, observations in one group yield
+*no information* about the observations in the other group. Independent samples can
+arise in a few ways:
+
+* In an experimental study, study units could be assigned randomly to different
+treatments, thus forming the two groups.
+* In an observational study, we could draw a random sample from the population, and
+then record an explanatory categorical variable on each unit, such as the gender
+or senior-citizen status.
+* In an observational study, we could draw a random sample from a group (say
+smokers), and then a random sample from another group (say non-smokers). This would
+result in a situation where the independent 2-sample $t$-test is appropriate.
+
+#### Formal Set-up
+
+Formally speaking, this is how the independent 2-sample t-test works:
+
+Suppose that $X_1,X_2,\ldots,X_{n_1}$ are independent observations from group 1,
+and $Y_1, \ldots Y_{n_2}$ are independent observations from group 2. It is assumed 
+that 
+
+\begin{eqnarray}
+X_i &\sim& N(\mu_1,\, \sigma^2),\; i=1,\ldots,n_1 \\
+Y_j &\sim& N(\mu_2,\, \sigma^2),\; j=1,\ldots,n_2
+\end{eqnarray}
+
+The null and alternative hypotheses would be 
+
+\begin{eqnarray}
+H_0: & \mu_1 = \mu_2 \\
+H_1: & \mu_1 \ne \mu_2
+\end{eqnarray}
+
+
+The test statistic for this test is:
+
+$$
+T_1 = \frac{(\bar{X} - \bar{Y}) - 0 }{s_p\sqrt{1/n_1 + 1/n_2} }
+$$
+
+where
+
+
+\begin{equation*}
+s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
+\end{equation*}
+
+
+Notice that the numerator of $T_1$ will be large (in absolute value) when the difference in sample group means is also large. This is what we mean when we 
+say that the test-statistic measures deviation from the null hypothesis.
+
+Under $H_0$, the test statistic $T_1$ follows a $t$-distribution with $n_1 + n_2 -2$ degrees of freedom. When we use a software
+to apply the test above, it will typically also return a confidence interval, computed as
+
+\begin{equation*}
+(\bar{X} - \bar{Y}) \pm t_{n_1 + n_2 -2, 1 - \alpha/2} \times s_p\sqrt{1/n_1 + 1/n_2}
+\end{equation*}
+
+For more details on the test, refer to the links in the references section.
+
+```{python}
+#| scrolled: true
+import pandas as pd
+import numpy as np
+
+from scipy import stats
+
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+import statsmodels.stats.multicomp as mc
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from itables import show
+```
+
+
+::: {#exm-abalone-1 style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Abalone Measurements
+
+The dataset on abalone measurements from the [UCI machine learning
+repository](https://archive.ics.uci.edu/dataset/1/abalone) contains measurements
+of physical characteristics, along with the gender status. We derive a sample of
+50 measurements of male and female abalone records for use here. Our goal is 
+to study if there is a significant difference between the viscera weight between
+males and females. The derived dataset can be found on Canvas.
+
+```{python}
+abl = pd.read_csv("data/abalone_sub.csv")
+show(abl)
+```
+
+```{python}
+x = abl.viscera[abl.gender == "F"]
+y = abl.viscera[abl.gender == "M"]
+
+t_out = stats.ttest_ind(y, x)
+ci_95 = t_out.confidence_interval()
+```
+
+```{python}
+print(f"The $p$-value for the test is {t_out.pvalue:.3f}.")#
+print(f"The actual value of the test statistic is {t_out.statistic:.3f}.")
+print(f"The upper and lower limits of the CI are ({ci_95[0]:.3f}, {ci_95[1]:.3f}).")
+```
+
+:::
