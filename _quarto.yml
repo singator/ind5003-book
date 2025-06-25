@@ -1,0 +1,49 @@
+project:
+  type: book
+
+book:
+  title: "Data Analytics for Sense-Making"
+  author: "Vik Gopal, Lim Tiong Wee"
+  date: today
+  chapters:
+    - index.qmd
+    - 01-intro.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    css: style.css
+    code-tools: false
+    code-line-numbers: true
+    fig-align: center
+    toc: true
+    toc-title: Contents
+    toc-depth: 2
+    number-sections: true
+    number-depth: 2
+    theme: Yeti
+  pdf: 
+    documentclass: scrreprt
+    papersize: a4
+    fig-align: center
+    toc: true
+    toc-title: Contents
+    toc-depth: 3
+    number-sections: true
+    number-depth: 2 
+    include-in-header: 
+      text: |
+        \usepackage{makeidx}
+        \makeindex
+    include-after-body: 
+      text: |
+        \printindex
+    geometry: 
+      - top=20mm
+      - left=20mm
+      - heightrounded
+    theme: Yeti
+
+jupyter: python3

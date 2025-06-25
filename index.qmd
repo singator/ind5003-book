@@ -1,0 +1,36 @@
+# Preface {.unnumbered}
+
+IND5003 is a foundation course for students in a 
+[Master's program](https://scale.nus.edu.sg/programmes/graduate/msc-(smart-industries-and-digital-transformation))
+for working adults, at the National University of Singapore. The title of the
+course is
+
+> <p> Data Analytics for Sense-Making </p>
+
+The content of the course aims to bring students up to speed in a variety of
+analytic techniques that will be useful for them in later courses of the
+program. You can read some reviews of the course on [NUSmods](https://nusmods.com/courses/IND5003/data-analytics-for-sense-making).
+
+In designing this course, we tried to cover the techniques from a
+couple of different angles:
+
+*   From the viewpoint of the types of data encountered, e.g. time series, 
+    unstructured text data, image data, and so on.
+*   From the viewpoint of the types of questions that could be asked of the
+    data, e.g. are we attempting to plan for unseen scenarios (simulation), 
+    are we interrogating the data for hidden structure (unsupervised learning),
+    and so on.
+
+The entire course uses the Python programming language. By the end of the
+course, the aim was for students to become familiar with Python for data
+analysis.
+
+If you are a fellow instructor and you find something useful in this textbook,
+please do let me know at vik.gopal@nus.edu.sg. If you need more details about
+anything, do feel free to write as well.
+
+So long, and thanks for reading!
+
+Vik
+
+<https://blog.nus.edu.sg/stavg>

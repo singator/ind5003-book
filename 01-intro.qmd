@@ -1,0 +1,750 @@
+---
+title: Introduction
+jupyter: python3
+ipynb-shell-interactivity: all
+---
+
+There are several ways of working with Python. We include three of them here,
+but we only insist on these two points:
+
+1.  We must insist that you set up a virtual environment specifically for our
+    course. All our notebooks are tested with python 3.10.12.
+2.  Set up [VScode](https://code.visualstudio.com/download), and obtain a free
+    github copilot license using your NUS student account (see references). Although
+    you will not be able to use copilot during our quizzes, it will be very helpful
+    for your project. It can increase your productivity greatly.
+
+## Python Programming 
+
+Python does not use braces to mark code blocks. It uses indentation to match up
+code segments. It also does not require any character to terminate the end of
+the line.
+
+```{python}
+the_world_is_flat = True
+
+if the_world_is_flat:
+    print("Be careful not to fall off!")
+```
+
+In interactive mode, Python can serve as a calculator. Try out the following
+commands:
+
+```{python}
+#| eval: false
+2 + 2
+
+17/ 3
+
+w = 4.0
+h = w * 2.3
+```
+
+Strings can be created using single or double quotes, and they are indexed
+starting from 0.
+
+```{python}
+word = 'Python'
+word[0]
+```
+
+```{python}
+word[2]
+```
+
+```{python}
+len(word)
+```
+
+### Slicing Operator
+
+The slicing operator ':' is used in Python to pick out subsequences from collections of items. Here's a pictorial representation of how slice indices should be envisioned:
+
+![Indexing with slice operator](figs/python_slice.png){width=40%}
+
+* With a single index (without the colon), the index determines which single element is returned.
+* With an index of the form `i:j`, it determines the start and end point to be returned.
+* With an index of the form `i:j:k`, it determines the start (i), the end (j) and the spacing between the positions of items returned (k).
+
+Try to guess what these will output before running them.
+
+```{python}
+#| eval: false
+word[0::2]
+word[-3:-1]
+word[1::2]
+```
+
+### Inbuilt Data Structures 
+
+There are three main types of containers for data in Python. They can be
+distinguished by the character that denotes them:
+* `[  ]` for lists.
+* `(  )` for tuples.
+* `{  }` for dictionaries.
+
+Lists and dictionaries are mutable, meaning that you can change individual
+elements within them. Tuples are not mutable. Looping over these containers are
+very common operations in Python. This looping can be performed with very
+succinct syntax.
+
+```{python}
+x = [ 1, 3, 5, 7, 8, 9, 10]
+for xx in x:
+    print(xx)
+```
+
+Here's what we mean by mutable. The entries in a list (or dictionary) can be
+overwritten, but not those in a tuple:
+
+```{python}
+# This is ok, because x is a list.
+x[3] = 17     
+print(x)
+```
+
+```{python}
+#| eval: false
+# This is not ok, because x_tuple is a tuple
+x_tuple = (1, 3, 5, 6, 8, 9, 10)
+x_tuple[3] = 17 
+```
+
+Lists, tuples and dictionaries are *iterables*. When you know an object is an
+iterable, it can be *iterated over* in `for` loops. This is a convenient concept
+in Python.
+
+```{python}
+# the object xr is not a list, but it is an iterable.
+xr = range(1, 11, 2)
+# xr
+# convert to a list, if preferred
+# list(xr)
+
+# iterate over xr
+for xx in xr:
+    print(xx)
+```
+
+Dictionaries contain keys and values tied to them. We can retrieve values
+through their associated keys, or we can iterate over all items in the
+dictionary.
+
+```{python}
+comics = {'marvel': 1, 'dc':0}
+# comics.keys()
+# list(comics.keys())
+# comics.values()
+comics['marvel']
+```
+
+When we iterate over the items of a dictionary, we get back 2-tuples of
+key-value pairs. We can unpack them immediately using the following code:
+
+```{python}
+#for x,y in comics.items():
+for _,y in comics.items():
+    print(f"This leaves only {y}.")
+    
+#for x,(k,v) in enumerate(comics.items()):
+```
+
+That's much more convenient than doing this:
+
+```{python}
+for z in comics.items():
+    x = z[0]
+    y = z[1]
+    print(f"This prints only {y}.")
+```
+
+Above, we used f-strings to print formatted strings.
+
+If the expression to be applied to the individual objects is not too
+sophisticated, one convenient approach in Python is to use a *list comprehension* 
+to iterate over an object and a return a list containing the output.
+
+```{python}
+y = ['a', 'b', 'd']
+['You typed ' + x for x in y]
+```
+
+### Strings
+
+Text data in Python is handled with `str` objects. A string object is an
+**immutable** sequence of characters. Here are some useful string methods and
+properties:
+
+*   catenating (joining) strings.
+*   finding sub-strings.
+*   iterating over strings.
+*   converting to lower/upper-case.
+
+A few cells earlier, we saw how we can format a string before sending it to the
+`print()` function. Here's another such example. This is useful when we are
+debugging loops.
+
+```{python}
+#| scrolled: true
+for x in range(1, 11):
+    print(f"Sq:{x*x:3d} Cu:{x*x*x:4d}.")
+```
+
+Here are more examples of working with strings.
+
+```{python}
+test_str = "Where in the World is Carmen san Diego?"
+```
+
+Remember that a string is immutable, just like a tuple, so this will not work:
+
+`test_str[5] = 'z'`
+
+But like a tuple, we can also iterate over a string.
+
+```{python}
+count = 0
+for x in test_str:
+    if x.isupper():
+        count += 1
+print(f"There were {count} upper-case characters in the sentence.")
+```
+
+```{python}
+test_str.lower()
+```
+
+To join strings, we can use the '+' operator, the `str.join()` method, or, if
+they are part of the same expression, we can just place them next to each other
+separated by whitespace.
+
+```{python}
+x = "Where shall "
+y = "we "
+print("Where shall " "we " "go today?")
+
+# also works - the '+' operator is overloaded to work with strings:
+# "Where " + "shall" +" we go" + " today?"
+
+# join using another character:
+# ':'.join(["Where", "shall", "we", "go", "today?"])
+```
+
+To find simple patterns, we may turn to the `find`, `replace`, `startswith` and
+`endswith` methods.
+
+```{python}
+test_str.find('Carmen')
+```
+
+```{python}
+test_str.replace('Carmen', 'John')
+```
+
+For more complicated search operations over strings, we use a special
+mini-language known as regular expressions. These are used in several other
+languages such as R and Perl, so it is worth knowing about them if you have
+time.
+
+### Functions, Modules and Packages 
+
+Functions provide a way to package code that you can re-use several times. To
+define a function in Python, use the `def` keyword.
+
+```{python}
+def test_function(x):
+    print('You typed', x)
+    
+test_function('test')
+```
+
+A Python module is a file containing Python definitions (of functions and
+constants) and statements. Instead of re-typing functions every time, we can
+simply load the module. We would then have access to the updated functions.
+
+We access objects within the module using the "dot" notation. There are several
+modules that ship with the default Python installation.
+
+Packages are collections of modules.
+
+Here are a couple of ways of importing (and then using) constants from the math
+package.
+
+```{python}
+import math, os
+
+# compute e^2
+math.exp(2)
+
+# print pi
+math.pi
+```
+
+Alternatively, we could import the constant $\pi$ so that we do not need to use the 
+dot notation.
+
+```{python}
+from math import pi
+pi
+```
+
+### Object-Oriented Programming
+
+Python has been developed as both a functional and object-oriented programming
+language. Much of the code we will soon use involves creation of an instance,
+and then accessing the attributes (data or methods) of that instance.
+
+Consider the following class Circle.
+
+```{python}
+class Circle:
+    """ A simple class definition 
+    
+    c0 = Circle()
+    c0.radius
+    
+    """
+    def __init__(self, radius = 1.0):
+        self.radius = radius
+        
+    def area(self):
+        """ Compute area of circle"""
+        return pi*(self.radius**2)
+```
+
+Having defined the class, we can *instantiate* it and use the methods it 
+contains.
+
+```{python}
+c1 = Circle(3.2)
+c2 = Circle(4.0)
+c2.area()
+```
+
+In this simple class, we can also set the value of the attribute of an instance,
+although this is not the recommended way.
+
+```{python}
+c1.radius = 6
+c1.area()
+```
+
+## Numpy
+
+```{python}
+import numpy as np
+import pandas as pd
+
+from itables import show
+```
+
+The basic object in this package is the `ndarray` object, which can represent
+*n*-dimensional arrays of homogeneous data types. This is the key difference
+between NumPy and Pandas objects -- while Pandas objects are also tabular in
+nature, they allow you to deal with inhomogenous objects. Specifically, Pandas'
+`DataFrame`s allow columns to be of different types.
+
+An `ndarray` object is an *n*-dimensional array (i.e., a
+[tensor](https://www.i2tutorials.com/wp-content/uploads/2019/09/Tensor-Datatype-and-Ranks-1i2tutorials.jpg))
+of elements, indexed by a tuple of non-negative integers.
+
+The dimensions of the array are referred to as **axes** in NumPy: a
+three-dimensional array will have three axes.
+
+Each array has several attributes. These include:
+
+*   `ndim`: the number of axes/dimensions.
+*   `shape`: a tuple describing the length of each dimension.
+*   `size`: the total number of elements in the array. This is a product of the integers in the       shape attribute.
+
+```{python}
+arr = np.array([(1.5, 2, 3), (4, 5, 6)])
+
+# number of axes
+arr.ndim
+
+# the length of each axis
+arr.shape
+
+# number of elements in the array
+arr.size
+```
+
+### Array Creation
+
+One way to create an array containing regular sequences is to use the
+`np.arange()` function. This creates a sequence of integers, with a specified
+separation.
+
+```{python}
+seq = np.arange(0, 10, 3)
+seq
+```
+
+The shape of an `ndarray` is given by a tuple. Note that an array of shape (4,)
+is different from one with shape (4, 1). The former has only **1 dimension**,
+while the latter has **2 dimensions**.
+
+```{python}
+# seq.shape
+col_vect = seq.reshape(4,1)
+col_vect
+```
+
+To create an array of regularly spaced **real numbers**, use `np.linspace()`.
+
+```{python}
+#| scrolled: true
+arr_real = np.linspace(start = 0.2, stop = 3.3, num = 24).reshape(2, 3, 4)  
+arr_real
+```
+
+Sometimes we need to create a placeholder array with the appropriate dimensions,
+and then fill it in later. This is preferrable to growing an array by appending
+to it.
+
+```{python}
+np.zeros((3, 5)) # there is also an np.ones() function
+```
+
+Instead of specifying the dimensions of an array ourselves, we can create arrays
+of zeros or ones in the shape of other existing arrays.
+
+```{python}
+#| scrolled: true
+# Creates an array of zeros, of the same shape as "arr_real".
+np.ones_like(arr_real)
+```
+
+### Slice Operator in Multiple Dimensions
+
+Multidimensional NumPy arrays can be accessed with comma separated slice
+notation. When fewer indices are provided than the number of axes, the missing
+indices are considered complete slices for the remaining dimensions.
+
+By the way, when printing, the *last* axis will be printed left-to-right, and
+the second last axis will be printed from top-to-bottom. The remaining axes will
+be printed with a line in between:
+
+```{python}
+arr_real
+```
+
+Here are examples based on this array. Try to guess what each will return before
+you run it:
+
+```{python}
+#| eval: false
+arr_real[1,2,3]
+arr_real[0, 2, ::-1]
+arr_real[1, 0:3:2]
+arr_real[:,2,:]
+```
+
+Here are examples using Boolean indexing, which means that we use an array of
+`True` and `False` entries to determine which elements to return.
+
+```{python}
+arr_real > 3
+```
+
+```{python}
+arr_real[arr_real > 3]
+```
+
+### Basic Operations
+
+```{python}
+# Setting a seed allows for reproducibility of random number generation
+# across sessions.
+rng = np.random.default_rng(1361)
+```
+
+```{python}
+a = rng.uniform(size=(3,5))
+b = rng.uniform(size=(3,5))
+b
+```
+
+```{python}
+# Element-wise addition.
+a + b 
+```
+
+```{python}
+# Element-wise multiplication: NOT matrix multiplication.
+a * b
+```
+
+```{python}
+# Matrix multiplication (need to transpose "b" to match get the right dimensions).
+# We can also do "a @ b.T".
+a.dot(b.T)
+```
+
+### Axis-wise Operations
+
+```{python}
+arr_real.shape
+```
+
+```{python}
+arr_real.mean(axis = 0) # mean across the 0th ("first") axis
+```
+
+The top-left element comes from the average of `arr_real[0,0,0]` and
+`arr_real[1,0,0]`. Similarly, the element to the right of it comes from the average
+of `arr_real[0,0,1]` and `arr_real[1,0,1]`:
+
+```{python}
+(arr_real[0,0,1] + arr_real[1,0,1]) / 2
+```
+
+```{python}
+arr_real.mean(axis = 1)
+```
+
+Note that `arr_real[0]` is a 2D array, with shape (3, 4). Suppose we wish to
+compute the row means. This means we have to apply the operation by the column
+axis (axis = 1).
+
+```{python}
+# the mean across the second axis of arr_real[0], not of arr_real itself.
+arr_real[0].mean(axis = 1) 
+```
+
+If we wanted to identify the row with the largest mean, we use `argmax()` on the
+resulting array.
+
+```{python}
+arr_real[0].mean(axis=1).argmax()
+```
+
+## Pandas
+
+### Series 
+
+A *Series* is a one-dimensional labeled array. The axis labels are referred to
+as the **index**. The simplest way to create a Series is to pass a sequence and
+an index to `pd.Series()`.
+
+```{python}
+year = pd.Series(list(range(2010, 2013) ) * 3)
+
+team = ["Barcelona", "RealMadrid", "Valencia"] * 3
+team.sort()
+team = pd.Series(team)
+
+wins = pd.Series([30, 28, 32, 29, 32, 26, 21, 17, 19])
+draws = pd.Series([6, 7, 4, 5, 4, 7, 8, 10, 8])
+losses = pd.Series([2, 3, 2, 4, 2, 5, 9, 11, 11])
+
+#wins.index
+#wins.values
+```
+
+To access particular values, we can use the slice operator.
+
+```{python}
+wins[0:6:2]
+```
+
+To convert a Series object to an `ndarray`, we use the following method:
+
+```{python}
+wins.to_numpy()
+```
+
+If we specify an index, we can use it to access values in the Series.
+
+```{python}
+s = pd.Series(rng.uniform(size=5), 
+             index=['a', 'b', 'c', 'd', 'e'])
+# s
+# s.index
+# s.values
+```
+
+```{python}
+s[['a', 'c']] 
+```
+
+Be careful when you combine the slice operator with label-based indexing. Unlike vanilla Python, Pandas includes **both** end-points!
+
+```{python}
+s['a':'d']
+```
+
+### DataFrames
+
+A *DataFrame* is a 2-dimensional labeled data structure with possibly **different** data types. It is the most commonly used Pandas object. The *index* of a DataFrame refers to the row labels (axis 0). The *columns* refer to the column labels (axis 1).
+
+DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays. For our course, we will typically create a DataFrame directly from a file.
+
+We can create a DataFrame from the earlier series.
+
+```{python}
+laliga = pd.DataFrame({'Year': year,
+              'Team': team,
+              'Wins': wins,
+              'Draws': draws,
+              'Losses': losses
+})
+```
+
+To inspect a DataFrame, we can use `info()`, `head()` and `tail()` methods.
+
+```{python}
+# laliga.info()
+# laliga.head()
+```
+
+#### Reading in Data
+
+The CSV file read here contains the happiness scores of 164 countries from 2015 to 2017. Click [here](https://worldhappiness.report/ed/2017/) for a full report on the dataset. The final score was based on many other factors (such as GDP per capita, family, freedom etc) which is included in the file as well. We will simplify things by just reading in the country, final score computed and year.
+
+In each year, not all of the 164 countries had their scores surveyed and taken. This results in some countries having missing values (`NaN`) in certain years.
+
+Besides reading in CSV formats, pandas can read in tab-separated files, Excel files and HDF5 files.
+
+```{python}
+happ = pd.read_csv('data/happiness_report.csv', header=0, 
+                    na_values='NA')
+#show(happ)
+```
+
+```{python}
+happ.info()
+```
+
+#### Basic Selection
+
+Row selection can be done with integers in with the slice operator. In practice,
+this is not used, because we typically wish to select a set of rows based on a
+condition.
+
+```{python}
+#| scrolled: true
+happ[10:12]
+```
+
+To select columns, you may use a list of column names.
+
+```{python}
+happ[['GDP', 'Freedom']] # note the difference with happ['GDP']
+# happ.GDP.head()
+```
+
+Remember that we are not working with numpy arrays, so this will not work:
+
+```
+happ[0:10, 2:4]
+```
+
+#### Indexing and Selecting Data
+
+The two main methods of advanced data selection use the `.loc` and `.iloc`
+functions. Although we call them functions, they are summoned using the `[ ]`
+notation. The `.loc` is primarily label-based. The common allowed inputs to
+`.loc` are
+
+*   a single label,
+*   a list of labels,
+*   a slice object, 
+*   a boolean array.
+
+The `.iloc` is primarily an integer-based input. The common allowed inputs to
+`.iloc` are
+
+*   a single integer,
+*   a list of integers,
+*   a slice object, 
+*   a boolean array.
+  
+When selecting from a DataFrame with `.loc` or `.iloc`, we can provide a
+comma-separated index, just as with NumPy. It is good to keep this
+[reference](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html)
+page bookmarked.
+
+*Take note that this next command will only work if the Index is made up of integers!*
+
+```{python}
+happ.loc[2:5]
+```
+
+```{python}
+happ.loc[[2,3,4,5]]
+```
+
+Notice how the slice operator inclusive when we use `.loc`, but not inclusive
+when we use `.iloc`.
+
+```{python}
+happ.loc[2:10:4, "GDP":"Generosity":2]
+```
+
+```{python}
+#| scrolled: true
+happ.iloc[2:11:4, 3:8:2] # Same as above, but with .iloc
+```
+
+#### Filtering Data
+
+It looks like Happiness Score is a left-skewed distribution. Suppose we are
+interested in the very happy countries. Here is how we can filter the data with
+a boolean array.
+
+```{python}
+happiest = happ[happ['Happiness.Score'] > 6.95]
+```
+
+```{python}
+happiest.Country.unique()
+```
+
+There isn't a single Asian or African country in the happiest 10% of countries!
+
+We can also combine Boolean indices.
+
+```{python}
+# Top 3 happiest countries in 2015
+happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)]
+```
+
+#### Missing Values
+
+The `.info()` method will yield information on missing values, column by column.
+We can see there are 21 rows with missing values.
+
+```{python}
+#| scrolled: true
+happ.info()
+```
+
+*Sometimes*, it is appropriate to drop rows with missing values. This can be done 
+with the `.dropna` method. Remember that it returns a new dataframe. The original 
+one remains unchanged, unless you include the `inplace=True` argument.
+
+```{python}
+happ.dropna()
+```
+
+```{python}
+pd.isna(happ)
+```
+
+## References
+
+What we have done in this chapter is to introduce the following data science tools:
+
+ * Python programming language
+ * Jupyter notebooks for working with Python
+ * Computer set-up for data science with Python
+
+Python is very widely used for data science, and especially for the machine learning aspect of it. For those of you with intentions to take up the GC in Deep Learning or Data Mining, it will be critical to be familiar with the language. It will be used again in at least DSA5102.
+
+1. [Regular expression HOWTO](https://docs.python.org/3.10/howto/regex.html) A tutorial with examples on regular expressions (for manipulating and searching through strings).
+2. [Formatting string literals](https://docs.python.org/3/reference/lexical_analysis.html#f-strings): Or just f-strings
+3. [Python documentation](https://docs.python.org/3/): This is the official Python documentation page. It contains a tutorial, detailed description of the usual libraries and HOWTOs for many specific tasks. Most sections contain working examples that you can learn from, or modify to suit your task. It is good to bookmark it.
+4. [Obtaining a github copilot license](https://education.github.com/discount_requests/application?type=student) For proof of student status, access EduRec -> Academics -> Academic Records -> View Student Status Letter, then take a photo of the pdf. Your application status should be shown in the same GitHub page. It will take a few days for the copilot access to be granted after your application is approved. 
+
