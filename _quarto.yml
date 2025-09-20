@@ -12,6 +12,11 @@ book:
     - 02-inference.qmd
     - 03-unsupervised.qmd
     - 04-nlp.qmd
+    - 05-regression.qmd
+    - 06-ts.qmd
+    - 07-simulation.qmd
+    - 08-supervised.qmd
+    - 09-vision.qmd
 
 bibliography: references.bib
 
