@@ -21,7 +21,7 @@ be used in production. Over the past ten years, more and more comprehensive data
 science toolkits (e.g. scikit-learn, NTLK, tensorflow, keras) have been written 
 in Python and are now the standard frameworks for those models. 
 
-Just like R, Python is an open-source software. It is free to use and extend.
+Python is an open-source software. It is free to use and extend.
 
 ## Installing Python and Jupyter Lab
 
@@ -197,7 +197,8 @@ Here are more examples of working with strings.
 test_str = "Where in the World is Carmen san Diego?"
 ```
 
-Remember that a string is immutable, just like a tuple, so this will not work:
+Remember that a string is immutable, just like a tuple, so this assignment will
+*not* work:
 
 `test_str[5] = 'z'`
 
@@ -245,7 +246,7 @@ test_str.replace('Carmen', 'John')
 For more complicated search operations over strings, we use a special
 mini-language known as regular expressions. These are used in several other
 languages such as R and Perl, so it is worth knowing about them if you have
-time.
+time. See @sec-01-ref for a good introduction.
 
 ## Functions, Modules and Packages 
 
@@ -261,18 +262,16 @@ test_function('test')
 
 A Python module is a file containing Python definitions (of functions and
 constants) and statements. Instead of re-typing functions every time, we can
-simply load the module. We would then have access to the updated functions.
-
-We access objects within the module using the "dot" notation. There are several
-modules that ship with the default Python installation.
-
-Packages are collections of modules.
+simply load the module. We would then have access to the updated functions. We
+access objects within the module using the "dot" notation. There are several
+modules that ship with the default Python installation. Note that Python
+packages are collections of modules.
 
 Here are a couple of ways of importing (and then using) constants from the math
-package.
+module.
 
 ```{python}
-import math, os
+import math
 
 # compute e^2
 math.exp(2)
@@ -335,7 +334,6 @@ c1.area()
 ```{python}
 import numpy as np
 import pandas as pd
-
 from itables import show
 ```
 
@@ -551,6 +549,9 @@ an index to `pd.Series()`.
 ::: {#exm-pd-series-1 style="background-color: #D5D1D164; padding: 20px"}
 
 ### Creating Pandas Series
+\index{Liga!Series}
+
+Consider the following data, from the football league in Spain.
 
 ```{python}
 year = pd.Series(list(range(2010, 2013) ) * 3)
@@ -567,7 +568,6 @@ losses = pd.Series([2, 3, 2, 4, 2, 5, 9, 11, 11])
 #wins.values
 ```
 
-:::
 
 To access particular values, we can use the slice operator.
 
@@ -601,6 +601,8 @@ Be careful when you combine the slice operator with label-based indexing. Unlike
 s['a':'d']
 ```
 
+:::
+
 ### DataFrames
 
 A *DataFrame* is a 2-dimensional labeled data structure with possibly
@@ -610,6 +612,11 @@ the column labels (axis 1).
 
 DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays.
 For our course, we will typically create a DataFrame directly from a file.
+
+::: {#exm-pd-df-1 style="background-color: #D5D1D164; padding: 20px"}
+
+### Creating Pandas DataFrame from Series
+\index{Liga!DataFrame}
 
 We can create a DataFrame from the earlier series.
 
@@ -624,10 +631,19 @@ laliga = pd.DataFrame({'Year': year,
 
 To inspect a DataFrame, we can use `info()`, `head()` and `tail()` methods.
 
+::: {.content-visible when-format="html"}
 ```{python}
-# laliga.info()
-# laliga.head()
+show(laliga.head())
 ```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{python}
+laliga.head()
+```
+:::
+
+:::
 
 ### Reading in Data
 
@@ -768,7 +784,7 @@ new_df = happ.dropna()
 # pd.isna(happ)
 ```
 
-## References
+## References {#sec-01-ref}
 
 In this chapter, we have introduced the following data science tools:
 

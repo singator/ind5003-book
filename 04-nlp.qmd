@@ -1,21 +1,8 @@
 ---
-title: 04 Natural Language Processing
-format:
-  html:
-    toc: true
-    toc-depth: 2
-    number-sections: true
-    number-depth: 2
-    code-fold: false
-    fig-align: center
-    embed-resources: true
-  pdf:
-    toc: true
-    toc-depth: 2
-    number-sections: true
-    number-depth: 2
-    fig-align: center
+title: Natural Language Processing
 jupyter: python3
+execute:
+  cache: true
 ---
 
 # Introduction
