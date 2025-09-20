@@ -652,6 +652,9 @@ files, Excel files and HDF5 files.
 
 ::: {#exm-pd-happ-1 style="background-color: #D5D1D164; padding: 20px"}
 
+### Happiness Dataset
+\index{Happiness!Read dataset}
+
 The CSV file read in here contains the happiness scores of 164 countries from
 2015 to 2017. Click [here](https://worldhappiness.report/ed/2017/) for a full
 report on the dataset. The final score was based on many other factors (such as
@@ -665,9 +668,19 @@ This results in some countries having missing values (`NaN`) in certain years.
 ```{python}
 happ = pd.read_csv('data/happiness_report.csv', header=0, 
                     na_values='NA')
-#show(happ)
+```
+
+::: {.content-visible when-format="html"}
+```{python}
+show(happ)
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{python}
 happ.info()
 ```
+:::
 
 :::
 
@@ -679,7 +692,7 @@ set of rows based on a condition.
 
 ```{python}
 #| scrolled: true
-happ[10:12]
+print(happ[10:12])
 ```
 
 To select columns, you may use a list of column names.
@@ -689,7 +702,7 @@ happ[['GDP', 'Freedom']] # note the difference with happ['GDP']
 # happ.GDP.head()
 ```
 
-Remember that we are not working with numpy arrays, so this will not work:
+Remember that we are not working with numpy arrays, so this will *not* work:
 
 ```{python}
 #| eval: false
@@ -724,7 +737,7 @@ page bookmarked.
 *Take note that this next command will only work if the index is made up of integers!*
 
 ```{python}
-happ.loc[2:5]
+print(happ.loc[2:5])
 
 # happ.loc[[2,3,4,5]]
 ```
@@ -746,23 +759,32 @@ happ.iloc[2:11:4, 3:8:2] # Same as above, but with .iloc
 Suppose we are interested in the very happy countries. Here is how we can filter
 the data with a boolean array.
 
-```{python}
-happiest = happ[happ['Happiness.Score'] > 6.95]
-```
+::: {#exm-pd-happ-2 style="background-color: #D5D1D164; padding: 20px"}
+
+### Happiest Countries
+\index{Happiness!Happiest countries}
+
+Suppose we retrieve the happiest countries; those with a score more than 6.95.
+Can you surmise why we use this value? 
 
 ```{python}
+happiest = happ[happ['Happiness.Score'] > 6.95]
+
 happiest.Country.unique()
 ```
 
 Notice that there isn't a single Asian or African country in the happiest 10% of
 countries!
 
+:::
+
 When filtering, we can also combine Boolean indices.
 
 ```{python}
 # Top 3 happiest countries in 2015
-happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)]
+print(happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)])
 ```
+
 
 ### Missing Values
 
