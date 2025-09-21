@@ -1,5 +1,6 @@
 ---
 title: Statistical Inference
+jupyter: python3
 ---
 
 ## Introduction
@@ -176,7 +177,8 @@ to apply the test above, it will typically also return a confidence interval, co
 (\bar{X} - \bar{Y}) \pm t_{n_1 + n_2 -2, 1 - \alpha/2} \times s_p\sqrt{1/n_1 + 1/n_2}
 \end{equation*}
 
-For more details on the test, refer to the links in the references section.
+For more details on the test, refer to the links in the references section
+@sec-02-ref.
 
 ```{python}
 #| scrolled: true
@@ -198,6 +200,7 @@ from itables import show
 ::: {#exm-abalone-1 style="background-color: #D5D1D164; padding: 20px"}
 
 ### Example: Abalone Measurements
+\index{Abalone!2-sample t-test}
 
 The dataset on abalone measurements from the [UCI machine learning
 repository](https://archive.ics.uci.edu/dataset/1/abalone) contains measurements
@@ -227,21 +230,41 @@ print(f"The upper and lower limits of the CI are ({ci_95[0]:.3f}, {ci_95[1]:.3f}
 
 :::
 
-To assess the normality assumption, we make histograms and qq-plots. Histograms of data from a Normal distribution should appear symmetric and bell-shaped. The tails on both sides should come down at a moderate pace. If we observe asymmetry in our histogram, we might suspect deviation from Normality. As we can see from the figure below, a histogram with a long tail on the right (left) is referred to as right-skewed (corr. left-skewed).
+To assess the normality assumption, we make histograms and qq-plots. Histograms
+of data from a Normal distribution should appear symmetric and bell-shaped. The
+tails on both sides should come down at a moderate pace. If we observe asymmetry
+in our histogram, we might suspect deviation from Normality. As we can see from
+the figure below, a histogram with a long tail on the right (left) is referred
+to as right-skewed (corr. left-skewed).
 
 ![Sample Histograms](figs/summ_data-05.png){width=75%}
 
-Now we turn back to the histograms for the abalone data. Indeed, they do indicate some deviation from Normality - the female group is a little skewed to the right, while the male group appears to have a sharper peak than a Normal.
+::: {#exm-abalone-1a style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Abalone Measurements
+\index{Abalone!Histogram checks for Normality}
+
+Now we turn back to the histograms for the abalone data. Indeed, they do
+indicate some deviation from Normality - the female group is a little skewed to
+the right, while the male group appears to have a sharper peak than a Normal.
 
 ```{python}
-sns.displot(abl, x='viscera', col='gender', kind='hist', stat='density', binwidth=0.1, height=4, aspect=1.2);
+sns.displot(abl, x='viscera', col='gender', kind='hist', stat='density', 
+            binwidth=0.1, height=4, aspect=1.2);
 ```
 
-A Quantile-Quantile plot is a graphical diagnostic tool for assessing if a dataset follows a particular distribution. Most of the time
-we would be interested in comparing against a Normal distribution. 
+:::
 
-A QQ-plot plots the standardized sample quantiles against the theoretical quantiles of a N(0; 1) distribution. If they fall on a straight line, then we would say that there is evidence that the data came from a normal distribution. Especially for unimodal datasets, the points in the middle will fall close to the line. The value of a QQ-plot is in judging if the tails of the data are fatter 
-or thinner than the tails of the Normal. 
+A Quantile-Quantile plot is a graphical diagnostic tool for assessing if a
+dataset follows a particular distribution. Most of the time we would be
+interested in comparing against a Normal distribution.
+
+A QQ-plot plots the standardized sample quantiles against the theoretical
+quantiles of a N(0; 1) distribution. If they fall on a straight line, then we
+would say that there is evidence that the data came from a normal distribution.
+Especially for unimodal datasets, the points in the middle will fall close to
+the line. The value of a QQ-plot is in judging if the tails of the data are
+fatter or thinner than the tails of the Normal. 
 
 
 ::: {layout-ncol=2}
@@ -251,7 +274,15 @@ or thinner than the tails of the Normal.
 
 :::
 
-If we compare the qq-plots from the data (below) with the reference (above), we can infer that for females, the left tail is thinner than a Normal - it abruptly cuts off. For males, both the left and the right tail are fatter than a Normal's. 
+::: {#exm-abalone-1b style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Abalone Measurements
+\index{Abalone!QQ-plots}
+
+If we compare the qq-plots from the data (below) with the reference (above), we
+can infer that for females, the left tail is thinner than a Normal - it abruptly
+cuts off. For males, both the left and the right tail are fatter than a
+Normal's.
 
 ```{python}
 f, axs = plt.subplots(1, 2, figsize=(10,4))
@@ -263,13 +294,17 @@ sm.qqplot(y, line="q", ax=tmp)
 tmp.set_title('Males');
 ```
 
-If you are keen on learning about particular hypothesis tests for Normality, take a look at the references.
+:::
+
+If you are keen on learning about particular hypothesis tests for Normality,
+take a look at the references @sec-02-ref.
 
 We also need to assess if the variances are equal. While there are many
 hypothesis tests specifically for assessing if variances are equal (e.g. Levene,
 Bartlett), in our class, I advocate a simple rule of thumb. If the larger s.d is
 more than twice the smaller one, than we should not use the equal variance form
-of the test. This rule of thumb is widely used in practice (see the references).
+of the test. This rule of thumb is widely used in practice (see the references
+@sec-02-ref).
 
 ```{python}
 abl.groupby('gender').describe()
@@ -286,7 +321,9 @@ the same subject receives both treatments. His/her measurement under each treatm
 gives rise to a measurement in each group. However, the measurements are no longer 
 independent.
 
+::: {#exm-reaction-time style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Reaction time of drivers
+\index{Reaction time}
 
 Consider a study on 32 drivers sampled from a driving school. Each driver is 
 put in a simulation of a driving situation, where a target flashes red and  green
@@ -294,10 +331,15 @@ at random periods. Whenever the driver sees red, he/she has to press a brake but
 
 For each driver, the study is carried out twice - at one of the repetitions, the
 individual carries on a phone conversation while at the other, the driver
-listens to the radio. Each measurement falls under one of two groups - "phone" or "radio", but the measurements
-for driver $i$ are clearly related. *Some people might just have a slower/faster baseline reaction time!*
+listens to the radio. Each measurement falls under one of two groups - "phone"
+or "radio", but the measurements for driver $i$ are clearly related. 
 
-This is a situation where a paired sample test is appropriate, not an independent sample test.
+*Some people might just have a slower/faster baseline reaction time!*
+
+This is a situation where a paired sample test is appropriate, not an
+independent sample test.
+
+:::
 
 ### Formal Set-up
 
@@ -341,7 +383,9 @@ $$
 \bar{D} \pm t_{n - 1, 1 - \alpha/2} \times s / \sqrt{n}
 $$
 
+::: {#exm-hr-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Heart Rate Before/After Treadmill
+\index{Treadmill!Paired t-test}
 
 The following dataset comes from a textbook. In a self-recorded experiment, 
 an individual recorded his heart rate before using a treadmill (baseline) and 
@@ -350,29 +394,35 @@ an individual recorded his heart rate before using a treadmill (baseline) and
 ```{python}
 hr_df = pd.read_csv("data/health_promo_hr.csv")
 #hr_df.head()
-
 p_test_out = stats.ttest_rel(hr_df.baseline, hr_df.after5)
-```
 
-```{python}
-#| user_expressions: [{expression: 'f"{p_test_out.pvalue:.2g}"', result: {data: {text/plain: '''2.2e-10'''}, metadata: {}, status: ok}}, {expression: 'f"{hr_df.baseline.mean() - hr_df.after5.mean():.3f}"', result: {data: {text/plain: '''-15.229'''}, metadata: {}, status: ok}}]
 print(f"The $p$-value for the test is {p_test_out.pvalue:.2g}.")
-print(f"The difference in means is {hr_df.baseline.mean() - hr_df.after5.mean():.3f}.")
+print(f"""
+The difference in means is {hr_df.baseline.mean() - hr_df.after5.mean():.3f}.
+       """)
 ```
 
-While we do not include them here, it is imperative to also make the checks for Normality. If you were to make them, you would realise that the sample size is rather small. Even so, it is difficult to make the case for Normality here. 
+While we do not include them here, it is imperative to also make the checks for
+Normality. If you were to make them, you would realise that the sample size is
+rather small. Even so, it is difficult to make the case for Normality here.
 
 Here is a plot that is particularly useful in paired sample studies:
 
 ```{python}
-ax1 = hr_df.plot(x='baseline', y='after5',kind='scatter', marker='o', edgecolor='blue', color='none')
+#| fig-align: center
+#| 
+ax1 = hr_df.plot(x='baseline', y='after5',kind='scatter', marker='o', 
+                 edgecolor='blue', color='none')
 group_means = hr_df.loc[:, ['baseline', 'after5']].mean(axis=0)
 ax1.set_xlim(75, 105)
 ax1.set_ylim(75,105)
 ax1.plot([75,105], [75,105], color="lightblue", linestyle="dashed");
-ax1.scatter(group_means.iloc[0], group_means.iloc[1],  marker='o', edgecolor='blue', color='none', s=100);
+ax1.scatter(group_means.iloc[0], group_means.iloc[1],  marker='o', 
+            edgecolor='blue', color='none', s=100);
 ax1.set_title('Agreement of after5 and baseline');
 ```
+
+:::
 
 ## ANoVA
 
@@ -384,12 +434,17 @@ While the $F$-test in ANOVA provides a determination of whether or not the group
 means are different, in practice, we would always want to follow up with
 specific comparisons between groups as well.
 
+::: {#exm-antibiotics-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Heifers
+\index{Heifers!Description}
 
-The following example was taken from [Introduction to Statistical Data Analysis for Life Sciences](https://biostatistics.dk/isdals/). An experiment with 
-dung from heifers was carried out in order to explore the influence of antibiotics
-on the decomposition of dung organic material. As part of the experiment, 36 heifers
-were randomly assigned into six groups. Note that a heifer is a young, female cow that has not had her first calf yet.
+The following example was taken from 
+[Introduction to Statistical Data Analysis for Life Sciences](https://biostatistics.dk/isdals/). 
+
+An experiment with dung from heifers was carried out in order to explore the
+influence of antibiotics on the decomposition of dung organic material. As part
+of the experiment, 36 heifers were randomly assigned into six groups. Note that
+a heifer is a young, female cow that has not had her first calf yet.
 
 Antibiotics of different types were added to the feed for heifers in five of the 
 groups. The remaining group served as a control group. For each heifer, a bag of 
@@ -426,6 +481,8 @@ shall carry out:
    other. Let us call this sub-group (A). They work differently than Enrofloxacin.
    At 5% level, is there a significant difference between the mean from sub-group 
    A and Enrofloxacin?
+
+:::
 
 ### Formal Set-up
 
@@ -546,10 +603,13 @@ $$
    2, we can proceed with the analysis.
 
    
+::: {#exm-antibiotics-2 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Heifers (Cont'd)
+\index{Heifers!F-test}
+
+Let us now apply the F-test to the heifers dataset.
 
 ```{python}
-#| jp-MarkdownHeadingCollapsed: true
 heifer_lm = ols('org ~ type', data=heifers).fit()
 anova_tab = sm.stats.anova_lm(heifer_lm, type=3,)
 anova_tab
@@ -561,9 +621,10 @@ group means are significantly different from one another. This answers the first
 To extract the estimated parameters, we can use the following code:
 
 ```{python}
-#| jp-MarkdownHeadingCollapsed: true
 heifer_lm.summary()
 ```
+
+<br/>
 
 When estimating, Python sets one of the $\alpha_i$ to be equal to 0. 
 We can tell from the output that the constraint has been placed on the coefficient for `Alfacyp` (since it is missing).
@@ -583,6 +644,8 @@ heifer_lm.resid.hist();
 tmp = plt.subplot(122)
 sm.qqplot(heifer_lm.resid, line="q", ax=tmp);
 ```
+
+:::
 
 ### Comparing specific groups {#sec-spec-grps}
 
@@ -617,7 +680,10 @@ the pooled estimate of the variance may not be valid.
 However, we shall proceed with this dataset just to demonstrate the next few techniques, instead of introducing a new dataset.
 :::
 
+::: {#exm-antibiotics-3 style="background-color: #D5D1D164; padding: 20px"}
+
 ### Example: Enrofloxacin vs. Control
+\index{Heifers!Comparing two groups}
 
 Let us attempt to answer question (2), that we had set out earlier.
 
@@ -629,11 +695,14 @@ q1 = -stats.t.ppf(0.025, df)
 
 lower_ci = est1 - q1*np.sqrt(MSW * (1/6 + 1/4))
 upper_ci = est1 + q1*np.sqrt(MSW * (1/6 + 1/4))
-print(f"The 95% CI for the diff. between Enrofloxacin and control is ({lower_ci:.3f}, {upper_ci:.3f}).") 
+print("The 95% CI for the diff. between Enrofloxacin and control is" +
+      f"({lower_ci:.3f}, {upper_ci:.3f}).") 
 ```
 
 As the confidence interval contains the value 0, the binary conclusion would be 
 to not reject the null hypothesis at the 5% level.
+
+:::
 
 ### Contrast Estimation
 
@@ -666,7 +735,10 @@ t_{n-k, \alpha/2}  \times
 \sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
 $$
 
-### Example: Comparing collection of groups
+::: {#exm-antibiotics-4 style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Enrofloxacin vs. Control
+\index{Heifers!Contrast estimation}
 
 As we mentioned earliers, let sub-group 1 consist of Ivermectin and Fenbendazole. 
 Here is how we can compute a confidence interval for the difference between 
@@ -684,8 +756,11 @@ se1 = np.sqrt(MSW*np.sum(c1**2 / n_vals))
 
 lower_ci = L - q1*se1
 upper_ci = L + q1*se1
-print(f"The 95% CI for the diff. between the two groups is ({lower_ci:.3f}, {upper_ci:.3f}).") 
+print("The 95% CI for the diff. between the two groups is " +
+      f"({lower_ci:.3f}, {upper_ci:.3f}).") 
 ```
+
+:::
 
 ### Multiple Comparisons
 
@@ -711,7 +786,12 @@ to construct confidence intervals for **all** pairwise comparisons. For the same
 $\alpha$-level, Tukey's HSD method provides shorter confidence intervals than
 a Bonferroni correction for all pairwise comparisons.
 
+::: {#exm-antibiotics-5 style="background-color: #D5D1D164; padding: 20px"}
+
 ### Example: Multiple Comparisons
+\index{Heifers!Multiple comparisons}
+
+Let us apply Tukey's procedure to the heifers dataset.
 
 ```{python}
 cp = mc.MultiComparison(heifers.org, heifers.type)
@@ -723,7 +803,9 @@ tk = cp.tukeyhsd()
 tk.plot_simultaneous();
 ```
 
-# Categorical Variables
+:::
+
+## Categorical Variables
 
 There are two sub-types of categorical variables:
 
@@ -735,7 +817,10 @@ categories, but the categories have no specific ordering.
 In this topic, we shall discuss techniques for identifying the presence, and for 
 measuring the strength, of the association between two categorical variables. 
 
+::: {#exm-chest-pain-1 style="background-color: #D5D1D164; padding: 20px"}
+
 ### Example: Chest Pain and Gender
+\index{Chest pain!Description}
 
 Suppose that 1073 NUH patients who were at high risk for cardiovascular disease
 (CVD) were randomly sampled. They were then queried on two things:
@@ -748,6 +833,8 @@ The data would probably be summarised and presented in this format, which is
 known as a *contingency table*.
 
 ```{python}
+#| fig-align: center
+#| 
 chest_array = np.array([[46, 474], [37, 516]])
 #print(chest_array)
 
@@ -757,23 +844,32 @@ sns.heatmap(chest_array, annot=True, square=True, fmt='',
             cmap='Reds', cbar=False, );
 ```
 
-In the above table, the rows correspond to gender (Male, followed by Female) and the columns correspond to chest pain (from left to right: presence, then absence). Hence 516 of the 1073 patients were females who did not experience chest pain.
+In the above table, the rows correspond to gender (Male, followed by Female) and
+the columns correspond to chest pain (from left to right: presence, then
+absence). Hence 516 of the 1073 patients were females who did not experience
+chest pain.
 
-In a contingency table, each observation from the dataset falls in exactly one 
-of the cells. The sum of all entries in the cells equals the number of independent 
-observations in the dataset. All the techniques we shall touch upon in this chapter are applicable to
-contingency tables. 
+In a contingency table, each observation from the dataset falls in exactly one
+of the cells. The sum of all entries in the cells equals the number of
+independent observations in the dataset. All the techniques we shall touch upon
+in this chapter are applicable to contingency tables.
 
-## $\chi^2$-Test for Independence 
+:::
+
+### $\chi^2$-Test for Independence 
 
 In the contingency table above, the two categorical variables are *Gender* and
 *Presence/absence of Pain*. With contingency tables, the main inferential task
 usually relates to assessing the association between the two categorical
 variables.
 
->If two categorical variables are **independent**, then the joint distribution of 
->the variables would be equal to the product of the marginals. If two variables 
->are not independent, we say that they are **associated**.
+::: {.callout-note}
+
+If two categorical variables are **independent**, then the joint distribution of
+the variables would be equal to the product of the marginals. If two variables
+are not independent, we say that they are **associated**.
+
+:::
 
 The $\chi^2$-test uses the definition above to assess if two variables in a 
 contingency table are associated. The null and alternative hypotheses are 
@@ -789,18 +885,20 @@ compute *expected* counts (which may not be integers) for each cell. The test
 statistic essentially compares the deviation of *observed* cell counts from the 
 expected cell counts. 
 
+::: {#exm-chest-pain-2 style="background-color: #D5D1D164; padding: 20px"}
+
 ### Example: Chest Pain and Gender Expected Counts
+\index{Chest pain!Expected counts}
 
 Continuing from the chest pain example, we can compute the estimated marginals using 
 row and column proportions
 
 ```{python}
 col_prop,row_prop = sm.stats.Table(chest_array).marginal_probabilities
-```
 
-```{python}
 print(f"The proportion of males in the sample was {col_prop[0]:.3f}.")
-print(f"The proportion of all patients who experienced chest pain was {row_prop[0]:.3f}.")
+print("The proportion of all patients who experienced chest pain " +
+      f"was {row_prop[0]:.3f}.")
 ```
 
 If we let $X$ represent gender and $Y$ represent chest pain, then we can estimate that:
@@ -821,6 +919,8 @@ $$
 0.04 \times 1073 = 42.92
 $$
 
+:::
+
 Using the approach above, we can derive a general formula for the expected count
 in each cell:
 $$
@@ -834,12 +934,13 @@ $$
 
 The sum is taken over every cell in the table. Hence in a $2\times2$ table, as we have here, there would be 4 terms in the summation. 
 
+::: {#exm-chest-pain-3 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Chest Pain and Gender $\chi^2$ Test
+\index{Chest pain!Chi-squared test}
 
 Let us see how we can apply and interpret the $\chi^2$-test for the data in the chest pain example.
 
 ```{python}
-#| jp-MarkdownHeadingCollapsed: true
 chisq_output = stats.chi2_contingency(chest_array, correction=False)
 
 print(f"The p-value is {chisq_output.pvalue:.3f}.")
@@ -853,31 +954,43 @@ independent.
 To extract the expected cell counts, we can use the following code: 
 
 ```{python}
-#| jp-MarkdownHeadingCollapsed: true
 chisq_output.expected_freq
 ```
 
 The test statistic in the $\chi^2$-test compares the above table to the *observed* table.
 
+:::
+
 ::: {.callout-note}
 
-It is only suitable to use the $\chi^2$-test when all *expected cell counts* are larger than 5. If this condition fails, one recommendation is to use a continuity correction, which modifies the test statistic to be 
+It is only suitable to use the $\chi^2$-test when all *expected cell counts* are
+larger than 5. If this condition fails, one recommendation is to use a
+continuity correction, which modifies the test statistic to be
 
 $$
 \chi^2 = \sum \frac{(|\text{expected} - \text{observed}| - 0.5)^2}{\text{expected count}} 
 $$
 
-However, I advocate using [Fisher's exact test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html), which is also a test of independence, but measures deviations under slightly different assumptions. The test using the exact distribution of the test statistic (not an approximation) so it will apply to small datasets as well.
+However, I advocate using [Fisher's exact test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html),
+which is also a test of independence, but measures deviations under slightly
+different assumptions. The test uses the exact distribution of the test
+statistic (not an approximation) so it will apply to small datasets as well.
 
 :::
 
 ```{python}
-#stats.fisher_exact(chest_array)
+stats.fisher_exact(chest_array)
 ```
 
-## Measures of Association
 
-Measures of association quantify how two random variables vary together. When both variables are continuous, a common measure that is used is Pearson correlation. We shall return to this in topics such as regression. For now, we touch on bivariate measures of association for contingency tables (two categorical variables).
+
+### Measures of Association
+
+Measures of association quantify how two random variables vary together. When
+both variables are continuous, a common measure that is used is Pearson
+correlation. We shall return to this in topics such as regression. For now, we
+touch on bivariate measures of association for contingency tables (two
+categorical variables).
 
 ### Odds Ratio
 
@@ -938,19 +1051,22 @@ $$
 \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}} 
 $$
 
+::: {#exm-chest-pain-4 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Chest Pain and Gender Odds Ratio
+\index{Chest pain!Odds ratio}
 
 Let us compute the confidence interval for the odds ratio in the chest pain and
 gender example from earlier.
 
 ```{python}
-#| jp-MarkdownHeadingCollapsed: true
 chest_tab2 = sm.stats.Table2x2(chest_array)
 
 chest_tab2.summary()
 ```
 
-## For Ordinal Variables
+:::
+
+### For Ordinal Variables
 
 When both variables are ordinal, it is often useful to compute the strength 
 (or lack) of any monotone trend association. It allows us to assess if
@@ -993,10 +1109,13 @@ $$
 For both measures, values close to 0 indicate a very weak trend, while values 
 close to 1 (or -1) indicate a strong positive (negative) association.
 
-### Example: Job Satisfaction by Income
+::: {#exm-job-income-1 style="background-color: #D5D1D164; padding: 20px"}
 
-Consider the following table, obtained from [Categorical Data Analysis](https://onlinelibrary.wiley.com/doi/book/10.1002/0471249688). The original
-data come from a nationwide survey conducted in the US in 1996.
+### Example: Job Satisfaction by Income
+\index{Job satisfaction!Ordinal association}
+
+Consider the following table, obtained from @agresti2012categorical. The
+original data come from a nationwide survey conducted in the US in 1996.
 
 ```{python}
 us_svy_tab = np.array([[1, 3, 10, 6], 
@@ -1031,21 +1150,47 @@ for i in range(0, dim1[0]):
 stats.kendalltau(x, y, variant='b')
 ```
 
-The output shows that $\tau_b =0.15$ is positive, and is borderline significant at 5% level. We can conclude that there is a weak association between job satisfaction and income.
+The output shows that $\tau_b =0.15$ is positive, and is borderline significant
+at 5% level. We can conclude that there is a weak association between job
+satisfaction and income.
 
-# Summary 
+:::
 
-In this topic, the primary take-aways are the notions of hypothesis tests (HT) and confidence intervals (CI). Both of these approaches aim to uncover information about a population using a sample. I strongly advocate the choice of CI over HT, as the latter option only provides a binary decision. CIs, on the other hand, provide a range of values to provide a better understanding of the situation. 
+## Summary 
 
-Using a small set of applications, we have demonstrated these techniques. We covered a common scenario where a researcher may need to compare the means between several groups. We then moved onto another common situation, where one might be faced with a contingency table. A common query is: What should we do if the assumptions of the test are not fulfilled? In those circumstances, one possibility is to turn to nonparametric versions of the test. For instance, the Kruskal-Wallis test is a HT for comparing the means of several groups whose distributions are not Normal. 
+In this topic, the primary take-aways are the notions of hypothesis tests (HT)
+and confidence intervals (CI). Both of these approaches aim to uncover
+information about a population using a sample. I strongly advocate the choice of
+CI over HT, as the latter option only provides a binary decision. CIs, on the
+other hand, provide a range of values to provide a better understanding of the
+situation.
 
-In the section on categorical data, we introduced measures of association for categorical variables - odds ratio, and Kendall $\tau$. When we have contingency tables, a common choice has been to display barcharts, or heat maps and use those to make decisions on. However, I encourage you to use the measures of association instead. They are intuitive to understand, and can allow you to compare sub-groups or variation of association over time.
+Using a small set of applications, we have demonstrated these techniques. We
+covered a common scenario where a researcher may need to compare the means
+between several groups. We then moved onto another common situation, where one
+might be faced with a contingency table. A common query is: What should we do if
+the assumptions of the test are not fulfilled? In those circumstances, one
+possibility is to turn to nonparametric versions of the test. For instance, the
+Kruskal-Wallis test is a HT for comparing the means of several groups whose
+distributions are not Normal.
 
-With HT and with CI, there has been a tendency to manipulate the data or tests until the desired outcome has been reached. Do be watchful of this. Conducting multiple tests increases the false positive error rate, so please do avoid this as well. If you conduct multiple tests, adjust for multiple testing. Use statitsical inference techniques as a guide together with common sense and domain expertise.
+In the section on categorical data, we introduced measures of association for
+categorical variables - odds ratio, and Kendall $\tau$. When we have contingency
+tables, a common choice has been to display barcharts, or heat maps and use
+those to make decisions on. However, I encourage you to use the measures of
+association instead. They are intuitive to understand, and can allow you to
+compare sub-groups or variation of association over time.
 
-# References
+With HT and with CI, there has been a tendency to manipulate the data or tests
+until the desired outcome has been reached. Do be watchful of this. Conducting
+multiple tests increases the false positive error rate, so please do avoid this
+as well. If you conduct multiple tests, adjust for multiple testing. Use
+statitsical inference techniques as a guide together with common sense and
+domain expertise.
 
-## Website References
+## References {#sec-02-ref}
+
+### Website References
 
 1. Inference recap from Penn State:
    * [Hypothesis testing recap](https://online.stat.psu.edu/statprogram/reviews/statistical-concepts/hypothesis-testing) 
@@ -1054,7 +1199,7 @@ With HT and with CI, there has been a tendency to manipulate the data or tests u
 3. [Overview of $t$-tests](https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/7-t-tests) This page includes the rule of thumb about deciding when
    to use the equal variance test, and when to use the unequal variances version.
 
-## Documentation links
+### Documentation links
 
 1. [statsmodels ANOVA](https://www.statsmodels.org/stable/examples/notebooks/generated/interactions_anova.html) A more complete example on the application of ANOVA. Return to this when we
    complete the topic on regression.  

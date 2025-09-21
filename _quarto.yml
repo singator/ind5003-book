@@ -17,6 +17,7 @@ book:
     - 07-simulation.qmd
     - 08-supervised.qmd
     - 09-vision.qmd
+    - references.qmd
 
 bibliography: references.bib
 
