@@ -824,6 +824,8 @@ embeddings = model.encode(t2_l)
 ### Example: Twitter Dataset t-SNE Output
 \index{Twitter!t-SNE Output}
 
+The following code generates an interactive plot based on the t-SNE visualisation.
+
 ```{python}
 #| scrolled: true
 tsne1 = TSNE(n_components=2, init="random", perplexity=10, verbose=0, 

@@ -3,9 +3,7 @@ title: Linear Regression
 jupyter: python3
 ---
 
-# Introduction
-
-## Linear Regression
+## Introduction
 
 Regression analysis is a technique for investigating and modeling
 the relationship between variables like X and Y. Here are some examples:
@@ -52,7 +50,9 @@ from statsmodels.formula.api import ols
 from scipy import stats
 ```
 
-## Taiwan Real Estate
+::: {#exm-taiwan-reg-1 style="background-color: #D5D1D164; padding: 20px"}
+### Example: Taiwan Real Estate
+\index{Taiwan Data!Description}
 
 For this tutorial, we shall work with a data set from the 
 [UCI machine learning repository](https://archive.ics.uci.edu/dataset/477/real+estate+valuation+data+set).
@@ -73,29 +73,29 @@ Here is a brief description of the columns in the dataset:
 
 ```{python}
 re2 = pd.read_csv("data/taiwan_dataset.csv")
-show(re2)
+re2.head()
 ```
 
+The following interactive map is available on the HTML version.
+
+::: {.content-visible when-format="html"}
 ```{python}
 m = folium.Map(location=(45.5236, -122.6750))
 df1 = geopandas.read_file('data/taiwan_dataset.csv')
 gdf = geopandas.GeoDataFrame(
     re2, geometry=geopandas.points_from_xy(re2.X, re2.Y), crs="EPSG:3825"
 )
-```
-
-```{python}
 gdf.explore("price", #tiles="CartoDB positron", 
             tooltip="price", marker_type="circle", 
             marker_kwds = {"radius": 50, "fill": True}, 
             legend_kwds = {"caption": "Price"})
 ```
+:::
 
-```{python}
-re2.loc[:, 'trans_date':].describe().round(3)
-```
+:::
 
-Let us first explore the dataset with Python. How do this plots aid in your understanding of the dataset?
+Let us first explore the dataset with Python. How do this plots aid in your
+understanding of the dataset?
 
 ```{python}
 plt.figure(figsize=(15,4));
@@ -109,14 +109,12 @@ ax= plt.subplot(133)
 z = re2.num_stores.unique()
 z.sort()
 tmp2 = np.array([re2.price[re2.num_stores == x].to_numpy() for x in z], dtype=object)
-ax.boxplot(tmp2, labels=z); ax.set_title('Num. of stores');
+ax.boxplot(tmp2, tick_labels=z); ax.set_title('Num. of stores');
 ```
 
-# Simple Linear Regression
+## Simple Linear Regression
 
-<a id='SLR'></a>
-## Formal Set-up
-
+### Formal Set-up
 
 The simple linear regression model is applicable when we have observations
 $(X_i, Y_i)$ for $n$ individuals. For now, let's assume both the $X$ and $Y$ 
@@ -151,7 +149,7 @@ All in all, the assumptions imply that:
 3. The $Y_i$ are independent.
 4. The $Y_i$'s are Normally distributed.
 
-## Estimation
+### Estimation
 
 Before deploying or using the model, we need to estimate optimal values to use 
 for the unknown $\beta_0$ and $\beta_1$. We shall introduce the method of 
@@ -235,7 +233,7 @@ $\hat{\beta_0}$ and $\hat{\beta_1}$:
 The above are used to construct confidence intervals for $\beta_0$ and $\beta_1$,
 based on $t$-distributions.
 
-## Hypothesis Test for Model Significance
+### Hypothesis Test for Model Significance
 
 The first test that we introduce here is to test if the coefficient $\beta_1$ is
 significantly different from 0. It is essentially a test of whether it was 

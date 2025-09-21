@@ -5,7 +5,7 @@ execute:
   cache: true
 ---
 
-# Introduction
+## Introduction
 
 In our world, Natural Language Processing (NLP) is used in several scenarios. For example, 
 
@@ -64,6 +64,7 @@ Can you catch all three jokes in the movie clip below? 🤣
 :::
 
 ```{python}
+#| fig-align: center
 video = YouTubeVideo("NfN_gcjGoJo", width=640, height=480)
 display(video)
 ```
@@ -115,9 +116,12 @@ Here are some of the use-cases that we shall discuss:
     we can assess whether the sentiment in a document is mostly positive or
     negative.
 
-# Text Pre-processing
+## Text Pre-processing
 
-## Wine Reviews Dataset
+::: {#exm-wine-reviews-1 style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Wine Reviews Dataset
+\index{Wine Reviews!Description}
 
 A dataset containing wine reviews is accessible from
 [Kaggle](https://www.kaggle.com/zynicide/wine-reviews). We shall work with one
@@ -128,11 +132,10 @@ rng = np.random.default_rng(5001)
 
 wine_reviews = pd.read_csv("data/winemag-data-130k-v2.csv", index_col=0)
 wine_reviews.drop_duplicates(inplace=True)
-```
 
-```{python}
-rng.choice(wine_reviews.description, size=5)
-#show(wine_reviews)
+pp = pprint.PrettyPrinter(indent=4, compact=True,)
+for x in rng.choice(wine_reviews.description, size=5):
+    pprint.pp(x)
 ```
 
 The "descriptions" column contains the review for a particular wine by a user,
@@ -140,7 +143,9 @@ whose name and twitter handle are provided. Also included is information such
 as the price, originating county, region of the wine, and so on. In our
 activity, we are going to apply NLP techniques to the wine reviews.
 
-## Tokenizing with Gensim
+:::
+
+### Pre-processing Text with Gensim
 
 Text documents consist of sentences of varying lengths. Usually, the first step
 to analysing a document is to break it up into pieces. This process is known as
@@ -150,11 +155,9 @@ resolution: at the sentence, line, word or even punctuation level.
 Tokenizing can easily done using the `.split()` within built-in python. But
 after that, we need to further pre-process the tokens.
 
-```{python}
-pp = pprint.PrettyPrinter(indent=4, compact=True,)
-```
 
-The `gensim` package includes a module for pre-processing text strings. Here is a list of some of the functions there:
+The `gensim` package includes a module for pre-processing text strings. Here is
+a list of some of the functions there:
 
 * `strip_multiple_whitespaces`
 * `strip_non_alphanum`
@@ -176,12 +179,12 @@ removing stop-words.
 
 For us, we are going to apply this list of filters to each review:
 
-1. strip_punctuation(),
-2. strip_multiple_whitespaces(),
-3. strip_numeric(),
-4. remove_stopwords(),
-5. strip_short(),
-6. lemmatize
+1. `strip_punctuation()`,
+2. `strip_multiple_whitespaces()`,
+3. `strip_numeric()`,
+4. `remove_stopwords()`,
+5. `strip_short()`,
+6. `lemmatize()`
 
 **Lemmatizing** a word is to reduce it to its root word. You will come across
 **stemming** whenever you read about lemmatizing. In both cases, we wish to
@@ -212,6 +215,9 @@ demo_sentence
 #nltk.download('wordnet')
 
 [porter.stem(x) for x in demo_sentence]
+```
+
+```{python}
 [wn.lemmatize(x) for x in demo_sentence]
 ```
 
@@ -226,6 +232,8 @@ all_review_strings = wine_reviews.description.values
 #all_review_strings[:3]
 all_strings_tokenized = [preprocess_string(x, CUSTOM_FILTER) for x in all_review_strings]
 ```
+
+Here is an example of the pre-processed review:
 
 ```{python}
 pp.pprint(all_strings_tokenized[1])
@@ -246,7 +254,7 @@ pp.pprint(all_strings_tokenized[233])
 preprocessed_corpus = [[wn.lemmatize(w) for w in dd ] for dd in all_strings_tokenized]
 ```
 
-# Representation of Text
+## Representation of Text
 
 Tokenisation of the corpus is merely the first step in processing natural
 language. All mathematical algorithms work on numerical representations of the
@@ -256,7 +264,7 @@ In natural language, there are two common ways of representing text:
 1. Sparse vectors, using tf-idf or PPMI, or
 2. Dense embeddings, which could result from word2vec, GLoVe, or from neural models.
 
-## Sparse embeddings with Tf-idf
+### Sparse embeddings with Tf-idf
 
 In this section, we demonstrate how we can use Tf-idf (Term frequency-Inverse
 document frequency) to create vector representations of documents. Consider the
@@ -264,20 +272,25 @@ following set of three simple text documents. Each document is a single
 sentence.
 
 ```{python}
-raw_docs =["Here are some very simple basic sentences.",
-           "They won’t be very interesting , I’m afraid. ", 
-           """The point of these basic examples is to learn how basic text 
-           counting works on *very simple* data, so that we are not afraid when 
-           it comes to larger text documents. The sentences are here just to provide words."""]
+raw_docs =[
+  "Here are some very simple basic sentences.", 
+  "They won’t be very interesting , I’m afraid. ",  
+  """
+  The point of these basic examples is to learn how basic text  
+  counting works on *very simple* data, so that we are not afraid when  
+  it comes to larger text documents. The sentences are here just to provide words.
+  """] 
 ```
 
-As the name tf-idf suggests, our first step should be to compute the frequency of each term (token) within each document.
+As the name tf-idf suggests, our first step should be to compute the frequency
+of each term (token) within each document.
 
 ```{python}
 vectorizer1 = CountVectorizer(stop_words='english', min_df=1)
 X1 = vectorizer1.fit_transform(raw_docs)
 
-pd.DataFrame(X1.toarray(), columns=vectorizer1.get_feature_names_out()).iloc[:, :15]
+print(pd.DataFrame(X1.toarray(), 
+  columns=vectorizer1.get_feature_names_out()).iloc[:, :10])
 ```
 
 The counts indicate the number of times each feature (or words) were present in
@@ -303,6 +316,7 @@ Then the final $w_{i,j}$ for term $i$ in document $j$ is the normalised version
 of $w'_{i,j}$ across the terms that document. 
 
 Consider the word "sentences", in document id 02 (the third document).
+
 * $N = 3$
 * $tf_{i,j} = 1$
 * $df_{i} = 2$
@@ -317,7 +331,8 @@ w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 vectorizer2 = TfidfVectorizer(stop_words='english', norm=None)
 X2 = vectorizer2.fit_transform(raw_docs)
 
-pd.DataFrame(X2.A, columns=list(vectorizer2.get_feature_names_out())).round(3)
+print(pd.DataFrame(X2.A, 
+  columns=list(vectorizer2.get_feature_names_out())).iloc[:, :10].round(3))
 ```
 
 The final step normalises the weights across each document, so now the weight
@@ -328,7 +343,8 @@ document 00 is shorter.
 vectorizer3 = TfidfVectorizer(stop_words='english')
 X3 = vectorizer3.fit_transform(raw_docs)
 
-pd.DataFrame(X3.A, columns=list(vectorizer3.get_feature_names_out())).round(3)
+print(pd.DataFrame(X3.A, 
+  columns=list(vectorizer3.get_feature_names_out())).iloc[:, :10].round(3))
 ```
 
 The above matrix is known as a **document-term matrix**, since the columns are
@@ -341,14 +357,14 @@ work with the *term-document* matrix. However, the idea is the same. Take a
 look at the following term-document matrix, assembled from the complete works
 of Shakespeare:
 
-![J&M textbook](figs/term-doc-shakespeare-1.png){width=70%}
+![@jm3](figs/term-doc-shakespeare-1.png){width=70%}
 
 If we intend to represent each document as a numeric vector, the columns,
 highlighted by the red boxes, would be a natural choice. Suppose we only focus
 on the coordinates corresponding to the words `battle` and `fool`. Then a
 visualisation of the documents would look like this:
 
-![J&M textbook](figs/term-doc-shakespeare-2.png){width=70%}
+![@jm3](figs/term-doc-shakespeare-2.png){width=70%}
 
 Visually, it is easy to tell that "Henry V" and "Julius Caesar" are similar
 (they point in the same direction) as opposed to "As You Like It" and "Twelfth
@@ -374,9 +390,9 @@ $$
 
 Geometrically, cosine similarity measures the size of the angle between vectors:
 
-![J&M textbook](figs/term-doc-shakespeare-4.png){width=70%}
+![@jm3](figs/term-doc-shakespeare-4.png){width=70%}
 
-## Dense Embeddings
+### Dense Embeddings
 
 One of the drawbacks of sparse vectors is that they are very long (the length
 of the vocabulary), and most entries in the vector will be 0. As a result,
@@ -385,16 +401,15 @@ into shorter ones. Instead of working on representations of the documents, the
 methods aimed to create representations of each token (or word) in the
 vocabulary. These are referred to as *embeddings*.
 
-Here, we shall discuss word2vec, but take note that there are others. GLoVe was
-invented soon after, but the most common embeddings used today arise from Deep
-Learning models. The most widely used version is BERT (see the video references
-below).
-
-### Word2Vec Embeddings
+Here, we shall discuss word2vec (@mikolov2013distributed), but take note that
+there are others. GLoVe (@pennington2014glove) was invented soon after, but the
+most common embeddings used today arise from Deep Learning models. The most
+widely used version is BERT (see the video references below, as well as 
+@devlin2019bert).
 
 The approach in word2vec deviates considerably from tf-idf, in that the goal is
-to obtain a numeric representation of a word, *in the context of it's
-surrounding words*. Consider this statement:
+to obtain a numeric representation of a word, 
+*in the context of it's surrounding words*. Consider this statement:
 
 > 13% of the United States population eats <font color="red">pizza</font> on any given day. Mozzarella is commonly used on
 > <font color="red">pizza</font>, with the highest quality mozzarella from Naples. In Italy, <font color="red">pizza</font> served in formal > settings is eaten with a fork and knife.
@@ -403,7 +418,8 @@ The words `eats`, `served` and `mozzarella` appear close to `pizza`. Hence
 another word that appears in similar contexts, should be *similar* to `pizza`.
 Examples could be certain baked dishes or even `salad`. 
 
-To achieve such a representation, word2vec runs a self-supervised algorithm, with two tasks:
+To achieve such a representation, word2vec runs a self-supervised algorithm,
+with two tasks:
 
 1. **Primary task:** To "learn" a numeric vector that represents each word.
 2. **Pretext task (stepping stone):** To train a classifier that, when given a word $w$, predicts nearby context words $c$.
@@ -422,8 +438,6 @@ predictions, based on a sliding window context:
 Starting with an initial random vector for each word, the algorithm updates the
 vectors as it proceeds through the corpus, finally ending up with an embedding
 for each word that reflects its semantic value, based on neighbouring words.
-
-### Analogy Task
 
 In NLP, the quality of an embedding can be evaluated using an analogy task:
 
@@ -446,8 +460,11 @@ solve, while on the right, we have visualisations of GLoVe.
 ![GloVE](figs/glove-001.jpg){width=70%}
 :::
 
+Here's how we can use `gensim` code to conduct the analogy task.
+
 ```{python}
-word_vectors = api.load("glove-wiki-gigaword-100")  # load pre-trained word-vectors from gensim-data
+# load pre-trained word-vectors from gensim-data
+word_vectors = api.load("glove-wiki-gigaword-100")  
 
 # Check the "most similar words", using the default "cosine similarity" measure.
 result = word_vectors.most_similar(positive=['woman', 'king'], negative=['man'])
@@ -493,7 +510,12 @@ of the cell, and when we initialise the transformer. Explore the resulting plot
 - notice how months of the year appear close together at the bottom left.
 Around the left as well, the calendar years appear as a group.
 
+(The figure below only appears in the html version of the text)
+
+::: {.content-visible when-format="html"}
+
 ```{python}
+#| fig-align: center
 df2 = pd.DataFrame(X_transformed2, columns=['x','y'])
 df2['labels'] = labels
 fig = px.scatter(df2, x='x', y='y', text='labels', width=1024, height=960)
@@ -501,20 +523,22 @@ fig.update_traces(textposition='top center')
 fig.show()
 ```
 
+:::
+
 ::: {.callout-note}
 
 Would we be able to make such a plot using tf-idf? Why or why not?
 
 :::
 
-# Neural Language Models
+## Neural Language Models
 
-Language is complex. It is incredible how we can understand such long
-paragraphs of texts with such ease. We somehow seem to have learnt complicated
-sets of grammar and syntax just by listening to others speak. To get a machine
-to learn language has not been easy. It is only recently that Large Language
-Models such as chatGPT have demonstrated that it is possible for machines to
-converse with humans just as we do to one another.
+Language is complex. It is incredible how we can understand such long paragraphs
+of texts with such ease. We somehow seem to have learnt complicated sets of
+grammar and syntax just by listening to others speak. To get a machine to learn
+language has not been easy. It is only recently that Large Language Models such
+as chatGPT have demonstrated that it is possible for machines to converse with
+humans just as we do to one another.
 
 Neural Models (or deep learning models) have been the key to this. In this
 subsection, we provide a very brief overview of their characteristics that
@@ -527,9 +551,9 @@ weights are multiplied by the input vector, summed and then fed through the
 activation function to generate an output.
 
 ::: {layout-ncol=2}
-![J&M textbook](figs/j_m_fig_7_2_neural_unit.png){width=70%}
+![@jm3](figs/j_m_fig_7_2_neural_unit.png){width=70%}
 
-![Neuron](figs/Blausen_0657_MultipolarNeuron.png){width=70%}
+![Neuron figure from <https://en.wikipedia.org/wiki/Neuron>](figs/Blausen_0657_MultipolarNeuron.png){width=70%}
 :::
 
 
@@ -540,7 +564,7 @@ already a huge improvement over earlier models. Here is a simple set up, with
 one hidden layer for training a language model (used to predict the next word).
 It can also be used to learn embeddings.
 
-![J&M textbook, FFN](figs/j_m_fig_7_17_ffn_training.png)
+![@jm3, FFN](figs/j_m_fig_7_17_ffn_training.png)
 
 The next evolution in neural models was the ability to incorporate words in the
 recent history. For humans, this comes naturally. For instance, we know that
@@ -557,7 +581,7 @@ these networks gave a word access to *all* preceding words in the training
 window, instead of just one. Most importantly. the training of these networks
 could be parallelised!
 
-![J&M textbook](figs/j_m_fig_10_18_training_transformer_lm.png){width=70%}
+![@jm3](figs/j_m_fig_10_18_training_transformer_lm.png){width=70%}
 
 Here are some examples where transformers excel:
 
@@ -573,16 +597,15 @@ to decide the correct one? With transformers, because the full context of a
 word is captured along with it, it is possible to perform this disambiguation.
 
 
-![J&M text](figs/j_m_fig_11_8_wsd.png){width=80%}
+![@jm3](figs/j_m_fig_11_8_wsd.png){width=80%}
 
-# Applications
-
+## Applications
 
 [Hugging Face](https://huggingface.co/) has spent a considerable effort to make
 Neural Language Models accessible and available to all with minimal coding. For
 starters, they have ensured that all their models are described in a
-standardised manner with model cards. Here is an example of a [model card for
-BERT](https://huggingface.co/google-bert/bert-base-uncased).
+standardised manner with model cards. Here is an example of a 
+[model card for BERT](https://huggingface.co/google-bert/bert-base-uncased).
 
 Moreover, they have developed easy to use pipelines. For NLP, the following
 tasks have mature pipelines:
@@ -596,7 +619,7 @@ tasks have mature pipelines:
 * translation, and
 * zero-shot-classification.
   
-## Sentiment Analysis
+### Sentiment Analysis
 
 In this subsection, we shall utilise one of their sentiment analysis models on
 the wine reviews dataset. This is a transformer-based neural language model
@@ -605,113 +628,129 @@ to do is feed in the sentence, and we will obtain a confidence score, and a
 sentiment label.
 
 ```{python}
-#| eval: false
-classifier = pipeline("sentiment-analysis", model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")
-```
-
-```{python}
-#| eval: false
+classifier = pipeline("sentiment-analysis", 
+  model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")
+  
 classifier(["I love this course!", "I absolutely detest this course."])
 ```
+
+::: {#exm-wine-reviews-3 style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Wine Reviews Dataset
+\index{Wine Reviews!Sentiment Analysis}
 
 The number of reviews we have is close to 120,000. Hence, computing the
 sentiments for each and every one will take a long time. Instead, we shall
 compute the sentiments for a sample (of size 20, where possible) from each
 variety of wine.
 
+The following snippet samples 20 reviews from each wine type.
+
 ```{python}
-#| eval: false
 tmp_df = pd.DataFrame(columns= wine_reviews.columns)
-w = widgets.IntProgress(
-    value=0,
-    min=0,
-    max=len(wine_reviews.variety.unique()),
-    description='Progress: ',
-    bar_style='', # 'success', 'info', 'warning', 'danger' or ''
-    style={'bar_color': 'lightblue'},
-    orientation='horizontal'
-)
-display(w)
+# w = widgets.IntProgress(
+#     value=0,
+#     min=0,
+#     max=len(wine_reviews.variety.unique()),
+#     description='Progress: ',
+#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''
+#     style={'bar_color': 'lightblue'},
+#     orientation='horizontal'
+# )
+# display(w)
 
 for x,vv in wine_reviews.groupby(wine_reviews.variety):
     grp_len = vv.shape[0]
     if(grp_len >= 20):
         vv = vv.sample(n=20, random_state=99)
     tmp_df = pd.concat([tmp_df, vv], ignore_index=True)
-    w.value += 1
-```
-
-```{python}
-#| eval: false
+    # w.value += 1
+    
 review_list = list(tmp_df.description)
 ```
 
+The next snippet computes the sentiment scores for those sampled reviews.
+
 ```{python}
-#| eval: false
 tmp_df['score'] = 0.00
 tmp_df['label'] = ''
-w = widgets.IntProgress(
-    value=0,
-    min=0,
-    max=tmp_df.shape[0],
-    description='Progress: ',
-    bar_style='', # 'success', 'info', 'warning', 'danger' or ''
-    style={'bar_color': 'lightblue'},
-    orientation='horizontal'
-)
-display(w)
+# w = widgets.IntProgress(
+#     value=0,
+#     min=0,
+#     max=tmp_df.shape[0],
+#     description='Progress: ',
+#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''
+#     style={'bar_color': 'lightblue'},
+#     orientation='horizontal'
+# )
+# display(w)
 for i,rr in enumerate(review_list):
     tmp = classifier(rr)[0]
     tmp_df.loc[i, 'score'] = tmp['score']
     tmp_df.loc[i, 'label'] = tmp['label']
-    w.value = i
+    #w.value = i
 ```
 
 ```{python}
-#| eval: false
 sent_counts = pd.crosstab(tmp_df.variety, tmp_df.label,margins=True)
 sent_counts['proportion'] = sent_counts.POSITIVE/sent_counts.All
 ```
 
+::: {.content-visible when-format="html"}
 ```{python}
-#| eval: false
 show(sent_counts)
 ```
+:::
 
-These are the reviews for one of the varieties that had a proportion of positive reviews close to 50%.
+::: {.content-visible when-format="pdf"}
+```{python}
+sent_counts.head()
+```
+:::
+
+
+These are the reviews for one of the varieties that had a proportion of positive
+reviews close to 50%.
 
 ```{python}
-#| eval: false
-pp.pprint(wine_reviews[wine_reviews.variety == 'Tempranillo Blanco'].description.values)
+for x in wine_reviews[wine_reviews.variety == 'Tempranillo Blanco'].description.values:
+    pp.pprint(x) 
 ```
 
-<div style="background-color: #99c1f133; padding: 20px">
-Do you agree with the classifications above? What would you investigate next?
-</div>
+:::
 
-## Information Retrieval
+::: {.callout-note}
+Do you agree with the classifications above? What would you investigate next?
+:::
+
+### Information Retrieval
 
 In the NLP context, Information Retrieval (IR) refers to the task of returning
 the most relevant set of documents, when given a query string. Search engines,
 e.g. Google, are trained to perform fast and accurate IR. Typically, a long
 list of documents is returned, with the most relevant one on top.
 
-<div style="background-color: #99c1f133; padding: 20px">   
+::: {.callout-note}
 Pause for a moment, and consider how you would assess the performance of such a
 search engine.
-</div>
+:::
+
+::: {#exm-wine-reviews-2 style="background-color: #D5D1D164; padding: 20px"}
+
+### Example: Wine Reviews Dataset
+\index{Wine Reviews!Information retrieval}
 
 A simple way to perform IR is to use cosine similarity to compute how close the
 given query vector is to the individual documents in the corpus.
 
-```{python}
-dct = gensim.corpora.Dictionary(all_strings_tokenized)
-```
+The next snippet initialises a model for retrieving similar documents.
 
 ```{python}
+dct = gensim.corpora.Dictionary(all_strings_tokenized)
 bow_corpus = [dct.doc2bow(text) for text in all_strings_tokenized]
 tfidf = gensim.models.TfidfModel(dictionary=dct)
 ```
+
 
 NLP corpora are typically very large. Before we can find matching documents, we
 build a similarity index, so that matches are returned quicker. We try
@@ -720,48 +759,49 @@ something simple at first:
 > Which documents/reviews are similar to the first one?
 
 ```{python}
-index = gensim.similarities.Similarity(None, corpus=tfidf[bow_corpus], num_features=len(dct))
-```
-
-```{python}
+index = gensim.similarities.Similarity(None, 
+  corpus=tfidf[bow_corpus], num_features=len(dct))
 sims = index[tfidf[bow_corpus[0]]]
 ```
 
-These are the most similar reviews to _review id 0_. Of course, the first review itself is there!
+These are the most similar reviews to _review id 0_. Of course, the first review
+itself is there! Let's retrieve and print all the reviews similar to the first
+one.
 
 ```{python}
-np.argsort(-sims)[:10]
-```
-
-```{python}
+#np.argsort(-sims)[:10]
 for x in np.argsort(-sims)[:5]:
     pp.pprint(all_review_strings[x]) 
 ```
 
-Now we try a new query of our own: "acidic chardonnay".
+Now we try a new query of our own: "acidic chardonnay". First we preprocess it,
+like we did the original documents.
 
 ```{python}
 q1 = [wn.lemmatize(x) for x in preprocess_string('acidic white chardonnay', CUSTOM_FILTER)]
 sims = index[tfidf[dct.doc2bow(q1)]]
 ```
 
+Now we print the top 5 most similar reviews to our query.
+
 ```{python}
 q1_results = np.argsort(-sims)[:10]
-q1_results
+#q1_results
+#pp.pprint(wine_reviews.description.values[q1_results])
+for x in q1_results[:5]:
+    pp.pprint(all_review_strings[x]) 
 ```
 
-```{python}
-pp.pprint(wine_reviews.description.values[q1_results])
-```
+:::
 
-<div style="background-color: #99c1f133; padding: 20px">
+::: {.callout-note}
 Try your favourite tastes, see if you discover a wine you like/dislike 🍷🍇🥂
-</div>
+:::
 
-## Topic Modeling
+### Topic Modeling
 
-
-The LDA (Latent Dirichlet Allocation) model assumes the following intuitive generative process for the documents:
+The LDA (Latent Dirichlet Allocation) model assumes the following intuitive
+generative process for the documents:
 
 1. There is a set of $K$ topics that the documents come from. Each document
    contains words from several topics. There is a probability mass function on the
@@ -780,18 +820,16 @@ investigate what these topics consist of.
 ```{python}
 lda1 = gensim.models.LdaModel(corpus= bow_corpus, num_topics=10, id2word=dct)
 reviews_vis_data = gensimvis.prepare(lda1, bow_corpus, dct)
-```
 
-```{python}
 pp.pprint(lda1.show_topics())
 ```
 
 The output provides the most common terms that define each topic (remember:
 each topic is defined as a *probability distribution over the vocabulary*). 
 
-<div style="background-color: #99c1f133; padding: 20px">
+::: {.callout-note}
 What name would you give each topic?
-</div>
+:::
 
 We can also find out which *topics* a particular document is distributed over.
 For instance, the output below shows that words in document 0 are predominantly
@@ -802,7 +840,7 @@ lda1.get_document_topics(bow_corpus[0])
 ```
 
 ```{python}
-all_review_strings[0]
+pp.pprint(all_review_strings[0])
 ```
 
 A delightful visualisation from pyLDAvis allows us to understand the "distance"
@@ -813,7 +851,7 @@ between topics, and the frequent words from each topic easily.
 pyLDAvis.display(reviews_vis_data)
 ```
 
-# Interpretation of Neural Models
+## Interpretation of Neural Models
 
 Neural models have achieved impressive performance on a number of
 language-related tasks. However, one criticism of them is that they are
@@ -830,7 +868,7 @@ predictions, this could give us intuition on why the model is failing, and
 guide us to ways to fix it. Here is an example where it was possible to
 pinpoint why a model yielded incorrect sentiment prediction.
 
-![Explaining black box predictions (2020)](figs/explaining_black_box_predictions.png){width=70%}
+![@han2020explaining](figs/explaining_black_box_predictions.png){width=70%}
 
 Another approach is to identify which parts of the test sentence itself were
 important to the eventual prediction. Imagine perturbing the test sentence in
@@ -839,7 +877,7 @@ Question-Answering model, the question was modified by dropping the least
 important word, until the question was answered incorrectly. In this case, the
 study revealed something pathological about the model:
 
-![Pathologies of neural models (2018)](figs/pathologies_03.png){width=80%}
+![@sun2021interpreting](figs/pathologies_03.png){width=80%}
 
 For transformers in particular, a great deal of study has focused on the
 weights that the attention layers pick up. By relating these to linguistic
@@ -847,26 +885,21 @@ information, researchers try to infer the precise language-related information
 that models retain. For instance, it has been found that BERT learns parts of
 speech. It is also able to identify the dependencies between words.
 
-![What does BERT look at (2019)](figs/what_does_bert_clark_preposition.png){width=40%}
+![@clark2019does](figs/what_does_bert_clark_preposition.png){width=40%}
 
-# References
+## References
 
-## Video explainers
+### Video explainers
 
 1. [Transformer models and BERT](https://www.youtube.com/watch?v=t45S_MwAcOw): A very good video from Google Cloud Tech on current neural models (11:37)
 2. [Introduction to RNN](https://www.youtube.com/watch?v=UNmqTiOnRfg)
 3. [Introduction to BERT](https://www.youtube.com/watch?v=ioGry-89gqE)
 
 
-## Website References
+### Website References
 
 1. [Hugging Face course on transformers](https://huggingface.co/learn/nlp-course/chapter1/1)
 2. [Gensim documentation](https://radimrehurek.com/gensim/auto_examples/index.html): Contains tutorials as well.
 3. [Using sklearn to perform LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html): We can also use scikit-learn
    to perform LDA.
 4. [Visualising LDA](https://github.com/bmabey/pyLDAvis): Contains sample notebooks for the visualisation.
-
-## Textbook references
-
-1. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/): This is a comprehensive textbook from Jurafsky and Martin. Several images and examples in this
-   notebook were taken from this book.
