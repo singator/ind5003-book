@@ -255,13 +255,20 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 $$
 
 
-# Classification: Heart Failure Dataset
+## Classification
+
+In this section, we demonstrate how we can use `scikit-learn` to perform supervised
+learning on a classification problem.
+
+::: {#exm-heart-failure-1 style="background-color: #D5D1D164; padding: 20px"}
+### Example: Heart Failure
+\index{Heart Failure!Description}
 
 This dataset, from the [UCI machine learning repository](https://archive.ics.uci.edu/dataset/519/heart+failure+clinical+records)
 contains records on 299 patients who had heart failure. The data was collected
-during the follow-up period; each patient had 13 clinical features recorded.
-The primary variable of interest ($y$) was whether they died or not. Here are
-more details about each column:
+during the follow-up period; each patient had 13 clinical features recorded. The
+primary variable of interest ($y$) was whether they died or not. Here are more
+details about each column:
 
 - `age`: age of the patient (years)
 - `anaemia`: decrease of red blood cells or hemoglobin (boolean)
@@ -278,12 +285,15 @@ more details about each column:
 - `DEATH_EVENT`: if the patient died during the follow-up period (boolean). This is the categorical outcome that we wish to predict.
 
 ```{python}
-hf = pd.read_csv("data/heart+failure+clinical+records/heart_failure_clinical_records_dataset.csv")
-show(hf)
+hf = pd.read_csv("data/heart+failure+clinical+records/"+
+                 "heart_failure_clinical_records_dataset.csv")
+print(hf.head())
 ```
 
+:::
 
-## Decision Tree
+
+### Decision Tree
 
 To begin our journey into supervised learning, we shall fit a decision tree to
 this dataset. A decision tree consists of a hierarchal set of rules, that when
@@ -313,7 +323,8 @@ until the terminal nodes are homogeneous. This could result in overfitting of
 the tree to this particular dataset.
 
 ```{python}
-X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.25, random_state=41, stratify=y)
+X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.25, 
+                                                 random_state=41, stratify=y)
 ```
 
 The `train_test_split` divides the data into a training and test set. When
@@ -339,6 +350,7 @@ clf.predict_proba(X_train.sample(random_state=3005))
 ```
 
 ```{python}
+#| fig-align: center
 plt.figure(figsize =(18, 6))
 tree.plot_tree(clf,feature_names=X.columns, filled=True, max_depth=2);
 ```
@@ -380,17 +392,18 @@ non-linearity of the splits. Both the initial split and the subsequent split on
 the left are on `time`. This indicates a non-linear relationship with time, and
 is not a property of classical models such as out-of-the-box linear regression.
 
-### Classification Scores
+::: {#exm-heart-failure-2 style="background-color: #D5D1D164; padding: 20px"}
+### Example: Heart Failure Classification Scores
+\index{Heart Failure!Decision Tree}
 
 Performance of classification algorithms are usually presented in the form of a
-*confusion matrix*.
+*confusion matrix*. First we display the results for the training set.
 
 ```{python}
+#| fig-align: center
 y_pred_train = clf.predict(X_train)
-ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, labels=clf.classes_, cmap='bone');
-```
-
-```{python}
+ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, 
+                                        labels=clf.classes_, cmap='bone');
 print(f"""
 ##: For training set:
 ----
@@ -401,12 +414,13 @@ The f1-score (for cat. 1) is {f1_score(y_train, y_pred_train):.3f}
 """)
 ```
 
-```{python}
-y_pred_test = clf.predict(X_test)
-ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test, labels=clf.classes_, cmap='bone');
-```
+Next, we display the results for the test set.
 
 ```{python}
+#| fig-align: center
+y_pred_test = clf.predict(X_test)
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test, 
+                                        labels=clf.classes_, cmap='bone');
 print(f"""
 ##: For test set:
 ----
@@ -417,13 +431,15 @@ The f1-score (for cat. 1) is {f1_score(y_test, y_pred_test):.3f}
 """)
 ```
 
+:::
+
 It is normal to observe poorer performance on the test set than on the training
-set. However, such a large difference in the scores usually indicates that
-there has been overfitting by the model; it is too tuned to the data in the
-training set. In supervised learning, we aim for a classifier that performs
-almost as well on the test data as it does on the training data. That would
-indicate that the model, with this particular hyperparameter configuration,
-will perform well on new data that has yet to be seen.
+set. However, such a large difference in the scores usually indicates that there
+has been overfitting by the model; it is too tuned to the data in the training
+set. In supervised learning, we aim for a classifier that performs almost as
+well on the test data as it does on the training data. That would indicate that
+the model, with this particular hyperparameter configuration, will perform well
+on new data that has yet to be seen.
 
 ### Variable importance
 
@@ -501,7 +517,7 @@ returns a visible bump in the probability of death. `serum_creatinine` is
 associated with a similar increase, but at low levels. The final plot, at the
 lower right, darker reds indicate higher probability of death.
 
-## Random Forest
+### Random Forest
 
 A random forest model is an example of an ensemble model. It aims to fix the
 weakness of decision trees by introducing a little noise in the fitting
@@ -526,7 +542,8 @@ Cross-validation begins with a split of the training data into $k$ blocks
 (typically $k=5$). Then, for each block $i$,
 
 1. Set aside block $i$, and use the *remaining* data to fit the model.
-2. Use the fitted model to predict on block $i$, thus obtaining one estimate of generalised error.
+2. Use the fitted model to predict on block $i$, thus obtaining one estimate of
+   generalised error.
 
 The process yields $k$ estimates of error - one for each block that was set
 aside. This can be used to compare between hyperparamter settings. In this case
@@ -535,43 +552,41 @@ large a depth would overfit to the data, and we wish to avoid that.
 
 ```{python}
 p_range = range(1, 11, 1)
-```
-
-```{python}
-list(p_range)
-```
-
-```{python}
+#list(p_range)
 cv_search = GridSearchCV(RandomForestClassifier(n_estimators=20, random_state=21), 
                          return_train_score=True,
                          param_grid ={'max_depth': p_range},
                          scoring = 'accuracy', cv= 5, verbose=1)
-```
-
-```{python}
 cv_search.fit(X_train, y_train)
 ```
+
+After calling the `.fit()` method, the optimal parameters are available for 
+persual:
 
 ```{python}
 cv_search.best_estimator_
 ```
 
+It is also possible, at this point, to extract the training and test scores for 
+each cross-validation set, and to then plot the validation curve.
+
 ```{python}
+#| fig-align: center
 train_means = cv_search.cv_results_['mean_train_score']
 train_sd = cv_search.cv_results_['std_train_score']
 
 test_means = cv_search.cv_results_['mean_test_score']
 test_sd = cv_search.cv_results_['std_test_score']
-```
-
-```{python}
 plt.plot(p_range, train_means, 'o-', label='Training', color='blue')
-plt.fill_between(p_range, train_means-train_sd, train_means+train_sd, color='blue', alpha=0.2)
+plt.fill_between(p_range, train_means-train_sd, train_means+train_sd, 
+                 color='blue', alpha=0.2)
 
 plt.plot(p_range, test_means, 'o-', label='CV (Test)', color='red')
-plt.fill_between(p_range, test_means-test_sd, test_means+test_sd, color='red', alpha=0.2)
+plt.fill_between(p_range, test_means-test_sd, test_means+test_sd, 
+                 color='red', alpha=0.2)
 
-plt.legend(loc='lower right');plt.ylabel('Accuracy');plt.xlabel('Complexity');plt.title('Validation Curve');
+plt.legend(loc='lower right');plt.ylabel('Accuracy');
+plt.xlabel('Complexity');plt.title('Validation Curve');
 ```
 
 From the above chart, we can see that as the max. depth increases, both the
@@ -582,10 +597,14 @@ complexity, accuracy in the training set approaches 1. From the curve, a good
 choice for the `max_depth` parameter is 3:
 
 * The test error for this value is close to the training error.
-* Any `max_depth` larger than this would lead to overfitting (fitting the noise patterns in the data to the model).
-* The convention is to take the smallest complexity that is not more than 1 standard error away from the best performing model.
+* Any `max_depth` larger than this would lead to overfitting 
+  (fitting the noise patterns in the data to the model).
+* The convention is to take the smallest complexity that is not more than 1 
+  standard error away from the best performing model.
 
-### Classification Scores 
+::: {#exm-heart-failure-3 style="background-color: #D5D1D164; padding: 20px"}
+### Example: Heart Failure Classification Scores II
+\index{Heart Failure!Random Forest}
 
 ```{python}
 rf = RandomForestClassifier(n_estimators=20, max_depth=3, random_state=40)
@@ -617,24 +636,34 @@ The f1-score (for cat. 1) is {f1_score(y_test, y_pred_test):.3f}
 Compared with the earlier single decision tree, we have obtained an improved
 test accuracy (from 0.760 to 0.827).
 
-# Taiwan Real Estate Data
+:::
+
+## Regression
 
 Just to demonstrate the use of random forests for regression, we return to the
 Taiwan Data. In our scoring, instead of using RMSE or MAE, we shall use the
 $R^2$.
 
+First, we read the Taiwan data into Python and transform each column to have 
+mean 0 and sd 1.
+
 ```{python}
 re2 = pd.read_csv("data/taiwan_dataset.csv")
 
-X_re = re2.loc[:, ['trans_date', 'house_age', 'dist_MRT', 'num_stores', 'Xs', 'Ys']]
+X_re = re2.loc[:, ['trans_date', 'house_age', 'dist_MRT', 
+                   'num_stores', 'Xs', 'Ys']]
 re_scaler = StandardScaler().fit(X_re)
 X_re_scaled = re_scaler.transform(X_re)
 y_re = re2.price
 
-Xre_train,Xre_test,yre_train,yre_test = train_test_split(X_re_scaled, y_re, test_size=0.2, random_state=41)
+Xre_train,Xre_test, yre_train,yre_test = train_test_split(X_re_scaled, 
+                                                          y_re, test_size=0.2, 
+                                                          random_state=41)
 ```
 
-## Random Forest Regressor
+### Random Forest Regressor
+
+Next, we set up a grid search to set up a random forest regressor.
 
 ```{python}
 p_range = range(1, 11, 1)
@@ -642,29 +671,35 @@ rf_search = GridSearchCV(RandomForestRegressor(n_estimators=10, random_state=43)
                          {'max_depth': p_range}, 
                          scoring='r2', cv=5, verbose=1, return_train_score=True)
 rf_search.fit(Xre_train, yre_train,)
-```
-
-```{python}
 rf_search.best_estimator_
 ```
 
+Here is the validation curve, that will allow us to decide on the optimal number 
+of trees.
+
 ```{python}
+#| fig-align: center
 train_means = rf_search.cv_results_['mean_train_score']
 train_sd = rf_search.cv_results_['std_train_score']
 
 test_means = rf_search.cv_results_['mean_test_score']
 test_sd = rf_search.cv_results_['std_test_score']
-```
 
-```{python}
 plt.plot(p_range, train_means, 'o-', label='Training', color='blue')
-plt.fill_between(p_range, train_means-train_sd, train_means+train_sd, color='blue', alpha=0.2)
+plt.fill_between(p_range, train_means-train_sd, train_means+train_sd, 
+                 color='blue', alpha=0.2)
 
 plt.plot(p_range, test_means, 'o-', label='CV (Test)', color='red')
-plt.fill_between(p_range, test_means-test_sd, test_means+test_sd, color='red', alpha=0.2)
+plt.fill_between(p_range, test_means-test_sd, test_means+test_sd, 
+                 color='red', alpha=0.2)
 
-plt.legend(loc='lower right');plt.ylabel('R2');plt.xlabel('Complexity');plt.title('Validation Curve');
+plt.legend(loc='lower right');plt.ylabel('R2');
+plt.xlabel('Complexity');plt.title('Validation Curve');
 ```
+
+::: {#exm-taiwan-data-14 style="background-color: #D5D1D164; padding: 20px"}
+### Example: Taiwan Data Regression
+\index{Taiwan Data!Random Forest Regression}
 
 We shall fit a model with 10 trees, and max_depth 2, and assess the test error.
 
@@ -681,9 +716,11 @@ yrf_pred = rf1.predict(Xre_test)
 r2_score(yre_test, yrf_pred)
 ```
 
-# Interpretability of Models
+:::
 
-## LIME 
+## Interpretability of Models
+
+### LIME 
 
 While the earlier methods indicated how we can understand the importance of
 features to the overall model, we have better tools to understand how features
@@ -709,19 +746,21 @@ interest is the yellow point.
 
 ![LIME](figs/lime-fitting-1.jpeg){fig-align=center width=60%}
 
-Now we return to our dataset on real estate transations and attempt to understand the prediction made for a particular instance:
+::: {#exm-taiwan-data-15 style="background-color: #D5D1D164; padding: 20px"}
+### Example: Taiwan Data LIME
+\index{Taiwan Data!LIME}
+
+Now we return to our dataset on real estate transations and attempt to
+understand the prediction made for a particular instance:
 
 ```{python}
 re_scaler.inverse_transform(Xre_test[4, :].reshape(1, -1)).round()
+#X_re.mean(axis=0).round(3)
+#Xre_test[4, :].round(4)
 ```
 
-```{python}
-X_re.mean(axis=0).round(3)
-```
-
-```{python}
-Xre_test[4, :].round(4)
-```
+First we instantiate an explainer object, and then provide it with the instance 
+we wish to explain.
 
 ```{python}
 explainer = lime_tabular.LimeTabularExplainer(
@@ -739,6 +778,7 @@ exp = explainer.explain_instance(
 ```
 
 ```{python}
+#| fig-align: center
 exp.as_pyplot_figure();
 ```
 
@@ -771,7 +811,9 @@ This means that, from the values, we can see that the `dist_MRT`, which was
 close to the average distance, had a negative impact on the price. The
 longitude had a positive impact on the price. 
 
-## ICE plots
+:::
+
+### ICE plots
 
 ICE plots are conditional versions of PDP. Instead of *averaging* over all
 instances in the training set, a single line is generated for each instance
@@ -780,6 +822,7 @@ inspect if the relationship between the response and the feature is consistent
 across the data.
 
 ```{python}
+#| fig-align: center
 _, ax = plt.subplots(ncols=2, nrows=1, figsize=(12, 4), constrained_layout=True)
 features_info = {
     "features": [1,2], # no names in the array; 1 and 2 correspond to house_age and dist_MRT

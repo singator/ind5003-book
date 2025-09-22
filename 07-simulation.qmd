@@ -5,7 +5,26 @@ execute:
   cache: true
 ---
 
-#### Import Packages
+## Random Variables
+
+In statistics, we use random variables to describe the probabilistic behaviour
+of phenomenon. Random variables are real numbers that represent the phenomena we
+observe. For instance, we might let $X$ represent a coin toss, with $X=1$
+representing Heads and $X=0$ representing Tails.
+
+Random variables come with a rule (or function) that prescribes the
+probabilities with which it takes on particular values. For instance, if we had
+a fair coin, then the rule would be that 
+$$
+P(X=1) = P(X=0) = \frac{1}{2}
+$$
+
+On the other hand, a biased coin might follow the rule
+$$
+P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
+$$
+
+This rule tells us which events are more likely, and which are less likely.
 
 ```{python}
 from math import pi 
@@ -26,32 +45,14 @@ from scipy import stats
 from scipy.stats import binom, bernoulli, norm, expon, uniform
 ```
 
-# Random Variables
 
-In statistics, we use random variables to describe the probabilistic behaviour
-of phenomenon. Random variables are real numbers that represent the phenomena
-we observe. For instance, we might let $X$ represent a coin toss, with $X=1$
-representing Heads and $X=0$ representing Tails.
-
-Random variables come with a rule (or function) that prescribes the
-probabilities with which it takes on particular values. For instance, if we had
-a fair coin, then the rule would be that 
-$$
-P(X=1) = P(X=0) = \frac{1}{2}
-$$
-
-On the other hand, a biased coin might follow the rule
-$$
-P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
-$$
-
-This rule tells us which events are more likely, and which are less likely.
-
-## Discrete vs. Continuous Random Variables.
+### Discrete vs. Continuous Random Variables.
 
 Discrete random variables take on only a countable number of values. Examples are:
+
 * A coin toss ($\{0, 1\}$)
-* The number of taxis passing by a particular junction between 12noon and 1pm. ($\{0, 1, 2, \ldots, \}$)
+* The number of taxis passing by a particular junction between 12noon and 1pm. 
+  ($\{0, 1, 2, \ldots, \}$)
 * The number of coin tosses until we observe Heads. ($\{1, 2, 3, \ldots, \}$)
 
 Discrete random variables are defined by their probability mass function (pmf),
@@ -63,6 +64,7 @@ We can visualise a pmf using a bar-chart. Here is the pmf for the above biased
 coin.
 
 ```{python}
+#| fig-align: center
 plt.bar([0,1], [1/3, 2/3], tick_label=['0', '1'], width=0.3);
 plt.xlim(-1,2); 
 plt.ylim(0,1); 
@@ -74,8 +76,10 @@ after 10 tosses of that same coin. Suppose we call that new random variable
 $Y$.
 
 ```{python}
+#| fig-align: center
 probs = binom.pmf(np.arange(0, 11), n=10, p=2/3)
-plt.bar(np.arange(0, 11), probs);plt.ylim(0,1);plt.title('pmf of no. of coin tosses');
+plt.bar(np.arange(0, 11), probs);plt.ylim(0,1);
+plt.title('pmf of no. of coin tosses');
 ```
 
 If we wish to find the probability of events, for instance, $P(Y \le 4)$, we
@@ -86,6 +90,7 @@ density function. Continuous random variables can take on an uncountable number
 of values, for instance, all real numbers in the interval $[0,1]$.
 
 ```{python}
+#| fig-align: center
 x = np.linspace(-3, 3, num=100)
 y = norm.pdf(x)
 plt.figure(figsize=(12,4), facecolor='0.9')
@@ -108,13 +113,14 @@ plt.ylim(0,1.1)
 plt.title('Uniform pdf');
 ```
 
-## Generating Random Variates
+### Generating Random Variates
 
 With a computer, we can generate random variables from almost any distribution.
 There are built-in routines to generate from the 'named' distributions. For
 instance,
 
 ```{python}
+#| fig-align: center
 rng = default_rng(5003)
 
 yvals = np.zeros((3,300))
@@ -133,9 +139,9 @@ for i in np.arange(0,3):
 
 Notice how the (normalised) histograms look a lot like the corresponding pdfs.
 
-# General Principles in Simulation Studies
+## General Principles in Simulation Studies
 
-## Introduction
+### Introduction
 
 The objective of any simulation study is to estimate an expectation $E(X)$.
 Simulation studies involve the use of a computer to generate independent copies 
@@ -147,7 +153,9 @@ Through the estimation of $E(X)$, simulation studies allow us to:
 1. Consider different planning scenarios and estimate the throughput from them.
 2. Study the emergent behaviour of complex situations.
 
+::: {#exm-insurance-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Insurance Claims
+\index{Insurance!Description}
 
 Before the financial year begins, an insurance company has to decide how much
 cash to keep, in order to pay out the claims for that year. Suppose that 
@@ -167,7 +175,11 @@ If we let $Y$ be the random variable representing the total sum of claims, we
 are interested in estimating $P(Y > 12000)$. Since probabilities are expectations,
 we can use simulation to estimate this value.
 
+:::
+
+::: {#exm-sandwich-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Sandwich Shop Closing Time
+\index{Sandwich!Description}
 
 Here is a slightly more sophisticated example.
 
@@ -180,7 +192,9 @@ If you are willing to assume that the inter-arrival times of customers is
 $Exp(3)$ hours, then it is possible to simulate this process to estimate the 
 mean time that you would have to remain open, beyond 5pm.
 
-## Steps in a Simulation Study
+:::
+
+### Steps in a Simulation Study
 
 The two examples above are known as Discrete Event Simulations. It is one type
 of simulation study.  Another type of simulations are Agent-Based Models. No
@@ -192,12 +206,12 @@ matter the type of simulation, the basic steps in a simulation study are:
 
 Before proceeding, let us refresh our knowledge of the properties of the sample mean.
 
-## Theory
+### Theory
 
 There are two important theorems that simulation studies rely on. The first 
 is the Strong Law of Large Numbers (SLLN).
 
-### Strong Law of Large Numbers
+#### Strong Law of Large Numbers
 
 If $X_1, X_2, \ldots, X_n$ are independent and identically distributed with 
 $E(X) < \infty$, then 
@@ -212,7 +226,7 @@ $E(X)$, *no matter what the distribution of $X$ is.*
 
 The second theorem that aids us is the Central Limit Theorem (CLT).
 
-### Central Limit Theorem
+#### Central Limit Theorem
 
 Let $X_1, X_2, \ldots, X_n$ be i.i.d., and suppose that 
 
@@ -232,7 +246,7 @@ confidence interval for the expectation that we are estimating.
 
 Also take note of the following properties of the sample mean and variance:
 
-### Sample Estimates
+#### Sample Estimates
 
 It can be shown that both the sample mean and sample standard deviation are 
 unbiased estimators.
@@ -265,7 +279,7 @@ $$
 \bar{X} \pm z_{1-\alpha/2} \sqrt{\frac{\bar{X}(1-\bar{X})}{n}}
 $$
 
-# Object-Oriented Programming in Python
+## Object-Oriented Programming in Python
 
 Python has been developed as both a functional and object-oriented programming
 language. Much of the code we will soon use for the mesa package involves
@@ -323,7 +337,7 @@ The area of c1 is {c1.area():.3f} and the area of c2 is {c2.area():.3f}.
 """)
 ```
 
-# Introduction to Agent Based Models
+## Introduction to Agent Based Models
 
 Agent-based models (ABM) consist of individual elements (agents) interacting
 with one another. One of the most common uses of an agent-based model is to
@@ -357,11 +371,10 @@ Remember that our role as analysts is to imbue the agents with the appropriate
 traits (behaviours), interactions and probabilities. Otherwise, our model is
 not going to yield useful results.
 
-# Introduction to Mesa
+### Introduction to Mesa
 
-Mesa is a Python package for running simulations using Agent-Based Models
-(ABM). Before we proceed, here are a few overarching concepts about this
-framework:
+Mesa is a Python package for running simulations using Agent-Based Models (ABM).
+Before we proceed, here are a few overarching concepts about this framework:
 
 1. *Agents* are defined using classes. Within the class definition for an agent, we need to define:
     * how the agent is initialised,
@@ -375,7 +388,7 @@ agents and/or the model at each step of the scheduler. Both the agent and the
 model classes should define a `step()` method. In ABM, a *step* is the smallest
 unit of time. It is also sometimes referred to as a "tick".
 
-# Boltzmann Model Overview 
+## Boltzmann Model Overview 
 
 This is a simple model from social sciences, to demonstrate the use of mesa for
 agent-based modeling. In this agent-based economy, the assumptions are:
@@ -384,13 +397,15 @@ agent-based modeling. In this agent-based economy, the assumptions are:
 2. All agents begin with 1 unit of money.
 3. At every step of the model, an agent gives 1 unit of money (if they have it), to another, randomly chosen, agent.
 
-The reference for this paper is 
-[Statistical Mechanics of Money, Income, and Wealth: A Short Survey](http://arxiv.org/abs/cond-mat/0211175). Before we begin
-the model, think about what you expect to see after some time. 
+The reference for this paper is @dragulescu2002statistical. Before we begin the
+model, think about what you expect to see after some time.
 
-# Agent and Model Classes (v1)
+## Agent and Model Classes (v1)
 
-The code below contains our initial definition for the agent class. The initialisation simply consists of setting the wealth for the agent. The `step` method defines that the agent will pick an agent (possibly itself) and transfer 1 unit of money to that agent.
+The code below contains our initial definition for the agent class. The
+initialisation simply consists of setting the wealth for the agent. The `step`
+method defines that the agent will pick an agent (possibly itself) and transfer
+1 unit of money to that agent.
 
 ```{python}
 class MoneyAgent(mesa.Agent):
@@ -415,7 +430,13 @@ The following flowchart depicts the flow of events for each agent. It is useful 
 
 ![Agent trajectory](figs/money_agent_flowchart.png){fig-align="center" width=60%}
 
-The next class defines the model itself. The initialisation of a model typically consists of populating it with various agents. However, it is also important to define the scheduler. In this case, the scheduler is based on `RandomActivation`. This means that *at every step*, the agents are shuffled, and then each of their `step` methods are executed in that order. The order changes at every time step. It is necessary to avoid running all agents' steps at the same time to avoid clashes.
+The next class defines the model itself. The initialisation of a model typically
+consists of populating it with various agents. However, it is also important to
+define the scheduler. In this case, the scheduler is based on
+`RandomActivation`. This means that *at every step*, the agents are shuffled,
+and then each of their `step` methods are executed in that order. The order
+changes at every time step. It is necessary to avoid running all agents' steps
+at the same time to avoid clashes.
 
 ```{python}
 class MoneyModel(mesa.Model):
@@ -467,10 +488,12 @@ prop = (np.array(all_wealth) == 0).mean()
 print(f"The proportion of agents with zero wealth is {prop:.3f}.")
 ```
 
-## Data Collection
+### Data Collection
 
-However, remember that when we perform simulations, we need to repeat the run multiple times, take the average, and then form a 
-confidence interval. To prepare the mesa model to perform data collection, we write a function that, given a model, will compute the proportion of zero-wealth agents.
+However, remember that when we perform simulations, we need to repeat the run
+multiple times, take the average, and then form a confidence interval. To
+prepare the mesa model to perform data collection, we write a function that,
+given a model, will compute the proportion of zero-wealth agents.
 
 ```{python}
 def compute_zero_prop(mesa_model):
@@ -484,7 +507,10 @@ def compute_zero_prop(mesa_model):
 compute_zero_prop(model)
 ```
 
-Next, we update the model class to define a data collector that calls the `compute_zero_prop()` function that we just defined. With Mesa, the data collector can be based on the model, or it could be a function that operates on individual agents.
+Next, we update the model class to define a data collector that calls the
+`compute_zero_prop()` function that we just defined. With Mesa, the data
+collector can be based on the model, or it could be a function that operates on
+individual agents.
 
 ```{python}
 class MoneyModel(mesa.Model):
@@ -515,7 +541,8 @@ class MoneyModel(mesa.Model):
         self.datacollector.collect(self)
 ```
 
-Once again, we reset the seed and re-run the model. We can then retrieve the zero-wealth proprortion at *every step of the model*. 
+Once again, we reset the seed and re-run the model. We can then retrieve the
+zero-wealth proprortion at *every step of the model*.
 
 ```{python}
 model = MoneyModel(10)
@@ -529,11 +556,18 @@ for i in range(100):
 model.datacollector.get_model_vars_dataframe()
 ```
 
-Take note that this is considered *a single simulation*. Any simulation model requires time to reach an equilibrium phase. In this case, we are interested in measuring the average proportion of zeros after 100 time steps. To do so, we need to run several simulations, compute the zero-wealth proportion at each step and take the average.
+Take note that this is considered *a single simulation*. Any simulation model
+requires time to reach an equilibrium phase. In this case, we are interested in
+measuring the average proportion of zeros after 100 time steps. To do so, we
+need to run several simulations, compute the zero-wealth proportion at each step
+and take the average.
 
-# Multiple Iterations
+## Multiple Iterations
 
-The mesa package has features to help us to run multiple simulations and then to collate the results. The primary method is `.batch_run()`. Now we shall run the model for 50 iterations. Remember that each iteration consists of a fresh set of 100 time steps. 
+The mesa package has features to help us to run multiple simulations and then to
+collate the results. The primary method is `.batch_run()`. Now we shall run the
+model for 50 iterations. Remember that each iteration consists of a fresh set of
+100 time steps.
 
 ```{python}
 params = {"N": 10}
@@ -551,6 +585,7 @@ results = mesa.batch_run(
 ```
 
 ```{python}
+#| fig-align: center
 results_df = pd.DataFrame(results)
 
 results_df.zero_prop.hist(grid=False, bins=np.arange(0.10, 1.00, 0.05));
@@ -565,29 +600,44 @@ stats.ttest_1samp(results_df.zero_prop, 0.0).confidence_interval()
 
 We can see that the proportion of agents with zero income is approximately 0.42. This is considerably higher than the 0.0 that the population began with.
 
-# Agent and Model Classes (v2)
+## Agent and Model Classes (v2)
 
-## Assessment of Income Inequality
+### Assessment of Income Inequality
 
-The Gini coefficient is a common measure of the income inequality of a population. The Gini coefficient can be defined using a Lorenz curve for a population:
+The Gini coefficient is a common measure of the income inequality of a
+population. The Gini coefficient can be defined using a Lorenz curve for a
+population:
 
 ![Lorenz curve](figs/Economics_Gini_coefficient2.svg.png){fig-align=center width=50%}
 
-The x- and y-axes both run from 0 to 100%. The x-axis depicts the cumulative proportion of a population (increasing from left to right), ranked by income. The y-axis depicts the cumulative proportion of total income earned by the population. If all members earned an equal amount, the Lorenz curve would be a straight line, from bottom left to top right. Gini coefficient measures deviation from this equality as:
+The x- and y-axes both run from 0 to 100%. The x-axis depicts the cumulative
+proportion of a population (increasing from left to right), ranked by income.
+The y-axis depicts the cumulative proportion of total income earned by the
+population. If all members earned an equal amount, the Lorenz curve would be a
+straight line, from bottom left to top right. Gini coefficient measures
+deviation from this equality as:
 
 $$
 \frac{A}{A+B}
 $$
 
-The Gini coefficient is a measure between 0 and 1. A value of 0 indicates income equality, while a value of 1 indicates that only 1 member of the population earns all the income (extreme inequality). Here is an interactive visualisation from Our World in Data on Gini coefficient values around the world, across time.
+The Gini coefficient is a measure between 0 and 1. A value of 0 indicates income
+equality, while a value of 1 indicates that only 1 member of the population
+earns all the income (extreme inequality). Here is an interactive visualisation
+from Our World in Data on Gini coefficient values around the world, across time.
 
+::: {.content-visible when-format="html"}
 ```{python}
 from IPython.display import IFrame
 
 IFrame(src='https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map', width=1024, height=600)
 ```
+:::
 
-The [wikipedia page](https://en.wikipedia.org/wiki/Gini_coefficient) on Gini coefficient contains a formula for computing Gini coefficient, given the income of all agents. After implementing it, we include it in the model class, along with our earlier metric.
+The [wikipedia page](https://en.wikipedia.org/wiki/Gini_coefficient) on Gini
+coefficient contains a formula for computing Gini coefficient, given the income
+of all agents. After implementing it, we include it in the model class, along
+with our earlier metric.
 
 ```{python}
 def compute_gini(model):
@@ -625,9 +675,12 @@ class MoneyModel(mesa.Model):
         self.datacollector.collect(self)
 ```
 
-## Data Collection
+### Data Collection
 
-Suppose we are interested to study how the Gini coefficient of our little population evolves over time. We shall use the `batch_run` to run 50 iterations, and then create a summary visualisation of the evolution of Gini coefficient for each iteration.
+Suppose we are interested to study how the Gini coefficient of our little
+population evolves over time. We shall use the `batch_run` to run 50 iterations,
+and then create a summary visualisation of the evolution of Gini coefficient for
+each iteration.
 
 ```{python}
 params = {"N": 10}
@@ -643,9 +696,12 @@ results = mesa.batch_run(
 )
 ```
 
-We would like to inspect how the inequality varies over the time steps. Hence, at each time step, we obtain the lower and upper quantiles along with the median and plot them.
+We would like to inspect how the inequality varies over the time steps. Hence,
+at each time step, we obtain the lower and upper quantiles along with the median
+and plot them.
 
 ```{python}
+#| fig-align: center
 results_df = pd.DataFrame(results)
 grp_by_step = results_df.Gini.groupby(results_df.Step).describe()
 #grp_by_step.head()
@@ -654,15 +710,23 @@ grp_by_step[['25%', '50%', '75%']].plot(style=['--', '-', '--'])
 plt.ylim([0, 1]);
 ```
 
-We can see that the Gini index quickly achieves one of the highest inequality values that we observe in the world, and remains there.
+We can see that the Gini index quickly achieves one of the highest inequality
+values that we observe in the world, and remains there.
 
-# Agent and Model Classes (v3)
+## Agent and Model Classes (v3)
 
-## Adding a spatial component
+### Adding a spatial component
 
-Next we introduce another critical component of agent-based modeling - the spatial component. We retain the Gini coefficient computation, but we are going to modify the model behaviour such that agents only exchange money if the other agent is nearby. The `MultiGrid` defines a rectangular grid, indexed by `[x, y]`, where `[0, 0]` is assumed to be at bottom-left and `[width - 1, height - 1]` is the top-right. If a grid is toroidal, the top and bottom, and left and right, edges wrap to each other.
+Next we introduce another critical component of agent-based modeling - the
+spatial component. We retain the Gini coefficient computation, but we are going
+to modify the model behaviour such that agents only exchange money if the other
+agent is nearby. The `MultiGrid` defines a rectangular grid, indexed by `[x,
+y]`, where `[0, 0]` is assumed to be at bottom-left and `[width - 1, height -
+1]` is the top-right. If a grid is toroidal, the top and bottom, and left and
+right, edges wrap to each other.
 
-In the loop to create agents, the agents are added to a random x- and y- cell of the grid.
+In the loop to create agents, the agents are added to a random x- and y- cell of
+the grid.
 
 ```{python}
 class MoneyModel(mesa.Model):
@@ -737,11 +801,12 @@ class MoneyAgent(mesa.Agent):
             self.give_money()
 ```
 
-## Data Collection
+### Data Collection
 
 The next code cell runs a single iteration with 100 agents in a 10x10 grid.
 
 ```{python}
+#| fig-align: center
 model = MoneyModel(100, 10, 10)
 for i in range(100):
     model.step()
@@ -766,7 +831,8 @@ results = mesa.batch_run(
 )
 ```
 
-For a visualisation of the results, we shall compute the mean Gini coefficient at each time step, grouped by `N`. 
+For a visualisation of the results, we shall compute the mean Gini coefficient
+at each time step, grouped by `N`.
 
 ```{python}
 results_df = pd.DataFrame(results)
@@ -777,6 +843,7 @@ grp_by_step.reset_index(inplace=True)
 ```
 
 ```{python}
+#| fig-align: center
 grouped = grp_by_step.groupby('N')
 plt.figure(figsize=(10, 6))
 
@@ -789,11 +856,17 @@ plt.title('Gini vs Step by N (number of agents)');
 plt.legend();
 ```
 
-As we can see, the value at which the Gini coefficient converges to differs for varying `N`. For smaller `N`, the final Gini value seems to be lower. For all the settings, the convergence does appear to happen at approximately the same time step. 
+As we can see, the value at which the Gini coefficient converges to differs for
+varying `N`. For smaller `N`, the final Gini value seems to be lower. For all
+the settings, the convergence does appear to happen at approximately the same
+time step.
 
-# Visualisations
+## Visualisations
 
-As with most ABM software, it is possible to visualise the steps. This is not to be used for conveying results to management; it is more for debugging, and for study for the purpose of understanding the behaviour and for generating hypothesis.
+As with most ABM software, it is possible to visualise the steps. This is not to
+be used for conveying results to management; it is more for debugging, and for
+study for the purpose of understanding the behaviour and for generating
+hypothesis.
 
 ```{python}
 def agent_portrayal(agent):
@@ -836,9 +909,10 @@ model_params = {
 #page
 ```
 
-<div style="background-color: #99c1f133; padding: 20px">
-
-Remember that simulations are a risk-free approach to trying out different scenarios. They are especially useful when it is difficult to guage what interactions the output depends on. In this case, here are some modifications you can try to understand the Boltzmann Wealth Distribution model better.
+Remember that simulations are a risk-free approach to trying out different
+scenarios. They are especially useful when it is difficult to guage what
+interactions the output depends on. In this case, here are some modifications
+you can try to understand the Boltzmann Wealth Distribution model better.
 
 * Vary the number of agents, to understand the Gini coefficient after 100 steps.
 * When there are N agents, what is the proportion of agents that own 80% of the total wealth after a certain number of steps?
@@ -847,13 +921,15 @@ Remember that simulations are a risk-free approach to trying out different scena
 * What if we want to know when Gini coefficient first crosses a threshold?
 * What if we want to use [Palma Ratio](ttps://en.wikipedia.org/wiki/Income_inequality_metrics#Palma_ratio) instead?
 
-</div>
 
-# Simpler Simulation Models
+## Simpler Simulation Models
 
-In this section, we provide two examples of "simpler" simulation scenarios. These are not agent-based models, but they use probability distributions to model language, and then to represent the scenario where we intend to perform a 2-sample $t$-test.
+In this section, we provide two examples of "simpler" simulation scenarios.
+These are not agent-based models, but they use probability distributions to
+model language, and then to represent the scenario where we intend to perform a
+2-sample $t$-test.
 
-## N-gram models
+### N-gram models
 
 Here is an example of how we can simulate from distributions to generate random (nonsensical) sentences that are "similar" to actual sentences from a text.
 
@@ -871,13 +947,15 @@ The object `cfd` contains information on the distribution of words that come aft
 cfd['she']
 ```
 
-The object `kjv` contains all the words and punctuations from the King James Bible. Here are the first 20 words:
+The object `kjv` contains all the words and punctuations from the King James
+Bible. Here are the first 20 words:
 
 ```{python}
 ' '.join(kjv[:20])
 ```
 
-Next, we extract all bigrams and create a dictionary of frequency distributions. Each frequency distribution tabulates the occurences of the *next* word.
+Next, we extract all bigrams and create a dictionary of frequency distributions.
+Each frequency distribution tabulates the occurences of the *next* word.
 
 Suppose we are interested in what words/tokens come after the word 'And' in the bible:
 
@@ -885,7 +963,11 @@ Suppose we are interested in what words/tokens come after the word 'And' in the 
 cfd['And'].keys()
 ```
 
-Thus 'the' is the most likely word after 'And'. The second most likely pairing would be 'And the', and so on. We can convert this into a pmf, just by normalising to ensure that it sums to 1. Then we are ready to generate a pairing once we know that the first word is 'And'. With the second word, we turn to its frequency distribution and simulate the third word, and so on.
+Thus 'the' is the most likely word after 'And'. The second most likely pairing
+would be 'And the', and so on. We can convert this into a pmf, just by
+normalising to ensure that it sums to 1. Then we are ready to generate a pairing
+once we know that the first word is 'And'. With the second word, we turn to its
+frequency distribution and simulate the third word, and so on.
 
 ```{python}
 rng = default_rng(1361)
@@ -904,7 +986,7 @@ def generate_model(cfdist, word, num=15):
 generate_model(cfd, 'God', 10)
 ```
 
-## Power Analysis
+### Power Analysis
 
 Recall that this is the general form of a 2-sample $t$-test:
 \begin{eqnarray}
@@ -954,12 +1036,13 @@ for n_ in n_vals:
 ```
 
 ```{python}
+#| fig-align: center
 ax = plt.plot(n_vals, power_est, 'go-')
 plt.hlines(0.9, n_vals[0], n_vals[-1], colors='b', linestyles='dotted')
 plt.title('Power Estimates');
 ```
 
-# Summary: Simulation-Based Modeling
+## Summary: Simulation-Based Modeling
 
 In simulation-based modeling, we have several things to consider. 
 
@@ -976,20 +1059,20 @@ Here are some general guidelines to begin with your simulation model:
 4. Add more and more realistic layers to our simulation as you proceed.
 5. Remember that simulation is used in estimating mean values. You will be able to estimate standard deviations around your estimate too.
 
-# References
+## References
 
-## Mesa Links
+### Mesa Links
 
 1. [Mesa documentation](https://mesa.readthedocs.io/en/stable/index.html): The Boltzmann tutorial in our lecture was modified from this page.
 2. [Mesa examples on github](https://github.com/projectmesa/mesa-examples)
 
-## Other ABM Software
+### Other ABM Software
 
 1. [Netlogo](https://ccl.northwestern.edu/netlogo/): Netlogo is an  open-source software for ABM. There are a host of examples that you can take a look. However NetLogo uses it's own programming language.
    * https://ccl.northwestern.edu/netlogo/models/index.cgi : Several of the examples can be run directly on the web. The mesa examples repository has several mesa versions of these NetLogo models.
 2. [AnyLogic](https://www.anylogic.com/): AnyLogic is a commercial software from a Russian company that combines ABM with DES. It is very powerful and allows for the creation of impressive animations.
 
-## Reference Papers and Websites
+### Reference Papers and Websites
 
 1. [Statistical Mechanics of Money, Income, and Wealth: A Short Survey](http://arxiv.org/abs/cond-mat/0211175): This paper contains more information about more complex versions of the Boltzmann model.
 2. [Explanation of Boids model](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2008-09/modeling-natural-systems/boids.html)
@@ -997,13 +1080,13 @@ Here are some general guidelines to begin with your simulation model:
 12. [Segregation in polygons](https://ncase.me/polygons/)
 
 
-## Other Simulation Software
+### Other Simulation Software
 
 1. [Simpy documentation](https://simpy.readthedocs.io/en/latest/) Simpy is a Python package for Discrete Event Simulations (DES). It is appropriate when there are arrivals
    to a set of queues.
 2. [Arena](https://www.rockwellautomation.com/en-us/products/software/arena-simulation.html) ARENA is a commercial DES software. There is a free license for academic use.
 
-## Other Links
+### Other Links
 
 1. [Python documentation on classes](https://docs.python.org/3.10/tutorial/classes.html)
 

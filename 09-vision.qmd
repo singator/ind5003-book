@@ -3,7 +3,7 @@ title: Computer Vision
 jupyter: python3
 ---
 
-# Introduction
+## Introduction
 
 Data science has a number of applications in computer vision. These have
 increased in number and accuray in the past 5 years or so due to the
@@ -20,7 +20,8 @@ Here is a short list of applications of computer vision techniques:
 3. Machine inspection: Automatically detecting damage on components
    manufactured, such as silicon wafers, etc.
 
-[Here](https://www.cs.ubc.ca/~lowe/vision.html) is an old page with a more comprehensive list of applications.
+[Here](https://www.cs.ubc.ca/~lowe/vision.html) is an old page with a more
+comprehensive list of applications.
 
 In computer vision, the goal is to get a computer to perceive the world as *we*
 see it. This is not easy even for us to do - we can get fooled by optical
@@ -29,8 +30,6 @@ illusions such as the ones below.
 In general though, for us, it is possible to do things like pick out faces that
 we recognise from a photograph of a crowd. But how can we get a computer to do
 it? 
-
-#### Import Libraries
 
 ```{python}
 import cv2
@@ -45,9 +44,9 @@ opencv_path = "opencv/samples/data/"
 opencvxtra_path = "opencv_extra/testdata/dnn/"
 ```
 
-# Image Processing
+## Image Processing
 
-## Reading Images
+### Reading Images
 
 The `opencv` package contains routines for reading images into Python. Images
 are typically represented using the RGB colorspace. Each image is a (W x H x 3)
@@ -56,15 +55,15 @@ uses the order BGR. When you use `plt.imshow` to plot an image that has been
 read in using opencv, take note of this, as it might not appear "correct".
 
 ```{python}
+#| fig-align: center
 Image("data/starry_night.jpg", width=240)
-```
 
-```{python}
 from matplotlib import colormaps
-list(colormaps)
+#list(colormaps)
 ```
 
 ```{python}
+#| fig-align: center
 starry_night = cv2.imread('data/starry_night.jpg')
 
 # Reversed (not correct)
@@ -72,6 +71,8 @@ plt.imshow(starry_night);
 #plt.imshow(starry_night[:, :, 0], cmap='Blues');
 ```
 
+The following code should open up the starry night image in a new window on your
+computer.
 ```{python}
 #| eval: false
 # plotting with cv2.imshow returns the correct colours.
@@ -82,70 +83,6 @@ cv2.resizeWindow('dst_rt', starry_night.shape[1], starry_night.shape[0])
 cv2.imshow('dst_rt', starry_night)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-```
-
-## Capture from Camera
-
-The following cell may take some time to load your onboard camera.
-
-```{python}
-#| eval: false
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    print("Cannot open camera")
-    exit()
-
-while True:
-    # Capture frame-by-frame
-    ret, frame = cap.read()
- 
-    # if frame is read correctly ret is True
-    if not ret:
-        print("Can't receive frame (stream end?). Exiting ...")
-        break
-    # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # Display the resulting frame
-    #cv2.imshow('frame', gray)
-    cv2.imshow('frame', frame)
-    if cv2.waitKey(1) == ord('q'):
-        break
- 
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
-```
-
-## Playing a video with opencv
-
-The following code will play a video with opencv functions.
-
-```{python}
-#| eval: false
-cap = cv2.VideoCapture('../data/vtest.avi')
- 
-while cap.isOpened():
-    ret, frame = cap.read()
- 
-    # if frame is read correctly ret is True
-    if not ret:
-        print("Can't receive frame (stream end?). Exiting ...")
-        break
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
- 
-    cv2.imshow('frame', gray)
-    if cv2.waitKey(1) == ord('q'):
-        break
- 
-cap.release()
-cv2.destroyAllWindows()
-```
-
-Alternatively, we can use IPython functions to embed a video as well.
-
-```{python}
-# Display a local video, taken from the FIFA 2016 world cup
-Video("data/obj_tracking_data.mp4", width=640, height=480)
 ```
 
 ## Working with Masks
@@ -203,6 +140,7 @@ ball.
 *Take note of where the origin is: at the top-left corner. The x-values increase to the right from there; y-values increase downward from there.*
 
 ```{python}
+#| fig-align: center
 plt.imshow(mask1, cmap='gray');
 ```
 
@@ -215,6 +153,7 @@ The next section of code identifies contours around the ball region, computes
 the convex hull around these points and then draws this on the original image.
 
 ```{python}
+#| fig-align: center
 #im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 contours, _ = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -234,9 +173,14 @@ to provide a map of four points from the original image (in the same plane),
 and the corresponding four points in the transformed image. Here are a couple
 of examples.
 
+::: {#exm-sudoku-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Example 1: Sudoku
+\index{Sudoku!Perspective}
+
+Here is an example of transforming the perspective.
 
 ```{python}
+#| fig-align: center
 sudoku = cv2.imread('data/sudoku.png')
 rows,cols,ch = sudoku.shape
 
@@ -248,6 +192,7 @@ plt.imshow(img2);
 ```
 
 ```{python}
+#| fig-align: center
 pts2 = np.float32([[0,0],[300,0],[300,300],[0,300]])
 M = cv2.getPerspectiveTransform(pts1,pts2)
 dst = cv2.warpPerspective(sudoku ,M,(300,300))
@@ -255,8 +200,11 @@ dst = cv2.warpPerspective(sudoku ,M,(300,300))
 plt.subplot(121),plt.imshow(sudoku),plt.title('Input')
 plt.subplot(122),plt.imshow(dst),plt.title('Output');
 ```
+:::
 
+::: {#exm-football-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Example 2: Football
+\index{Football!Perspective}
 
 ```{python}
 Image('data/football1.png')
@@ -276,6 +224,7 @@ img2 = cv2.polylines(football1, [pts], True, (255, 0, 0), 1 )
 ```
 
 ```{python}
+#| fig-align: center
 fig = plt.figure(figsize=(10, 5)) 
 gs = fig.add_gridspec(1, 2, width_ratios=[2, 1]) 
 
@@ -290,7 +239,9 @@ ax2.imshow(cv2.cvtColor(dst[:300, :200], cv2.COLOR_BGR2RGB))
 ax2.set_title('Transformed Image');
 ```
 
-# Computer Vision Tasks
+:::
+
+## Computer Vision Tasks
 
 Just as we observed there are numerous NLP tasks, the field of computer vision has made great strides in several tasks. Among them are:
 
@@ -329,263 +280,21 @@ is as follows:
 4. Once you have that working, inspect the script to obtain details on how to
    call the model programmatically, and proceed from there.
 
-Here is a list of all models available for download and use from the opencv repositories:
+## References
 
-```{python}
-#| eval: false
-%run opencv_extra/testdata/dnn/download_models.py -d models "Colorization (prototxt)"
-```
-
-## Object Detection
-
-For our first task, we shall demonstrate how we can use python functions from
-`opencv_extra` to download the SSD mobile net, v2.
-
-```{python}
-#| eval: false
-%run opencv_extra/testdata/dnn/download_models.py -d models "MobileNet-SSD v2 (TensorFlow)"
-```
-
-With that, we have downloaded the model weights. However, we still need a
-template script for calling the model, and the model itself requires certain
-specific parameters to run successfully. These parameters can be obtained from
-a file called `models.yml` from the opencv repository.
-
-```{python}
-#| eval: false
-%run opencv/samples/dnn/object_detection.py --input ../data/cars.jpg --model models/ssd_mobilenet_v2_coco_2018_03_29.pb \
---config opencv_extra/testdata/dnn/ssd_mobilenet_v2_coco_2018_03_29.pbtxt --scale 1.00 --width 300 --height 300 --rgb \
---classes ../data/coco_class_labels-Copy1.txt
-```
-
-```{python}
-#| eval: false
-cv2.destroyAllWindows()
-```
-
-The above approach uses a Python script to automatically process the image,
-detect the objects, and to then label them. However, it is often the case that
-we wish to perform this task in Python. We may wish to retrieve the labels, or
-to extract the section corresponding to one of the objects. For this purpose,
-we want to have minimal functions that input the image, and return the objects.
-Here is one approach:
-
-```{python}
-#| eval: false
-# ExecuteTime: {end_time: '2023-03-29T19:35:34.622060Z', start_time: '2023-03-29T19:35:34.608060Z'}
-modelFile  = "models/ssd_mobilenet_v2_coco_2018_03_29.pb"  #os.path.join("models", "ssd_mobilenet_v2_coco_2018_03_29.pb")
-configFile = "opencv_extra/testdata/dnn/ssd_mobilenet_v2_coco_2018_03_29.pbtxt" #os.path.join("models", "ssd_mobilenet_v2_coco_2018_03_29.pbtxt")
-classFile = "../data/coco_class_labels.txt"
-
-with open(classFile) as fp:
-    labels = fp.read().split("\n")
-#print(labels)
-
-# Read the Tensorflow network
-net = cv2.dnn.readNetFromTensorflow(modelFile, configFile)
-
-# For ach file in the directory
-def detect_objects(net, im, dim = 300):
-
-    # Create a blob from the image
-    blob = cv2.dnn.blobFromImage(im, 1.0, size=(dim, dim), mean=(0, 0, 0), swapRB=True, crop=False)
-
-    # Pass blob to the network
-    net.setInput(blob)
-
-    # Peform Prediction
-    objects = net.forward()
-    return objects
-
-FONTFACE = cv2.FONT_HERSHEY_SIMPLEX
-FONT_SCALE = 0.7
-THICKNESS = 1
-
-def display_text(im, text, x, y):
-    # Get text size
-    textSize = cv2.getTextSize(text, FONTFACE, FONT_SCALE, THICKNESS)
-    dim = textSize[0]
-    baseline = textSize[1]
-
-    # Use text size to create a black rectangle
-    cv2.rectangle(
-        im,
-        (x, y - dim[1] - baseline),
-        (x + dim[0], y + baseline),
-        (0, 0, 0),
-        cv2.FILLED,
-    )
-
-    # Display text inside the rectangle
-    cv2.putText(
-        im,
-        text,
-        (x, y - 5),
-        FONTFACE,
-        FONT_SCALE,
-        (0, 255, 255),
-        THICKNESS,
-        cv2.LINE_AA,
-    )
-
-def display_objects(im, objects, threshold=0.25):
-    rows = im.shape[0]
-    cols = im.shape[1]
-
-    # For every Detected Object
-    for i in range(objects.shape[2]):
-        # Find the class and confidence
-        classId = int(objects[0, 0, i, 1])
-        score = float(objects[0, 0, i, 2])
-
-        # Recover original cordinates from normalized coordinates
-        x = int(objects[0, 0, i, 3] * cols)
-        y = int(objects[0, 0, i, 4] * rows)
-        w = int(objects[0, 0, i, 5] * cols - x)
-        h = int(objects[0, 0, i, 6] * rows - y)
-
-        # Check if the detection is of good quality
-        if score > threshold:
-            display_text(im, "{}".format(labels[classId]), x, y)
-            cv2.rectangle(im, (x, y), (x + w, y + h), (255, 255, 255), 2)
-
-    # Convert Image to RGB since we are using Matplotlib for displaying image
-    mp_img = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    plt.figure(figsize=(30, 10))
-    plt.imshow(mp_img)
-    plt.show()
-```
-
-```{python}
-#| eval: false
-im =cv2.imread("../data/cars.jpg")
-objects = detect_objects(net, im)
-display_objects(im, objects)
-```
-
-## Image Classification
-
-```{python}
-#| eval: false
-%run opencv/samples/dnn/classification.py --input ../data/a_dog.jpg --framework caffe \
---model models/DenseNet_121.caffemodel --config models/DenseNet_121.prototxt --mean 103.94 116.78 123.68  \
---scale 0.017  \
---classes opencv/samples/data/dnn/classification_classes_ILSVRC2012.txt
-```
-
-```{python}
-#| eval: false
-cv2.destroyAllWindows()
-```
-
-## Background Subtraction
-
-Background subtraction is a useful technique for identifying the change from
-frame to frame. It is most useful when the camera angle is constant, and
-objects are moving/appearing on the constant background. This approach does not
-use deep learning.
-
-```{python}
-#| eval: false
-backSub = cv2.createBackgroundSubtractorMOG2()
-capture = cv2.VideoCapture('data/obj_tracking_data.mp4')
-if not capture.isOpened():
-    print('Unable to open: ' + args.input)
-    exit(0) 
- 
-while True:
-    ret, frame0 = capture.read()
-    if frame0 is None:
-        break
-
-    frame = cv2.resize(frame0, None, fx=0.5, fy=0.5)
-    fgMask = backSub.apply(frame)
-   
-    cv2.rectangle(frame, (10, 2), (100,20), (255,255,255), -1)
-    cv2.putText(frame, str(capture.get(cv2.CAP_PROP_POS_FRAMES)), (15, 15),
-               cv2.FONT_HERSHEY_SIMPLEX, 0.5 , (0,0,0))
-    
-    cv2.imshow('Frame', frame)
-    cv2.imshow('FG Mask', fgMask)
-
-    keyboard = cv2.waitKey(30)
-    if keyboard == 'q' or keyboard == 27:
-        break
-```
-
-## Demonstrations from Model Zoo
-
-1. Segmentation
-2. Colorizer
-3. Object tracker
-4. Text recognition
-
-human segmentation
-
-```{python}
-#| eval: false
-cd opencv_zoo/models/human_segmentation_pphumanseg/
-```
-
-```{python}
-#| eval: false
-%run demo.py
-```
-
-image segmentation
-
-```{python}
-#| eval: false
-cd ../image_segmentation_efficientsam/
-```
-
-```{python}
-#| eval: false
-%run demo.py -i a_dog.jpg
-```
-
-colorizer
-
-```{python}
-#| eval: false
-pwd
-```
-
-```{python}
-#| eval: false
-%run opencv_extra/testdata/dnn/download_models.py -d models "Colorization (prototxt)"
-```
-
-```{python}
-#| eval: false
-%run opencv/samples/dnn/colorization.py --input ../data/a_dog.jpg --prototxt models/colorization_deploy_v2.prototxt \
---caffemodel models/colorization_release_v2.caffemodel \
---kernel opencv_extra/testdata/dnn/colorization_pts_in_hull.npy
-```
-
-vitt tracker
-
-```{python}
-#| eval: false
-cd opencv_zoo/models/object_tracking_vittrack/
-```
-
-## facial expression
-
-# References
-
-## Opencv documentation
+### Opencv documentation
 
 1. [Python tutorials](https://docs.opencv.org/4.10.0/d6/d00/tutorial_py_root.html)
 2. [Changing colour spaces](https://docs.opencv.org/4.10.0/df/d9d/tutorial_py_colorspaces.html)
 3. [Background subtraction](https://docs.opencv.org/3.4/d1/dc5/tutorial_background_subtraction.html)
 4. [Opencv bootcamp](https://courses.opencv.org/courses/course-v1:OpenCV+Bootcamp+CV0/about): This is a very useful course on opencv techniques. It will also provide you several more notebooks with template code for object tracking, etc.
 
-## Books
+### Books
 
-1. [Computer Vision: Applications and Algorithms](https://szeliski.org/Book/)
+A very comprehensive book on vision techniques is by @szeliski2022computer. An online 
+version can be found here: [Computer Vision: Applications and Algorithms](https://szeliski.org/Book/)
 
-## Github repositories
+### Github repositories
 
 1. [opencv](https://github.com/opencv/opencv)
 2. [opencv-extra](https://github.com/opencv/opencv_extra)
