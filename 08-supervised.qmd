@@ -3,7 +3,7 @@ title: Supervised Learning
 jupyter: python3
 ---
 
-# Introduction
+## Introduction
 
 In supervised learning, our goal is to develop a model that can predict a
 quantity of interest from a set of features. In this process,

@@ -423,7 +423,7 @@ $$
 $$
 We retain the same distributional assumptions as in simple linear regression.
 
-## Estimation 
+### Estimation 
 
 Similar to estimation in the earlier case, we can define $SS_E$ to be 
 $$
@@ -966,6 +966,9 @@ in many other ways. Here are some models you may want to read up on:
 * Constrained regression, when we know certain coefficients should be positive, for instance.
 * Robust linear models to automagically take care of wild outliers.
 
+Good reference textbooks for this topic are @draper1998applied and
+@hastie2009introduction.
+
 ## References
 
 ### Website References
@@ -974,8 +977,3 @@ in many other ways. Here are some models you may want to read up on:
 3. [Stats models documentation](https://www.statsmodels.org/stable/regression.html)
 6. [Diagnostics](https://www.zeileis.org/teaching/AER/Ch-Validation-handout.pdf)
 6. [On residual plots](https://online.stat.psu.edu/stat462/node/120/)
-
-### Academic References
-
-1. Applied Regression Analysis, *Draper and Smith*.
-2. [An Introduction to Statistical Learning](https://www.statlearning.com), *Hastie, Tibshirani and others*
