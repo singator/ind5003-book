@@ -60,7 +60,7 @@ Here are the specific details:
 6. Once you are satisfied with your choice(s) or model, evaluate the selected
    model on the test set to obtain an estimate of your generalisation error.
 
-# Scikit-learn
+## Scikit-learn
 
 Scikit-learn is a library in Python which has several useful functions used in
 machine learning. The library has many algorithms for classification,
@@ -95,7 +95,7 @@ interfaces are:
     * We will not have too much time to spend on the transformer 
       interface in this course.
 
-## Input Data Structure
+### Input Data Structure
 
 For supervised learning problems in scikit-learn, the input data has to be structured in NumPy-like arrays.
 
@@ -126,16 +126,35 @@ y_1 & y_2 & \ldots & y_n
 \end{bmatrix}^T
 $$
 
-# Measures of Performance
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-## For Classification
+from itables import show
+
+from lime import lime_tabular
+
+from sklearn import tree
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, r2_score
+from sklearn.model_selection import cross_val_score, cross_validate, ShuffleSplit, learning_curve, validation_curve, GridSearchCV, train_test_split
+from sklearn.inspection import permutation_importance
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.inspection import PartialDependenceDisplay, partial_dependence
+```
+
+## Measures of Performance
+
+### For Classification
 
 Before we head into creating classifiers which will help us predict heart
 failure, let's understand what determines the usefulness of a classifier. For
 now, we focus on the case where the outcome is binary (only two possible values
 for $y_i$).
 
-### Accuracy 
+#### Accuracy 
 
 A basic measure of performance would be the *accuracy* of predictions.
 
@@ -165,7 +184,7 @@ In the confusion matrix, there are 4 possible cases:
     * Classifier predicts sample as negative but in truth, it is positive. **Incorrect prediction**
 
 
-### Precision and Recall
+#### Precision and Recall
 
 With the confusion matrix, more performance metrics can be defined besides the
 accuracy of a classifier.
@@ -192,7 +211,7 @@ Note that recall is also sometimes referred to as the True Positive Rate (TPR),
 while $(1 - \text{precision})$ is also referred to as the False Positive Rate
 (FPR).
 
-### F1 score
+#### F1 score
 
 The harmonic mean of two numbers $x_1$ and $x_2$ is 
 $$
@@ -211,9 +230,9 @@ mean of precision and recall, because it ensures that both are high; the F1
 score will be significantly lower than the mean if one of precision or recall
 is very low.
 
-## For Regression
+### For Regression
 
-## Root Mean Squared Error
+#### Root Mean Squared Error
 
 For regression problems, the typical measure of accuracy is RMSE. Let
 * $y_i$ be the observed quantity (that we wish to predict), for $i=1,\ldots, n$, and
@@ -225,7 +244,7 @@ $$
 RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2}
 $$
 
-## Mean Absolute Error
+#### Mean Absolute Error
 
 Using the RMSE amplifies the effect of outliers because of the square-term in
 the equation. Hence, in order to be resistant to outliers, one alternative is
@@ -235,26 +254,6 @@ $$
 MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 $$
 
-#### Import libraries
-
-```{python}
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-
-from itables import show
-
-from lime import lime_tabular
-
-from sklearn import tree
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, r2_score
-from sklearn.model_selection import cross_val_score, cross_validate, ShuffleSplit, learning_curve, validation_curve, GridSearchCV, train_test_split
-from sklearn.inspection import permutation_importance
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.preprocessing import StandardScaler
-from sklearn.inspection import PartialDependenceDisplay, partial_dependence
-```
 
 # Classification: Heart Failure Dataset
 
@@ -794,7 +793,7 @@ display = PartialDependenceDisplay.from_estimator(
 )
 ```
 
-# Summary
+## Summary
 
 We have only touched on a random forests and decision trees. However, there are
 numerous other (non-deep learning) machine learning models. Examples are
@@ -812,16 +811,20 @@ When working on your project, if you intend to perform supervised learning,
 please ensure that you also interpret the models, and do not leave them as a
 black box.
 
-# References
+## References
 
-## Website and video references
+One of the best textbook references for this topic is @hastie2009introduction. For 
+more information on interpretable machine learning, refer to 
+@molnar2020interpretable. It is very comprehensive, with much more details 
+on LIME and Shaply values.
+
+### Website and video references
 
 1. [Decision trees, clearly explained](https://www.youtube.com/watch?v=_L39rN6gz7Y): This is from a popular YouTube channel that explains stats and data science concepts.
 2. [sklearn documentation](https://scikit-learn.org/stable/supervised_learning.html): Documentation on available supervised learning models in sklearn.
 
-## Academic references
+### Documentation references
 
 1. [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/): A comprehensive textbook on interpreting machine learning models. See this book for more information about LIME and SHAPLY values.
 2. [LIME](https://github.com/marcotcr/lime): Full documentation on LIME
    * [Video introduction to LIME](https://www.youtube.com/watch?v=hUnRCxnydCc)
-3. [Introduction to Statistical Learning](https://www.statlearning.com/): One of the go-to textbooks on Machine Learning, written by recognised experts in the domain.
