@@ -299,21 +299,23 @@ $$
 Y = 42.43 - 0.25 X_1
 $$
 
+
 The estimates are $\hat{\beta_0} = 42.43$ and $\hat{\beta_1} = -0.25$. The
 output includes the 95% confidence intervals for $\beta_0$ and $\beta_1$. The
 $R^2$ is 0.044, which means that means that only 4.4% of the variation in $Y$
 is explained by $X$. This is extremely poor, even though the $p$-value for the
 $F$-test is very small (0.000016).
 
+
 A simple interpretation of the model is as follows:
 
 > For every 1 year increase in house age, there is an average associated *decrease* in
 > price of $0.25 \times 10,000$ New Taiwan Dollars.
 
+:::
+
 Note that this interpretation has to be taken very cautiously, especially when there are
 other explanatory variables in the model.
-
-:::
 
 ::: {#exm-taiwan-reg-3 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Price vs. House Age Estimated Line
@@ -841,11 +843,14 @@ We typically inspect the plots for the following patterns:
    or weighted least squares. You will cover these in your linear models class.
    
 
+::: {#exm-taiwan-reg-9 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Residual Plots for `lm_age_mrt_2`
+\index{Taiwan Data!Residual scatterplots}
 
 Let us extract and create the residual plots for the second model that we had fit, earlier.
 
 ```{python}
+#| fig-align: center
 plt.figure(figsize=(12,4));
 r_s = lm_age_mrt_2.resid_pearson
 ax=plt.subplot(121)
@@ -863,7 +868,9 @@ While the plot for house age looks acceptable (points are evenly scattered
 about the red dashed line), the one for distance shows some curvature. This is
 something we can try to fix, using a transformation of the x-variable.
 
-## Influential Points
+:::
+
+### Influential Points
 
 The influence of a point on the inference can be judged by how much the inference
 changes with and without the point. For instance to assess if point $i$ is 
@@ -888,7 +895,9 @@ adjustment for those points. A third approach is to use a *robust linear
 model*. This is a model that automatically reduces the influence of aberrant
 points. This is a good topic to know about - do read up on it if you are keen!
 
+::: {#exm-taiwan-reg-10 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Influential Points for `lm_age_mrt_2` 
+\index{Taiwan Data!Influential points}
 
 The influence of a point on the inference can be judged by how much the inference
 changes with and without the point. For instance to assess if point $i$ is 
@@ -909,12 +918,15 @@ infl_df = infl.summary_frame()
 ```
 
 ```{python}
-show(infl_df)
+print(infl_df.head())
 ```
+:::
 
-# Transformation
+## Transformation
 
+::: {#exm-taiwan-reg-11 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Log-transformation
+\index{Taiwan Data!Log transformation}
 
 As we observed in the residual plots, the distance-to-MRT variable displays a
 slight curvature. We can fix this by taking a log-transformation of the
@@ -928,6 +940,7 @@ re2['ldist'] = np.log(re2.dist_MRT)
 lm_age_mrt_3 = ols('price ~ house_age + x3 + num_stores + ldist', data=re2).fit()
 print(lm_age_mrt_3.summary())
 ```
+:::
 
 Now, take some to investigate the following issues:
 
@@ -936,7 +949,7 @@ Now, take some to investigate the following issues:
 3. What is the difference between how this model uses `num_stores`, and how `lm_cat_1` uses it?
 4. How did we choose 25 as the breakpoint for house-age? Is it the ideal one?
 
-# Summary, Further topics
+## Summary, Further topics
 
 Linear regression is a very flexible model. It is quick to fit, easily
 generalisable and much more interpretable than other models. These are some of
@@ -953,16 +966,16 @@ in many other ways. Here are some models you may want to read up on:
 * Constrained regression, when we know certain coefficients should be positive, for instance.
 * Robust linear models to automagically take care of wild outliers.
 
-# References
+## References
 
-## Website References
+### Website References
 
 1. [Taiwan dataset from UCI machine learning repository](https://archive.ics.uci.edu/dataset/477/real+estate+valuation+data+set)
 3. [Stats models documentation](https://www.statsmodels.org/stable/regression.html)
 6. [Diagnostics](https://www.zeileis.org/teaching/AER/Ch-Validation-handout.pdf)
 6. [On residual plots](https://online.stat.psu.edu/stat462/node/120/)
 
-## Academic References
+### Academic References
 
 1. Applied Regression Analysis, *Draper and Smith*.
 2. [An Introduction to Statistical Learning](https://www.statlearning.com), *Hastie, Tibshirani and others*
