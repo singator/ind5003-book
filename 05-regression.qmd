@@ -264,7 +264,7 @@ Under $H_0$, the distribution of $T_0$ is $t_{n-2}$. This $t$-test and the earli
 $F$-test in this section are *identical*. It can be proved that $F_0 = T_0^2$; the 
 obtained $p$-values will be identical.
 
-## Coefficient of Determination, $R^2$
+### Coefficient of Determination, $R^2$
 
 The coefficient of determination $R^2$ is defined as
 
@@ -279,7 +279,9 @@ When we get to the case of multiple linear regression, take note that simply
 including more variables in the model will increase $R^2$. This is undesirable; it 
 is preferable to have a parsimonious model that explains the response variable well.
 
+::: {#exm-taiwan-reg-2 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Price vs. House Age
+\index{Taiwan Data!Simple linear, price vs. house}
 
 As a first model, we fit price ($Y$) against house age ($X_1$). From the plot
 above, we already suspect this may not be ideal, but let us use it as a
@@ -311,7 +313,11 @@ A simple interpretation of the model is as follows:
 Note that this interpretation has to be taken very cautiously, especially when there are
 other explanatory variables in the model.
 
+:::
+
+::: {#exm-taiwan-reg-3 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Price vs. House Age Estimated Line
+\index{Taiwan Data!Price vs. house, estimated line}
 
 In linear regression, we almost always wish to use the model to understand what
 the mean of future observations would be. In this case, we may wish to use the
@@ -331,6 +337,8 @@ Thus we can vary the values of $X$ to study how the mean of $Y$ changes. Here
 is how we can do so for the model that we have just fit.
 
 ```{python}
+#| fig-align: center
+
 new_df = sm.add_constant(pd.DataFrame({'house_age' : np.linspace(0, 45, 100)}))
 predictions_out = lm_house_age_1.get_prediction(new_df)
 
@@ -344,6 +352,7 @@ ax.plot(new_df.house_age, predictions_out.predicted, color='blue');
 ```
 
 ```{python}
+#| fig-align: center
 new_df = sm.add_constant(pd.DataFrame({'house_age' : np.linspace(0, 45, 100)}))
 predictions_out = lm_house_age_1.get_prediction(new_df)
 
@@ -355,10 +364,11 @@ ax.plot(new_df.house_age, predictions_out.conf_int()[:, 1].reshape(-1),
         color='blue', linestyle='dashed');
 ax.plot(new_df.house_age, predictions_out.predicted, color='blue');
 ```
+:::
 
-# Multiple Linear Regression
+## Multiple Linear Regression
 
-## Formal Setup
+### Formal Setup
 
 When we have more than 1 explanatory variable, we turn to multiple linear
 regression - a more general version of what we have been dealing with so far.
@@ -437,7 +447,7 @@ $$
 \hat{\sigma^2} = \frac{SS_{Res}}{n-p} = \frac{\textbf{r}' \textbf{r}}{n-p}
 $$
 
-## Adjusted $R^2$
+### Adjusted $R^2$
 
 In the case of multiple linear regression, $R^2$ is calculated exactly as in
 simple linear regression, and its interpretation remains the same:
@@ -452,7 +462,7 @@ $$
 R^2_{adj} = 1 - \frac{SS_{Res}/(n-p)}{SS_T/(n-1)}
 $$
 
-## Hypothesis Tests
+### Hypothesis Tests
 
 The $F$-test in the multiple linear regression helps determine if our regression
 model provides any advantage over the simple mean model. The null and
@@ -483,7 +493,9 @@ H_1 &:& \beta_j \ne 0
 However, note that these $t$-tests are partial because it should be interpreted
 as a test of the contribution of $\beta_j$, *given that all other terms are already in the model*.
 
+::: {#exm-taiwan-reg-4 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Price vs. House Age and Distance to MRT
+\index{Taiwan Data!Price vs. house and distance}
 
 For our first example on multiple linear regression, let us regress price ($Y$)
 on house age ($X_1$) and distance to MRT ($X_2$).
@@ -501,8 +513,13 @@ $$
 
 At 5%-level, the estimates for both $\beta_1$ and $\beta_2$ are significantly
 different from 0. Moreover, the adjusted $R^2$ is now a more respectable 0.49. 
+:::
 
+<br/>
+
+::: {#exm-taiwan-reg-5 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Broken Line Regression
+\index{Taiwan Data!Broken line regression}
 
 Although multiple linear regression is usually carried out with distinct
 variables, it is possible to include functions of the same variable. Suppose we
@@ -573,6 +590,7 @@ predictions_out2 = lm_age_mrt_2.get_prediction(new_df2)
 ```
 
 ```{python}
+#| fig-align: center
 ax = re2.plot(x='house_age', y='price', kind='scatter', alpha=0.5 )
 ax.set_title('Price vs. age');
 ax.plot(new_df.house_age, predictions_out.predicted_mean, 
@@ -581,8 +599,9 @@ ax.plot(new_df2.house_age, predictions_out2.predicted_mean,
         color='red', linestyle='dashed', label='dist = 1500m');
 ax.legend();
 ```
+:::
 
-# Including a Categorical Variable
+## Including a Categorical Variable
 
 The explanatory variables in a linear regression model do not need to be continuous.
 Categorical variables can also be included in the model. In order to include them,
@@ -621,7 +640,9 @@ learning models which use one-hot encoding. The latter encoding results in
 columns that are linearly dependent if we include an intercept term in the
 model.
 
+::: {#exm-taiwan-reg-6 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Price vs. Num Stores and Distance to MRT
+\index{Taiwan Data!Number of stores, categorical}
 
 For this example, let us work with a reduced model in order to understand how
 things work. Price will remain the dependent variable, but we shall use
@@ -651,7 +672,9 @@ As a result, we have estimated two models:
 * Corresponding to a large number of nearby stores: $Y = 47.81 - 0.0055 X_2$
 * Corresponding to a small number of nearby stores: $Y = 40.40 - 0.0055 X_2$
 
-## Including an Interaction Term
+:::
+
+### Including an Interaction Term
 
 A more complex model arises from an interaction between two terms. Here, we shall
 consider an interaction between a continuous variable and a categorical 
@@ -680,7 +703,9 @@ Both the intercept and coefficient of $X_2$ are different, for each value of
 $X_3$. Recall that in the previous section, only the intercept term was
 different.
 
+::: {#exm-taiwan-reg-7 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Interaction between Num of Stores and Distance to MRT
+\index{Taiwan Data!Interaction term}
 
 ```{python}
 lm_cat_2 = ols('price ~ dist_MRT * num_stores_cat', re2).fit()
@@ -694,9 +719,14 @@ The model that we have fit consists of two models:
 1. For the case that the number of stores is 4 or less: $Y = 39.88 - 0.005 X_2$
 2. For the case that the number of stores is more than 4: $Y = 54.84 - 0.028 X_2$.
 
-Can you interpret the result above based on your intuition or understanding of real estate prices?
+:::
 
-# Residual Analysis
+::: {.callout-note}
+Can you interpret the result above based on your intuition or understanding of real estate prices?
+:::
+
+
+## Residual Analysis
 
 Recall from earlier that residuals are computed as 
 $$
@@ -708,7 +738,7 @@ the distributional assumptions hold. We can also use residuals to identify
 influential points that are masking the general trend of other points. Finally,
 residuals can provided some direction on how to improve the model.
 
-## Standardised Residuals
+### Standardised Residuals
 
 It can be shown that the variance of the residuals is in fact not constant! Let us 
 define the hat-matrix as 
@@ -741,13 +771,16 @@ residuals and studentised residuals. While they differ in definitions slightly, 
 typically yield the same information. Hence we shall stick to standardised residuals
 for our course.
 
+::: {#exm-taiwan-reg-8 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Normality Check for `lm_age_mrt_1`
+\index{Taiwan Data!Normality check}
 
 One of the first checks for Normality is to create a histogram. If the
 residuals adhere to a Normal distribution, we should observe a symmetric
 bell-shaped distribution.
 
 ```{python}
+#| fig-align: center
 r_s = pd.Series(lm_age_mrt_1.resid_pearson)
 r_s.hist();
 ```
@@ -765,8 +798,11 @@ line. The value of a QQ-plot is in judging if the tails of the data are fatter
 or thinner than the tails of the Normal. 
 
 ```{python}
+#| fig-align: center
 sm.qqplot(r_s[r_s < 6], line="q");
 ```
+
+:::
 
 Overall, the residuals do indicate a lack of Normal behaviour. Non-normality in
 the residuals should lead us to view the hypothesis tests with caution. The
@@ -774,7 +810,7 @@ estimated models are still valid, in the sense that they are optimal.
 Estimation of the models did not require the assumption of Normality. So far,
 we have only focused on inspecting the $R^2$ to assess the model quality.
 
-## Scatterplots
+### Scatterplots
 
 To understand the model fit better, a set of scatterplots are typically made. These
 are plots of standardised residuals (on the $y$-axis) against
