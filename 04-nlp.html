@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Natural Language Processing – Data Analytics for Sense-Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./05-regression.html" rel="next">
+<link href="./03-unsupervised.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./04-nlp.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analytics for Sense-Making</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-nlp.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Academic References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">4.1</span> Introduction</a></li>
+  <li><a href="#definitions" id="toc-definitions" class="nav-link" data-scroll-target="#definitions"><span class="header-section-number">4.2</span> Definitions</a></li>
+  <li><a href="#overview-of-applications" id="toc-overview-of-applications" class="nav-link" data-scroll-target="#overview-of-applications"><span class="header-section-number">4.3</span> Overview of Applications</a></li>
+  <li><a href="#text-pre-processing" id="toc-text-pre-processing" class="nav-link" data-scroll-target="#text-pre-processing"><span class="header-section-number">4.4</span> Text Pre-processing</a></li>
+  <li><a href="#representation-of-text" id="toc-representation-of-text" class="nav-link" data-scroll-target="#representation-of-text"><span class="header-section-number">4.5</span> Representation of Text</a></li>
+  <li><a href="#visualisation-with-t-sne" id="toc-visualisation-with-t-sne" class="nav-link" data-scroll-target="#visualisation-with-t-sne"><span class="header-section-number">4.6</span> Visualisation with t-SNE</a></li>
+  <li><a href="#neural-language-models" id="toc-neural-language-models" class="nav-link" data-scroll-target="#neural-language-models"><span class="header-section-number">4.7</span> Neural Language Models</a></li>
+  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications"><span class="header-section-number">4.8</span> Applications</a></li>
+  <li><a href="#interpretation-of-neural-models" id="toc-interpretation-of-neural-models" class="nav-link" data-scroll-target="#interpretation-of-neural-models"><span class="header-section-number">4.9</span> Interpretation of Neural Models</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4.10</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
+<p>In our world, Natural Language Processing (NLP) is used in several scenarios. For example,</p>
+<ul>
+<li>phones and handheld computers support predictive text and handwriting recognition;</li>
+<li>web search engines give access to information locked up in unstructured text;</li>
+<li>machine translation allows us to understand texts written in languages that we do not know;</li>
+<li>text analysis enables us to detect sentiment in tweets and blogs.</li>
+</ul>
+<p>But as we begin to explore Natural Language, we realise that it is an extremely difficult subject. Here are some specific points to note:</p>
+<ol type="1">
+<li>Some words mean different things in different contexts, but us humans know which meaning is being used.
+<ul>
+<li>He <strong>served</strong> the <strong>dish</strong>.</li>
+</ul></li>
+<li>In the following two sentences, the word “by” has different meanings:
+<ul>
+<li>The lost children were found by the lake.</li>
+<li>The lost children were found by the search party.</li>
+</ul></li>
+<li>In the following cases, we (humans) can resolve what “they” is referring to, but it is not easy to generate a simple rule that a computer can follow.
+<ul>
+<li>The thieves stole the paintings. They were subsequently recovered.</li>
+<li>The thieves stole the paintings. They were subsequently arrested.</li>
+</ul></li>
+<li>How can we get a computer to understand the following tweet?:
+<ul>
+<li>“Wow. Great job st@rbuck’s. Best cup of coffee ever.”</li>
+</ul></li>
+</ol>
+<div id="df14d81f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> itables <span class="im">import</span> show</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">import</span> pprint</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> gensim</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="im">from</span> gensim.parsing.preprocessing <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="im">import</span> gensim.downloader <span class="im">as</span> api</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> nltk.stem <span class="im">import</span> PorterStemmer, WordNetLemmatizer</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer, TfidfVectorizer</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> sklearn <span class="im">import</span> manifold</span>
+<span id="cb1-17"><a href="#cb1-17"></a></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="im">import</span> pyLDAvis</span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="im">import</span> pyLDAvis.gensim_models <span class="im">as</span> gensimvis</span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Can you catch all three jokes in the movie clip below? 🤣</p>
+</div>
+</div>
+<div id="f593831a" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>video <span class="op">=</span> YouTubeVideo(<span class="st">"NfN_gcjGoJo"</span>, width<span class="op">=</span><span class="dv">640</span>, height<span class="op">=</span><span class="dv">480</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>display(video)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+        <iframe width="640" height="480" src="https://www.youtube.com/embed/NfN_gcjGoJo" frameborder="0" allowfullscreen=""></iframe>
+        
+</div>
+</div>
+</section>
+<section id="definitions" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="definitions"><span class="header-section-number">4.2</span> Definitions</h2>
+<p>Before we go on, it would be useful to establish some terminology:</p>
+<ul>
+<li>A <strong>corpus</strong> is a collection of documents.
+<ul>
+<li>Examples are a group of movie reviews, a group of essays, a group of paragraphs, or just a group of tweets.</li>
+<li>Plural of corpus is <strong>corpora</strong>.</li>
+</ul></li>
+<li>A <strong>document</strong> is a single unit within a corpus.
+<ul>
+<li>Depending on the context, examples are a single sentence, a single paragraph, or a single essay.</li>
+</ul></li>
+<li><strong>Terms</strong> are the elements that make up the document. They could be individual words, bigrams or trigrams from the sentences. These are also sometimes referred to as <strong>tokens</strong>.</li>
+<li>The <strong>vocabulary</strong> is the set of all terms in the corpus.</li>
+</ul>
+<p>Consider the sentence:</p>
+<pre><code>I am watching television.</code></pre>
+<p>The process of splitting up the document into tokens is known as tokenisation. The result for the above sentence would be</p>
+<pre><code>'I',  'am',  'watching', 'television', '.'</code></pre>
+<p>How we tokenize and pre-process things will affect our final results. We shall discuss this more in a minute.</p>
+</section>
+<section id="overview-of-applications" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="overview-of-applications"><span class="header-section-number">4.3</span> Overview of Applications</h2>
+<p>Here are some of the use-cases that we shall discuss:</p>
+<ol type="1">
+<li><em>Topic Modeling</em>: This is an unsupervised technique that allows us to identify the salient topics of a new document automatically. This could be useful in a customer feedback setting, because it would allow quick allocation or prioritisation of resources. This approach requires one to decide on the number of topics. It typically also requires some study of the topics in order to interpret and verify them.</li>
+<li><em>Information Retrieval</em>: This is also an unsupervised approach. If the new document can be considered a “query”, then this can be used to retrieve and prioritise documents that are relevant to the query.</li>
+<li><em>Sentiment Analysis</em>: Using a lexicon of words and their tagged sentiments, we can assess whether the sentiment in a document is mostly positive or negative.</li>
+</ol>
+</section>
+<section id="text-pre-processing" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="text-pre-processing"><span class="header-section-number">4.4</span> Text Pre-processing</h2>
+<div id="exm-wine-reviews-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.1 (Example: Wine Reviews Dataset)</strong></span> </p>
+<p>A dataset containing wine reviews is accessible from <a href="https://www.kaggle.com/zynicide/wine-reviews">Kaggle</a>. We shall work with one of the csv files. It contains 130,000 rows, although some are duplicates.</p>
+<div id="6ca37962" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">5001</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>wine_reviews <span class="op">=</span> pd.read_csv(<span class="st">"data/winemag-data-130k-v2.csv"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>wine_reviews.drop_duplicates(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>, compact<span class="op">=</span><span class="va">True</span>,)</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="cf">for</span> x <span class="kw">in</span> rng.choice(wine_reviews.description, size<span class="op">=</span><span class="dv">5</span>):</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    pprint.pp(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('Bell pepper and sharp red fruit aromas provide a shaky start, which is '
+ 'followed by cranberry, tart cherry and other pointed flavors. The feel is '
+ 'racy and tight, with gritty acids. Airing does improve it somewhat. Tasted '
+ 'twice; this is a review of the better bottle. Cabernet, Merlot, Cab Franc '
+ 'and Carmenère is the blend. From Brazil.')
+('Consistent with previous releases, this Michel Rolland effort is a soft, '
+ 'silky, smoky wine that introduces itself with round cherry fruit and then '
+ 'charges ahead with layers of licorice, citrus, coffee and rock that enliven '
+ 'the finish. There is plenty of tart raspberry fruit to open, and the '
+ "balancing acids to give the wine a tight core. It's a very polished and "
+ 'appealing balance of forward, approachable fruit married to more elegant, '
+ 'ageworthy tannins and acids.')
+("This is a light and soft selection, with an upfront gamy note that's framed "
+ 'by soft strawberry, rhubarb, red cherry and currant fruit tones on the nose '
+ "and mouth. Overall, it's short and direct; drink up.")
+('Fresh, clean and easy, this would taste great at an outdoor pool party or '
+ 'during a sunny lunch outdoors. It delivers fresh crispness, with lingering '
+ 'tones of green apple and passion fruit.')
+('This easy-drinking wine has a bouquet of honeydew melon and lime juice. '
+ 'Flavors of lemon, tangerine, guava and white peach with a soft hint of '
+ 'baking spice continue into the finish, which is marked by flavors of stone '
+ 'fruits and nutmeg.')</code></pre>
+</div>
+</div>
+<p>The “descriptions” column contains the review for a particular wine by a user, whose name and twitter handle are provided. Also included is information such as the price, originating county, region of the wine, and so on. In our activity, we are going to apply NLP techniques to the wine reviews.</p>
+</div>
+<section id="pre-processing-text-with-gensim" class="level3">
+<h3 class="anchored" data-anchor-id="pre-processing-text-with-gensim">Pre-processing Text with Gensim</h3>
+<p>Text documents consist of sentences of varying lengths. Usually, the first step to analysing a document is to break it up into pieces. This process is known as <strong>tokenizing</strong>. When tokenizing a document, we can do it at several levels of resolution: at the sentence, line, word or even punctuation level.</p>
+<p>Tokenizing can easily done using the <code>.split()</code> within built-in python. But after that, we need to further pre-process the tokens.</p>
+<p>The <code>gensim</code> package includes a module for pre-processing text strings. Here is a list of some of the functions there:</p>
+<ul>
+<li><code>strip_multiple_whitespaces</code></li>
+<li><code>strip_non_alphanum</code></li>
+<li><code>strip_numeric</code></li>
+<li><code>strip_punctuation</code></li>
+<li><code>strip_short</code></li>
+</ul>
+<p>Since what we are about to do in the initial part of our activity is based on frequency counts of tokens, apart from some of the above steps, we are also going to remove common “filler” words that could end up skewing the eventual probability distributions of counts. These filler words are known as stop words. They were identified by linguists, and they vary from model to model, from Python package to package, and of course, from language to language.</p>
+<p>Whether stop-word removal is meaningful or not also depends on your particular application. At times, it is only done in order to speed up the training of a model. However, it is possible to change the entire meaning of a sentence by removing stop-words.</p>
+<p>For us, we are going to apply this list of filters to each review:</p>
+<ol type="1">
+<li><code>strip_punctuation()</code>,</li>
+<li><code>strip_multiple_whitespaces()</code>,</li>
+<li><code>strip_numeric()</code>,</li>
+<li><code>remove_stopwords()</code>,</li>
+<li><code>strip_short()</code>,</li>
+<li><code>lemmatize()</code></li>
+</ol>
+<p><strong>Lemmatizing</strong> a word is to reduce it to its root word. You will come across <strong>stemming</strong> whenever you read about lemmatizing. In both cases, we wish to reduce a word to its root word so that we do not have to deal with multiple variations of a token, such as ate, eating, and eats.</p>
+<p>When we stem a word, the prefix and/or suffix will be removed according to a set of rules. Since it is primarily rule-based, the resulting word may not be an actual English word.</p>
+<p>Like stemming, lemmatizing also aims to reduce a word to its root form. However, it differs from stemming in that the final word must be a proper English language word. For this purpose, the algorithm has to be supplied with a lexicon or dictionary, along with the text to be lemmatized.</p>
+<p>Here is an example that demonstrates the differences.</p>
+<div id="7e86d509" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>porter <span class="op">=</span> PorterStemmer()</span>
+<span id="cb7-2"><a href="#cb7-2"></a>wn <span class="op">=</span> WordNetLemmatizer()</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>demo_sentence <span class="op">=</span> <span class="st">'Cats and ponies have a meeting'</span>.split()</span>
+<span id="cb7-5"><a href="#cb7-5"></a>demo_sentence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>['Cats', 'and', 'ponies', 'have', 'a', 'meeting']</code></pre>
+</div>
+</div>
+<div id="a8a29804" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#import nltk</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#nltk.download('wordnet')</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a>[porter.stem(x) <span class="cf">for</span> x <span class="kw">in</span> demo_sentence]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>['cat', 'and', 'poni', 'have', 'a', 'meet']</code></pre>
+</div>
+</div>
+<div id="610c8b40" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>[wn.lemmatize(x) <span class="cf">for</span> x <span class="kw">in</span> demo_sentence]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>['Cats', 'and', 'pony', 'have', 'a', 'meeting']</code></pre>
+</div>
+</div>
+<p>Now let us go ahead and perform the pre-processing on the wine reviews.</p>
+<div id="97747395" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>CUSTOM_FILTER <span class="op">=</span> [<span class="kw">lambda</span> x: x.lower(), strip_punctuation, </span>
+<span id="cb13-2"><a href="#cb13-2"></a>                 strip_multiple_whitespaces, strip_numeric, </span>
+<span id="cb13-3"><a href="#cb13-3"></a>                 remove_stopwords, strip_short]</span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#CUSTOM_FILTER[1]</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>all_review_strings <span class="op">=</span> wine_reviews.description.values</span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#all_review_strings[:3]</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>all_strings_tokenized <span class="op">=</span> [preprocess_string(x, CUSTOM_FILTER) <span class="cf">for</span> x <span class="kw">in</span> all_review_strings]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is an example of the pre-processed review:</p>
+<div id="35ccad88" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>pp.pprint(all_strings_tokenized[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[   'ripe', 'fruity', 'wine', 'smooth', 'structured', 'firm', 'tannins',
+    'filled', 'juicy', 'red', 'berry', 'fruits', 'freshened', 'acidity',
+    'drinkable', 'certainly', 'better']</code></pre>
+</div>
+</div>
+<p>At this point in time, what we have is a list of lists. Each sub-list contains the tokens for a particular wine_review. For instance, the original review for row 234 was:</p>
+<div id="9def21b2" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>pp.pprint(wine_reviews.description.values[<span class="dv">233</span>])</span>
+<span id="cb16-2"><a href="#cb16-2"></a>pp.pprint(all_strings_tokenized[<span class="dv">233</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('There is an odd, piercing edge to the aromas, a mix of acetic acid and '
+ "pungent herb, with a hint of diesel. Somehow it's not off-putting, just "
+ 'atypical. The light, tart fruit is a mix of rhubarb and cranberry, very '
+ 'earthy and tasting of dirt and bark in the finish. This could be quite '
+ 'pleasant with a hearty, rustic dish such as beef Bourgogne.')
+[   'odd', 'piercing', 'edge', 'aromas', 'mix', 'acetic', 'acid', 'pungent',
+    'herb', 'hint', 'diesel', 'putting', 'atypical', 'light', 'tart', 'fruit',
+    'mix', 'rhubarb', 'cranberry', 'earthy', 'tasting', 'dirt', 'bark',
+    'finish', 'pleasant', 'hearty', 'rustic', 'dish', 'beef', 'bourgogne']</code></pre>
+</div>
+</div>
+<p><code>gensim</code> does not have a lemmatizer, so we use the nltk lemmatizer on each token.</p>
+<div id="93cafbe3" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>preprocessed_corpus <span class="op">=</span> [[wn.lemmatize(w) <span class="cf">for</span> w <span class="kw">in</span> dd ] <span class="cf">for</span> dd <span class="kw">in</span> all_strings_tokenized]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="representation-of-text" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="representation-of-text"><span class="header-section-number">4.5</span> Representation of Text</h2>
+<p>Tokenisation of the corpus is merely the first step in processing natural language. All mathematical algorithms work on numerical representations of the data. Hence the next step is to convert the text into numeric representations. In natural language, there are two common ways of representing text:</p>
+<ol type="1">
+<li>Sparse vectors, using tf-idf or PPMI, or</li>
+<li>Dense embeddings, which could result from word2vec, GLoVe, or from neural models.</li>
+</ol>
+<section id="sparse-embeddings-with-tf-idf" class="level3">
+<h3 class="anchored" data-anchor-id="sparse-embeddings-with-tf-idf">Sparse embeddings with Tf-idf</h3>
+<p>In this section, we demonstrate how we can use Tf-idf (Term frequency-Inverse document frequency) to create vector representations of documents. Consider the following set of three simple text documents. Each document is a single sentence.</p>
+<div id="b3b66e3a" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>raw_docs <span class="op">=</span>[</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="st">"Here are some very simple basic sentences."</span>, </span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="st">"They won’t be very interesting , I’m afraid. "</span>,  </span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="st">"""</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="st">  The point of these basic examples is to learn how basic text  </span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="st">  counting works on *very simple* data, so that we are not afraid when  </span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="st">  it comes to larger text documents. The sentences are here just to provide words.</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="st">  """</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As the name tf-idf suggests, our first step should be to compute the frequency of each term (token) within each document.</p>
+<div id="70805cf9" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>vectorizer1 <span class="op">=</span> CountVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>, min_df<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>X1 <span class="op">=</span> vectorizer1.fit_transform(raw_docs)</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="bu">print</span>(pd.DataFrame(X1.toarray(), </span>
+<span id="cb20-5"><a href="#cb20-5"></a>  columns<span class="op">=</span>vectorizer1.get_feature_names_out()).iloc[:, :<span class="dv">10</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   afraid  basic  comes  counting  data  documents  examples  interesting  \
+0       0      1      0         0     0          0         0            0   
+1       1      0      0         0     0          0         0            1   
+2       1      2      1         1     1          1         1            0   
+
+   just  larger  
+0     0       0  
+1     0       0  
+2     1       1  </code></pre>
+</div>
+</div>
+<p>The counts indicate the number of times each feature (or words) were present in the document. As you might observe, longer documents tend to contain larger counts (see document 3, which has many more 1’s and even a couple of 2’s. Thus, instead of dealing with counts, we shall convert each row into a vector of length 1. Words that appear in all documents will be weighted down by this transformation, since these do not help to distinguish the document from others. This transformation is known as the TF-IDF transformation.</p>
+<p>Instead of the raw counts, we define:</p>
+<ul>
+<li><span class="math inline">\(N\)</span> to be the number of documents (<span class="math inline">\(N=3\)</span> in the little example above).</li>
+<li><span class="math inline">\(tf_{i,j}\)</span> to be the frequency of term <span class="math inline">\(i\)</span> in document <span class="math inline">\(j\)</span>.</li>
+<li><span class="math inline">\(df_{i}\)</span> to be the frequency of term <span class="math inline">\(i\)</span> across all documents.</li>
+<li><span class="math inline">\(w'_{i,j}\)</span> to be:</li>
+</ul>
+<p><span class="math display">\[\begin{equation}
+w'_{i,j} = tf_{i,j} \times \left[ \log \left( \frac{1 + N}{1 + df_{i}} \right) + 1 \right]
+\end{equation}\]</span></p>
+<p>Then the final <span class="math inline">\(w_{i,j}\)</span> for term <span class="math inline">\(i\)</span> in document <span class="math inline">\(j\)</span> is the normalised version of <span class="math inline">\(w'_{i,j}\)</span> across the terms that document.</p>
+<p>Consider the word “sentences”, in document id 02 (the third document).</p>
+<ul>
+<li><span class="math inline">\(N = 3\)</span></li>
+<li><span class="math inline">\(tf_{i,j} = 1\)</span></li>
+<li><span class="math inline">\(df_{i} = 2\)</span></li>
+</ul>
+<p>Thus</p>
+<p><span class="math display">\[\begin{equation}
+w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
+\end{equation}\]</span></p>
+<div id="10dc2e2f" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>vectorizer2 <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>, norm<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a>X2 <span class="op">=</span> vectorizer2.fit_transform(raw_docs)</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="bu">print</span>(pd.DataFrame(X2.A, </span>
+<span id="cb22-5"><a href="#cb22-5"></a>  columns<span class="op">=</span><span class="bu">list</span>(vectorizer2.get_feature_names_out())).iloc[:, :<span class="dv">10</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   afraid  basic  comes  counting   data  documents  examples  interesting  \
+0   0.000  1.288  0.000     0.000  0.000      0.000     0.000        0.000   
+1   1.288  0.000  0.000     0.000  0.000      0.000     0.000        1.693   
+2   1.288  2.575  1.693     1.693  1.693      1.693     1.693        0.000   
+
+    just  larger  
+0  0.000   0.000  
+1  0.000   0.000  
+2  1.693   1.693  </code></pre>
+</div>
+</div>
+<p>The final step normalises the weights across each document, so now the weight for sentences in document 00 is higher than the weight in document 02 since document 00 is shorter.</p>
+<div id="25d77128" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>vectorizer3 <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>X3 <span class="op">=</span> vectorizer3.fit_transform(raw_docs)</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="bu">print</span>(pd.DataFrame(X3.A, </span>
+<span id="cb24-5"><a href="#cb24-5"></a>  columns<span class="op">=</span><span class="bu">list</span>(vectorizer3.get_feature_names_out())).iloc[:, :<span class="dv">10</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   afraid  basic  comes  counting   data  documents  examples  interesting  \
+0   0.000  0.577  0.000     0.000  0.000      0.000     0.000        0.000   
+1   0.474  0.000  0.000     0.000  0.000      0.000     0.000        0.623   
+2   0.170  0.340  0.223     0.223  0.223      0.223     0.223        0.000   
+
+    just  larger  
+0  0.000   0.000  
+1  0.000   0.000  
+2  0.223   0.223  </code></pre>
+</div>
+</div>
+<p>The above matrix is known as a <strong>document-term matrix</strong>, since the columns are defined by terms, and each row is a document. At this point, we can use each <strong>row</strong> as a vector representation of each document. If necessary, for this corpus, we could even represent each term using its corresponding <strong>column</strong>.</p>
+<p>Note that some books/software use a slightly different convention - they may work with the <em>term-document</em> matrix. However, the idea is the same. Take a look at the following term-document matrix, assembled from the complete works of Shakespeare:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/term-doc-shakespeare-1.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
+</figure>
+</div>
+<p>If we intend to represent each document as a numeric vector, the columns, highlighted by the red boxes, would be a natural choice. Suppose we only focus on the coordinates corresponding to the words <code>battle</code> and <code>fool</code>. Then a visualisation of the documents would look like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/term-doc-shakespeare-2.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
+</figure>
+</div>
+<p>Visually, it is easy to tell that “Henry V” and “Julius Caesar” are similar (they point in the same direction) as opposed to “As You Like It” and “Twelfth Night”. But it is also easy to see <em>why</em> - the former two contain similar high counts of <code>battle</code> compared to the latter two, which are comedies.</p>
+<p>Tf-idf are a normalised version of the above raw counts; they provide a numerical representation of documents, adjusting for document length and words that are common across all documents in a corpus.</p>
+</section>
+<section id="cosine-similarity" class="level3">
+<h3 class="anchored" data-anchor-id="cosine-similarity">Cosine similarity</h3>
+<p>In order to quantify the similarity (or nearness) of vector representations in NLP, the common method used is cosine similarity. Suppose that we have a vector representation of two documents <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span>. If the vocabulary size is <span class="math inline">\(N\)</span>, then each of the vectors is of length <span class="math inline">\(N\)</span>. Since we are dealing with counts the coordinate values of each vector will be non-negative. We use the angle <span class="math inline">\(\theta\)</span> between the vectors as a measure of their similarity:</p>
+<p><span class="math display">\[
+\cos \theta = \frac{\sum_{i=1}^N v_i w_i}{\sqrt{\sum_{i=1}^N v_i^2} \sqrt{\sum_{i=1}^N w_i^2}}
+\]</span></p>
+<p>Geometrically, cosine similarity measures the size of the angle between vectors:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/term-doc-shakespeare-4.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="dense-embeddings" class="level3">
+<h3 class="anchored" data-anchor-id="dense-embeddings">Dense Embeddings</h3>
+<p>One of the drawbacks of sparse vectors is that they are very long (the length of the vocabulary), and most entries in the vector will be 0. As a result, researchers worked on methods that would pack the information in the vectors into shorter ones. Instead of working on representations of the documents, the methods aimed to create representations of each token (or word) in the vocabulary. These are referred to as <em>embeddings</em>.</p>
+<p>Here, we shall discuss word2vec (<span class="citation" data-cites="mikolov2013distributed">Mikolov et al. (<a href="references.html#ref-mikolov2013distributed" role="doc-biblioref">2013</a>)</span>), but take note that there are others. GLoVe (<span class="citation" data-cites="pennington2014glove">Pennington, Socher, and Manning (<a href="references.html#ref-pennington2014glove" role="doc-biblioref">2014</a>)</span>) was invented soon after, but the most common embeddings used today arise from Deep Learning models. The most widely used version is BERT (see the video references below, as well as <span class="citation" data-cites="devlin2019bert">Devlin et al. (<a href="references.html#ref-devlin2019bert" role="doc-biblioref">2019</a>)</span>).</p>
+<p>The approach in word2vec deviates considerably from tf-idf, in that the goal is to obtain a numeric representation of a word, <em>in the context of it’s surrounding words</em>. Consider this statement:</p>
+<blockquote class="blockquote">
+<p>13% of the United States population eats <font color="red">pizza</font> on any given day. Mozzarella is commonly used on <font color="red">pizza</font>, with the highest quality mozzarella from Naples. In Italy, <font color="red">pizza</font> served in formal &gt; settings is eaten with a fork and knife.</p>
+</blockquote>
+<p>The words <code>eats</code>, <code>served</code> and <code>mozzarella</code> appear close to <code>pizza</code>. Hence another word that appears in similar contexts, should be <em>similar</em> to <code>pizza</code>. Examples could be certain baked dishes or even <code>salad</code>.</p>
+<p>To achieve such a representation, word2vec runs a self-supervised algorithm, with two tasks:</p>
+<ol type="1">
+<li><strong>Primary task:</strong> To “learn” a numeric vector that represents each word.</li>
+<li><strong>Pretext task (stepping stone):</strong> To train a classifier that, when given a word <span class="math inline">\(w\)</span>, predicts nearby context words <span class="math inline">\(c\)</span>.</li>
+</ol>
+<p>Self-supervised algorithms differ from supervised algorithms in that there are no labels that need to be created. The pre-text task trains a model to perform predictions, based on a sliding window context:</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="1">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="figs/word2vec-001a.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="figs/word2vec-001b.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Starting with an initial random vector for each word, the algorithm updates the vectors as it proceeds through the corpus, finally ending up with an embedding for each word that reflects its semantic value, based on neighbouring words.</p>
+<p>In NLP, the quality of an embedding can be evaluated using an analogy task:</p>
+<blockquote class="blockquote">
+<p>Given X, Y and Z, find W such that W is related to to Z in the same way that X is related to Y.</p>
+</blockquote>
+<p>For instance, if we are given the pair <code>man</code>:<code>king</code>, and the word <code>woman</code>, then the embedding should return <code>queen</code>, since <code>woman</code>:<code>queen</code> in the same way that <code>man</code> is related to <code>king</code>. Geometrically, the answer to the analogy is obtained by adding (king - man) to woman. The nearest embedding to the result, is returned as the answer.</p>
+<p>On the left are examples of the types of analogy pairs that word2vec is able to solve, while on the right, we have visualisations of GLoVe.</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/word2vec-relationships.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>word2vec</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/glove-001.jpg" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>GloVE</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Here’s how we can use <code>gensim</code> code to conduct the analogy task.</p>
+<div id="8be3968a" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># load pre-trained word-vectors from gensim-data</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>word_vectors <span class="op">=</span> api.load(<span class="st">"glove-wiki-gigaword-100"</span>)  </span>
+<span id="cb26-3"><a href="#cb26-3"></a></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="co"># Check the "most similar words", using the default "cosine similarity" measure.</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a>result <span class="op">=</span> word_vectors.most_similar(positive<span class="op">=</span>[<span class="st">'woman'</span>, <span class="st">'king'</span>], negative<span class="op">=</span>[<span class="st">'man'</span>])</span>
+<span id="cb26-6"><a href="#cb26-6"></a>most_similar_key, similarity <span class="op">=</span> result[<span class="dv">0</span>]  <span class="co"># look at the first match</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>most_similar_key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>similarity<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>queen: 0.7699</code></pre>
+</div>
+</div>
+<div id="54b3df98" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="bu">print</span>(word_vectors.doesnt_match(<span class="st">"breakfast cereal dinner lunch"</span>.split()))</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="co">#similarity = word_vectors.similarity('woman', 'man')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>cereal</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="visualisation-with-t-sne" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="visualisation-with-t-sne"><span class="header-section-number">4.6</span> Visualisation with t-SNE</h2>
+<p>When compared with sparse embeddings, dense embeddings are compact. However, a more important difference is that dense vectors represent the semantic meaning of the words. This means that vectors that are close to each other are similar in meaning. Let us use t-SNE to visualise the GloVe embeddings.</p>
+<p>There are a total of 400,000 vectors in the embedding. Even with t-SNE that will be difficult to make sense of. Hence for now, we sample a set of 100 to visualise them.</p>
+<div id="0643505d" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>rng1 <span class="op">=</span> np.random.default_rng(<span class="dv">1111</span>)</span>
+<span id="cb30-2"><a href="#cb30-2"></a></span>
+<span id="cb30-3"><a href="#cb30-3"></a>nn <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="bu">id</span> <span class="op">=</span> rng1.choice(<span class="bu">len</span>(word_vectors), size<span class="op">=</span>(nn,), replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb30-5"><a href="#cb30-5"></a></span>
+<span id="cb30-6"><a href="#cb30-6"></a>X <span class="op">=</span> np.zeros((nn, <span class="dv">100</span>))</span>
+<span id="cb30-7"><a href="#cb30-7"></a><span class="cf">for</span> ii <span class="kw">in</span> np.arange(nn):</span>
+<span id="cb30-8"><a href="#cb30-8"></a>    <span class="co">#X[ii,] = glove_vectors.get_vector(id[ii])</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a>    X[ii,] <span class="op">=</span> word_vectors.get_vector(ii)</span>
+<span id="cb30-10"><a href="#cb30-10"></a>labels <span class="op">=</span> pd.Series([word_vectors.index_to_key[x] <span class="cf">for</span> x <span class="kw">in</span> np.arange(nn)])</span>
+<span id="cb30-11"><a href="#cb30-11"></a></span>
+<span id="cb30-12"><a href="#cb30-12"></a>tsne1 <span class="op">=</span> manifold.TSNE(n_components<span class="op">=</span><span class="dv">2</span>, init<span class="op">=</span><span class="st">"random"</span>, perplexity<span class="op">=</span><span class="dv">10</span>, metric<span class="op">=</span><span class="st">'cosine'</span>, verbose<span class="op">=</span><span class="dv">0</span>, max_iter<span class="op">=</span><span class="dv">5000</span>, random_state<span class="op">=</span><span class="dv">222</span>)</span>
+<span id="cb30-13"><a href="#cb30-13"></a>X_transformed2 <span class="op">=</span> tsne1.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You should get the same plot as us since we have set the same seed at the start of the cell, and when we initialise the transformer. Explore the resulting plot - notice how months of the year appear close together at the bottom left. Around the left as well, the calendar years appear as a group.</p>
+<p>(The figure below only appears in the html version of the text)</p>
+<div id="55886583" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>df2 <span class="op">=</span> pd.DataFrame(X_transformed2, columns<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
+<span id="cb31-2"><a href="#cb31-2"></a>df2[<span class="st">'labels'</span>] <span class="op">=</span> labels</span>
+<span id="cb31-3"><a href="#cb31-3"></a>fig <span class="op">=</span> px.scatter(df2, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, text<span class="op">=</span><span class="st">'labels'</span>, width<span class="op">=</span><span class="dv">1024</span>, height<span class="op">=</span><span class="dv">960</span>)</span>
+<span id="cb31-4"><a href="#cb31-4"></a>fig.update_traces(textposition<span class="op">=</span><span class="st">'top center'</span>)</span>
+<span id="cb31-5"><a href="#cb31-5"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+        <script type="text/javascript">
+        window.PlotlyConfig = {MathJaxConfig: 'local'};
+        if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+        </script>
+        <script type="module">import "https://cdn.plot.ly/plotly-3.0.1.min"</script>
+        
+</div>
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="d9b118c5-0a13-400e-8838-7c73e317d322" class="plotly-graph-div" style="height:960px; width:1024px;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("d9b118c5-0a13-400e-8838-7c73e317d322")) {                    Plotly.newPlot(                        "d9b118c5-0a13-400e-8838-7c73e317d322",                        [{"hovertemplate":"x=%{x}\u003cbr\u003ey=%{y}\u003cbr\u003elabels=%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":"#636efa","symbol":"circle"},"mode":"markers+text","name":"","orientation":"v","showlegend":false,"text":["the",",",".","of","to","and","in","a","\"","'s","for","-","that","on","is","was","said","with","he","as","it","by","at","(",")","from","his","''","``","an","be","has","are","have","but","were","not","this","who","they","had","i","which","will","their",":","or","its","one","after","new","been","also","we","would","two","more","'","first","about","up","when","year","there","all","--","out","she","other","people","n't","her","percent","than","over","into","last","some","government","time","$","you","years","if","no","world","can","three","do",";","president","only","state","million","could","us","most","_","against","u.s.","so","them","what","him","united","during","before","may","since","many","while","where","states","because","now","city","made","like","between","did","just","national","day","country","under","such","second","then","company","group","any","through","china","four","being","down","war","back","off","south","american","minister","police","well","including","team","international","week","officials","still","both","even","high","part","told","those","end","former","these","make","billion","work","our","home","school","party","house","old","later","get","another","tuesday","news","long","five","called","1","wednesday","military","way","used","much","next","monday","thursday","friday","game","here","?","should","take","very","my","north","security","season","york","how","public","early","according","several","court","say","around","foreign","10","until","set","political","says","market","however","family","life","same","general","\u2013","left","good","top","university","going","number","major","known","points","won","six","month","dollars","bank","2","iraq","use","members","each","area","found","official","sunday","place","go","based","among","third","times","took","right","days","local","economic","countries","see","best","report","killed","held","business","west","does","own","%","came","law","months","women","'re","power","think","service","children","bush","show","\u002f","help","chief","saturday","system","john","support","series","play","office","following","me","meeting","expected","late","washington","games","european","league","reported","final","added","without","british","white","history","man","men","became","want","march","case","few","run","money","began","open","name","trade","center","3","israel","oil","too","al","film","win","led","east","central","20","air","come","chinese","town","leader","army","line","never","little","played","prime","death","companies","least","put","forces","past","de","half","june","saying","know","federal","french","peace","earlier","capital","force","great","union","near","released","small","department","every","health","japan","head","ago","night","big","cup","election","region","director","talks","program","far","today","statement","july","although","district","again","born","development","leaders","council","close","record","along","county","france","went","point","must","spokesman","your","member","plan","financial","april","recent","campaign","become","troops","whether","lost","music","15","got","israeli","30","need","4","lead","already","russia","though","might","free","hit","rights","11","information","away","12","5","others","control","within","large","economy","press","agency","water","died","career","making","...","deal","attack","side","seven","better","less","september","once","clinton","main","due","committee","building","conference","club","january","decision","stock","america","given","give","often","announced","television","industry","order","young","'ve","palestinian","age","start","administration","russian","prices","round","december","nations","'m","human","india","defense","asked","total","october","players","bill","important","southern","move","fire","population","rose","november","include","further","nuclear","street","taken","media","different","issue","received","secretary","return","college","working","community","eight","groups","despite","level","largest","whose","attacks","germany","august","change","church","nation","german","station","london","weeks","having","18","research","black","services","story","6","europe","sales","policy","visit","northern","lot","across","per","current","board","football","ministry","workers","vote","book","fell","seen","role","students","shares","iran","process","agreement","quarter","full","match","started","growth","yet","moved","possible","western","special","100","plans","interest","behind","strong","england","named","food","period","real","authorities","car","term","rate","race","nearly","korea","enough","site","opposition","keep","25","call","future","taking","island","2008","2006","road","outside","really","century","democratic","almost","single","share","leading","trying","find","album","senior","minutes","together","congress","index","australia","results","hard","hours","land","action","higher","field","cut","coach","elections","san","issues","executive","february","production","areas","river","face","using","japanese","province","park","price","commission","california","father","son","education","7","village","energy","shot","short","africa","key","red","association","average","pay","exchange","eu","something","gave","likely","player","george","2007","victory","8","low","things","2010","pakistan","14","post","social","continue","ever","look","chairman","job","2000","soldiers","able","parliament","front","himself","problems","private","lower","list","built","13","efforts","dollar","miles","included","radio","live","form","david","african","increase","reports","sent","fourth","always","king","50","tax","taiwan","britain","16","playing","title","middle","meet","global","wife","2009","position","located","clear","ahead","2004","2005","iraqi","english","result","release","violence","goal","project","closed","border","body","soon","crisis","division","&amp;","served","tour","hospital","kong","test","hong","u.n.","inc.","technology","believe","organization","published","weapons","agreed","why","nine","summer","wanted","republican","act","recently","texas","course","problem","senate","medical","un","done","reached","star","continued","investors","living","care","signed","17","art","provide","worked","presidential","gold","obama","morning","dead","opened","'ll","event","previous","cost","instead","canada","band","teams","daily","2001","available","drug","coming","2003","investment","\u2019s","michael","civil","woman","training","appeared","9","involved","indian","similar","situation","24","los","running","fighting","mark","40","trial","hold","australian","thought","!","study","fall","mother","met","relations","anti","2002","song","popular","base","tv","ground","markets","ii","newspaper","staff","saw","hand","hope","operations","pressure","americans","eastern","st.","legal","asia","budget","returned","considered","love","wrote","stop","fight","currently","charges","try","aid","ended","management","brought","cases","decided","failed","network","works","gas","turned","fact","vice","ca","mexico","trading","especially","reporters","afghanistan","common","looking","space","rates","manager","loss","2011","justice","thousands","james","rather","fund","thing","republic","opening","accused","winning","scored","championship","example","getting","biggest","performance","sports","1998","let","allowed","schools","means","turn","leave","no.","robert","personal","stocks","showed","light","arrested","person","either","offer","majority","battle","19","class","evidence","makes","society","products","regional","needed","stage","am","doing","families","construction","various","1996","sold","independent","kind","airport","paul","judge","internet","movement","room","followed","original","angeles","italy","`","data","comes","parties","nothing","sea","bring","2012","annual","officer","beijing","present","remain","nato","1999","22","remains","allow","florida","computer","21","contract","coast","created","demand","operation","events","islamic","beat","analysts","interview","helped","child","probably","spent","asian","effort","cooperation","shows","calls","investigation","lives","video","yen","runs","tried","bad","described","1994","toward","written","throughout","established","mission","associated","buy","growing","green","forward","competition","poor","latest","banks","question","1997","prison","feel","attention"],"x":{"dtype":"f4","bdata":"xpIPQaYihkHzvH9BWS4SQbf3qsGvuYtBiq9CQSpjKUEQ2yrCqUuevp5KZkF1nd3BghLWvZE\u002fP0HC3CzAJ7EowS0zB8Jnx6lBzbOwwJHteUFzZJQ\u002fO46iQShOtkF0AjRCyK4zQv89NEGJUsPA5sQkwqDKK8LDyjVBAl+pwZVBl8BxrjXBZO83wf17AMGhy0HBd82rwTu\u002fEUAJ8JPAz6NMwbbJIMEXHxLC7vabPspGvsGZeiFApdAnQgFInEDU0M4\u002fd2UCQXaq2MF62DdCtLIuwRXse8CGQQrCdW+4wSdCaUFDpHpB9CvpwdBRq8BR749B9pZ\u002fQC3FwsHOQxvCC4l3P5y8jUEP\u002ft3B7n4bQJb+nMDuNKFBQ5esQYMZC8LNX5\u002fAohuEQgu0gEF2O7BBn1aLQJkwEsJ3SpNBqIhiwFtS28GUjo1CQRwXwr\u002flEcImyyjBqN4SPRr2QkKnnM3B79B6QU+nDcIBECtCCoWIwWoY5kBSSi1AKxWLQiwQwMH7VBNC2+uaQSU72MEidvdARh8WQgCbOMG9qYBBRJfnwY1oB8EmQyNChjT0wbO3z8HH27XBxSIMwkf4n0EEkpBBW\u002f+CQcwkIkLOgxLBWcG6wNJ9akKs4D7Bhlxxwcz7vEFbwRDCnyCNwSZbiEDLsiLCAnU9Qqt4IkH9zsdBsc+ywGXtuMHdxFdCMg0yQUNRsr\u002fcpI9Agux5QiqkdEEB6CvBpKeMQHz8aEGyh3I\u002fGua6P6u3kEKBhBhCt5ypwV76N8GYAIhB0wnYQezKhMIiQDhC80MWwrIkU8HhUdPAU\u002fGTQVr1IME0VFtCNDcBQW+HC8IIOpRBlqMOwrrVicG1JZFBZWquwQTdikJpQ5dBCCk0wvIJiUFNFRZCUo3mQD8FwcBAy2HARSSnwaJw3sHEPx5BiDkTwiToG8KnZbhBWhWHQbsH60DAV0dC\u002fFQUwpxMoEECiInBJUQPQl29LMGZgBbCWToYwrWOEcKZIRfCpfN7wpUbPj9nayHCkRHKwf7HqsENk0zBdWQtwu\u002f6kEIdSZJBDxCBwtpWO0ITreHBx1byQX6Q7cFMk8XBdUKqQTKulcDkgvXBJRp5QlQer8GwzHhC32XIwd7pisDCMPlBw5IMwnlHfUIM4+PATiiCwNcIScGfE7FAaIGWwVRiU0L61GG\u002fbw+jwZVh7kGruBpCv5P3wfhGv0FvpfZB7aQHQU8UZEFAKXjCadqDQWx2FcIGgIxC3lRtQrKlSELlgMRBOx8RQmp1\u002fUBMRABBH8Z5QhJvT8EFw7zB7DsdwnzMtcD8AvfBSX9RQgBvrkEl4r\u002fA8hzkwRPhlsHayRHAAbUiwvpB50GHh1hCxHYuQtkwxcF3UFbCj2wFwmOjWkCU6ITB\u002fudZQqwgk0KCQ7TBv\u002fgEQAo8g0KXdqHBLvcKQFBkGsJItMRAPFUKwrSF9EEByQDC3lkMQkVZ8sAAVAbAULE8wjQVL0IPQEFB8sShwVraGsLFuQJCkZr+wVQDXEFizi5BJ0V1wm2\u002f2sCs4OrBGXwfwnwTu8HB5cnBzlzxwa5eGkLqGH3C8\u002fI6QlH+gcK5qwvCnFlfwsNmBsKzTtq9ma0wQqI0tEGbWEvCAiSGwKRozkAS62xB5xINwsoJscLsG8\u002fAvgaaQdAY\u002fUDsQkRCSK\u002f1wUwNVsIBAhNB071jQrICQ0JZ\u002fExCOTquQTLhg0LqbUbBS9esQV0URsKb43DC0K\u002f\u002fQTX7k0J4fIxCNyx+QrOgrkFfW\u002fTBYKl3QmLzb0LnV9dA5NynQW2ZtEAZNBnCJKdawZQSccKGbKfBd47VP5lNWkIYVYZBNNK3wFpmrkFrnZA\u002flcA+QpyW8cDQdLPCA3r9wecJAcIv+8E\u002fkOk5QiKnmMGJXQ7C4ORkQuKKrUE2mnzBWH\u002frQM6Xc0I+DqjCQUgBQsbiw8BIQdhAJ4AGQs7fbUIu1JbBD\u002foQwmoEJ8L+0oPBefh0wps9oUAJ44dCvaKqwTMpo8H0Ei5CqwrqwPa8RD88jvbBPHSxwtBj38Cq43BC9Ue7wTryKD0gzzBCHyYAQReIC8GXGNFAI5E1wu9xg0L5JHBCRs44QgmepcHb\u002f19BZTPMwR1k\u002fsGxvy7CiZXyQJGFZMFlCVZCDnezwqGQBMIRV74\u002f8BxpQSors0Ere9DAh7JUwbXSn8JB9n1CZz\u002fWwQbhqEGa34BCAkzSwbPxTkJfjIvAS57lwCP+UkIFbuTA+oPGwclmjkCmBDk\u002fEMZEQLwTdEKAyiBCsWaCP3v\u002feEKQ+VFCzvmmQcrt+EESOrtAh18BQrbjWEIhCxvCdoC0wUjmg0KzjQdAObZQwgxzTME7NRvC\u002fVaXwWmZV0Hhx3tAUxyOQeHEosH15WZBdz24wuQThMGkbbK\u002frYnkQRiQFsFgQBDBe8FIQvvlusGjT4DC74a4wnbBS8EZtYVCfyNDQlMnjUCfg6LB6VktPjNthcG5VjbCoZ1cQgtFn8GHhcvA0SAMwgGhqUFswXHBZ2oQwk5YRMAaEFJC1At0QmEjX8LQtLPC7S8tQuZpEMJpzUhAg5sJQmZdlUGtZwfC35SBQlvftcK9t3\u002fCg7i7v3mXykFuSYpC6WqNwY9XcUEXGYJCvDWLQuNltsIJjdBBwQuewFSj5EF\u002fLWVCMWF7weiiIsLYaYFBFDxGwHMMZcHnCpXBvLcHwihOGELD9I1Bw1AIQp82g0FVqTBBruZEwbI9XkLklwRCdiRwwFBUT0FtH0JCLo62wsVoxL+iTBZCfhc\u002fQn24QkLKNlpC9qo+Qq8KHsL0rhnB2FmFQi8BIUIDXa9BYQENQt\u002fRZMJFB1NCyBBBQpbsc0J4LOy\u002fGjzKwSXSiEIiitXBOICCQiSef0Kdh5JACokqwRz4gsJi1bbB1MDDQXaCy0D622fCMO2LQjCHB8FKC25Bg2kTQkC0hUIv7dVBYEaSQRMCksF0iQ7Bw0oxQPWNZcLej\u002ffB8adaQknxy8AlPZTBu4sawE84jUItXS5AaIB+QhAtbcGaSmpCy7t0QIw4UMEenyJCciMHQXrOc0Is5PvBiD+SwTeEScGxzcdAZpCMQM3bYkJmb4fCTvSDQS2ZckIPEb7BuixxQlal0kBfBu3A9OmCQlOV0sHhahXAwvGNwT9cjELuAbPCVZm1wvKPgkJ\u002f6m5CUaf6wYab38HRpTxAjLh\u002fQbt7X8AO+IRCKCL3QW\u002f4E8L3x9nBeNOiwpPvkMGajwPB1UGuQeedhT3GrolC20gmQs8JBcEC7GnBfP8owqemgEIdII9AfEljQlcIlkH8+r\u002fA8zuIwtR\u002fu0D2qEdCqFkYwMELosEGbbXCnkN0QhV6e0L3RIhCVjPnwNx5DULkkWtC1FCFQsKTgUKq2nZCb+gYwQyzT0Jsm5a\u002frNvEvhkaCkJyxVdCz0VzQlPxgEJDT6vBrdW3QZ9KVkJjyNxBK4G0QYWSEEETNH1CaO86Qq5Zh0LX5TdCK\u002f3nwfdQgcG898XBjKd7woeX9cHXWrPCov5vwjTnVEIO4V1C12jjwRedsMIL4gZCn358QmeiAsFe2ABC7TPdwfEDHsLxArjB3VyawZocbkEBYr3CQFyvQb6\u002fz8FVEvNA8B2HQNuKEMFhgC1CyoP1QUnlZULGocxBgHNLQlUqekLut0xBPhyOQs0rdkKfS9VBndkxwnk7OcIpWAtBN+sEwsruWEIaUl1CsYYIwjLGqMEoMtvArnQAwtx57z\u002fLMIFCeGsyQrsDfkJl4zBCIe9\u002fQvrWc8IMm3fCZhKXQvjjtMFoAFdC+rAGwFjcsMKAczLA2QJ5QkkbpMB+VRzCAC24wnjFtcK8yLtBv5gzQrXfBMEekajC4QRJQS94q8CN\u002fTBCmDdcQn7ThkL4qZXBnqi5wWDcOkI+h4jCytFcQt8Qa0H0No3CqwcLQjudgkLaSmXCHMCBQgw75UFo3VpC37EuQmqv8sHIAyBB1P5owjhc6EHC9oXB8GH2wewljUH1\u002fCbC4LYMwjrZ4z9bvA5As8DewAF\u002fU0IzJpXBQEYvQu7DAD6j\u002fwlC+GzqQaDRAsJQnMDBnHxfwl8i8sHY2oBCpVQlwRMDBELI\u002fJXBfCKAQr4RrEE64SVCzuqLQRmdbUDXI4DCJfC1v4e5IsJAKTZAlWtcQt\u002fEF8KLmIrCmfgwws0wOUJdJBdAlvMnQi+7osLutIPCQRYXwsi1u8LUzR9C17aPwG5FFsIiS7nCzTtQQgcJqr6ryQfCtO6SQKwZgsAbceZB9pyjwfWaWULxagDB+VEMQg5zYEEtaTRCeLGFQm5FQkKBne1AEEdMQW39DMKIYIBCF5nVwLKfisE4zStCGYn8wb9PJsIhDh9CtNMXwnp6O8CaUb3BuWsWQtFTFkHYibrCBkehwthdkUFWCJ5B8e43wq5fkEGoE39C2MlmQG\u002fdF8LJXLXBdi+7wav6vMCRB\u002fnB+P3bQWHZWMF8+pxBGXiLQhOwGEKSbR1AVkpSQntkLUL9zprBkm1KQedtJ8LYkGzCa90Xwq\u002fVQUE4DnzAaNMNwWxLD8K5xmlBvmADwgMtV0Kv65bByKmxwBfHXcF+phdBa+w3wqa0oUEL84JCiu6LwYu\u002fmMCaJY\u002fBRXMTwubLRkIA2YVCsIivQeQMEMKMzMZBL+A6Qenjs8FyFT1CTahlQt66isKSrD7BWl2uwg6cLMAe+r9B5U8AwsnSzz9u0kpCTD\u002fvwYjCVEIUaVfCIw4gwY10dcJYk7HAqEZ3wsmyJEHLn93BQBwDQoshU8JvKIPCuD++wkx+GMJ3\u002fonBlUYQQrqiQT+6tajBlj0HwrFdW0KZYPvBXmAgQJSbg0Ixsx3Cn0CzQernJcHJa7ZAkjJmQNoTNEKoKeRApg1PQUvQfkJyqxpCOegHwQ8BucGPdwRCQltyQu4tikL2XM7BhdJUwud1FMLz5QXC9yAQwakHRUKL+LRBVRPBwngsQUJFgbFBqi3cweqNXUINZgTCKuOEwCFHJkIahkdB8R2uwB7e78FRZeJATqtCQqfGP0KWKS\u002fCIPYgQrufssFXpwlBEXXqwSeNjUKupkRBcyCuwgxBH8LHbqvBc1p8QlWslUDEAw\u002fB0oXXQUdTvsIIn4JCQkADwXnpjcFydFJCFq0rQswcgkKll5\u002fBoO6NQuP8m0HRw25CYNTaQSboisL7nVlBTphowlCAgUIy+g\u002fCA7MyQZhR2sBpX9fBUDsSwgebVEKhnUFBqD4YQkwmPcJQ49HBrZj5wHDuPsGIRj3CgwCPQq1dC0HeyhXCTj25wRgCyEBaLcHCUgKHwXdkbsJMrIJCfFChQRg51EEKuR7CBQY8Ql8tTkL5dbpBQV+LwU1ah8KjxbdB4wwFwr+qb0IToZXA8bnAwmAPCsEdWgLCPaAkwQ=="},"xaxis":"x","y":{"dtype":"f4","bdata":"46Ehwfq0EcH1fPXAVXANwXDYccGOyCPBTHfwwEZJk8GJszLCQ0BJQOeAO8GAYWTCcHEtwZY7HsGA3RLBiswYQFN+SEK8Qx3BQbIEQT7WSsEoK0DBtJ7\u002fwA\u002fnccA4UG7CkS9swhQ718CkSzFB8NIowqsLK8K\u002fKojB5DsgwYmmf8C6mMvAFQaewChhz8HHUlrAC48vwbgeS8ECG7NAASCtwPhOLcDBWA\u002fCr0UUwQAoP8HL3odAprhnwpm05cEQ6xJAQYeTwdmwIkF9oQpCfAjav2B7gMBvlQbCws0wwbamb8LWGwfCgZtfwhLnWsLzewPCHcglwoDzBUEgnD9B9Vuuwe9zxcEA0F\u002fCUCklwqqvFUGXzdTBAKy4wVH\u002f\u002fsGqgTFBarfYwd82CsKxxRnB+w0Wwt6EakFjIfTB7ptgQpUrw0DyTw\u002fCBwUHwtzSOEEAO8vBlQewwQXHTkKPuy\u002fBp0ZuwuAA98HJxWfCclGEQuv5kcEhCVpCTKoMwmfkH8EPuVFCRpKTwdUAXcII\u002fxNCVndSQlpz58FytbnB4wQFwoWTKkG7D1BCTbtTQTQgHkGkdf3APWBEQaoI38FX5AnBHyGcwCGvTkJO0snBwgb\u002fwNJr20GnH2PBaSYcwp\u002fqEcH5fMnBChTswZljXEKIA4tBG01BQkw1TMGdLOXB3uVewic\u002fEUF6AbTA8PZ1Qg4crMHVNxPCgO1zQu9mdMI0p8W+g\u002f8nwhExMEJN2SDCGHMqwufv3EF5kVdCKidbQuOORULDjEvB6F7xwYemG0HzcVFCwZ6GQeViSkLurP\u002fAyw9UwU2n6MFGlujBJ\u002f8qwbWqOEKTEMjB4+I2QI3Ci0IZ7tXBUsWPwXSPCcI2mkFBtbX\u002fwTonN8D9q61BNliIQvg3dUI0i61BnBUrQThOwsFR9JDBinmpQe5AKUKkETnCfOttwlN44b8F2X\u002fCWcu5QZdxM0K7FNPBiE2kwFePAMLqbCJASMipQfsNskFVE7JBqJuyQFv0Y8ByDSPCEfpOwUXTisGcQePB3jgFwgpI1kG7XztCnGatQNQAC0JciQTClTwHQddlgkFm3UNC7cvqwacaNkJzb+rBtU1\u002fQU7uU0IMYUvCAoI4QaX7LMLY3a5BQMtIQtuHkMHzALTB4hZ6Qc2elUEY5HXBlxZ8Qov1bsLsqR\u002fCMUkMwmw5VcGmfaBBbr6\u002fwUB5CMIlUYDBNSYgv1MNP8JsIAfB0cxywtnqekE8AwjCj9JFwUc\u002fesIKHVNCJomNwFxReEKxqabBENDAQam9l7+Tg0lC\u002fKuzQTpKZMHp\u002f7fBh9aRwIVA18HTwmHCjWWuQAPT5j8SPxXCWfF9QQ4Y9EBgJ4zBAF5LQgU6MMJEsKZAbpoTQnjN2kEN5SHBTp8Ewaor1kH9F+DBM7CbQGjS4sHhYEtAzkAyQgt9YEHkk0RBwV8WwiwNvr7NqAvCzR\u002fgQOY6lEF3pZBCkywLQhNVcsLyZ5tBIOSIQp9Cu0F+ZNa+SJqkQtscw0H8qXbCcZveQIhpb0KVbitBt9YNwl0uFUL4ObLAp2WFQRcrR0K+851AgbxXQgZFNEGDshNCEj2VwPpkT0KQ2MHBdYN2QkXGy0FPRCNBGfyiQQmqQUEMk0hAFo3qwdOMTcJMCS1COQHqwdPpWsJx+UbBiah7vihp2MAv\u002flQ+61iCwW7iqEGBY37CIkVtQgEZ+j+3YfDBnIZZQjp\u002fDUIlSAvBKZhdwWUH3UHEZv5Bgb9IwqyUJEKgJa\u002fB9Ax3Qjpl20EVBIVCDEM2QnQjTsKSRcjBf2IGwhMJ+kBiZl1CRU7FQdVk0MBUGRHCuQArwp9SM0JiwhfChyUmQo\u002fwacLjaVDCs2U5QvvZBcKUS1hC391yQryKD0Ksf5FBZMbeQexnLEKF4ArCdsJrQsJZpEE+jUbB4vvMwZkAakISD6nBP2aAQZFIb0IUOpJCHphPQQsRn0F9LhvCiLJJwPu5kEKZ2PRBlTqFQly9DkKtS4FBXp\u002f5wYjLfsCfnTpChbtTwjobu8GidPhBhicmQeQrnkFUYmNBwLCAQtI7iEJ95iXCtz4GQbpEhEHMtP1BRW9tQsOeCkD8kzzCDYhawbl8R0JbyQLC6YJ1Qr964UEKM1HBWXNXwicO+UG335FCfQ8FQGymN0L6tw1CILZbwn3FgMFG7U7CcEzLwd7Ca0Jad0XCY5OAwcSIecLRgmbCC6CzwBPhckKvzMXBAsYPwRoUCsK7+DDCCys+Qt38W8LH\u002fihAkF8lwregVMKX\u002fX7Csrm\u002fwRhquL6vokTByKDKweZBlcG6kTBCKX1FQh7iikAiNMlBNdMSQdjFa8E5byXC\u002frwAQm\u002f7FEJWuUbCtYhxwnpxCsKHCQnCvWxTwkT2zUBzuY9CGT+JwZLnpcECrIVCY6x4Qf9AEkIgakJBg+lNwnEcBkL1gKfBjSNIQuNEg8FtzY3B8O3uwSd13kE\u002fCh5CvDz4wLrVZsEXmaVB03AOwirhaEItcjzC1327P0RAZEJJT3VCpwulwVzRssCqq0rCSCVNQmc9FsJNXEFCIXB4QpZqMEIlOTdCrN8uwi\u002fuTsJ2+wxB546JQo0+gsE0cehB4RuhwUYAEUJe5evBaW29weWlScJ4D\u002fDBDbufwVrtWUKPwGlBW2aLv47sKEI4gtvBMwUMQvVqSEAm+nlCfUYvwbJWpkGNPElBgqbVQWm+d8JTv3hCvkiuwZ1r88FypJPBFBGZQKsnF0L13mtC80hYwuoUa8ElA+pBkCNCQoQpcULZELlBx3gEQgSFcEF2DAO94wlTwq8rWUH6ncxB+H7oQMhZEEIloXbCZlhVQg6QkMFEdWVC72UWQkX\u002f5UEvSxTC0Id4QUkJGsIrAhXBUDKHQqPWQkFVWE1ChW64wYJfkkI\u002fwRNCZ67AwfLI5cFc\u002fmLBFBS1QRintMEYR1lCHhsRQYXRAULZ32HCg0iYwRxjXcD9B6c+OTeiwbaB2sEixClBeO2gwdd07UE5sofB8Rg1whFa4EEmxMXBFbI5wokoucFxwXJCHpyJP\u002f+bisDEJmVBLfwcwge1SELgGjvCK2AEwTljxsEQurrA\u002fDYYwu6Za0JwIJ3Bg6i8QSAaiULN3CvCDoxKwkbB0EHnXpbB5PU1vl8AvEF2MWPA3KaEwF25lUGWpJ9BaCcXwl+Ni0FxA4xCaZYZwvQ3WcJV2L7BaPhpwe8tkcFNYKrBaEdvwd7Ai0JOBnPCyB9HwcxShkLks6nBNM1wQhoylcE66\u002fPBMm+DQUgIwkFG9xlCVBHgwb6eCUJqoDXC3xk1Qcz7j0LrxRlCsM4LQrdKhkLZhVPCRGXwwGDUxUGDiYpB2GkfwnQ9i8AS6nFC+MftQQtxpEEUR6bBjASHQu7EHEL1s4xBfFyKQZ7kp0Fb9X3CVrveQXrqAkAf+Po9JTg6wgjQS0KVlYLBPf\u002fWQWE5aEK14hfCmSZRwYbKmMGI81lCzs4hwgeKJ0AJpufA3qEJQZXRpEIrJqLAbdYXwc3HesJ7nOTBUNIWwlCLMcABhXZCrHNZwnfSbkLtsKtBpfJJwZDJwsHRmjLC5kqFQtLFOUESzXDATkI7Qtjem8EUM49CgfFBwlgvKEH0Xr3B8JgFQROy4MGBtAfC60F5QYAmXcKZprdBh2P9wR7IlkHAVfjBPr0eQjaBAkKFZNDBOgqoQs6uSkIwja3Bj+MRQoVdj0AE3l\u002fCY2IUwi9sikEimjbCQLhGwTaUcUIpZG5CWwZXwhMq\u002f0ALIbfAvIHgQTXRHUIJJXrBRzWEQQnOjsCWsQ\u002fCWcuvQUuY4MFGwo4\u002fe7aUwBxDs8DDs1RCBwt9Qiq8ocG\u002fM0LB+\u002fQeQv7sfcLHanRBBnZAQdOX2UE2ZZRCF9g4QYssrsFq8\u002fpAPSsswFLrjkBY97DAVFliQULhckLVcv+\u002f9sF0QteTO0JaYWvAzsuzQBvH78EcRm5CBMMYQmxtWEKBqP9BaLUEwsJ8dsJzj0lBXsbcwQXZi0Jk9StCJiQ6wBmMHEK3CtnBNo+7wSfoiELHYXBBmx08QvnuLcIKMQdAitfSQK1u3r\u002ffDYDBpp6RQZIGgEEaffRB4QhdwoZZSUFMiGHAd1NUQR5AkUJsgA7BebaRQvIepUGBudlBGnhJQWisA8L8fo\u002fAWboSQdk2XMF82+DBI29qQsRWgMEAexFBwnggQqlO2cAxLUrA7kgkQnhLQb05oc3ASBpFweLBjkBW1aVCjS42QpCDmkHOrg1Cyh5MQU8aecIebhs\u002figR7QtQt2sEq87XBweNXwlAAGUKZcljCu2soQr1fpUKbSTrCPoczQhcUMsE+2nZCM5T+wY52HcJoJlxBwi7Uv4xeikHhCh1CSh4jQsPKFUKf1ajA6o9uwciojMHashlCk9IbQpQPDkLDA43ByUOOQQA2I0JBcYxC3f\u002fKQNOcIMJ+tqHBgcoYQprgosFpD7DBv6bxQQXB7UF\u002fozVCJGdTQslhRsHdWB1BWgO8v+3xDMJzvRdCnq2DwVlKKkIliuDAuYA2QhClkMFpI7FBDwEWQbGjK8EeqZtAEl4oQnddA0I\u002feLdBhHYkQm+eQ0GUDClAYhG7QCCjx8HzxYRCZNj6wWnvM0LG2JXBdrKKwTbUOEIsO09Ct+jZwXFlM8Lo45tBixLHwWCtPkHXtF3CXCSOwLz9OEIrOsPBP1KmQttf4cGR7UXBdm4XwpN7bELgy5XAH4E4Qne+\u002fcCDFn\u002fCvYlrwMMF1MFEFszBmcSPwV10iECGKmRBOYG3wNRQ68HH3XjBSXWuQdtj2MGR0afBaaU5wRcWgsKlJahC5wTQQL+8psGW7AJC\u002fR8fQjz\u002fQEL9xLTBxZ3hwVXTnMDxrZRCvp8uQjfRYcJdvLxB4RIfQq5x6MGgm9VBrRGkwNUHCULYSInB00RLwBjDGcKZRivCcnKGQTIEckH6uO7BAXrOwLT8pMBPoJBAM+ogwmCuwUHur6NCdPg3QpQzmkC3SYBCq2B5QlevI0H3amzBIBAWQvqWZ0JuQyfCGfYNQO1u8MHy+YdCmjUkwmrQrEESd5FBWC5HwG8+KEHXFYtC+CV4Qt6IT8E4OCHB7tY5QlOa4sBAOFzCETwiwVj7dcEFoBlCIHmkQFIeYcIRrPpBgVK6QQMwOUC00aTB1Y4aQiQEfMBYt3xCLrQMwXIlbsHyJjJCQQKiQTxDlEHnEgTB4e0cQXprVUJOFLdBADskQjLfDELZ+NJB+JosQqfDlEFu+hhCA6L2wZhrXsKMopbBGmATwvRkF8B9\u002f\u002f3AilvIwbwkFEKIAmJBRhdtQKc6JEKfOTVCdL2lwOV3r8HoO9VBVhOswSoBE8DmEJTB\u002f87+QVnrScET8gtCmiGqwDtJQELSBx3CbAcGwg=="},"yaxis":"y","type":"scatter","textposition":"top center"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"x"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"y"}},"legend":{"tracegroupgap":0},"height":960,"width":1024},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('d9b118c5-0a13-400e-8838-7c73e317d322');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Would we be able to make such a plot using tf-idf? Why or why not?</p>
+</div>
+</div>
+</section>
+<section id="neural-language-models" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="neural-language-models"><span class="header-section-number">4.7</span> Neural Language Models</h2>
+<p>Language is complex. It is incredible how we can understand such long paragraphs of texts with such ease. We somehow seem to have learnt complicated sets of grammar and syntax just by listening to others speak. To get a machine to learn language has not been easy. It is only recently that Large Language Models such as chatGPT have demonstrated that it is possible for machines to converse with humans just as we do to one another.</p>
+<p>Neural Models (or deep learning models) have been the key to this. In this subsection, we provide a very brief overview of their characteristics that allow them to achieve impressive performance on a range of language-related tasks.</p>
+<p>The basic unit of a neural model is the neural unit (on the left). It consists of weights and a non-linear activation function. Given an input vector, the weights are multiplied by the input vector, summed and then fed through the activation function to generate an output.</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/j_m_fig_7_2_neural_unit.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/Blausen_0657_MultipolarNeuron.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Neuron figure from <a href="https://en.wikipedia.org/wiki/Neuron" class="uri">https://en.wikipedia.org/wiki/Neuron</a></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Neural models are made up of many neural units, organised into layers. The first neural models were Feed-Forward Networks. Due to the virtue of being able to incorporate many parameters, and due to semi-supervised learning, they were already a huge improvement over earlier models. Here is a simple set up, with one hidden layer for training a language model (used to predict the next word). It can also be used to learn embeddings.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/j_m_fig_7_17_ffn_training.png" class="img-fluid figure-img"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span>, FFN</figcaption>
+</figure>
+</div>
+<p>The next evolution in neural models was the ability to incorporate words in the recent history. For humans, this comes naturally. For instance, we know that this is grammatically correct:</p>
+<blockquote class="blockquote">
+<p>The flights the airline was cancelling <strong>were</strong> full.</p>
+</blockquote>
+<p>For neural models to have this ability, it was necessary to incorporate the hidden layers from recent words when processing the current word. Recurrent Neural Networks (RNNs) and Long-Short Term Memory (LSTM) networks had these features, but they were very slow to train. The major breakthrough came with the invention of the transformer architecture. The self-attention layer of these networks gave a word access to <em>all</em> preceding words in the training window, instead of just one. Most importantly. the training of these networks could be parallelised!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/j_m_fig_10_18_training_transformer_lm.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
+</figure>
+</div>
+<p>Here are some examples where transformers excel:</p>
+<blockquote class="blockquote">
+<p>The keys to the cabinet <em>are</em> on the table.</p>
+<p>The chicken crossed the road because <em>it</em> wanted to get to the other side.</p>
+<p>I walked along the pond, and noticed that one of the trees along the <em>bank</em> had fallen into the water after the storm.</p>
+</blockquote>
+<p>In the final sentence, the word <code>bank</code> has two meanings - how will a model know to decide the correct one? With transformers, because the full context of a word is captured along with it, it is possible to perform this disambiguation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/j_m_fig_11_8_wsd.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="applications" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="applications"><span class="header-section-number">4.8</span> Applications</h2>
+<p><a href="https://huggingface.co/">Hugging Face</a> has spent a considerable effort to make Neural Language Models accessible and available to all with minimal coding. For starters, they have ensured that all their models are described in a standardised manner with model cards. Here is an example of a <a href="https://huggingface.co/google-bert/bert-base-uncased">model card for BERT</a>.</p>
+<p>Moreover, they have developed easy to use pipelines. For NLP, the following tasks have mature pipelines:</p>
+<ul>
+<li>feature-extraction (obtaining the embedding of a text)</li>
+<li>ner</li>
+<li>question-answering</li>
+<li>sentiment-analysis</li>
+<li>summarization</li>
+<li>text-generation</li>
+<li>translation, and</li>
+<li>zero-shot-classification.</li>
+</ul>
+<section id="sentiment-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="sentiment-analysis">Sentiment Analysis</h3>
+<p>In this subsection, we shall utilise one of their sentiment analysis models on the wine reviews dataset. This is a transformer-based neural language model (BERT) that has been fine-tuned with data labelled with sentiments. All we have to do is feed in the sentence, and we will obtain a confidence score, and a sentiment label.</p>
+<div id="bd854fd8" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>, </span>
+<span id="cb32-2"><a href="#cb32-2"></a>  model<span class="op">=</span><span class="st">"distilbert/distilbert-base-uncased-finetuned-sst-2-english"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3"></a>  </span>
+<span id="cb32-4"><a href="#cb32-4"></a>classifier([<span class="st">"I love this course!"</span>, <span class="st">"I absolutely detest this course."</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Device set to use cpu</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>[{'label': 'POSITIVE', 'score': 0.9998835325241089},
+ {'label': 'NEGATIVE', 'score': 0.9973570704460144}]</code></pre>
+</div>
+</div>
+<div id="exm-wine-reviews-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.2 (Example: Wine Reviews Dataset)</strong></span> </p>
+<p>The number of reviews we have is close to 120,000. Hence, computing the sentiments for each and every one will take a long time. Instead, we shall compute the sentiments for a sample (of size 20, where possible) from each variety of wine.</p>
+<p>The following snippet samples 20 reviews from each wine type.</p>
+<div id="beee77a3" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>tmp_df <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span> wine_reviews.columns)</span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="co"># w = widgets.IntProgress(</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="co">#     value=0,</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#     min=0,</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="co">#     max=len(wine_reviews.variety.unique()),</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="co">#     description='Progress: ',</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a><span class="co">#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a><span class="co">#     style={'bar_color': 'lightblue'},</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="co">#     orientation='horizontal'</span></span>
+<span id="cb35-10"><a href="#cb35-10"></a><span class="co"># )</span></span>
+<span id="cb35-11"><a href="#cb35-11"></a><span class="co"># display(w)</span></span>
+<span id="cb35-12"><a href="#cb35-12"></a></span>
+<span id="cb35-13"><a href="#cb35-13"></a><span class="cf">for</span> x,vv <span class="kw">in</span> wine_reviews.groupby(wine_reviews.variety):</span>
+<span id="cb35-14"><a href="#cb35-14"></a>    grp_len <span class="op">=</span> vv.shape[<span class="dv">0</span>]</span>
+<span id="cb35-15"><a href="#cb35-15"></a>    <span class="cf">if</span>(grp_len <span class="op">&gt;=</span> <span class="dv">20</span>):</span>
+<span id="cb35-16"><a href="#cb35-16"></a>        vv <span class="op">=</span> vv.sample(n<span class="op">=</span><span class="dv">20</span>, random_state<span class="op">=</span><span class="dv">99</span>)</span>
+<span id="cb35-17"><a href="#cb35-17"></a>    tmp_df <span class="op">=</span> pd.concat([tmp_df, vv], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb35-18"><a href="#cb35-18"></a>    <span class="co"># w.value += 1</span></span>
+<span id="cb35-19"><a href="#cb35-19"></a>    </span>
+<span id="cb35-20"><a href="#cb35-20"></a>review_list <span class="op">=</span> <span class="bu">list</span>(tmp_df.description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_12351/2593812303.py:17: FutureWarning:
+
+The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+</code></pre>
+</div>
+</div>
+<p>The next snippet computes the sentiment scores for those sampled reviews.</p>
+<div id="3a9172df" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>tmp_df[<span class="st">'score'</span>] <span class="op">=</span> <span class="fl">0.00</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>tmp_df[<span class="st">'label'</span>] <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="co"># w = widgets.IntProgress(</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="co">#     value=0,</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="co">#     min=0,</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="co">#     max=tmp_df.shape[0],</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a><span class="co">#     description='Progress: ',</span></span>
+<span id="cb37-8"><a href="#cb37-8"></a><span class="co">#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="co">#     style={'bar_color': 'lightblue'},</span></span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="co">#     orientation='horizontal'</span></span>
+<span id="cb37-11"><a href="#cb37-11"></a><span class="co"># )</span></span>
+<span id="cb37-12"><a href="#cb37-12"></a><span class="co"># display(w)</span></span>
+<span id="cb37-13"><a href="#cb37-13"></a><span class="cf">for</span> i,rr <span class="kw">in</span> <span class="bu">enumerate</span>(review_list):</span>
+<span id="cb37-14"><a href="#cb37-14"></a>    tmp <span class="op">=</span> classifier(rr)[<span class="dv">0</span>]</span>
+<span id="cb37-15"><a href="#cb37-15"></a>    tmp_df.loc[i, <span class="st">'score'</span>] <span class="op">=</span> tmp[<span class="st">'score'</span>]</span>
+<span id="cb37-16"><a href="#cb37-16"></a>    tmp_df.loc[i, <span class="st">'label'</span>] <span class="op">=</span> tmp[<span class="st">'label'</span>]</span>
+<span id="cb37-17"><a href="#cb37-17"></a>    <span class="co">#w.value = i</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="bf08a922" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>sent_counts <span class="op">=</span> pd.crosstab(tmp_df.variety, tmp_df.label,margins<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb38-2"><a href="#cb38-2"></a>sent_counts[<span class="st">'proportion'</span>] <span class="op">=</span> sent_counts.POSITIVE<span class="op">/</span>sent_counts.All</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="331fa577" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>show(sent_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table id="itables_a21adf71_0a7f_4ae1_a65e_524fba266ace" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<thead>
+    <tr style="text-align: right;">
+      <th>label</th>
+      <th>NEGATIVE</th>
+      <th>POSITIVE</th>
+      <th>All</th>
+      <th>proportion</th>
+    </tr>
+    <tr>
+      <th>variety</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead><tbody><tr>
+<td style="vertical-align:middle; text-align:left">
+<a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+Loading ITables v2.3.0 from the internet...
+(need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)</td>
+</tr></tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
+
+    document.querySelectorAll("#itables_a21adf71_0a7f_4ae1_a65e_524fba266ace:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        // Define the table data
+        const data = [["Abouriou", 0, 3, 3, 1.0], ["Agiorgitiko", 0, 20, 20, 1.0], ["Aglianico", 0, 20, 20, 1.0], ["Aidani", 0, 1, 1, 1.0], ["Airen", 1, 2, 3, 0.666667], ["Albana", 0, 20, 20, 1.0], ["Albanello", 0, 1, 1, 1.0], ["Albari\u00f1o", 1, 19, 20, 0.95], ["Albarossa", 0, 1, 1, 1.0], ["Aleatico", 0, 5, 5, 1.0], ["Alfrocheiro", 0, 14, 14, 1.0], ["Alicante", 0, 5, 5, 1.0], ["Alicante Bouschet", 0, 20, 20, 1.0], ["Aligot\u00e9", 1, 19, 20, 0.95], ["Alsace white blend", 0, 20, 20, 1.0], ["Altesse", 0, 6, 6, 1.0], ["Alvarelh\u00e3o", 0, 2, 2, 1.0], ["Alvarinho", 0, 20, 20, 1.0], ["Alvarinho-Chardonnay", 0, 5, 5, 1.0], ["Ansonica", 0, 2, 2, 1.0], ["Ant\u00e3o Vaz", 1, 14, 15, 0.933333], ["Apple", 0, 2, 2, 1.0], ["Aragonez", 1, 8, 9, 0.888889], ["Aragon\u00eas", 0, 9, 9, 1.0], ["Argaman", 0, 3, 3, 1.0], ["Arinto", 0, 20, 20, 1.0], ["Arneis", 0, 20, 20, 1.0], ["Asprinio", 1, 2, 3, 0.666667], ["Assyrtico", 0, 20, 20, 1.0], ["Assyrtiko", 0, 16, 16, 1.0], ["Athiri", 0, 1, 1, 1.0], ["Austrian Red Blend", 0, 20, 20, 1.0], ["Austrian white blend", 0, 20, 20, 1.0], ["Auxerrois", 1, 19, 20, 0.95], ["Avesso", 0, 6, 6, 1.0], ["Azal", 0, 3, 3, 1.0], ["Babi\u0107", 0, 4, 4, 1.0], ["Babosa Negro", 0, 1, 1, 1.0], ["Bacchus", 0, 1, 1, 1.0], ["Baco Noir", 1, 14, 15, 0.933333], ["Baga", 0, 20, 20, 1.0], ["Baga-Touriga Nacional", 0, 2, 2, 1.0], ["Barbera", 1, 19, 20, 0.95], ["Barbera-Nebbiolo", 0, 1, 1, 1.0], ["Bastardo", 0, 2, 2, 1.0], ["Biancale", 0, 1, 1, 1.0], ["Biancolella", 0, 1, 1, 1.0], ["Biancu Gentile", 0, 1, 1, 1.0], ["Bical", 0, 13, 13, 1.0], ["Black Monukka", 0, 2, 2, 1.0], ["Black Muscat", 1, 9, 10, 0.9], ["Blanc du Bois", 1, 5, 6, 0.833333], ["Blatina", 0, 1, 1, 1.0], ["Blauburger", 0, 1, 1, 1.0], ["Blauburgunder", 0, 1, 1, 1.0], ["Blauer Portugieser", 0, 2, 2, 1.0], ["Blaufr\u00e4nkisch", 0, 20, 20, 1.0], ["Bobal", 3, 17, 20, 0.85], ["Bobal-Cabernet Sauvignon", 1, 0, 1, 0.0], ["Bombino Bianco", 1, 1, 2, 0.5], ["Bombino Nero", 0, 1, 1, 1.0], ["Bonarda", 1, 19, 20, 0.95], ["Bordeaux-style Red Blend", 1, 19, 20, 0.95], ["Bordeaux-style White Blend", 1, 19, 20, 0.95], ["Bovale", 0, 3, 3, 1.0], ["Bo\u011fazkere", 0, 4, 4, 1.0], ["Brachetto", 2, 12, 14, 0.857143], ["Braucol", 0, 5, 5, 1.0], ["Bual", 0, 7, 7, 1.0], ["Cabernet", 0, 10, 10, 1.0], ["Cabernet Blend", 1, 19, 20, 0.95], ["Cabernet Franc", 2, 18, 20, 0.9], ["Cabernet Franc-Cabernet Sauvignon", 1, 15, 16, 0.9375], ["Cabernet Franc-Carmen\u00e8re", 0, 2, 2, 1.0], ["Cabernet Franc-Lemberger", 0, 2, 2, 1.0], ["Cabernet Franc-Malbec", 0, 3, 3, 1.0], ["Cabernet Franc-Merlot", 2, 15, 17, 0.882353], ["Cabernet Merlot", 2, 18, 20, 0.9], ["Cabernet Moravia", 0, 2, 2, 1.0], ["Cabernet Pfeffer", 0, 2, 2, 1.0], ["Cabernet Sauvignon", 2, 18, 20, 0.9], ["Cabernet Sauvignon Grenache", 0, 2, 2, 1.0], ["Cabernet Sauvignon-Barbera", 1, 0, 1, 0.0], ["Cabernet Sauvignon-Cabernet Franc", 0, 20, 20, 1.0], ["Cabernet Sauvignon-Carmen\u00e8re", 5, 15, 20, 0.75], ["Cabernet Sauvignon-Malbec", 6, 10, 16, 0.625], ["Cabernet Sauvignon-Merlot", 1, 19, 20, 0.95], ["Cabernet Sauvignon-Merlot-Shiraz", 0, 2, 2, 1.0], ["Cabernet Sauvignon-Sangiovese", 0, 7, 7, 1.0], ["Cabernet Sauvignon-Shiraz", 3, 17, 20, 0.85], ["Cabernet Sauvignon-Syrah", 2, 18, 20, 0.9], ["Cabernet Sauvignon-Tempranillo", 1, 11, 12, 0.916667], ["Cabernet-Malbec", 0, 1, 1, 1.0], ["Cabernet-Shiraz", 0, 2, 2, 1.0], ["Cabernet-Syrah", 0, 12, 12, 1.0], ["Canaiolo", 0, 3, 3, 1.0], ["Cannonau", 0, 20, 20, 1.0], ["Caprettone", 0, 1, 1, 1.0], ["Carcajolu", 0, 1, 1, 1.0], ["Carignan", 0, 20, 20, 1.0], ["Carignan-Grenache", 2, 6, 8, 0.75], ["Carignan-Syrah", 0, 2, 2, 1.0], ["Carignane", 0, 20, 20, 1.0], ["Carignano", 0, 13, 13, 1.0], ["Carine\u00f1a", 0, 5, 5, 1.0], ["Cari\u00f1ena-Garnacha", 0, 2, 2, 1.0], ["Carmen\u00e8re", 1, 19, 20, 0.95], ["Carmen\u00e8re-Cabernet Sauvignon", 0, 7, 7, 1.0], ["Carmen\u00e8re-Syrah", 0, 6, 6, 1.0], ["Carricante", 0, 20, 20, 1.0], ["Casavecchia", 1, 2, 3, 0.666667], ["Castel\u00e3o", 2, 18, 20, 0.9], ["Catalanesca", 0, 1, 1, 1.0], ["Catarratto", 0, 20, 20, 1.0], ["Cayuga", 0, 2, 2, 1.0], ["Centesimino", 0, 1, 1, 1.0], ["Cerceal", 0, 3, 3, 1.0], ["Cercial", 0, 1, 1, 1.0], ["Cesanese", 0, 1, 1, 1.0], ["Cesanese d'Affile", 0, 5, 5, 1.0], ["Chambourcin", 5, 12, 17, 0.705882], ["Champagne Blend", 1, 19, 20, 0.95], ["Chancellor", 2, 0, 2, 0.0], ["Charbono", 0, 20, 20, 1.0], ["Chardonel", 0, 1, 1, 1.0], ["Chardonnay", 1, 19, 20, 0.95], ["Chardonnay Weissburgunder", 0, 2, 2, 1.0], ["Chardonnay-Albari\u00f1o", 0, 2, 2, 1.0], ["Chardonnay-Pinot Blanc", 0, 4, 4, 1.0], ["Chardonnay-Pinot Gris", 0, 1, 1, 1.0], ["Chardonnay-Riesling", 0, 1, 1, 1.0], ["Chardonnay-Sauvignon", 0, 6, 6, 1.0], ["Chardonnay-Sauvignon Blanc", 0, 4, 4, 1.0], ["Chardonnay-Semillon", 2, 4, 6, 0.666667], ["Chardonnay-Viognier", 3, 17, 20, 0.85], ["Chasselas", 0, 8, 8, 1.0], ["Chelois", 0, 2, 2, 1.0], ["Chenin Blanc", 0, 20, 20, 1.0], ["Chenin Blanc-Chardonnay", 1, 19, 20, 0.95], ["Chenin Blanc-Sauvignon Blanc", 0, 6, 6, 1.0], ["Chenin Blanc-Viognier", 0, 11, 11, 1.0], ["Chinuri", 0, 3, 3, 1.0], ["Ciliegiolo", 0, 3, 3, 1.0], ["Cinsault", 1, 19, 20, 0.95], ["Clairette", 0, 3, 3, 1.0], ["Claret", 3, 17, 20, 0.85], ["Cococciola", 0, 1, 1, 1.0], ["Coda di Volpe", 2, 15, 17, 0.882353], ["Colombard", 0, 20, 20, 1.0], ["Colombard-Sauvignon Blanc", 0, 17, 17, 1.0], ["Colombard-Ugni Blanc", 0, 7, 7, 1.0], ["Colorino", 0, 1, 1, 1.0], ["Cortese", 0, 20, 20, 1.0], ["Corvina", 1, 19, 20, 0.95], ["Corvina, Rondinella, Molinara", 2, 18, 20, 0.9], ["Counoise", 0, 11, 11, 1.0], ["C\u00f3dega do Larinho", 0, 4, 4, 1.0], ["Dafni", 0, 1, 1, 1.0], ["Debit", 0, 2, 2, 1.0], ["Diamond", 0, 1, 1, 1.0], ["Dolcetto", 0, 20, 20, 1.0], ["Dornfelder", 1, 19, 20, 0.95], ["Do\u00f1a Blanca", 1, 0, 1, 0.0], ["Duras", 0, 7, 7, 1.0], ["Durella", 0, 8, 8, 1.0], ["Durif", 1, 1, 2, 0.5], ["Edelzwicker", 0, 4, 4, 1.0], ["Ekiga\u00efna", 0, 1, 1, 1.0], ["Elbling", 0, 3, 3, 1.0], ["Emir", 0, 3, 3, 1.0], ["Encruzado", 0, 20, 20, 1.0], ["Erbaluce", 0, 2, 2, 1.0], ["Espadeiro", 0, 1, 1, 1.0], ["Falanghina", 0, 20, 20, 1.0], ["Favorita", 0, 1, 1, 1.0], ["Fer Servadou", 0, 2, 2, 1.0], ["Fern\u00e3o Pires", 0, 20, 20, 1.0], ["Feteasca", 0, 2, 2, 1.0], ["Feteasca Neagra", 0, 6, 6, 1.0], ["Feteasc\u01ce Regal\u01ce", 0, 5, 5, 1.0], ["Fiano", 0, 20, 20, 1.0], ["Folle Blanche", 0, 1, 1, 1.0], ["Forcall\u00e0", 1, 0, 1, 0.0], ["Francisa", 0, 1, 1, 1.0], ["Franconia", 0, 1, 1, 1.0], ["Frankovka", 0, 1, 1, 1.0], ["Frappato", 0, 20, 20, 1.0], ["Freisa", 0, 2, 2, 1.0], ["Friulano", 0, 20, 20, 1.0], ["Fr\u00fcburgunder", 0, 1, 1, 1.0], ["Fum\u00e9 Blanc", 3, 17, 20, 0.85], ["Furmint", 0, 20, 20, 1.0], ["G-S-M", 4, 16, 20, 0.8], ["Gaglioppo", 0, 13, 13, 1.0], ["Gamay", 0, 20, 20, 1.0], ["Gamay Noir", 1, 19, 20, 0.95], ["Gamza", 0, 1, 1, 1.0], ["Garganega", 0, 20, 20, 1.0], ["Garnacha", 2, 18, 20, 0.9], ["Garnacha Blanca", 7, 13, 20, 0.65], ["Garnacha Blend", 0, 2, 2, 1.0], ["Garnacha Tintorera", 0, 8, 8, 1.0], ["Garnacha-Cabernet", 0, 1, 1, 1.0], ["Garnacha-Cari\u00f1ena", 0, 1, 1, 1.0], ["Garnacha-Monastrell", 0, 3, 3, 1.0], ["Garnacha-Syrah", 4, 8, 12, 0.666667], ["Garnacha-Tempranillo", 0, 5, 5, 1.0], ["Gelber Muskateller", 0, 20, 20, 1.0], ["Gelber Traminer", 0, 1, 1, 1.0], ["Gew\u00fcrztraminer", 0, 20, 20, 1.0], ["Gew\u00fcrztraminer-Riesling", 1, 6, 7, 0.857143], ["Glera", 0, 20, 20, 1.0], ["Godello", 6, 14, 20, 0.7], ["Gouveio", 0, 2, 2, 1.0], ["Graciano", 2, 18, 20, 0.9], ["Gragnano", 0, 2, 2, 1.0], ["Grauburgunder", 0, 14, 14, 1.0], ["Gra\u0161evina", 0, 1, 1, 1.0], ["Grecanico", 0, 8, 8, 1.0], ["Grechetto", 0, 14, 14, 1.0], ["Greco", 1, 19, 20, 0.95], ["Greco Bianco", 0, 5, 5, 1.0], ["Grenache", 2, 18, 20, 0.9], ["Grenache Blanc", 3, 17, 20, 0.85], ["Grenache Blend", 0, 9, 9, 1.0], ["Grenache Gris", 0, 1, 1, 1.0], ["Grenache Noir", 0, 3, 3, 1.0], ["Grenache-Carignan", 0, 16, 16, 1.0], ["Grenache-Mourv\u00e8dre", 0, 5, 5, 1.0], ["Grenache-Shiraz", 0, 3, 3, 1.0], ["Grenache-Syrah", 2, 18, 20, 0.9], ["Grignolino", 0, 2, 2, 1.0], ["Grillo", 0, 20, 20, 1.0], ["Grolleau", 0, 2, 2, 1.0], ["Groppello", 0, 1, 1, 1.0], ["Gros Manseng", 0, 20, 20, 1.0], ["Gros Plant", 0, 1, 1, 1.0], ["Gros and Petit Manseng", 0, 20, 20, 1.0], ["Gr\u00fcner Veltliner", 0, 20, 20, 1.0], ["Hondarrabi Zuri", 3, 13, 16, 0.8125], ["H\u00e1rslevel\u00fc", 0, 2, 2, 1.0], ["Incrocio Manzoni", 0, 3, 3, 1.0], ["Insolia", 0, 20, 20, 1.0], ["Inzolia", 0, 20, 20, 1.0], ["Irsai Oliver", 0, 1, 1, 1.0], ["Jacquez", 0, 3, 3, 1.0], ["Jacqu\u00e8re", 0, 20, 20, 1.0], ["Jaen", 0, 7, 7, 1.0], ["Jampal", 0, 1, 1, 1.0], ["Johannisberg Riesling", 2, 7, 9, 0.777778], ["Kadarka", 0, 2, 2, 1.0], ["Kalecik Karasi", 0, 13, 13, 1.0], ["Kangoun", 0, 1, 1, 1.0], ["Karalahna", 0, 1, 1, 1.0], ["Karasakiz", 0, 1, 1, 1.0], ["Kekfrankos", 1, 8, 9, 0.888889], ["Kerner", 0, 20, 20, 1.0], ["Kinali Yapincak", 1, 0, 1, 0.0], ["Kisi", 0, 5, 5, 1.0], ["Kotsifali", 0, 1, 1, 1.0], ["Kuntra", 1, 0, 1, 0.0], ["Lagrein", 1, 19, 20, 0.95], ["Lambrusco", 0, 20, 20, 1.0], ["Lambrusco Grasparossa", 0, 17, 17, 1.0], ["Lambrusco Salamino", 0, 2, 2, 1.0], ["Lambrusco di Sorbara", 0, 18, 18, 1.0], ["Lemberger", 1, 19, 20, 0.95], ["List\u00e1n Negro", 0, 2, 2, 1.0], ["Loin de l'Oeil", 0, 9, 9, 1.0], ["Loureiro", 0, 20, 20, 1.0], ["Loureiro-Arinto", 0, 1, 1, 1.0], ["Macabeo", 9, 11, 20, 0.55], ["Macabeo-Chardonnay", 1, 3, 4, 0.75], ["Macabeo-Moscatel", 0, 1, 1, 1.0], ["Madeira Blend", 0, 3, 3, 1.0], ["Madeleine Angevine", 1, 1, 2, 0.5], ["Magliocco", 0, 3, 3, 1.0], ["Malagousia", 0, 9, 9, 1.0], ["Malagouzia", 0, 4, 4, 1.0], ["Malagouzia-Chardonnay", 0, 1, 1, 1.0], ["Malbec", 3, 17, 20, 0.85], ["Malbec Blend", 0, 3, 3, 1.0], ["Malbec-Bonarda", 0, 5, 5, 1.0], ["Malbec-Cabernet", 0, 3, 3, 1.0], ["Malbec-Cabernet Franc", 0, 11, 11, 1.0], ["Malbec-Cabernet Sauvignon", 2, 18, 20, 0.9], ["Malbec-Carm\u00e9n\u00e8re", 0, 1, 1, 1.0], ["Malbec-Merlot", 0, 20, 20, 1.0], ["Malbec-Petit Verdot", 0, 2, 2, 1.0], ["Malbec-Syrah", 1, 16, 17, 0.941176], ["Malbec-Tannat", 2, 11, 13, 0.846154], ["Malbec-Tempranillo", 0, 2, 2, 1.0], ["Malvar", 1, 1, 2, 0.5], ["Malvasia", 2, 18, 20, 0.9], ["Malvasia Bianca", 0, 16, 16, 1.0], ["Malvasia Fina", 0, 2, 2, 1.0], ["Malvasia Istriana", 0, 7, 7, 1.0], ["Malvasia Nera", 0, 5, 5, 1.0], ["Malvasia di Candia", 0, 2, 2, 1.0], ["Malvasia-Viura", 1, 2, 3, 0.666667], ["Mandilaria", 0, 2, 2, 1.0], ["Mansois", 0, 4, 4, 1.0], ["Mantonico", 0, 7, 7, 1.0], ["Manzoni", 0, 7, 7, 1.0], ["Marawi", 0, 2, 2, 1.0], ["Maria Gomes", 0, 1, 1, 1.0], ["Maria Gomes-Bical", 0, 1, 1, 1.0], ["Marquette", 0, 2, 2, 1.0], ["Marsanne", 2, 18, 20, 0.9], ["Marsanne-Roussanne", 4, 16, 20, 0.8], ["Marsanne-Viognier", 0, 2, 2, 1.0], ["Marselan", 0, 4, 4, 1.0], ["Marzemino", 0, 3, 3, 1.0], ["Mataro", 2, 8, 10, 0.8], ["Maturana", 0, 6, 6, 1.0], ["Mauzac", 0, 7, 7, 1.0], ["Mavrodaphne", 0, 5, 5, 1.0], ["Mavrokalavryta", 0, 1, 1, 1.0], ["Mavrotragano", 0, 1, 1, 1.0], ["Mavroudi", 0, 1, 1, 1.0], ["Mavrud", 0, 7, 7, 1.0], ["Mazuelo", 1, 3, 4, 0.75], ["Melnik", 0, 3, 3, 1.0], ["Melon", 0, 20, 20, 1.0], ["Menc\u00eda", 3, 17, 20, 0.85], ["Meritage", 1, 19, 20, 0.95], ["Merlot", 1, 19, 20, 0.95], ["Merlot-Argaman", 0, 1, 1, 1.0], ["Merlot-Cabernet", 1, 9, 10, 0.9], ["Merlot-Cabernet Franc", 0, 20, 20, 1.0], ["Merlot-Cabernet Sauvignon", 3, 17, 20, 0.85], ["Merlot-Grenache", 0, 1, 1, 1.0], ["Merlot-Malbec", 0, 6, 6, 1.0], ["Merlot-Petite Verdot", 0, 1, 1, 1.0], ["Merlot-Shiraz", 0, 1, 1, 1.0], ["Merlot-Syrah", 0, 2, 2, 1.0], ["Merlot-Tannat", 0, 3, 3, 1.0], ["Merseguera-Sauvignon Blanc", 0, 1, 1, 1.0], ["Meseguera", 0, 1, 1, 1.0], ["Misket", 0, 1, 1, 1.0], ["Mission", 0, 6, 6, 1.0], ["Molinara", 0, 1, 1, 1.0], ["Monastrell", 3, 17, 20, 0.85], ["Monastrell-Petit Verdot", 0, 2, 2, 1.0], ["Monastrell-Syrah", 1, 18, 19, 0.947368], ["Mondeuse", 1, 14, 15, 0.933333], ["Monica", 0, 3, 3, 1.0], ["Montepulciano", 1, 19, 20, 0.95], ["Morava", 0, 1, 1, 1.0], ["Morillon", 0, 7, 7, 1.0], ["Morio Muskat", 0, 2, 2, 1.0], ["Moscadello", 0, 6, 6, 1.0], ["Moscatel", 3, 17, 20, 0.85], ["Moscatel Gra\u00fado", 0, 2, 2, 1.0], ["Moscatel Roxo", 0, 6, 6, 1.0], ["Moscatel de Alejandr\u00eda", 2, 1, 3, 0.333333], ["Moscato", 1, 19, 20, 0.95], ["Moscato Giallo", 0, 16, 16, 1.0], ["Moscato Rosa", 0, 2, 2, 1.0], ["Moscato di Noto", 0, 1, 1, 1.0], ["Moschofilero", 0, 20, 20, 1.0], ["Moschofilero-Chardonnay", 0, 1, 1, 1.0], ["Mourv\u00e8dre", 3, 17, 20, 0.85], ["Mourv\u00e8dre-Syrah", 0, 3, 3, 1.0], ["Mtsvane", 0, 5, 5, 1.0], ["Muscadel", 0, 1, 1, 1.0], ["Muscadelle", 0, 10, 10, 1.0], ["Muscadine", 1, 1, 2, 0.5], ["Muscat", 1, 19, 20, 0.95], ["Muscat Blanc", 1, 11, 12, 0.916667], ["Muscat Blanc \u00e0 Petits Grains", 0, 3, 3, 1.0], ["Muscat Canelli", 0, 20, 20, 1.0], ["Muscat Hamburg", 0, 4, 4, 1.0], ["Muscat d'Alexandrie", 0, 3, 3, 1.0], ["Muscat of Alexandria", 0, 3, 3, 1.0], ["Muscatel", 0, 2, 2, 1.0], ["Muskat", 0, 3, 3, 1.0], ["Muskat Ottonel", 2, 18, 20, 0.9], ["Muskateller", 0, 5, 5, 1.0], ["M\u00fcller-Thurgau", 2, 18, 20, 0.9], ["Narince", 0, 7, 7, 1.0], ["Nascetta", 0, 6, 6, 1.0], ["Nasco", 0, 2, 2, 1.0], ["Nebbiolo", 1, 19, 20, 0.95], ["Negrette", 1, 15, 16, 0.9375], ["Negroamaro", 0, 20, 20, 1.0], ["Nerello Cappuccio", 0, 5, 5, 1.0], ["Nerello Mascalese", 1, 19, 20, 0.95], ["Nero d'Avola", 0, 20, 20, 1.0], ["Nero di Troia", 1, 15, 16, 0.9375], ["Neuburger", 0, 8, 8, 1.0], ["Nielluciu", 0, 3, 3, 1.0], ["Norton", 5, 11, 16, 0.6875], ["Nosiola", 0, 7, 7, 1.0], ["Nuragus", 0, 3, 3, 1.0], ["Ojaleshi", 0, 1, 1, 1.0], ["Okuzgozu", 0, 8, 8, 1.0], ["Ondenc", 0, 1, 1, 1.0], ["Orange Muscat", 2, 16, 18, 0.888889], ["Orangetraube", 0, 1, 1, 1.0], ["Other", 0, 1, 1, 1.0], ["Otskhanuri Sapere", 0, 1, 1, 1.0], ["Pallagrello", 0, 9, 9, 1.0], ["Pallagrello Bianco", 0, 5, 5, 1.0], ["Pallagrello Nero", 2, 2, 4, 0.5], ["Palomino", 1, 15, 16, 0.9375], ["Pansa Blanca", 4, 9, 13, 0.692308], ["Papaskarasi", 0, 2, 2, 1.0], ["Paralleda", 0, 1, 1, 1.0], ["Parraleta", 0, 1, 1, 1.0], ["Passerina", 0, 20, 20, 1.0], ["Pa\u00eds", 1, 0, 1, 0.0], ["Pecorino", 1, 19, 20, 0.95], ["Pedro Xim\u00e9nez", 1, 19, 20, 0.95], ["Perricone", 2, 7, 9, 0.777778], ["Petit Courbu", 0, 1, 1, 1.0], ["Petit Manseng", 3, 17, 20, 0.85], ["Petit Meslier", 0, 1, 1, 1.0], ["Petit Verdot", 3, 17, 20, 0.85], ["Petite Sirah", 2, 18, 20, 0.9], ["Petite Verdot", 1, 19, 20, 0.95], ["Picapoll", 1, 0, 1, 0.0], ["Picolit", 1, 19, 20, 0.95], ["Picpoul", 0, 16, 16, 1.0], ["Piedirosso", 2, 17, 19, 0.894737], ["Pigato", 0, 1, 1, 1.0], ["Pignoletto", 0, 4, 4, 1.0], ["Pignolo", 0, 1, 1, 1.0], ["Pinot Auxerrois", 0, 12, 12, 1.0], ["Pinot Bianco", 0, 20, 20, 1.0], ["Pinot Blanc", 1, 19, 20, 0.95], ["Pinot Blanc-Chardonnay", 0, 4, 4, 1.0], ["Pinot Blanc-Pinot Noir", 1, 0, 1, 0.0], ["Pinot Blanc-Viognier", 0, 1, 1, 1.0], ["Pinot Grigio", 3, 17, 20, 0.85], ["Pinot Grigio-Sauvignon Blanc", 0, 1, 1, 1.0], ["Pinot Gris", 1, 19, 20, 0.95], ["Pinot Gris-Gew\u00fcrztraminer", 0, 1, 1, 1.0], ["Pinot Meunier", 2, 18, 20, 0.9], ["Pinot Nero", 0, 20, 20, 1.0], ["Pinot Noir", 0, 20, 20, 1.0], ["Pinot Noir-Gamay", 1, 16, 17, 0.941176], ["Pinot Noir-Syrah", 1, 2, 3, 0.666667], ["Pinot-Chardonnay", 0, 5, 5, 1.0], ["Pinotage", 0, 20, 20, 1.0], ["Pinotage-Merlot", 0, 1, 1, 1.0], ["Piquepoul Blanc", 0, 1, 1, 1.0], ["Plavac Mali", 1, 15, 16, 0.9375], ["Plyto", 0, 2, 2, 1.0], ["Port", 1, 19, 20, 0.95], ["Portuguese Red", 1, 19, 20, 0.95], ["Portuguese Ros\u00e9", 1, 14, 15, 0.933333], ["Portuguese Sparkling", 2, 18, 20, 0.9], ["Portuguese White", 0, 20, 20, 1.0], ["Portuguiser", 0, 1, 1, 1.0], ["Posip", 0, 7, 7, 1.0], ["Poulsard", 0, 3, 3, 1.0], ["Premsal", 1, 0, 1, 0.0], ["Prieto Picudo", 3, 11, 14, 0.785714], ["Primitivo", 4, 16, 20, 0.8], ["Pri\u00e9 Blanc", 0, 6, 6, 1.0], ["Prosecco", 1, 19, 20, 0.95], ["Provence red blend", 0, 20, 20, 1.0], ["Provence white blend", 0, 20, 20, 1.0], ["Prugnolo Gentile", 1, 19, 20, 0.95], ["Prunelard", 0, 1, 1, 1.0], ["Pugnitello", 0, 3, 3, 1.0], ["Rabigato", 0, 2, 2, 1.0], ["Raboso", 0, 13, 13, 1.0], ["Ramisco", 0, 1, 1, 1.0], ["Rara Neagra", 0, 2, 2, 1.0], ["Rebo", 0, 2, 2, 1.0], ["Rebula", 0, 3, 3, 1.0], ["Red Blend", 0, 20, 20, 1.0], ["Refosco", 0, 10, 10, 1.0], ["Rh\u00f4ne-style Red Blend", 2, 18, 20, 0.9], ["Rh\u00f4ne-style White Blend", 0, 20, 20, 1.0], ["Ribolla Gialla", 1, 19, 20, 0.95], ["Rieslaner", 1, 4, 5, 0.8], ["Riesling", 1, 19, 20, 0.95], ["Riesling-Chardonnay", 0, 1, 1, 1.0], ["Rivaner", 1, 2, 3, 0.666667], ["Rkatsiteli", 2, 18, 20, 0.9], ["Robola", 0, 4, 4, 1.0], ["Roditis", 0, 4, 4, 1.0], ["Roditis-Moschofilero", 0, 1, 1, 1.0], ["Rolle", 0, 4, 4, 1.0], ["Romorantin", 0, 3, 3, 1.0], ["Rosado", 9, 11, 20, 0.55], ["Rosato", 0, 20, 20, 1.0], ["Roscetto", 0, 1, 1, 1.0], ["Rosenmuskateller", 0, 2, 2, 1.0], ["Ros\u00e9", 2, 18, 20, 0.9], ["Roter Traminer", 0, 6, 6, 1.0], ["Roter Veltliner", 0, 11, 11, 1.0], ["Rotgipfler", 0, 20, 20, 1.0], ["Roussanne", 2, 18, 20, 0.9], ["Roussanne-Grenache Blanc", 0, 1, 1, 1.0], ["Roussanne-Marsanne", 1, 4, 5, 0.8], ["Roussanne-Viognier", 1, 10, 11, 0.909091], ["Roviello", 0, 2, 2, 1.0], ["Ruch\u00e9", 0, 10, 10, 1.0], ["Rufete", 1, 1, 2, 0.5], ["Ryzlink R\u00fdnsk\u00fd", 0, 1, 1, 1.0], ["Sacy", 0, 2, 2, 1.0], ["Sagrantino", 1, 19, 20, 0.95], ["Sangiovese", 2, 18, 20, 0.9], ["Sangiovese Cabernet", 1, 2, 3, 0.666667], ["Sangiovese Grosso", 0, 20, 20, 1.0], ["Sangiovese-Cabernet Sauvignon", 0, 6, 6, 1.0], ["Sangiovese-Syrah", 0, 4, 4, 1.0], ["Saperavi", 1, 19, 20, 0.95], ["Saperavi-Merlot", 1, 1, 2, 0.5], ["Sauvignon", 0, 20, 20, 1.0], ["Sauvignon Blanc", 4, 16, 20, 0.8], ["Sauvignon Blanc-Assyrtiko", 0, 1, 1, 1.0], ["Sauvignon Blanc-Chardonnay", 1, 7, 8, 0.875], ["Sauvignon Blanc-Chenin Blanc", 1, 3, 4, 0.75], ["Sauvignon Blanc-Sauvignon Gris", 0, 1, 1, 1.0], ["Sauvignon Blanc-Semillon", 1, 19, 20, 0.95], ["Sauvignon Blanc-Verdejo", 0, 4, 4, 1.0], ["Sauvignon Gris", 3, 11, 14, 0.785714], ["Sauvignon Musqu\u00e9", 1, 0, 1, 0.0], ["Sauvignon-S\u00e9millon", 0, 1, 1, 1.0], ["Sauvignonasse", 0, 1, 1, 1.0], ["Savagnin", 0, 20, 20, 1.0], ["Savatiano", 1, 4, 5, 0.8], ["Scheurebe", 0, 20, 20, 1.0], ["Schiava", 0, 20, 20, 1.0], ["Schwartzriesling", 0, 1, 1, 1.0], ["Sciaccerellu", 0, 4, 4, 1.0], ["Semillon-Chardonnay", 0, 5, 5, 1.0], ["Semillon-Sauvignon Blanc", 1, 19, 20, 0.95], ["Sercial", 0, 1, 1, 1.0], ["Seyval Blanc", 0, 15, 15, 1.0], ["Sherry", 1, 19, 20, 0.95], ["Shiraz", 1, 19, 20, 0.95], ["Shiraz-Cabernet", 0, 2, 2, 1.0], ["Shiraz-Cabernet Sauvignon", 3, 17, 20, 0.85], ["Shiraz-Grenache", 3, 11, 14, 0.785714], ["Shiraz-Malbec", 0, 3, 3, 1.0], ["Shiraz-Mourv\u00e8dre", 0, 3, 3, 1.0], ["Shiraz-Roussanne", 1, 0, 1, 0.0], ["Shiraz-Tempranillo", 1, 1, 2, 0.5], ["Shiraz-Viognier", 2, 18, 20, 0.9], ["Sideritis", 0, 1, 1, 1.0], ["Siegerrebe", 1, 0, 1, 0.0], ["Silvaner", 0, 20, 20, 1.0], ["Silvaner-Traminer", 0, 1, 1, 1.0], ["Siria", 0, 11, 11, 1.0], ["Sirica", 0, 2, 2, 1.0], ["Sous\u00e3o", 1, 5, 6, 0.833333], ["Souzao", 0, 2, 2, 1.0], ["Sparkling Blend", 4, 16, 20, 0.8], ["Sp\u00e4tburgunder", 0, 20, 20, 1.0], ["St. Laurent", 0, 20, 20, 1.0], ["St. Vincent", 0, 1, 1, 1.0], ["Susumaniello", 0, 6, 6, 1.0], ["Sylvaner", 1, 19, 20, 0.95], ["Symphony", 1, 3, 4, 0.75], ["Syrah", 2, 18, 20, 0.9], ["Syrah-Bonarda", 0, 1, 1, 1.0], ["Syrah-Cabernet", 1, 14, 15, 0.933333], ["Syrah-Cabernet Franc", 0, 3, 3, 1.0], ["Syrah-Cabernet Sauvignon", 3, 17, 20, 0.85], ["Syrah-Carignan", 0, 4, 4, 1.0], ["Syrah-Grenache", 3, 17, 20, 0.85], ["Syrah-Grenache-Viognier", 0, 1, 1, 1.0], ["Syrah-Malbec", 0, 1, 1, 1.0], ["Syrah-Merlot", 0, 6, 6, 1.0], ["Syrah-Mourv\u00e8dre", 1, 16, 17, 0.941176], ["Syrah-Petit Verdot", 0, 2, 2, 1.0], ["Syrah-Petite Sirah", 2, 13, 15, 0.866667], ["Syrah-Tempranillo", 0, 7, 7, 1.0], ["Syrah-Viognier", 2, 13, 15, 0.866667], ["S\u00e4mling", 0, 5, 5, 1.0], ["S\u00e9millon", 5, 15, 20, 0.75], ["Tamianka", 0, 1, 1, 1.0], ["Tamjanika", 0, 1, 1, 1.0], ["Tannat", 2, 18, 20, 0.9], ["Tannat-Cabernet", 0, 20, 20, 1.0], ["Tannat-Cabernet Franc", 2, 12, 14, 0.857143], ["Tannat-Merlot", 0, 11, 11, 1.0], ["Tannat-Syrah", 0, 5, 5, 1.0], ["Tempranillo", 1, 19, 20, 0.95], ["Tempranillo Blanco", 5, 4, 9, 0.444444], ["Tempranillo Blend", 1, 19, 20, 0.95], ["Tempranillo-Cabernet Sauvignon", 2, 18, 20, 0.9], ["Tempranillo-Garnacha", 3, 17, 20, 0.85], ["Tempranillo-Malbec", 0, 1, 1, 1.0], ["Tempranillo-Merlot", 2, 5, 7, 0.714286], ["Tempranillo-Shiraz", 2, 5, 7, 0.714286], ["Tempranillo-Syrah", 0, 2, 2, 1.0], ["Tempranillo-Tannat", 0, 1, 1, 1.0], ["Teran", 1, 6, 7, 0.857143], ["Teroldego", 1, 19, 20, 0.95], ["Teroldego Rotaliano", 0, 1, 1, 1.0], ["Terrantez", 0, 1, 1, 1.0], ["Thrapsathiri", 0, 1, 1, 1.0], ["Timorasso", 0, 4, 4, 1.0], ["Tinta Amarela", 0, 1, 1, 1.0], ["Tinta Barroca", 0, 5, 5, 1.0], ["Tinta Cao", 0, 1, 1, 1.0], ["Tinta Fina", 2, 8, 10, 0.8], ["Tinta Francisca", 0, 3, 3, 1.0], ["Tinta Madeira", 0, 1, 1, 1.0], ["Tinta Mi\u00fada", 0, 2, 2, 1.0], ["Tinta Negra Mole", 0, 1, 1, 1.0], ["Tinta Roriz", 0, 11, 11, 1.0], ["Tinta de Toro", 2, 18, 20, 0.9], ["Tinta del Pais", 0, 2, 2, 1.0], ["Tinta del Toro", 1, 2, 3, 0.666667], ["Tintilia ", 0, 1, 1, 1.0], ["Tinto Fino", 3, 17, 20, 0.85], ["Tinto Velasco", 0, 1, 1, 1.0], ["Tinto del Pais", 3, 13, 16, 0.8125], ["Tocai", 0, 10, 10, 1.0], ["Tocai Friulano", 1, 19, 20, 0.95], ["Tokaji", 0, 20, 20, 1.0], ["Tokay", 0, 6, 6, 1.0], ["Tokay Pinot Gris", 0, 1, 1, 1.0], ["Torbato", 0, 1, 1, 1.0], ["Torontel", 0, 1, 1, 1.0], ["Torront\u00e9s", 5, 15, 20, 0.75], ["Touriga", 0, 2, 2, 1.0], ["Touriga Franca", 0, 6, 6, 1.0], ["Touriga Nacional", 1, 19, 20, 0.95], ["Touriga Nacional Blend", 0, 18, 18, 1.0], ["Touriga Nacional-Cabernet Sauvignon", 1, 19, 20, 0.95], ["Trajadura", 0, 1, 1, 1.0], ["Traminer", 0, 20, 20, 1.0], ["Traminette", 1, 8, 9, 0.888889], ["Trebbiano", 0, 20, 20, 1.0], ["Trebbiano Spoletino", 0, 7, 7, 1.0], ["Trebbiano di Lugana", 0, 3, 3, 1.0], ["Treixadura", 1, 1, 2, 0.5], ["Trepat", 0, 9, 9, 1.0], ["Trincadeira", 0, 20, 20, 1.0], ["Trollinger", 0, 2, 2, 1.0], ["Trousseau", 0, 6, 6, 1.0], ["Trousseau Gris", 0, 2, 2, 1.0], ["Tsapournakos", 0, 1, 1, 1.0], ["Tsolikouri", 0, 1, 1, 1.0], ["Turbiana", 0, 20, 20, 1.0], ["T\u0103m\u00e2ioas\u0103 Rom\u00e2neasc\u0103", 0, 2, 2, 1.0], ["Ugni Blanc", 0, 3, 3, 1.0], ["Ugni Blanc-Colombard", 0, 9, 9, 1.0], ["Uva di Troia", 1, 10, 11, 0.909091], ["Uvalino", 0, 1, 1, 1.0], ["Valdigui\u00e9", 0, 5, 5, 1.0], ["Valvin Muscat", 0, 1, 1, 1.0], ["Veltliner", 0, 4, 4, 1.0], ["Verdeca", 0, 5, 5, 1.0], ["Verdejo", 4, 16, 20, 0.8], ["Verdejo-Sauvignon Blanc", 0, 5, 5, 1.0], ["Verdejo-Viura", 7, 12, 19, 0.631579], ["Verdelho", 1, 19, 20, 0.95], ["Verdicchio", 2, 18, 20, 0.9], ["Verdil", 0, 1, 1, 1.0], ["Verdosilla", 1, 0, 1, 0.0], ["Verduzzo", 0, 5, 5, 1.0], ["Verduzzo Friulano ", 0, 3, 3, 1.0], ["Vermentino", 1, 19, 20, 0.95], ["Vermentino Nero", 0, 1, 1, 1.0], ["Vernaccia", 0, 20, 20, 1.0], ["Vespaiolo", 0, 1, 1, 1.0], ["Vespolina", 0, 2, 2, 1.0], ["Vidadillo", 0, 1, 1, 1.0], ["Vidal", 0, 10, 10, 1.0], ["Vidal Blanc", 1, 19, 20, 0.95], ["Vignoles", 0, 10, 10, 1.0], ["Vilana", 0, 4, 4, 1.0], ["Vinh\u00e3o", 0, 4, 4, 1.0], ["Viognier", 2, 18, 20, 0.9], ["Viognier-Chardonnay", 1, 11, 12, 0.916667], ["Viognier-Gew\u00fcrztraminer", 0, 1, 1, 1.0], ["Viognier-Grenache Blanc", 0, 3, 3, 1.0], ["Viognier-Marsanne", 1, 2, 3, 0.666667], ["Viognier-Roussanne", 2, 5, 7, 0.714286], ["Viognier-Valdigui\u00e9", 0, 1, 1, 1.0], ["Viosinho", 0, 4, 4, 1.0], ["Vital", 0, 1, 1, 1.0], ["Vitovska", 0, 3, 3, 1.0], ["Viura", 7, 13, 20, 0.65], ["Viura-Chardonnay", 6, 7, 13, 0.538462], ["Viura-Verdejo", 0, 2, 2, 1.0], ["Vranac", 0, 1, 1, 1.0], ["Vranec", 0, 4, 4, 1.0], ["Weissburgunder", 1, 19, 20, 0.95], ["Welschriesling", 0, 20, 20, 1.0], ["White Blend", 1, 19, 20, 0.95], ["White Port", 0, 2, 2, 1.0], ["White Riesling", 0, 13, 13, 1.0], ["Xarel-lo", 7, 12, 19, 0.631579], ["Xinisteri", 0, 1, 1, 1.0], ["Xinomavro", 1, 19, 20, 0.95], ["Xynisteri", 0, 2, 2, 1.0], ["Yapincak", 0, 2, 2, 1.0], ["Zelen", 0, 1, 1, 1.0], ["Zibibbo", 0, 20, 20, 1.0], ["Zierfandler", 0, 14, 14, 1.0], ["Zierfandler-Rotgipfler", 0, 5, 5, 1.0], ["Zinfandel", 0, 20, 20, 1.0], ["Zlahtina", 0, 2, 2, 1.0], ["Zweigelt", 0, 20, 20, 1.0], ["\u00c7alkaras\u0131", 0, 2, 2, 1.0], ["\u017dilavka", 0, 1, 1, 1.0], ["All", 429, 6061, 6490, 0.933898]];
+
+        // Define the dt_args
+        let dt_args = {"layout": {"topStart": "pageLength", "topEnd": "search", "bottomStart": "info", "bottomEnd": "paging"}, "order": [], "warn_on_selected_rows_not_rendered": true};
+        dt_args["data"] = data;
+
+        
+        new DataTable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+<p>These are the reviews for one of the varieties that had a proportion of positive reviews close to 50%.</p>
+<div id="beb1a0d1" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="cf">for</span> x <span class="kw">in</span> wine_reviews[wine_reviews.variety <span class="op">==</span> <span class="st">'Tempranillo Blanco'</span>].description.values:</span>
+<span id="cb40-2"><a href="#cb40-2"></a>    pp.pprint(x) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>("Gold in color and lightly oxidized on the nose, and it's still young. Smells "
+ 'heavy and creamy, like hay. Feels flat, with pickled flavors and mealy apple '
+ 'on the finish. Runs plump, sweet and seems like an imposter for Chardonnay.')
+('Oily, stalky, bready aromas are a bit tired. This has a chunky feel offset '
+ 'by citric acidity. Briny, salty flavors of citrus fruits and lees are '
+ "lasting. For varietal Tempranillo Blanco, this isn't bad.")
+('Maderized in color, this wine has a yeasty, creamy nose with baked '
+ "white-fruit aromas and caramel. It's OK in feel, with pickled, mildly briny "
+ 'flavors of apple and apricot. The finish is showing some oxidization, '
+ 'leading to a chunky, fleshy feel.')
+("Waxy peach aromas seem slightly oxidized. It's round and citrusy on the "
+ 'palate, but in a monotone way that fades to pithy white fruits and mealy '
+ "citrus. Shows some flashes of uniqueness and class; mostly it's wayward and "
+ 'slightly bitter.')
+('Forget the high price on this Tempranillo Blanco. Looking at the wine alone, '
+ "it's briny and stalky on the nose, with wiry lemon-like acids that push sour "
+ "orange flavors. Overall it's monotone, briny and citrusy.")
+("A maderized color is apropos for the wine's fully mature, nutty nose. This "
+ 'is big and cidery feeling, with apple and orange flavors. A finish of '
+ 'vanilla, nuttiness and oxidation matches the color and aromas of this '
+ 'interesting but midlevel Tempranillo Blanco.')
+('Green grassy aromas are modest and watery. This feels oily, but with decent '
+ 'acidity. Oxidized flavors of stone fruits finish wheaty, bland and eggy.')
+('Rough, stalky, yeasty aromas are all over the map. Lemony acidity renders '
+ 'this tight as a drum, while bitter, stalky flavors finish wheaty and bitter. '
+ 'This Tempranillo Blanco is barely worth a go; the pleasure factor is at base '
+ 'level.')
+('Green aromas of herbs and tomatillo are harsh, rubbery and outweigh peach '
+ 'and other stone-fruit scents. This Tempranillo Blanco is plump and fair on '
+ 'the palate, while flavors of apple and peach are briny and finish with '
+ 'controlled bitterness.')</code></pre>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do you agree with the classifications above? What would you investigate next?</p>
+</div>
+</div>
+</section>
+<section id="information-retrieval" class="level3">
+<h3 class="anchored" data-anchor-id="information-retrieval">Information Retrieval</h3>
+<p>In the NLP context, Information Retrieval (IR) refers to the task of returning the most relevant set of documents, when given a query string. Search engines, e.g.&nbsp;Google, are trained to perform fast and accurate IR. Typically, a long list of documents is returned, with the most relevant one on top.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pause for a moment, and consider how you would assess the performance of such a search engine.</p>
+</div>
+</div>
+<div id="exm-wine-reviews-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.3 (Example: Wine Reviews Dataset)</strong></span> </p>
+<p>A simple way to perform IR is to use cosine similarity to compute how close the given query vector is to the individual documents in the corpus.</p>
+<p>The next snippet initialises a model for retrieving similar documents.</p>
+<div id="a2262c21" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>dct <span class="op">=</span> gensim.corpora.Dictionary(all_strings_tokenized)</span>
+<span id="cb42-2"><a href="#cb42-2"></a>bow_corpus <span class="op">=</span> [dct.doc2bow(text) <span class="cf">for</span> text <span class="kw">in</span> all_strings_tokenized]</span>
+<span id="cb42-3"><a href="#cb42-3"></a>tfidf <span class="op">=</span> gensim.models.TfidfModel(dictionary<span class="op">=</span>dct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>NLP corpora are typically very large. Before we can find matching documents, we build a similarity index, so that matches are returned quicker. We try something simple at first:</p>
+<blockquote class="blockquote">
+<p>Which documents/reviews are similar to the first one?</p>
+</blockquote>
+<div id="c41af86c" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>index <span class="op">=</span> gensim.similarities.Similarity(<span class="va">None</span>, </span>
+<span id="cb43-2"><a href="#cb43-2"></a>  corpus<span class="op">=</span>tfidf[bow_corpus], num_features<span class="op">=</span><span class="bu">len</span>(dct))</span>
+<span id="cb43-3"><a href="#cb43-3"></a>sims <span class="op">=</span> index[tfidf[bow_corpus[<span class="dv">0</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These are the most similar reviews to <em>review id 0</em>. Of course, the first review itself is there! Let’s retrieve and print all the reviews similar to the first one.</p>
+<div id="de0d299f" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="co">#np.argsort(-sims)[:10]</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a><span class="cf">for</span> x <span class="kw">in</span> np.argsort(<span class="op">-</span>sims)[:<span class="dv">5</span>]:</span>
+<span id="cb44-3"><a href="#cb44-3"></a>    pp.pprint(all_review_strings[x]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('Aromas include tropical fruit, broom, brimstone and dried herb. The palate '
+ "isn't overly expressive, offering unripened apple, citrus and dried sage "
+ 'alongside brisk acidity.')
+("The nose isn't very expressive but reveals white flower and tropical fruit. "
+ 'The simple palate delivers pineapple and lemon zest alongside brisk acidity.')
+("The nose isn't very expressive but the palate eventually reveals raw red "
+ 'berry, espresso, brimstone and grilled rosemary alongside astringent and '
+ 'rather drying tannins.')
+('This opens with aromas of pressed acacia flowers, ripe stone fruits and '
+ "dried sage. The palate isn't overly sweet, offering dried apricot, "
+ 'wildflower honey and toasted almond notes.')
+('Subdued aromas of Spanish broom and brimstone float from the glass. The '
+ 'vertical palate offers yellow apple, citrus zest and mineral alongside crisp '
+ 'acidity.')</code></pre>
+</div>
+</div>
+<p>Now we try a new query of our own: “acidic chardonnay”. First we preprocess it, like we did the original documents.</p>
+<div id="ab379296" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>q1 <span class="op">=</span> [wn.lemmatize(x) <span class="cf">for</span> x <span class="kw">in</span> preprocess_string(<span class="st">'acidic white chardonnay'</span>, CUSTOM_FILTER)]</span>
+<span id="cb46-2"><a href="#cb46-2"></a>sims <span class="op">=</span> index[tfidf[dct.doc2bow(q1)]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we print the top 5 most similar reviews to our query.</p>
+<div id="7ad85229" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>q1_results <span class="op">=</span> np.argsort(<span class="op">-</span>sims)[:<span class="dv">10</span>]</span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="co">#q1_results</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="co">#pp.pprint(wine_reviews.description.values[q1_results])</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a><span class="cf">for</span> x <span class="kw">in</span> q1_results[:<span class="dv">5</span>]:</span>
+<span id="cb47-5"><a href="#cb47-5"></a>    pp.pprint(all_review_strings[x]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('A standard Chardonnay, dry and nicely acidic, with citrus, pear, vanilla, '
+ 'lees and oak flavors.')
+('Dry and acidic, this Chardonnay has a herbaceous earthiness, plus flavors of '
+ 'orange and pear.')
+'This is thin and acidic, with flavors of sour cherry candy and spice.'
+'This is acidic and sweet, with a medicinal taste.'
+('Pungent up front, with green herb, white pepper and citrus aromas, this is '
+ 'zesty and acidic on the palate, with a monotonous lemon flavor on the '
+ 'finish. It turns more tart and acidic as it airs.')</code></pre>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try your favourite tastes, see if you discover a wine you like/dislike 🍷🍇🥂</p>
+</div>
+</div>
+</section>
+<section id="topic-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="topic-modeling">Topic Modeling</h3>
+<p>The LDA (Latent Dirichlet Allocation) model assumes the following intuitive generative process for the documents:</p>
+<ol type="1">
+<li>There is a set of <span class="math inline">\(K\)</span> topics that the documents come from. Each document contains words from several topics. There is a probability mass function on the topics for each document.</li>
+<li>For each topic, there is a probability mass function for the distribution of words in that topic.</li>
+</ol>
+<p>At the end of LDA topic modeling, we will be able to tell, for a particular (new or old) document: the weight combination of the topics for that document. For each topic, we would be able to tell the terms that are salient.</p>
+<p>LDA only gives us the probabilistic weights - we have to interpret them ourselves. Suppose we decide to split the corpus into 10 topics. Let us investigate what these topics consist of.</p>
+<div id="96b27c9e" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1"></a>lda1 <span class="op">=</span> gensim.models.LdaModel(corpus<span class="op">=</span> bow_corpus, num_topics<span class="op">=</span><span class="dv">10</span>, id2word<span class="op">=</span>dct)</span>
+<span id="cb49-2"><a href="#cb49-2"></a>reviews_vis_data <span class="op">=</span> gensimvis.prepare(lda1, bow_corpus, dct)</span>
+<span id="cb49-3"><a href="#cb49-3"></a></span>
+<span id="cb49-4"><a href="#cb49-4"></a>pp.pprint(lda1.show_topics())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[   (   0,
+        '0.081*"wine" + 0.033*"acidity" + 0.033*"drink" + 0.026*"ripe" + '
+        '0.024*"fruit" + 0.022*"fruits" + 0.019*"tannins" + 0.017*"rich" + '
+        '0.014*"character" + 0.014*"flavors"'),
+    (   1,
+        '0.048*"flavors" + 0.038*"finish" + 0.036*"aromas" + 0.021*"palate" + '
+        '0.020*"berry" + 0.017*"plum" + 0.013*"feels" + 0.012*"herbal" + '
+        '0.010*"notes" + 0.010*"nose"'),
+    (   2,
+        '0.040*"oak" + 0.037*"fruit" + 0.023*"finish" + 0.019*"flavors" + '
+        '0.013*"red" + 0.013*"tannins" + 0.013*"aromas" + 0.012*"palate" + '
+        '0.012*"cherry" + 0.011*"french"'),
+    (   3,
+        '0.030*"wine" + 0.025*"flavors" + 0.019*"pinot" + 0.017*"cherry" + '
+        '0.017*"fruit" + 0.012*"drink" + 0.012*"noir" + 0.010*"oak" + '
+        '0.010*"texture" + 0.009*"like"'),
+    (   4,
+        '0.039*"cabernet" + 0.025*"tannins" + 0.024*"blend" + 0.024*"black" + '
+        '0.022*"flavors" + 0.021*"merlot" + 0.021*"sauvignon" + 0.020*"wine" + '
+        '0.018*"blackberry" + 0.015*"chocolate"'),
+    (   5,
+        '0.028*"wine" + 0.026*"vineyard" + 0.022*"flavors" + 0.019*"oak" + '
+        '0.017*"acidity" + 0.016*"vanilla" + 0.012*"chardonnay" + 0.011*"rich" '
+        '+ 0.010*"toast" + 0.010*"valley"'),
+    (   6,
+        '0.038*"black" + 0.031*"cherry" + 0.030*"palate" + 0.026*"tannins" + '
+        '0.019*"aromas" + 0.016*"red" + 0.016*"nose" + 0.014*"pepper" + '
+        '0.014*"spice" + 0.013*"plum"'),
+    (   7,
+        '0.039*"fruit" + 0.035*"aromas" + 0.035*"wine" + 0.025*"spice" + '
+        '0.022*"flavors" + 0.017*"cherry" + 0.015*"notes" + 0.011*"followed" + '
+        '0.010*"pair" + 0.010*"bright"'),
+    (   8,
+        '0.025*"flavors" + 0.023*"apple" + 0.019*"citrus" + 0.019*"finish" + '
+        '0.019*"lemon" + 0.018*"wine" + 0.017*"palate" + 0.016*"peach" + '
+        '0.016*"fresh" + 0.015*"acidity"'),
+    (   9,
+        '0.045*"palate" + 0.039*"aromas" + 0.026*"white" + 0.023*"acidity" + '
+        '0.023*"offers" + 0.022*"note" + 0.021*"alongside" + 0.018*"opens" + '
+        '0.016*"flower" + 0.015*"hint"')]</code></pre>
+</div>
+</div>
+<p>The output provides the most common terms that define each topic (remember: each topic is defined as a <em>probability distribution over the vocabulary</em>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What name would you give each topic?</p>
+</div>
+</div>
+<p>We can also find out which <em>topics</em> a particular document is distributed over. For instance, the output below shows that words in document 0 are predominantly drawn from topics 2 and 5.</p>
+<div id="3fd02e41" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a>lda1.get_document_topics(bow_corpus[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>[(1, 0.087330736), (7, 0.13275942), (8, 0.21943033), (9, 0.53188884)]</code></pre>
+</div>
+</div>
+<div id="fa9c6ce8" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a>pp.pprint(all_review_strings[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('Aromas include tropical fruit, broom, brimstone and dried herb. The palate '
+ "isn't overly expressive, offering unripened apple, citrus and dried sage "
+ 'alongside brisk acidity.')</code></pre>
+</div>
+</div>
+<p>A delightful visualisation from pyLDAvis allows us to understand the “distance” between topics, and the frequent words from each topic easily.</p>
+<div id="d15a53e9" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1"></a>pyLDAvis.display(reviews_vis_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="interpretation-of-neural-models" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="interpretation-of-neural-models"><span class="header-section-number">4.9</span> Interpretation of Neural Models</h2>
+<p>Neural models have achieved impressive performance on a number of language-related tasks. However, one criticism of them is that they are “black-box” models; we do not fully grasp how they work. This can lead to a mistrust of such models, with good reason. If we do not fully know how these models work, we would not know when they are might fail, or we might not know the reason when they do fail (or make an incorrect prediction). For this reason, a huge amount of research effort is currently directed towards understanding and interpreting neural models.</p>
+<p>One approach is to identify which examples in the training set were most influential for predictions regarding particular test instances. For incorrect predictions, this could give us intuition on why the model is failing, and guide us to ways to fix it. Here is an example where it was possible to pinpoint why a model yielded incorrect sentiment prediction.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/explaining_black_box_predictions.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption><span class="citation" data-cites="han2020explaining">Han, Wallace, and Tsvetkov (<a href="references.html#ref-han2020explaining" role="doc-biblioref">2020</a>)</span></figcaption>
+</figure>
+</div>
+<p>Another approach is to identify which parts of the test sentence itself were important to the eventual prediction. Imagine perturbing the test sentence in some ways, and studying how the prediction changed. In one study of a Question-Answering model, the question was modified by dropping the least important word, until the question was answered incorrectly. In this case, the study revealed something pathological about the model:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/pathologies_03.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption><span class="citation" data-cites="sun2021interpreting">Sun et al. (<a href="references.html#ref-sun2021interpreting" role="doc-biblioref">2021</a>)</span></figcaption>
+</figure>
+</div>
+<p>For transformers in particular, a great deal of study has focused on the weights that the attention layers pick up. By relating these to linguistic information, researchers try to infer the precise language-related information that models retain. For instance, it has been found that BERT learns parts of speech. It is also able to identify the dependencies between words.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/what_does_bert_clark_preposition.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<figcaption><span class="citation" data-cites="clark2019does">Clark et al. (<a href="references.html#ref-clark2019does" role="doc-biblioref">2019</a>)</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="references" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="references"><span class="header-section-number">4.10</span> References</h2>
+<section id="video-explainers" class="level3">
+<h3 class="anchored" data-anchor-id="video-explainers">Video explainers</h3>
+<ol type="1">
+<li><a href="https://www.youtube.com/watch?v=t45S_MwAcOw">Transformer models and BERT</a>: A very good video from Google Cloud Tech on current neural models (11:37)</li>
+<li><a href="https://www.youtube.com/watch?v=UNmqTiOnRfg">Introduction to RNN</a></li>
+<li><a href="https://www.youtube.com/watch?v=ioGry-89gqE">Introduction to BERT</a></li>
+</ol>
+</section>
+<section id="website-references" class="level3">
+<h3 class="anchored" data-anchor-id="website-references">Website References</h3>
+<ol type="1">
+<li><a href="https://huggingface.co/learn/nlp-course/chapter1/1">Hugging Face course on transformers</a></li>
+<li><a href="https://radimrehurek.com/gensim/auto_examples/index.html">Gensim documentation</a>: Contains tutorials as well.</li>
+<li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html">Using sklearn to perform LDA</a>: We can also use scikit-learn to perform LDA.</li>
+<li><a href="https://github.com/bmabey/pyLDAvis">Visualising LDA</a>: Contains sample notebooks for the visualisation.</li>
+</ol>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-clark2019does" class="csl-entry" role="listitem">
+Clark, Kevin, Urvashi Khandelwal, Omer Levy, and Christopher D Manning. 2019. <span>“What Does Bert Look at? An Analysis of Bert’s Attention.”</span> <em>arXiv Preprint arXiv:1906.04341</em>.
+</div>
+<div id="ref-devlin2019bert" class="csl-entry" role="listitem">
+Devlin, Jacob, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. <span>“Bert: Pre-Training of Deep Bidirectional Transformers for Language Understanding.”</span> In <em>Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)</em>, 4171–86.
+</div>
+<div id="ref-han2020explaining" class="csl-entry" role="listitem">
+Han, Xiaochuang, Byron C Wallace, and Yulia Tsvetkov. 2020. <span>“Explaining Black Box Predictions and Unveiling Data Artifacts Through Influence Functions.”</span> <em>arXiv Preprint arXiv:2005.06676</em>.
+</div>
+<div id="ref-jm3" class="csl-entry" role="listitem">
+Jurafsky, Daniel, and James H. Martin. 2025. <em>Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition, with Language Models</em>. 3rd ed. <a href="https://web.stanford.edu/~jurafsky/slp3/">https://web.stanford.edu/~jurafsky/slp3/</a>.
+</div>
+<div id="ref-mikolov2013distributed" class="csl-entry" role="listitem">
+Mikolov, Tomas, Ilya Sutskever, Kai Chen, Greg S Corrado, and Jeff Dean. 2013. <span>“Distributed Representations of Words and Phrases and Their Compositionality.”</span> <em>Advances in Neural Information Processing Systems</em> 26.
+</div>
+<div id="ref-pennington2014glove" class="csl-entry" role="listitem">
+Pennington, Jeffrey, Richard Socher, and Christopher D Manning. 2014. <span>“Glove: Global Vectors for Word Representation.”</span> In <em>Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)</em>, 1532–43.
+</div>
+<div id="ref-sun2021interpreting" class="csl-entry" role="listitem">
+Sun, Xiaofei, Diyi Yang, Xiaoya Li, Tianwei Zhang, Yuxian Meng, Han Qiu, Guoyin Wang, Eduard Hovy, and Jiwei Li. 2021. <span>“Interpreting Deep Learning Models in Natural Language Processing: A Review.”</span> <em>arXiv Preprint arXiv:2110.10470</em>.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./03-unsupervised.html" class="pagination-link" aria-label="Unsupervised Learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./05-regression.html" class="pagination-link" aria-label="Linear Regression">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

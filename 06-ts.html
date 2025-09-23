@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Time Series Analysis – Data Analytics for Sense-Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./07-simulation.html" rel="next">
+<link href="./05-regression.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06-ts.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analytics for Sense-Making</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-ts.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Academic References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#exploring-time-series-data" id="toc-exploring-time-series-data" class="nav-link active" data-scroll-target="#exploring-time-series-data"><span class="header-section-number">6.1</span> Exploring Time Series Data</a></li>
+  <li><a href="#decomposing-time-series-data" id="toc-decomposing-time-series-data" class="nav-link" data-scroll-target="#decomposing-time-series-data"><span class="header-section-number">6.2</span> Decomposing Time Series Data</a></li>
+  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting"><span class="header-section-number">6.3</span> Forecasting</a></li>
+  <li><a href="#arima-models" id="toc-arima-models" class="nav-link" data-scroll-target="#arima-models"><span class="header-section-number">6.4</span> ARIMA Models</a></li>
+  <li><a href="#ets" id="toc-ets" class="nav-link" data-scroll-target="#ets"><span class="header-section-number">6.5</span> ETS</a></li>
+  <li><a href="#theta-method" id="toc-theta-method" class="nav-link" data-scroll-target="#theta-method"><span class="header-section-number">6.6</span> Theta Method</a></li>
+  <li><a href="#forecasting-with-seasonal-decomposition" id="toc-forecasting-with-seasonal-decomposition" class="nav-link" data-scroll-target="#forecasting-with-seasonal-decomposition"><span class="header-section-number">6.7</span> Forecasting with Seasonal Decomposition</a></li>
+  <li><a href="#miscellaneous-topics" id="toc-miscellaneous-topics" class="nav-link" data-scroll-target="#miscellaneous-topics"><span class="header-section-number">6.8</span> Miscellaneous Topics</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6.9</span> Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">6.10</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="exploring-time-series-data" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="exploring-time-series-data"><span class="header-section-number">6.1</span> Exploring Time Series Data</h2>
+<p>One of the first things that we do when we are given a time series is visualise it. The visualisation is meant to give us an indication of what kinds of techniques would be suitable for forecasting it. In this section, we shall learn several methods to visualise a time series dataset.</p>
+<p>When we visualise a time series, we look out for the following features:</p>
+<ol type="1">
+<li><strong>Trend</strong>: A trend exists when there is a long-term increase or decrease in the data.</li>
+<li><strong>Level</strong>: The level of a series refers to its height on the ordinate axis.</li>
+<li><strong>Seasonal</strong>: A seasonal pattern exists when a series is influenced by factors such as quarters of the year, the month, the day of the week, or time of day. Seasonality is always of a <strong>fixed and known</strong> period.</li>
+<li><strong>Cyclic</strong>: A cyclic pattern exists when there are rises and falls that are not of a fixed period.</li>
+</ol>
+<div id="4a4fc65c" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> datetime, calendar</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> statsmodels.tsa.seasonal <span class="im">import</span> seasonal_decompose,STL</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> statsmodels.tsa.statespace.tools <span class="im">import</span> diff</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> acf</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> statsmodels.tsa.forecasting.theta <span class="im">import</span> ThetaModel</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">from</span> statsmodels.tsa.statespace <span class="im">import</span> exponential_smoothing</span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> ExponentialSmoothing, SimpleExpSmoothing, Holt, STLForecast</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="im">import</span> pmdarima <span class="im">as</span> pm</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="im">from</span> scipy.cluster <span class="im">import</span> hierarchy</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> pdist,squareform</span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="im">from</span> ind5003 <span class="im">import</span> ts</span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="exm-housing-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.1 (Example: Basic Plots of Housing Data)</strong></span> </p>
+<div id="273f7df0" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hsales <span class="op">=</span> pd.read_csv(<span class="st">'data/hsales.csv'</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>])</span>
+<span id="cb2-2"><a href="#cb2-2"></a>hsales.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>hsales.index.freq <span class="op">=</span> <span class="st">'MS'</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>hsales.plot(title<span class="op">=</span><span class="st">'Sales of One-Family Houses, USA'</span>, legend<span class="op">=</span><span class="va">False</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb2-5"><a href="#cb2-5"></a>plt.xlabel(<span class="st">'Month-Year'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Sales'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-3-output-1.png" width="957" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We observe a strong seasonality within each year. There is some indication of cyclic behaviour every 6 – 10 years. There is no apparent monotonic trend over this period. With pandas objects, we can resample the series. This allows us to compute summaries over time windows that could be of business importance. For instance, we might be interested in a breakdown by quarters instead of months.</p>
+</div>
+<p>With the <code>resample()</code> function, we can perform both downsampling (reducing the frequency of observations) or upsampling (via interpolation or nearest neighbour imputation).</p>
+<div id="8297b8de" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>hsales.resample(<span class="st">'14D'</span>).interpolate().head()</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#hsales.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">hsales</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1973-01-01</td>
+<td>55.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1973-01-15</td>
+<td>54.820513</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1973-01-29</td>
+<td>54.641026</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1973-02-12</td>
+<td>54.461538</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1973-02-26</td>
+<td>54.282051</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>See the <a href="https://pandas.pydata.org/docs/user_guide/timeseries.html#dateoffset-objects">page</a> on date-offset objects for details and options on the strings that you can put within the resample method.</p>
+</div>
+</div>
+<div id="exm-housing-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.2 (Example: Season Plots of Housing Data)</strong></span> </p>
+<p>A season plot allows us to visualise what happens within a season. In this case, each line in the graph below traces the behaviour of the series from the beginning of the season till the end (from Jan to Dec).</p>
+<div id="ea496da9" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>hsales.loc[:, <span class="st">'year'</span>] <span class="op">=</span> hsales.index.year</span>
+<span id="cb4-2"><a href="#cb4-2"></a>hsales.loc[:, <span class="st">'month'</span>] <span class="op">=</span> hsales.index.month</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a>yrs <span class="op">=</span> np.sort(hsales.year.unique())</span>
+<span id="cb4-5"><a href="#cb4-5"></a>color_ids <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, num<span class="op">=</span><span class="bu">len</span>(yrs))</span>
+<span id="cb4-6"><a href="#cb4-6"></a>colors_to_use <span class="op">=</span> plt.cm.YlOrRd(color_ids)</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="cf">for</span> i,yr <span class="kw">in</span> <span class="bu">enumerate</span>(yrs):</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    df_tmp <span class="op">=</span> hsales.loc[hsales.year <span class="op">==</span> yr, :]</span>
+<span id="cb4-12"><a href="#cb4-12"></a>    plt.plot(df_tmp.month, df_tmp.hsales, color<span class="op">=</span>colors_to_use[i])<span class="op">;</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>    plt.text(<span class="fl">12.1</span>, df_tmp.hsales.iloc[<span class="op">-</span><span class="dv">1</span>], <span class="bu">str</span>(yr), color<span class="op">=</span>colors_to_use[i])</span>
+<span id="cb4-14"><a href="#cb4-14"></a>plt.title(<span class="st">'Season Plot: House Sales'</span>)</span>
+<span id="cb4-15"><a href="#cb4-15"></a>plt.xlim(<span class="dv">0</span>, <span class="dv">13</span>)</span>
+<span id="cb4-16"><a href="#cb4-16"></a>plt.xticks(np.arange(<span class="dv">1</span>, <span class="dv">13</span>), calendar.month_abbr[<span class="dv">1</span>:<span class="dv">13</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-5-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="938" height="653"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-aus-elec-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.3 (Example: Basic Time Plot, Australian Quarterly Electricity Production)</strong></span> </p>
+<div id="f5210d4c" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>qau <span class="op">=</span> pd.read_csv(<span class="st">'data/qauselec.csv'</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>])</span>
+<span id="cb5-2"><a href="#cb5-2"></a>qau.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>qau.index.freq <span class="op">=</span> <span class="st">'QS'</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>qau.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>), title<span class="op">=</span><span class="st">'Electrcity Production by Quarter'</span>, legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>plt.xlabel(<span class="st">'Qtr-Year'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Billion kWh'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-6-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="673" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There is a strong increasing trend. There is strong seasonality, and there is no evidence of cyclic behaviour.</p>
+<p>In general, it looks like there is a peak around Feb to March, after which sales descend until the next January. Using a colour map with colours that we can remember would allow us to identify a trend <strong>across</strong> seasons. In this case, there isn’t one, but if you re-do this plot for the Electricity series, you would see a clear association between the colour of line and level of each series within a year.</p>
+<div id="0adf9eb2" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>qau2 <span class="op">=</span> qau.copy()</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>qau2.loc[:, <span class="st">'year'</span>] <span class="op">=</span> qau2.index.year</span>
+<span id="cb6-4"><a href="#cb6-4"></a>qau2.loc[:, <span class="st">'qtr'</span>] <span class="op">=</span> qau2.index.quarter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cb8b9288" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>yrs <span class="op">=</span> np.sort(qau2.year.unique())</span>
+<span id="cb7-2"><a href="#cb7-2"></a>color_ids <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, num<span class="op">=</span><span class="bu">len</span>(yrs))</span>
+<span id="cb7-3"><a href="#cb7-3"></a>colors_to_use <span class="op">=</span> plt.cm.YlOrRd(color_ids)</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="cf">for</span> i,yr <span class="kw">in</span> <span class="bu">enumerate</span>(yrs):</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    df_tmp <span class="op">=</span> qau2.loc[qau2.year <span class="op">==</span> yr, :]</span>
+<span id="cb7-9"><a href="#cb7-9"></a>    plt.plot(df_tmp.qtr, df_tmp.kWh, color<span class="op">=</span>colors_to_use[i])<span class="op">;</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>    plt.text(<span class="fl">4.1</span>, df_tmp.kWh.iloc[<span class="op">-</span><span class="dv">1</span>], <span class="bu">str</span>(yr), color<span class="op">=</span>colors_to_use[i])</span>
+<span id="cb7-11"><a href="#cb7-11"></a>plt.title(<span class="st">'Season Plot: House Sales'</span>)</span>
+<span id="cb7-12"><a href="#cb7-12"></a>plt.xlim(<span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb7-13"><a href="#cb7-13"></a>plt.xticks(np.arange(<span class="dv">1</span>, <span class="dv">5</span>), [<span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-8-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="938" height="653"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><br></p>
+<p>Most time series models are autoregressive in nature. This means that they attempt to predict future observations based on previous ones. The observations from the past could be from the time series that we are interested in, or they could be from other time series that we believe are related.</p>
+<p>When beginning with model fitting, we would want to have some idea about the extent to which past observations affect the current one. In other words, how many of the past observations should we include when forecasting new observations? Lag plots and autocorrelation functions (acf) are the tools that we use to answer this question.</p>
+<p>If we denote the observation of a time series as <span class="math inline">\(y_t\)</span>, then a lag plot at lag <span class="math inline">\(k, k &gt; 0\)</span> is a scatter plot of <span class="math inline">\(y_t\)</span> against <span class="math inline">\(y_{t-k}\)</span>. It allows us to visually assess if the observations that are <span class="math inline">\(k\)</span> units of time apart are associated with one another. We typically plot several lags at once to observe this relationship.</p>
+<div id="exm-housing-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.4 (Example: Lag plots of Housing Sales Data)</strong></span> </p>
+<div id="7fb94a60" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>f, aa <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">3</span>,ncols<span class="op">=</span><span class="dv">4</span>, sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>f.set_figheight(<span class="dv">10</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>f.set_figwidth(<span class="dv">12</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>y <span class="op">=</span> hsales.hsales.values</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="cf">for</span> i <span class="kw">in</span> np.arange(<span class="dv">0</span>, <span class="dv">3</span>):</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="cf">for</span> j <span class="kw">in</span> np.arange(<span class="dv">0</span>, <span class="dv">4</span>):</span>
+<span id="cb8-8"><a href="#cb8-8"></a>        lag <span class="op">=</span> i<span class="op">*</span><span class="dv">4</span> <span class="op">+</span> j <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>        aa[i,j].scatter(y[:<span class="op">-</span>lag], y[lag:], alpha<span class="op">=</span><span class="fl">0.4</span>)</span>
+<span id="cb8-10"><a href="#cb8-10"></a>        aa[i,j].set_xlabel(<span class="st">"lag "</span> <span class="op">+</span> <span class="bu">str</span>(lag))</span>
+<span id="cb8-11"><a href="#cb8-11"></a>f.suptitle(<span class="st">'Lag plots'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-9-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="938" height="895"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="decomposing-time-series-data" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="decomposing-time-series-data"><span class="header-section-number">6.2</span> Decomposing Time Series Data</h2>
+<p>In this section, our goal is still primarily exploratory, but it will also return information that we can use to model our data later on. We aim to break the time series readings into:</p>
+<ul>
+<li>a trend-cycle component,</li>
+<li>a seasonal component, and</li>
+<li>a remainder component.</li>
+</ul>
+<p>If we can forecast these components individually, we can combine them to provide forecasts for the original series. There are two basic methods of decomposition into the above components: an additive one, and a multiplicative one. In the additive decomposition, we assume that they contribute in an additive manner to <span class="math inline">\(y_t\)</span>:</p>
+<p><span class="math display">\[\begin{equation}
+y_t = S_t + T_t + R_t
+\end{equation}\]</span></p>
+<p>In the multiplicative decomposition, we assume the following relationship holds: <span class="math display">\[\begin{equation}
+y_t = S_t \times T_t \times R_t
+\end{equation}\]</span></p>
+<p>When we are in the multiplicative case, we sometimes apply the logarithm transform to the data, which returns to an additive model: <span class="math display">\[\begin{equation}
+\log y_t = \log S_t + \log T_t + \log R_t
+\end{equation}\]</span></p>
+<p>A typical algorithm to decompose time series data would work like this:</p>
+<ol type="1">
+<li>Estimate the trend component. Let us call it <span class="math inline">\(\hat{T}_t\)</span>.</li>
+<li>Obtain the de-trended data <span class="math inline">\(y_t - \hat{T}_t\)</span> or <span class="math inline">\(y_t / \hat{T}_t\)</span> as appropriate.</li>
+<li>Estimate the seasonal component. For instance, we could simply average the values in each month. Let us denote this estimate as <span class="math inline">\(\hat{S}_t\)</span>.</li>
+<li>Estimate the remainder component. For instance, in the additive model, it would be <span class="math inline">\(\hat{R}_t = y_t - \hat{T}_t - \hat{S}_t\)</span>.</li>
+</ol>
+<div id="exm-housing-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.5 (Example: Additive Decomposition, Housing Sales)</strong></span> </p>
+<p>Here is the naive additive decomposition of the housing sales data.</p>
+<div id="4563aa6e" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>hsales_add <span class="op">=</span> seasonal_decompose(hsales.loc[:, <span class="st">'hsales'</span>], </span>
+<span id="cb9-2"><a href="#cb9-2"></a>                                model<span class="op">=</span><span class="st">'additive'</span>, extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>hsales_add.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-10-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="662" height="470"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-aus-elec-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.6 (Example: Multiplicative Decomposition, Aus Electricity Data)</strong></span> </p>
+<p>Here is the *multiplicative decomposition for the Australian electric data.</p>
+<div id="4db65158" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>qau_mult <span class="op">=</span> seasonal_decompose(qau.loc[:, <span class="st">'kWh'</span>], model<span class="op">=</span><span class="st">'multiplicative'</span>,</span>
+<span id="cb10-2"><a href="#cb10-2"></a>                              extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>qau_mult.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-11-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="662" height="470"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>As you may have noticed, there are some issues with the classical seasonal decomposition algorithms. These include:</p>
+<ul>
+<li>an inability to estimate the trend at the ends of the series.</li>
+<li>an inability to account for changing seasonal components.</li>
+<li>it is not robust to outliers.</li>
+</ul>
+<div id="exm-aus-elec-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.7 (Example: STL decomposition, Aus Electricity)</strong></span> </p>
+<p>Newer algorithms such as STL decomposition, X11 and others attempt to address these issues. They use locally weighted regression models to obtain the trend. These algorithms iterate over the time series several times, so as to ensure that outliers are not affecting the outcome.</p>
+<div id="141d86f0" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>qau_stl <span class="op">=</span> STL(qau.kWh).fit()</span>
+<span id="cb11-2"><a href="#cb11-2"></a>qau_stl.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-12-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="662" height="470"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="forecasting" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="forecasting"><span class="header-section-number">6.3</span> Forecasting</h2>
+<section id="benchmark-methods" class="level3">
+<h3 class="anchored" data-anchor-id="benchmark-methods">Benchmark methods</h3>
+<p>As in all forecasting methods, it is useful to obtain a baseline forecast before proceeding to more sophisticated techniques. Baseline forecasts are usually obtained from simple, intuitive methods. Here are some such methods:</p>
+<p>A. The simple mean forecast:<br>
+<span class="math display">\[\begin{equation}
+\hat{y}_{T+h | T} = \frac{y_1 + y_2 + y_3 + \cdots + y_T}{T}
+\end{equation}\]</span></p>
+<p>B. The naive forecast: <span class="math display">\[\begin{equation}
+\hat{y}_{T+h | T} = y_T
+\end{equation}\]</span></p>
+<p>C. The seasonal naive forecast.</p>
+<div id="exm-housing-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.8 (Example: Benchmark Forecasts Housing Sales)</strong></span> </p>
+<p>Suppose we apply some of the above forecasts to the housing sales dataset. We withhold the most recent 2 years of data and foreacst those. Here is a plot depicting the forecasts, and the true values.</p>
+<div id="c2e33e8e" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Set aside the last two years as the test set.</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#hsales = hsales.drop(columns=['year', 'month'])</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>train_set <span class="op">=</span> hsales.iloc[:<span class="op">-</span><span class="dv">24</span>,]</span>
+<span id="cb12-4"><a href="#cb12-4"></a>test_set <span class="op">=</span> hsales.iloc[<span class="op">-</span><span class="dv">24</span>:, ]</span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co"># Obtain the forecast from the training set</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a>mean_forecast <span class="op">=</span> ts.meanf(train_set.hsales, <span class="dv">24</span>)</span>
+<span id="cb12-8"><a href="#cb12-8"></a>snaive_forecast <span class="op">=</span> ts.snaive(train_set.hsales, <span class="dv">24</span>, <span class="dv">12</span>)</span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co"># Plot the predictions and true values</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a>ax <span class="op">=</span> train_set.hsales.plot(title<span class="op">=</span><span class="st">'Benchmarks'</span>, legend<span class="op">=</span><span class="va">False</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="fl">4.5</span>))</span>
+<span id="cb12-12"><a href="#cb12-12"></a>test_set.hsales.plot(ax<span class="op">=</span>ax, legend<span class="op">=</span><span class="va">False</span>, style<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb12-13"><a href="#cb12-13"></a>mean_forecast.plot(ax<span class="op">=</span>ax, legend<span class="op">=</span><span class="va">True</span>, style<span class="op">=</span><span class="st">'-'</span>)</span>
+<span id="cb12-14"><a href="#cb12-14"></a>snaive_forecast.plot(ax<span class="op">=</span>ax, legend<span class="op">=</span><span class="va">False</span>, style<span class="op">=</span><span class="st">'-'</span>)</span>
+<span id="cb12-15"><a href="#cb12-15"></a>plt.legend(labels<span class="op">=</span>[<span class="st">'train'</span>, <span class="st">'test'</span>, <span class="st">'mean'</span>, <span class="st">'snaive'</span>], loc<span class="op">=</span><span class="st">'lower right'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-13-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="938" height="413"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>When assessing forecasts, there are a few different metrics that are typically applied. Each of them has it’s own set of pros and cons. If we denote the predicted value with <span class="math inline">\(\hat{y}_t\)</span>, then these are the formulas for three of the most common error metrics used in time series forecasting</p>
+<p>A. RMSE: <span class="math display">\[\begin{equation}
+\sqrt{\frac{1}{h} \sum_{i=1}^h (y_{t+i} - \hat{y}_{t+i})^2 }
+\end{equation}\]</span></p>
+<p>B. MAE <span class="math display">\[\begin{equation}
+\frac{1}{h} \sum_{i=1}^h |y_{t+i} - \hat{y}_{t+i}|
+\end{equation}\]</span></p>
+<p>C. Mean Absolute Scaled Error</p>
+<p><span class="math display">\[\begin{equation}
+\frac{1}{h} \sum_{i=1}^h \frac{|y_{t+i} - \hat{y}_{t+i}|}{ \frac{1}{T-1} \sum_{t=2}^T |y_t - y_{t-1}|}
+\end{equation}\]</span></p>
+<p>The RMSE and MAE are scale dependent errors. It is difficult to compare the errors across, or to aggregate errors across different time series with it. Due to the square in the formula, the RMSE is quite sensitive to outliers. The MAE is more robust to outliers. The MASE is a scaled error - it allows us to compare the forecasting performance <em>across</em> time series. The other two metrics depend on the scale of the time series and hence do not allow us to make such comparisons.</p>
+<div id="438db10e" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="cf">for</span> x <span class="kw">in</span> [ts.rmse, ts.mae]:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">,mean: </span><span class="sc">{</span>x(test_set.hsales.values, mean_forecast.values)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">,snaive: </span><span class="sc">{</span>x(test_set.hsales.values, snaive_forecast.values)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="bu">print</span>(<span class="st">'---'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rmse,mean: 9.023
+rmse,snaive: 5.906
+---
+mae,mean: 7.562
+mae,snaive: 4.792
+---</code></pre>
+</div>
+</div>
+<p>The MASE for the seasonal naive forecast is as follows.</p>
+<div id="edc22b78" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>ts.mase(test_set.hsales.values,  snaive_forecast.values, train_set.values, </span>
+<span id="cb15-2"><a href="#cb15-2"></a>        seasonality<span class="op">=</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>1.5154940449933834</code></pre>
+</div>
+</div>
+<p>In our simple example, the seasonal naive model outperforms the simple mean forecast according to all the metrics but in general, things are not always this clear-cut.</p>
+</section>
+</section>
+<section id="arima-models" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="arima-models"><span class="header-section-number">6.4</span> ARIMA Models</h2>
+<p>Now let us turn to a huge class of models that have been utilised in time series forecasting since the 1960’s. They are known as ARIMA models. ARIMA stands for AutoRegressive Integrated Moving Average models. These models are appropriate for <strong>stationary</strong> processes. Stationarity is a technical term that refers to processes</p>
+<ul>
+<li>that have a constant mean. This means that the process merely fluctuates about a fixed level over time.</li>
+<li>whose covariance function does not change over time. This means that, for a fixed <span class="math inline">\(h\)</span>, the covariance between <span class="math inline">\(y_t\)</span> and <span class="math inline">\(y_{t+h}\)</span> is the same for all <span class="math inline">\(t\)</span>.</li>
+<li>whose variance is constant over time.</li>
+</ul>
+<p>How can we tell if a process is stationary or not? The following time series is not stationary. Why?</p>
+<div id="exm-dow-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.9 (Example: Dow Jones Index)</strong></span> </p>
+<p>Consider the following time series of the Dow Jones index.</p>
+<div id="e4894a10" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dj <span class="op">=</span> pd.read_csv(<span class="st">'data/dj.csv'</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>dj.plot(legend<span class="op">=</span><span class="va">False</span>, title<span class="op">=</span><span class="st">'Dow Jones Index'</span>, figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-16-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1178" height="357"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, the following differenced version of the same series is: <span class="math display">\[\begin{equation}
+\Delta y_t = y_t - y_{t-1}
+\end{equation}\]</span></p>
+<div id="4a5d5bdd" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>ddj <span class="op">=</span> diff(dj)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>ddj.plot(legend<span class="op">=</span><span class="va">False</span>, title<span class="op">=</span><span class="st">'Differenced Dow Jones'</span>, figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-17-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1181" height="357"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>ARIMA models revolve around the idea that if we have a non-stationary series, we can transform it into a stationary one with a suitable number of differencing. A more general way of studying if a series is stationary is to plot it’s AutoCorrelation Function (ACF). The ARIMA method directly models the ACF. That is why it is so important for this class of models. The ACF of a stationary process should “die down” quickly. Here is the ACF of the Dow Jones data, before and after differencing.</p>
+<div id="0b17228f" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>plt.stem(acf(dj, fft<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb19-3"><a href="#cb19-3"></a>plt.title(<span class="st">"Non-differenced"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb19-5"><a href="#cb19-5"></a>plt.stem(acf(ddj, fft<span class="op">=</span><span class="va">False</span>))<span class="op">;</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>plt.title(<span class="st">"Differenced Series"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-18-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="584" height="431"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now suppose that, starting from our original series <span class="math inline">\(y_t\)</span>, we difference it a sufficient number of times and obtain a stationary series. Let’s call this <span class="math inline">\(y'_t\)</span>. The ARIMA model assumes that</p>
+<p><span class="math display">\[\begin{equation}
+y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta_1 e_{t-1} + \cdots + \theta_q e_{t-q}
+\end{equation}\]</span></p>
+<ul>
+<li>The <span class="math inline">\(e_j\)</span> correspond to unobserved innovations. They are typically assumed to be independent across time with a common variance.</li>
+<li>The <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\theta\)</span> terms are unknown coefficients to be estimated.</li>
+<li>If <span class="math inline">\(y'_t\)</span> was obtained by performing <span class="math inline">\(d\)</span> successive differencings, then the above ARIMA model is referred to as an <span class="math inline">\(\text{ARIMA}(p,d,q)\)</span> model.</li>
+</ul>
+<p>In olden days, the <span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span> and <span class="math inline">\(q\)</span> parameters were picked by the analyst after inspecting the ACF, PACF, and time plots of the differenced series. Today, we can iterate through a large number of them and pick the best according to a well-established criteria (AIC).</p>
+<div id="exm-aus-elec-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.10 (Example: Auto ARIMA on Aus Electricity)</strong></span> </p>
+<p>Let us try out the ARIMA auto-fitting algorithm on the qau electricity usage dataset. We shall set aside the last three years of data as the test set. Recall that this is quarterly data. First, we establish the seasonal naive benchmark error for this dataset.</p>
+<div id="7cdaa318" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>train2 <span class="op">=</span> qau.kWh[:<span class="op">-</span><span class="dv">12</span>]</span>
+<span id="cb20-2"><a href="#cb20-2"></a>test2 <span class="op">=</span> qau.kWh[<span class="op">-</span><span class="dv">12</span>:]</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a>snaive_f <span class="op">=</span> ts.snaive(train2, <span class="dv">12</span>, <span class="dv">4</span>)</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="bu">print</span>(<span class="ss">f"The RMSE is approximately </span><span class="sc">{</span>ts<span class="sc">.</span>rmse(test2.values, snaive_f.values)<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The RMSE is approximately 2.545.</code></pre>
+</div>
+</div>
+<p>Let us see if the automatically fitted ARIMA models can do better than this.</p>
+<p>Here is the summary of the final chosen model.</p>
+<div id="f4faa9fb" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="co">#arima_m1 = pm.auto_arima(train2.values, seasonal=True, m=4, test='adf', </span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#                         trace=False, suppress_warnings=True)</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>arima_m1.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>SARIMAX Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>y</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>206</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>SARIMAX(2, 1, 2)x(1, 0, [1], 4)</td>
+<td data-quarto-table-cell-role="th">Log Likelihood</td>
+<td>-175.320</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Mon, 22 Sep 2025</td>
+<td data-quarto-table-cell-role="th">AIC</td>
+<td>364.640</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>23:34:09</td>
+<td data-quarto-table-cell-role="th">BIC</td>
+<td>387.901</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Sample:</td>
+<td>0</td>
+<td data-quarto-table-cell-role="th">HQIC</td>
+<td>374.049</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th"></td>
+<td>- 206</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>opg</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">ar.L1</td>
+<td>-0.1675</td>
+<td>0.613</td>
+<td>-0.273</td>
+<td>0.785</td>
+<td>-1.369</td>
+<td>1.034</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">ar.L2</td>
+<td>0.3262</td>
+<td>0.418</td>
+<td>0.781</td>
+<td>0.435</td>
+<td>-0.492</td>
+<td>1.145</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">ma.L1</td>
+<td>-0.1472</td>
+<td>0.604</td>
+<td>-0.244</td>
+<td>0.807</td>
+<td>-1.330</td>
+<td>1.036</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">ma.L2</td>
+<td>-0.6210</td>
+<td>0.589</td>
+<td>-1.054</td>
+<td>0.292</td>
+<td>-1.776</td>
+<td>0.534</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">ar.S.L4</td>
+<td>0.9889</td>
+<td>0.009</td>
+<td>116.030</td>
+<td>0.000</td>
+<td>0.972</td>
+<td>1.006</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">ma.S.L4</td>
+<td>-0.6195</td>
+<td>0.085</td>
+<td>-7.310</td>
+<td>0.000</td>
+<td>-0.786</td>
+<td>-0.453</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">sigma2</td>
+<td>0.3110</td>
+<td>0.026</td>
+<td>12.139</td>
+<td>0.000</td>
+<td>0.261</td>
+<td>0.361</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Ljung-Box (L1) (Q):</td>
+<td>0.19</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>21.89</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Q):</td>
+<td>0.67</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Heteroskedasticity (H):</td>
+<td>9.53</td>
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.09</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(H) (two-sided):</td>
+<td>0.00</td>
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>4.59</td>
+</tr>
+</tbody>
+</table>
+<br><br>Warnings:<br>[1] Covariance matrix calculated using the outer product of gradients (complex-step).
+</div>
+</div>
+</div>
+<p>Once we have found the best-fitting model, we do what we do with any other model in data analytics: we have to inspect the residuals. The residuals should look like trash to us - there should be no clues about the data in them. The standardized residual in the top left should be consistently wide; it isn’t. This suggests some sort of transformation of the data before modeling might be appropriate.</p>
+<p>The two plots on the off-diagonal are meant for us to assess if the residuals are Normally distributed with mean 0. They do indeed look like it.</p>
+<p>The final plot, in the bottom right, displays an ACF with no spikes, indicating that the residuals are uncorrelated. This is precisely what we wished to see.</p>
+<div id="b26702bf" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>arima_m1.plot_diagnostics(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-22-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="959" height="523"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we assess the error on the test set. The out-of-sample performance is better than the naive methods.</p>
+<div id="1a412185" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="bu">print</span>(<span class="ss">f"The RMSE on the test set is </span><span class="sc">{</span>ts<span class="sc">.</span>rmse(test2.values, arima_m1.predict(n_periods<span class="op">=</span><span class="dv">12</span>))<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="bu">print</span>(<span class="ss">f"The MASE on the test set is </span><span class="sc">{</span>ts<span class="sc">.</span>mase(test2.values, arima_m1.predict(n_periods<span class="op">=</span><span class="dv">12</span>), train2.values, seasonality<span class="op">=</span><span class="dv">4</span>)<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The RMSE on the test set is 1.929.
+The MASE on the test set is 1.245.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/sklearn/utils/deprecation.py:132: FutureWarning:
+
+'force_all_finite' was renamed to 'ensure_all_finite' in 1.6 and will be removed in 1.8.
+
+/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/sklearn/utils/deprecation.py:132: FutureWarning:
+
+'force_all_finite' was renamed to 'ensure_all_finite' in 1.6 and will be removed in 1.8.
+</code></pre>
+</div>
+</div>
+<p>Let us proceed to make a plot of the predictions.</p>
+<div id="e0fbb419" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>n_periods <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>fc, confint <span class="op">=</span> arima_m1.predict(n_periods<span class="op">=</span>n_periods, return_conf_int<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a></span>
+<span id="cb27-4"><a href="#cb27-4"></a>ff <span class="op">=</span> pd.Series(fc, index<span class="op">=</span>test2.index)</span>
+<span id="cb27-5"><a href="#cb27-5"></a>lower_series <span class="op">=</span> pd.Series(confint[:, <span class="dv">0</span>], index<span class="op">=</span>test2.index)</span>
+<span id="cb27-6"><a href="#cb27-6"></a>upper_series <span class="op">=</span> pd.Series(confint[:, <span class="dv">1</span>], index<span class="op">=</span>test2.index)</span>
+<span id="cb27-7"><a href="#cb27-7"></a></span>
+<span id="cb27-8"><a href="#cb27-8"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb27-9"><a href="#cb27-9"></a>plt.plot(train2[<span class="op">-</span><span class="dv">36</span>:])</span>
+<span id="cb27-10"><a href="#cb27-10"></a>plt.plot(ff, color<span class="op">=</span><span class="st">'red'</span>, label<span class="op">=</span><span class="st">'Forecast'</span>)</span>
+<span id="cb27-11"><a href="#cb27-11"></a>plt.fill_between(lower_series.index, lower_series, upper_series, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">.15</span>)</span>
+<span id="cb27-12"><a href="#cb27-12"></a>plt.plot(test2, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'True'</span>)</span>
+<span id="cb27-13"><a href="#cb27-13"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/sklearn/utils/deprecation.py:132: FutureWarning:
+
+'force_all_finite' was renamed to 'ensure_all_finite' in 1.6 and will be removed in 1.8.
+
+/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/sklearn/utils/deprecation.py:132: FutureWarning:
+
+'force_all_finite' was renamed to 'ensure_all_finite' in 1.6 and will be removed in 1.8.
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-24-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="1100" height="411"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ets" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="ets"><span class="header-section-number">6.5</span> ETS</h2>
+<p>ETS models are a new class of models, that define a time series process according to a set of state space equations:</p>
+<p><span class="math display">\[\begin{eqnarray}
+y_t &amp;=&amp; w' x_{t-1} + e_t \\
+x_t &amp;=&amp; F x_{t-1} + g e_t
+\end{eqnarray}\]</span></p>
+<p>The unobserved <strong>state</strong> <span class="math inline">\(x_t\)</span> is usually a vector, and it typically contains information about * the level of the process at time <span class="math inline">\(t\)</span>. * the seasonal effect at time <span class="math inline">\(t\)</span> * the trend or growth factor at time <span class="math inline">\(t\)</span>.</p>
+<p>All these parameters are updated at every point in time. For instance, the simplest ETS model (A,N,N), is one that assumes that there is only a level parameter, and that it is updated as a weighted average of the most recent levels:</p>
+<p><span class="math display">\[\begin{eqnarray}
+l_t &amp;=&amp; \alpha y_t + (1- \alpha)l_{t-1} \\
+\hat{y}_{t+1} &amp;=&amp; l_t
+\end{eqnarray}\]</span></p>
+<p>The definition of the model is very flexible, and allows multiplicative growth, linear growth and damped terms in the model. All this, in addition to not requiring the assumption of stationarity!</p>
+<p>Here is a full table of the additive models, followed by the multiplicative models:</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="1">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="figs/ets_add.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/ets_mult.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Forecasting: Principles and Practice</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-aus-elec-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.11 (Example: ETS model on Aus Electricity Dataset)</strong></span> </p>
+<p>Let us try one of the basic models, with just a slope, level and seasonal effect ETS(A,A,A), on the qau dataset.</p>
+<div id="3267275b" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>ets_m1 <span class="op">=</span> ExponentialSmoothing(train2.values, seasonal_periods<span class="op">=</span><span class="dv">4</span>, trend<span class="op">=</span><span class="st">'add'</span>, seasonal<span class="op">=</span><span class="st">'add'</span>)</span>
+<span id="cb29-2"><a href="#cb29-2"></a>ets_fit <span class="op">=</span> ets_m1.fit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2bde5e84" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>ets_fit.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>ExponentialSmoothing Model Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>endog</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>206</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>ExponentialSmoothing</td>
+<td data-quarto-table-cell-role="th">SSE</td>
+<td>64.907</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Optimized:</td>
+<td>True</td>
+<td data-quarto-table-cell-role="th">AIC</td>
+<td>-221.915</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Trend:</td>
+<td>Additive</td>
+<td data-quarto-table-cell-role="th">BIC</td>
+<td>-195.292</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Seasonal:</td>
+<td>Additive</td>
+<td data-quarto-table-cell-role="th">AICC</td>
+<td>-220.787</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Seasonal Periods:</td>
+<td>4</td>
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Mon, 22 Sep 2025</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Box-Cox:</td>
+<td>False</td>
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>23:34:09</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Box-Cox Coeff.:</td>
+<td>None</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coeff</td>
+<td data-quarto-table-cell-role="th">code</td>
+<td data-quarto-table-cell-role="th">optimized</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">smoothing_level</td>
+<td>0.6205891</td>
+<td>alpha</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">smoothing_trend</td>
+<td>1.4395e-11</td>
+<td>beta</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">smoothing_seasonal</td>
+<td>0.2690339</td>
+<td>gamma</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_level</td>
+<td>4.0245281</td>
+<td>l.0</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_trend</td>
+<td>0.2509921</td>
+<td>b.0</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.0</td>
+<td>-0.3901302</td>
+<td>s.0</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.1</td>
+<td>0.1114788</td>
+<td>s.1</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">initial_seasons.2</td>
+<td>0.2913054</td>
+<td>s.2</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">initial_seasons.3</td>
+<td>-0.3722268</td>
+<td>s.3</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="c77bdff8" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>plt.plot(train2.index, ets_fit.trend, scaley<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb31-3"><a href="#cb31-3"></a>plt.ylim(<span class="fl">0.245</span>, <span class="fl">0.255</span>)</span>
+<span id="cb31-4"><a href="#cb31-4"></a>plt.ylabel(<span class="st">'slope'</span>)</span>
+<span id="cb31-5"><a href="#cb31-5"></a></span>
+<span id="cb31-6"><a href="#cb31-6"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb31-7"><a href="#cb31-7"></a>plt.plot(train2.index, ets_fit.level)</span>
+<span id="cb31-8"><a href="#cb31-8"></a>plt.ylabel(<span class="st">'level'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-27-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="606" height="411"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, let’s take a look if the predictions on the test set are competitive with the automatic ARIMA model that was selected earlier. The forecasts are better than the naive ones, but not as good as the ARIMA. However, keep in mind that we are working with a single model; we should iterate over several ETS models and pick the best one in order to compare with the ARIMA model found.</p>
+<div id="83ed95fb" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>ets_fc <span class="op">=</span> ets_fit.forecast(steps<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="bu">print</span>(<span class="ss">f"The RMSE on th tests set is </span><span class="sc">{</span>ts<span class="sc">.</span>rmse(test2.values, ets_fc)<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The RMSE on th tests set is 2.237.</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="theta-method" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="theta-method"><span class="header-section-number">6.6</span> Theta Method</h2>
+<p>The Theta method is a forecasting approach that has proved to be quite effective in competitions. It regularly appears as one of the best-performing models. Instead of decomposing a time series into Trend, Season and Remainder terms, the theta method decomposes a <em>seasonally adjusted</em> time series into <strong>short-</strong> and <strong>long-term</strong> components. The full reference for this method is <span class="citation" data-cites="assimakopoulos2000theta">Assimakopoulos and Nikolopoulos (<a href="references.html#ref-assimakopoulos2000theta" role="doc-biblioref">2000</a>)</span>.</p>
+<p>Suppose we are interested in forecasting a time series <span class="math inline">\(\{y_t\}\)</span>. The theta decomposition is based on the concept of amplifying/diminishing the local curvatures of the time series. This is brought about through a coefficient <span class="math inline">\(\theta\)</span>; hence the name of the model.</p>
+<p>As a preview, we are going to find series <span class="math inline">\(\{ x_{\theta,t}\}\)</span> and <span class="math inline">\(\{ x_{1 - \theta,t}\}\)</span> such that</p>
+<p><span class="math display">\[
+y_t = \frac{1}{2}(x_{\theta,t} + x_{1 - \theta,t})
+\]</span></p>
+<p>In order to forecast <span class="math inline">\(y_t\)</span>, we shall forecast <span class="math inline">\(\{ x_{\theta,t}\}\)</span> and <span class="math inline">\(\{ x_{1
+- \theta,t}\}\)</span> separately and then combine them. There are numerous possible pairs of <span class="math inline">\(\{ x_{\theta,t}\}\)</span> and <span class="math inline">\(\{ x_{1 - \theta,t}\}\)</span> that we can use. However the most common one is where <span class="math inline">\(x_\theta\)</span> corresponds to a straight line OLS fit, and <span class="math inline">\(x_{1 - \theta}\)</span> corresponds to a version of the time series with its curvature amplified.</p>
+<section id="international-tourism-arrivals-to-singapore" class="level3">
+<h3 class="anchored" data-anchor-id="international-tourism-arrivals-to-singapore">International Tourism Arrivals to Singapore</h3>
+<p>The Singapore Department of Statistics shares information on tourist arrivals to Singapore at the monthly level. Here is a time series plot of arrivals from South East Asian Countries:</p>
+<div id="fdf7eff2" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>tourism <span class="op">=</span> pd.read_excel(<span class="st">"data/international_visitor_arrivals_sg.xlsx"</span>, </span>
+<span id="cb34-2"><a href="#cb34-2"></a>                        parse_dates<span class="op">=</span>[<span class="dv">0</span>], date_format<span class="op">=</span><span class="st">"%Y %b"</span>, </span>
+<span id="cb34-3"><a href="#cb34-3"></a>                        na_values<span class="op">=</span><span class="st">'na'</span>)</span>
+<span id="cb34-4"><a href="#cb34-4"></a>sea_tourism <span class="op">=</span> tourism.iloc[:, <span class="dv">0</span>:<span class="dv">9</span>]</span>
+<span id="cb34-5"><a href="#cb34-5"></a>sea_tourism.columns <span class="op">=</span> [<span class="st">'Date'</span>, <span class="st">'SEA'</span>, <span class="st">'Brunei'</span>, <span class="st">'Indonesia'</span> ,<span class="st">'Malaysia'</span>, </span>
+<span id="cb34-6"><a href="#cb34-6"></a>                       <span class="st">'Myanmar'</span>, <span class="st">'Philippines'</span>, <span class="st">'Thailand'</span>, <span class="st">'Vietnam'</span>]</span>
+<span id="cb34-7"><a href="#cb34-7"></a>sea_tourism.Date <span class="op">=</span> sea_tourism.Date.<span class="bu">str</span>.replace(<span class="st">'  '</span>, <span class="st">''</span>)</span>
+<span id="cb34-8"><a href="#cb34-8"></a>sea_tourism.Date <span class="op">=</span> pd.to_datetime(sea_tourism.Date, <span class="bu">format</span><span class="op">=</span><span class="st">"%Y %b"</span>)</span>
+<span id="cb34-9"><a href="#cb34-9"></a>sea_tourism.set_index(<span class="st">'Date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb34-10"><a href="#cb34-10"></a>sea_tourism.sort_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb34-11"><a href="#cb34-11"></a>sea_tourism.index.freq <span class="op">=</span> <span class="st">'MS'</span></span>
+<span id="cb34-12"><a href="#cb34-12"></a></span>
+<span id="cb34-13"><a href="#cb34-13"></a>sea2 <span class="op">=</span> sea_tourism.SEA[sea_tourism.index <span class="op">&lt;</span> datetime.datetime(<span class="dv">2020</span>, <span class="dv">1</span>, <span class="dv">1</span>)]</span>
+<span id="cb34-14"><a href="#cb34-14"></a>fig <span class="op">=</span> sea2.plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span>
+<span id="cb34-15"><a href="#cb34-15"></a>fig.set_title(<span class="st">'Monthly Arrivals from SEA Countries before COVID-19'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-29-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="951" height="376"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="0689a233" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>theta_mod <span class="op">=</span> ThetaModel(sea2)</span>
+<span id="cb35-2"><a href="#cb35-2"></a>theta_mod_fit <span class="op">=</span> theta_mod.fit()</span>
+<span id="cb35-3"><a href="#cb35-3"></a>theta_mod_fit.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>ThetaModel Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>SEA</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>504</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>OLS/SES</td>
+<td data-quarto-table-cell-role="th">Deseasonalized:</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Mon, 22 Sep 2025</td>
+<td data-quarto-table-cell-role="th">Deseas. Method:</td>
+<td>Multiplicative</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>23:34:11</td>
+<td data-quarto-table-cell-role="th">Period:</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Sample:</td>
+<td>01-01-1978</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th"></td>
+<td>- 12-01-2019</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Parameter Estimates</caption>
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">Parameters</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">b0</td>
+<td>2628.8595906871597</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">alpha</td>
+<td>0.8383848338839772</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Here is what the two components from the model look like, in comparison to the seasonally adjusted series (based on a multiplicative decomposition).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The calculations in the next cell are based on formulas for the theta decomposition that we won’t get into. They are just for illustration of how the decomposition is in terms of long and short term trends, rather than the cross-sectional decompositions we have been dealing with so far.</p>
+</div>
+</div>
+<div id="68ea4c9a" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># carry out mutliplicative decomposition in order to obtain seasonally adjusted series</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a>sea2_mult <span class="op">=</span> seasonal_decompose(sea2, model<span class="op">=</span><span class="st">'multiplicative'</span>, extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
+<span id="cb36-3"><a href="#cb36-3"></a></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="co"># get long-term trend slope and intercept</span></span>
+<span id="cb36-5"><a href="#cb36-5"></a>a0 <span class="op">=</span> (sea2.mean() <span class="op">-</span> theta_mod_fit.params[<span class="st">'b0'</span>]<span class="op">*</span>(<span class="dv">503</span>)<span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="fl">1e6</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a>xvals <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">505</span>)</span>
+<span id="cb36-7"><a href="#cb36-7"></a>yvals1 <span class="op">=</span> a0 <span class="op">+</span> theta_mod_fit.params[<span class="st">'b0'</span>]<span class="op">*</span>(xvals <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb36-8"><a href="#cb36-8"></a>yvals1 <span class="op">=</span> pd.Series(data<span class="op">=</span>yvals1, index<span class="op">=</span>sea2.index)</span>
+<span id="cb36-9"><a href="#cb36-9"></a></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="co"># get short term trend series</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a>a2 <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">*</span>a0</span>
+<span id="cb36-12"><a href="#cb36-12"></a>b2 <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">*</span>theta_mod_fit.params[<span class="st">'b0'</span>]</span>
+<span id="cb36-13"><a href="#cb36-13"></a>yvals2 <span class="op">=</span> a2 <span class="op">+</span> b2<span class="op">*</span>(xvals <span class="op">-</span> <span class="dv">1</span>) <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>(sea2_mult.resid <span class="op">+</span> sea2_mult.trend)</span>
+<span id="cb36-14"><a href="#cb36-14"></a>yvals2 <span class="op">=</span> pd.Series(data<span class="op">=</span>yvals2, index<span class="op">=</span>sea2.index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e5c79e6b" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>fig <span class="op">=</span> (sea2_mult.resid <span class="op">+</span> sea2_mult.trend).plot(label<span class="op">=</span><span class="st">'Seasonally adjusted'</span>, </span>
+<span id="cb37-2"><a href="#cb37-2"></a>                                               legend<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a>yvals1.plot(legend<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Long-term trend'</span>, style<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb37-4"><a href="#cb37-4"></a>yvals2.plot(legend<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Short-term trend'</span>, style<span class="op">=</span><span class="st">"--"</span>)<span class="op">;</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a>fig.set_title(<span class="st">"Theta decomposition"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-32-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="951" height="376"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we visualise the forecasts from this theta decomposition model.</p>
+<div id="0e1a8305" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>theta_forecasts <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb38-2"><a href="#cb38-2"></a>    {</span>
+<span id="cb38-3"><a href="#cb38-3"></a>        <span class="st">"original"</span>: sea2,</span>
+<span id="cb38-4"><a href="#cb38-4"></a>        <span class="st">"theta forecast"</span>: theta_mod_fit.forecast(<span class="dv">24</span>)</span>
+<span id="cb38-5"><a href="#cb38-5"></a>    }</span>
+<span id="cb38-6"><a href="#cb38-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0fa3af71" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>theta_forecasts.tail(<span class="dv">360</span>).plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-34-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="943" height="351"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="forecasting-with-seasonal-decomposition" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="forecasting-with-seasonal-decomposition"><span class="header-section-number">6.7</span> Forecasting with Seasonal Decomposition</h2>
+<p>Continuing with the tourism data, we demonstrate how we can utilise a seasonal decomposition (not theta decomposition) model to make forecasts. Recall that a seasonal decomposition breaks the series down into the trend, seasonal and residual components. Seasonal decompositions are typically used to <em>study</em> a time series, but they can also be used to make forecasts. One approach is to use either ARIMA or ETS to predict the seasonally adjusted component, and then to use a seasonal naive model to predict the seasonal component. These two forecasts will then be combined to create the final forecast.</p>
+<div id="099875b6" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>stlf <span class="op">=</span> STLForecast(sea2, ARIMA, model_kwargs<span class="op">=</span>{<span class="st">"order"</span>: (<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>)})</span>
+<span id="cb40-2"><a href="#cb40-2"></a>res <span class="op">=</span> stlf.fit( )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/statsmodels/tsa/statespace/sarimax.py:966: UserWarning:
+
+Non-stationary starting autoregressive parameters found. Using zeros as starting parameters.
+</code></pre>
+</div>
+</div>
+<div id="8b30f340" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>forecasts2 <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb42-2"><a href="#cb42-2"></a>    {</span>
+<span id="cb42-3"><a href="#cb42-3"></a>        <span class="st">"original"</span>: sea2,</span>
+<span id="cb42-4"><a href="#cb42-4"></a>        <span class="st">"dcmp forecast"</span>: res.forecast(<span class="dv">24</span>)</span>
+<span id="cb42-5"><a href="#cb42-5"></a>    }</span>
+<span id="cb42-6"><a href="#cb42-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="637cb7e1" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>forecasts2.tail(<span class="dv">360</span>).plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-37-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="951" height="351"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="miscellaneous-topics" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="miscellaneous-topics"><span class="header-section-number">6.8</span> Miscellaneous Topics</h2>
+<section id="time-series-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="time-series-clustering">Time Series Clustering</h3>
+<div id="exm-us-emp-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 6.12 (Example: Time Series Clustering, US Employment Data)</strong></span> </p>
+<p>The <a href="https://otexts.com/fpp3/">Forecasting: Principles and Practice</a> contains time series data on employment in various sectors in the US. There are 148 unique series in the dataset.</p>
+<div id="765dc6fa" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>us_employment <span class="op">=</span> pd.read_csv(<span class="st">"data/us_employment.csv"</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>], date_format<span class="op">=</span><span class="st">"%Y %b"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2"></a></span>
+<span id="cb44-3"><a href="#cb44-3"></a>series_ids <span class="op">=</span> us_employment.Series_ID.unique()</span>
+<span id="cb44-4"><a href="#cb44-4"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="bu">len</span>(series_ids)<span class="sc">}</span><span class="ss"> unique series in the dataset."</span>)</span>
+<span id="cb44-5"><a href="#cb44-5"></a><span class="co">#us_employment.Month.set_index</span></span>
+<span id="cb44-6"><a href="#cb44-6"></a></span>
+<span id="cb44-7"><a href="#cb44-7"></a>us_employment.sample(n<span class="op">=</span><span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 148 unique series in the dataset.</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Month</th>
+<th data-quarto-table-cell-role="th">Series_ID</th>
+<th data-quarto-table-cell-role="th">Title</th>
+<th data-quarto-table-cell-role="th">Employed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3498</td>
+<td>1988-04-01</td>
+<td>CEU1000000001</td>
+<td>Mining and Logging</td>
+<td>764.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25500</td>
+<td>1964-07-01</td>
+<td>CEU3133410001</td>
+<td>Durable Goods: Computer and Peripheral Equipment</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">94614</td>
+<td>1990-10-01</td>
+<td>CEU6000000001</td>
+<td>Professional and Business Services</td>
+<td>10945.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8065</td>
+<td>1965-02-01</td>
+<td>CEU1021210001</td>
+<td>Mining and Logging: Coal Mining</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13135</td>
+<td>1983-11-01</td>
+<td>CEU2023620001</td>
+<td>Construction: Nonresidential Building</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">37974</td>
+<td>1954-04-01</td>
+<td>CEU3231500001</td>
+<td>Nondurable Goods: Apparel</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">137888</td>
+<td>1963-03-01</td>
+<td>CEU9092200001</td>
+<td>Government: State Government, Excluding Education</td>
+<td>1164.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">85433</td>
+<td>1952-06-01</td>
+<td>CEU5552200001</td>
+<td>Financial Activities: Credit Intermediation an...</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Here is a plot of one of the time series in the dataset.</p>
+<div id="4ff7341a" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>us_employment[us_employment.Title <span class="op">==</span> <span class="st">"Total Private"</span>].plot(x<span class="op">=</span><span class="st">'Month'</span>, </span>
+<span id="cb46-2"><a href="#cb46-2"></a>                                                           y<span class="op">=</span><span class="st">'Employed'</span>, </span>
+<span id="cb46-3"><a href="#cb46-3"></a>                                                           figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-39-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="982" height="356"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Since we are going to perform clustering on the time series data, our first step is to remove the missing values.</p>
+<div id="82568b11" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>us_full <span class="op">=</span> us_employment[(us_employment.Month <span class="op">&gt;=</span> datetime.datetime(<span class="dv">2002</span>, <span class="dv">9</span>, <span class="dv">30</span>)) <span class="op">&amp;</span> (us_employment.Month <span class="op">&lt;</span> datetime.datetime(<span class="dv">2018</span>, <span class="dv">1</span>, <span class="dv">1</span>) )   ]</span>
+<span id="cb47-2"><a href="#cb47-2"></a>us2 <span class="op">=</span> us_full.pivot(index<span class="op">=</span><span class="st">'Series_ID'</span>, columns<span class="op">=</span><span class="st">'Month'</span>, values<span class="op">=</span><span class="st">"Employed"</span>)</span>
+<span id="cb47-3"><a href="#cb47-3"></a>us2_array <span class="op">=</span> us2.to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can begin the clustering procedure.</p>
+<div id="fdcfa775" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a><span class="co"># This already converts the correlation into a distance (see the help page)</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a>out <span class="op">=</span> pdist(us2_array, metric<span class="op">=</span><span class="st">'correlation'</span>)</span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="co">#corr_mat = np.corrcoef(X, rowvar=False)</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a><span class="co">#dist_mat = (1 - corr_mat)/2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c2be09b2" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1"></a>lm1 <span class="op">=</span> hierarchy.linkage(out, method<span class="op">=</span><span class="st">'average'</span>, optimal_ordering<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb49-2"><a href="#cb49-2"></a></span>
+<span id="cb49-3"><a href="#cb49-3"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb49-4"><a href="#cb49-4"></a>hierarchy.dendrogram(lm1, p<span class="op">=</span><span class="dv">3</span>, truncate_mode<span class="op">=</span><span class="st">'level'</span>,color_threshold<span class="op">=</span><span class="va">True</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-42-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="943" height="414"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We reorder the columns and rows in the matrix so that similar time series appear next to one another.</p>
+<div id="71f3c86e" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a>X_ord <span class="op">=</span> us2_array[hierarchy.leaves_list(lm1)]</span>
+<span id="cb50-2"><a href="#cb50-2"></a>corr_mat_ord <span class="op">=</span> np.corrcoef(X_ord)</span>
+<span id="cb50-3"><a href="#cb50-3"></a><span class="co">#corr_mat_ord.shape</span></span>
+<span id="cb50-4"><a href="#cb50-4"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>))</span>
+<span id="cb50-5"><a href="#cb50-5"></a>sns.heatmap(corr_mat_ord, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>, cmap<span class="op">=</span><span class="st">'coolwarm_r'</span>, center<span class="op">=</span><span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb50-6"><a href="#cb50-6"></a><span class="co">#, annot=True, cmap='coolwarm', center=0)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-43-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1108" height="1168"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>In the next few plots, we pick out series that are close to one another in blue segments of the matrix above to inspect how similar they are, and in what ways they are similar to one another.</p>
+<div id="a3811c77" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a>us2_series <span class="op">=</span> us2.index.to_list()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="50bb92f2" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Similar series set 1</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="co"># ss = [us2_series[x] for x in [22, 24, 32, 33, 34]]</span></span>
+<span id="cb52-3"><a href="#cb52-3"></a>ss <span class="op">=</span> [us2_series[x] <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">143</span>, <span class="dv">144</span>, <span class="dv">145</span>]]</span>
+<span id="cb52-4"><a href="#cb52-4"></a>us2.T.loc[:, ss].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span>
+<span id="cb52-5"><a href="#cb52-5"></a></span>
+<span id="cb52-6"><a href="#cb52-6"></a><span class="co"># Similar series set 2</span></span>
+<span id="cb52-7"><a href="#cb52-7"></a><span class="co">#ss = us2_series[65:68]</span></span>
+<span id="cb52-8"><a href="#cb52-8"></a><span class="co">#us2.T.loc[:, ss].plot(logy=False, figsize=(12,4)); # try with and without log</span></span>
+<span id="cb52-9"><a href="#cb52-9"></a></span>
+<span id="cb52-10"><a href="#cb52-10"></a><span class="co"># Simular series set 3:</span></span>
+<span id="cb52-11"><a href="#cb52-11"></a></span>
+<span id="cb52-12"><a href="#cb52-12"></a><span class="co">#ss = [us2_series[x] for x in [92, 94, 96, 97, 98]]</span></span>
+<span id="cb52-13"><a href="#cb52-13"></a><span class="co">#us2.T.loc[:, ss].plot(logy=False, figsize=(12,4));</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-ts_files/figure-html/cell-45-output-1.png" width="964" height="356" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">6.9</span> Summary</h2>
+<p>We have briefly covered the following time series concepts: Exploratory data analysis, assessing point forecasts and a few commonly used models. To finish up the section, we also applied clustering to time series. With today’s code, the model-fitting routines are easier to run. As always, the onus is on us as analysts to inspect the residuals from the models to understand the time series we are working with.</p>
+</section>
+<section id="references" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="references"><span class="header-section-number">6.10</span> References</h2>
+<section id="stats-models-pages" class="level3">
+<h3 class="anchored" data-anchor-id="stats-models-pages">Stats models pages</h3>
+<ol type="1">
+<li><a href="https://www.statsmodels.org/dev/tsa.html">Main page</a></li>
+<li><a href="https://www.statsmodels.org/dev/tsa.html#module-statsmodels.tsa.forecasting">Forecasting with statsmodels</a></li>
+<li><a href="https://www.statsmodels.org/dev/examples/notebooks/generated/theta-model.html">Theta model</a></li>
+</ol>
+</section>
+<section id="forecasting-principles-and-practice" class="level3">
+<h3 class="anchored" data-anchor-id="forecasting-principles-and-practice">Forecasting principles and practice</h3>
+<p>Although the code for this textboook uses R, the concepts are very well explained. It is written by one of the foremost experts in time series forecasting methods. The reference is <span class="citation" data-cites="hyndman2018forecasting">Hyndman and Athanasopoulos (<a href="references.html#ref-hyndman2018forecasting" role="doc-biblioref">2018</a>)</span>.</p>
+<ul>
+<li><a href="https://otexts.com/fpp3/">Forecasting: Principles and Practice</a></li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-assimakopoulos2000theta" class="csl-entry" role="listitem">
+Assimakopoulos, Vassilis, and Konstantinos Nikolopoulos. 2000. <span>“The Theta Model: A Decomposition Approach to Forecasting.”</span> <em>International Journal of Forecasting</em> 16 (4): 521–30.
+</div>
+<div id="ref-hyndman2018forecasting" class="csl-entry" role="listitem">
+Hyndman, Rob J, and George Athanasopoulos. 2018. <em>Forecasting: Principles and Practice</em>. OTexts.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./05-regression.html" class="pagination-link" aria-label="Linear Regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./07-simulation.html" class="pagination-link" aria-label="Simulation">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

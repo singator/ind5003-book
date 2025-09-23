@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>9&nbsp; Computer Vision – Data Analytics for Sense-Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./08-supervised.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./09-vision.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analytics for Sense-Making</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-vision.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Academic References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">9.1</span> Introduction</a></li>
+  <li><a href="#image-processing" id="toc-image-processing" class="nav-link" data-scroll-target="#image-processing"><span class="header-section-number">9.2</span> Image Processing</a></li>
+  <li><a href="#working-with-masks" id="toc-working-with-masks" class="nav-link" data-scroll-target="#working-with-masks"><span class="header-section-number">9.3</span> Working with Masks</a></li>
+  <li><a href="#modifying-perspective-of-images" id="toc-modifying-perspective-of-images" class="nav-link" data-scroll-target="#modifying-perspective-of-images"><span class="header-section-number">9.4</span> Modifying Perspective of Images</a></li>
+  <li><a href="#computer-vision-tasks" id="toc-computer-vision-tasks" class="nav-link" data-scroll-target="#computer-vision-tasks"><span class="header-section-number">9.5</span> Computer Vision Tasks</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.6</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">9.1</span> Introduction</h2>
+<p>Data science has a number of applications in computer vision. These have increased in number and accuray in the past 5 years or so due to the advancements in deep learning (both theory and computational feasibility). In this topic, we shall experiment with some of the applications, utilising existing deep learning models.</p>
+<p>Here is a short list of applications of computer vision techniques:</p>
+<ol type="1">
+<li>Optical Character Recognition: Reading handwritten documents, car license plate numbers from images.<br>
+</li>
+<li>Surveillance and traffic monitoring: Monitoring cars on a highway, tracking humans in security cameras for suspicious activity.</li>
+<li>Machine inspection: Automatically detecting damage on components manufactured, such as silicon wafers, etc.</li>
+</ol>
+<p><a href="https://www.cs.ubc.ca/~lowe/vision.html">Here</a> is an old page with a more comprehensive list of applications.</p>
+<p>In computer vision, the goal is to get a computer to perceive the world as <em>we</em> see it. This is not easy even for us to do - we can get fooled by optical illusions such as the ones below.</p>
+<p>In general though, for us, it is possible to do things like pick out faces that we recognise from a photograph of a crowd. But how can we get a computer to do it?</p>
+<div id="bfe5bace" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> cv2</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> sys</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> os</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML, Image, Video</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a>opencv_path <span class="op">=</span> <span class="st">"opencv/samples/data/"</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>opencvxtra_path <span class="op">=</span> <span class="st">"opencv_extra/testdata/dnn/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="image-processing" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="image-processing"><span class="header-section-number">9.2</span> Image Processing</h2>
+<section id="reading-images" class="level3">
+<h3 class="anchored" data-anchor-id="reading-images">Reading Images</h3>
+<p>The <code>opencv</code> package contains routines for reading images into Python. Images are typically represented using the RGB colorspace. Each image is a (W x H x 3) numpy array. Each layer corresponds to one of these channels. However, opencv uses the order BGR. When you use <code>plt.imshow</code> to plot an image that has been read in using opencv, take note of this, as it might not appear “correct”.</p>
+<div id="2c0d02fc" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>Image(<span class="st">"data/starry_night.jpg"</span>, width<span class="op">=</span><span class="dv">240</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> matplotlib <span class="im">import</span> colormaps</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#list(colormaps)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b79349c8" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>starry_night <span class="op">=</span> cv2.imread(<span class="st">'data/starry_night.jpg'</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># Reversed (not correct)</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>plt.imshow(starry_night)<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#plt.imshow(starry_night[:, :, 0], cmap='Blues');</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-4-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="517" height="416"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The following code should open up the starry night image in a new window on your computer.</p>
+<div id="d61f666f" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># plotting with cv2.imshow returns the correct colours.</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>cv2.namedWindow(<span class="st">'dst_rt'</span>, cv2.WINDOW_NORMAL)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>cv2.resizeWindow(<span class="st">'dst_rt'</span>, starry_night.shape[<span class="dv">1</span>], starry_night.shape[<span class="dv">0</span>])</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># hit "q" to close window (do not hit the "X" button)</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>cv2.imshow(<span class="st">'dst_rt'</span>, starry_night)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>cv2.waitKey(<span class="dv">0</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>cv2.destroyAllWindows()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="working-with-masks" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="working-with-masks"><span class="header-section-number">9.3</span> Working with Masks</h2>
+<p>When working in a computer vision project, we often need to extract parts of the image to work with, or to modify. This is typically done using masks. Masks are black-and-white images that identify the foreground (white) and the background (black).</p>
+<p>Let us work with the following image of Lionel Messi, and see how we can use masks and colour selection to outline the ball.</p>
+<div id="0c64dd04" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>Image(<span class="st">'data/messi5.jpg'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-6-output-1.jpeg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our first task is to read the data into Python, and use a colour picker to identify the colour of the ball. The following website provides a useful tool for us to upload an image, and isolate the HSV (Hue-Saturation-Value) representaion of the colour we wish to pick out:</p>
+<p><a href="https://redketchup.io/color-picker" class="uri">https://redketchup.io/color-picker</a></p>
+<p>Using this website, we learn that the RGB representation we want is RGB=(244,251,95). We the convert this to HSV using a colour conversion function.</p>
+<div id="00e0ae5d" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>messi <span class="op">=</span> cv2.imread(<span class="st">'data/messi5.jpg'</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>hsv <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2HSV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="58798742" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># 244, 251, 95</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>cv2.cvtColor(np.uint8([[[<span class="dv">95</span>, <span class="dv">251</span>, <span class="dv">244</span> ]]]), cv2.COLOR_BGR2HSV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>array([[[ 31, 158, 251]]], dtype=uint8)</code></pre>
+</div>
+</div>
+<div id="da44c73b" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># define range of yellow color in HSV </span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>lower_yellow <span class="op">=</span> np.array([<span class="dv">21</span>,  <span class="dv">100</span>, <span class="dv">100</span>])</span>
+<span id="cb9-3"><a href="#cb9-3"></a>upper_yellow <span class="op">=</span> np.array([<span class="dv">41</span>, <span class="dv">255</span>, <span class="dv">255</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6cba6684" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Threshold the HSV image to get only blue colors</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>mask1 <span class="op">=</span> cv2.inRange(hsv, lower_yellow, upper_yellow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compare the black-and-white image below with the original one. The white regions below correspond to yellow coloured sections in the original image. The white pixels take the value 255, while the black pixels are 0. We are going to modify the numpy array corresponding to this mask to correspond to only the ball.</p>
+<p><em>Take note of where the origin is: at the top-left corner. The x-values increase to the right from there; y-values increase downward from there.</em></p>
+<div id="e8aaf8df" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>plt.imshow(mask1, cmap<span class="op">=</span><span class="st">'gray'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-11-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="575" height="371"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="a18fdbd5" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>mask1[:, :<span class="dv">330</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>mask1[:, <span class="dv">405</span>:] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next section of code identifies contours around the ball region, computes the convex hull around these points and then draws this on the original image.</p>
+<div id="51487842" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a>contours, _ <span class="op">=</span> cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a>largest_contour <span class="op">=</span> <span class="bu">max</span>(contours, key<span class="op">=</span>cv2.contourArea)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>hull <span class="op">=</span> cv2.convexHull(largest_contour)</span>
+<span id="cb13-7"><a href="#cb13-7"></a>cv2.drawContours(messi, [hull], <span class="op">-</span><span class="dv">1</span>, (<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">255</span>), thickness<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-13-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="575" height="371"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="modifying-perspective-of-images" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="modifying-perspective-of-images"><span class="header-section-number">9.4</span> Modifying Perspective of Images</h2>
+<p>There are situations where we need to transform the perspective of an image, in order to identify objects better, or to perform OCR better. To do so, we need to provide a map of four points from the original image (in the same plane), and the corresponding four points in the transformed image. Here are a couple of examples.</p>
+<div id="exm-sudoku-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 9.1 (Example 1: Sudoku)</strong></span> </p>
+<p>Here is an example of transforming the perspective.</p>
+<div id="106ecfcc" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>sudoku <span class="op">=</span> cv2.imread(<span class="st">'data/sudoku.png'</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>rows,cols,ch <span class="op">=</span> sudoku.shape</span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">73</span>,<span class="dv">85</span>], [<span class="dv">350</span>, <span class="dv">88</span>], [<span class="dv">355</span>, <span class="dv">360</span>], [<span class="dv">48</span>, <span class="dv">357</span>]])</span>
+<span id="cb14-5"><a href="#cb14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6"></a>pts <span class="op">=</span> np.array(pts1, np.int32)</span>
+<span id="cb14-7"><a href="#cb14-7"></a>img2 <span class="op">=</span> cv2.polylines(sudoku, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span> )</span>
+<span id="cb14-8"><a href="#cb14-8"></a>plt.imshow(img2)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-14-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="420" height="416"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="ea7f69b2" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">300</span>],[<span class="dv">0</span>,<span class="dv">300</span>]])</span>
+<span id="cb15-2"><a href="#cb15-2"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>dst <span class="op">=</span> cv2.warpPerspective(sudoku ,M,(<span class="dv">300</span>,<span class="dv">300</span>))</span>
+<span id="cb15-4"><a href="#cb15-4"></a> </span>
+<span id="cb15-5"><a href="#cb15-5"></a>plt.subplot(<span class="dv">121</span>),plt.imshow(sudoku),plt.title(<span class="st">'Input'</span>)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>plt.subplot(<span class="dv">122</span>),plt.imshow(dst),plt.title(<span class="st">'Output'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-15-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="575" height="300"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-football-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 9.2 (Example 2: Football)</strong></span> </p>
+<div id="f95a9153" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>Image(<span class="st">'data/football1.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="ec096d84" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>football1 <span class="op">=</span> cv2.imread(<span class="st">'data/football1.png'</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">118</span>]])</span>
+<span id="cb17-3"><a href="#cb17-3"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">100</span>], [<span class="dv">45</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">100</span>]])</span>
+<span id="cb17-4"><a href="#cb17-4"></a></span>
+<span id="cb17-5"><a href="#cb17-5"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
+<span id="cb17-6"><a href="#cb17-6"></a>dst <span class="op">=</span> cv2.warpPerspective(football1, M, (<span class="dv">504</span>, <span class="dv">360</span>))</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a>pts <span class="op">=</span> np.array([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">119</span>]], np.int32)</span>
+<span id="cb17-9"><a href="#cb17-9"></a>pts <span class="op">=</span> pts.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb17-10"><a href="#cb17-10"></a>img2 <span class="op">=</span> cv2.polylines(football1, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7e86471d" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>)) </span>
+<span id="cb18-2"><a href="#cb18-2"></a>gs <span class="op">=</span> fig.add_gridspec(<span class="dv">1</span>, <span class="dv">2</span>, width_ratios<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">1</span>]) </span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># First subplot</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>ax1 <span class="op">=</span> fig.add_subplot(gs[<span class="dv">0</span>])</span>
+<span id="cb18-6"><a href="#cb18-6"></a>ax1.imshow(cv2.cvtColor(img2, cv2.COLOR_BGR2RGB))</span>
+<span id="cb18-7"><a href="#cb18-7"></a>ax1.set_title(<span class="st">'Original Screen capture'</span>)</span>
+<span id="cb18-8"><a href="#cb18-8"></a></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># Second subplot</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>ax2 <span class="op">=</span> fig.add_subplot(gs[<span class="dv">1</span>])</span>
+<span id="cb18-11"><a href="#cb18-11"></a>ax2.imshow(cv2.cvtColor(dst[:<span class="dv">300</span>, :<span class="dv">200</span>], cv2.COLOR_BGR2RGB))</span>
+<span id="cb18-12"><a href="#cb18-12"></a>ax2.set_title(<span class="st">'Transformed Image'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="09-vision_files/figure-html/cell-18-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="798" height="400"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="computer-vision-tasks" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="computer-vision-tasks"><span class="header-section-number">9.5</span> Computer Vision Tasks</h2>
+<p>Just as we observed there are numerous NLP tasks, the field of computer vision has made great strides in several tasks. Among them are:</p>
+<ol type="1">
+<li>Object detection</li>
+<li>Object classification</li>
+<li>Object tracking</li>
+<li>Face detection</li>
+<li>Pose estimation</li>
+<li>QR/Bar code detection</li>
+<li>Text detection/extraction</li>
+</ol>
+<p>Almost all the models that perform well in the above tasks are deep learning models. In the next few sections, we are going to practice running/configuring some of the above models. Although these models are already trained, it is a little tricky to find the resources and parameters to get them up and running.</p>
+<p>There are three repositories of interest:</p>
+<ol type="1">
+<li><code>opencv</code>: This contains example images and videos, and configuration files for several models.</li>
+<li><code>opencv_extra</code>: This contains more configuration details for the models, along with routines to download model weights.</li>
+<li><code>opencv_zoo</code>: This contains a smaller range of models, along with the model weights.</li>
+</ol>
+<p>For our course, we have pre-downloaded some models for us to play around with, <code>models</code>. However, the general approach to start working on one of these models is as follows:</p>
+<ol type="1">
+<li>Download the model weights using <code>opencv_extra/testdata/dnn/download_models.py</code></li>
+<li>Figure out what other configuration files/parameters are needed for this model. Sometimes information is in <code>opencv/samples/dnn/models.yml</code>. At other times, you may need to figure it out from the github repository for the particular model.</li>
+<li>Test it out using one of the sample scripts from <code>opencv/samples/dnn/*.py</code></li>
+<li>Once you have that working, inspect the script to obtain details on how to call the model programmatically, and proceed from there.</li>
+</ol>
+</section>
+<section id="references" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="references"><span class="header-section-number">9.6</span> References</h2>
+<section id="opencv-documentation" class="level3">
+<h3 class="anchored" data-anchor-id="opencv-documentation">Opencv documentation</h3>
+<ol type="1">
+<li><a href="https://docs.opencv.org/4.10.0/d6/d00/tutorial_py_root.html">Python tutorials</a></li>
+<li><a href="https://docs.opencv.org/4.10.0/df/d9d/tutorial_py_colorspaces.html">Changing colour spaces</a></li>
+<li><a href="https://docs.opencv.org/3.4/d1/dc5/tutorial_background_subtraction.html">Background subtraction</a></li>
+<li><a href="https://courses.opencv.org/courses/course-v1:OpenCV+Bootcamp+CV0/about">Opencv bootcamp</a>: This is a very useful course on opencv techniques. It will also provide you several more notebooks with template code for object tracking, etc.</li>
+</ol>
+</section>
+<section id="books" class="level3">
+<h3 class="anchored" data-anchor-id="books">Books</h3>
+<p>A very comprehensive book on vision techniques is by <span class="citation" data-cites="szeliski2022computer">Szeliski (<a href="references.html#ref-szeliski2022computer" role="doc-biblioref">2022</a>)</span>. An online version can be found here: <a href="https://szeliski.org/Book/">Computer Vision: Applications and Algorithms</a></p>
+</section>
+<section id="github-repositories" class="level3">
+<h3 class="anchored" data-anchor-id="github-repositories">Github repositories</h3>
+<ol type="1">
+<li><a href="https://github.com/opencv/opencv">opencv</a></li>
+<li><a href="https://github.com/opencv/opencv_extra">opencv-extra</a></li>
+<li><a href="https://github.com/opencv/opencv_zoo">opencv model zoo</a></li>
+</ol>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-szeliski2022computer" class="csl-entry" role="listitem">
+Szeliski, Richard. 2022. <em>Computer Vision: Algorithms and Applications</em>. Springer Nature.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./08-supervised.html" class="pagination-link" aria-label="Supervised Learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="Academic References">
+        <span class="nav-page-text">Academic References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

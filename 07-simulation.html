@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Simulation – Data Analytics for Sense-Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./08-supervised.html" rel="next">
+<link href="./06-ts.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./07-simulation.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analytics for Sense-Making</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-simulation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Academic References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link active" data-scroll-target="#random-variables"><span class="header-section-number">7.1</span> Random Variables</a></li>
+  <li><a href="#general-principles-in-simulation-studies" id="toc-general-principles-in-simulation-studies" class="nav-link" data-scroll-target="#general-principles-in-simulation-studies"><span class="header-section-number">7.2</span> General Principles in Simulation Studies</a></li>
+  <li><a href="#object-oriented-programming-in-python" id="toc-object-oriented-programming-in-python" class="nav-link" data-scroll-target="#object-oriented-programming-in-python"><span class="header-section-number">7.3</span> Object-Oriented Programming in Python</a></li>
+  <li><a href="#introduction-to-agent-based-models" id="toc-introduction-to-agent-based-models" class="nav-link" data-scroll-target="#introduction-to-agent-based-models"><span class="header-section-number">7.4</span> Introduction to Agent Based Models</a></li>
+  <li><a href="#boltzmann-model-overview" id="toc-boltzmann-model-overview" class="nav-link" data-scroll-target="#boltzmann-model-overview"><span class="header-section-number">7.5</span> Boltzmann Model Overview</a></li>
+  <li><a href="#agent-and-model-classes-v1" id="toc-agent-and-model-classes-v1" class="nav-link" data-scroll-target="#agent-and-model-classes-v1"><span class="header-section-number">7.6</span> Agent and Model Classes (v1)</a></li>
+  <li><a href="#multiple-iterations" id="toc-multiple-iterations" class="nav-link" data-scroll-target="#multiple-iterations"><span class="header-section-number">7.7</span> Multiple Iterations</a></li>
+  <li><a href="#agent-and-model-classes-v2" id="toc-agent-and-model-classes-v2" class="nav-link" data-scroll-target="#agent-and-model-classes-v2"><span class="header-section-number">7.8</span> Agent and Model Classes (v2)</a></li>
+  <li><a href="#agent-and-model-classes-v3" id="toc-agent-and-model-classes-v3" class="nav-link" data-scroll-target="#agent-and-model-classes-v3"><span class="header-section-number">7.9</span> Agent and Model Classes (v3)</a></li>
+  <li><a href="#visualisations" id="toc-visualisations" class="nav-link" data-scroll-target="#visualisations"><span class="header-section-number">7.10</span> Visualisations</a></li>
+  <li><a href="#simpler-simulation-models" id="toc-simpler-simulation-models" class="nav-link" data-scroll-target="#simpler-simulation-models"><span class="header-section-number">7.11</span> Simpler Simulation Models</a></li>
+  <li><a href="#summary-simulation-based-modeling" id="toc-summary-simulation-based-modeling" class="nav-link" data-scroll-target="#summary-simulation-based-modeling"><span class="header-section-number">7.12</span> Summary: Simulation-Based Modeling</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7.13</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="random-variables" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">7.1</span> Random Variables</h2>
+<p>In statistics, we use random variables to describe the probabilistic behaviour of phenomenon. Random variables are real numbers that represent the phenomena we observe. For instance, we might let <span class="math inline">\(X\)</span> represent a coin toss, with <span class="math inline">\(X=1\)</span> representing Heads and <span class="math inline">\(X=0\)</span> representing Tails.</p>
+<p>Random variables come with a rule (or function) that prescribes the probabilities with which it takes on particular values. For instance, if we had a fair coin, then the rule would be that <span class="math display">\[
+P(X=1) = P(X=0) = \frac{1}{2}
+\]</span></p>
+<p>On the other hand, a biased coin might follow the rule <span class="math display">\[
+P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
+\]</span></p>
+<p>This rule tells us which events are more likely, and which are less likely.</p>
+<div id="a78e00fa" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> math <span class="im">import</span> pi </span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">from</span> IPython.display <span class="im">import</span> IFrame,Video</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> mesa</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> nltk</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="im">from</span> nltk <span class="im">import</span> word_tokenize</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> numpy.random <span class="im">import</span> default_rng</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom, bernoulli, norm, expon, uniform</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="discrete-vs.-continuous-random-variables." class="level3">
+<h3 class="anchored" data-anchor-id="discrete-vs.-continuous-random-variables.">Discrete vs.&nbsp;Continuous Random Variables.</h3>
+<p>Discrete random variables take on only a countable number of values. Examples are:</p>
+<ul>
+<li>A coin toss (<span class="math inline">\(\{0, 1\}\)</span>)</li>
+<li>The number of taxis passing by a particular junction between 12noon and 1pm. (<span class="math inline">\(\{0, 1, 2, \ldots, \}\)</span>)</li>
+<li>The number of coin tosses until we observe Heads. (<span class="math inline">\(\{1, 2, 3, \ldots, \}\)</span>)</li>
+</ul>
+<p>Discrete random variables are defined by their probability mass function (pmf), which is just a table or a function describing <span class="math inline">\(P(X=i)\)</span> for all possible <span class="math inline">\(i\)</span> values. Once we know the pmf of a random variable, we know everything about it - the mean, variance, quantiles, maximum values, etc.</p>
+<p>We can visualise a pmf using a bar-chart. Here is the pmf for the above biased coin.</p>
+<div id="7c8fbf97" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>plt.bar([<span class="dv">0</span>,<span class="dv">1</span>], [<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="op">/</span><span class="dv">3</span>], tick_label<span class="op">=</span>[<span class="st">'0'</span>, <span class="st">'1'</span>], width<span class="op">=</span><span class="fl">0.3</span>)<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>plt.xlim(<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span>)<span class="op">;</span> </span>
+<span id="cb2-3"><a href="#cb2-3"></a>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">;</span> </span>
+<span id="cb2-4"><a href="#cb2-4"></a>plt.title(<span class="st">'pmf of </span><span class="ch">\'</span><span class="st">X</span><span class="ch">\'</span><span class="st"> random variable'</span> )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-3-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="571" height="431"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here is the pmf for a random variable representing the total number of Heads after 10 tosses of that same coin. Suppose we call that new random variable <span class="math inline">\(Y\)</span>.</p>
+<div id="439990fd" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>probs <span class="op">=</span> binom.pmf(np.arange(<span class="dv">0</span>, <span class="dv">11</span>), n<span class="op">=</span><span class="dv">10</span>, p<span class="op">=</span><span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>plt.bar(np.arange(<span class="dv">0</span>, <span class="dv">11</span>), probs)<span class="op">;</span>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>plt.title(<span class="st">'pmf of no. of coin tosses'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-4-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="571" height="431"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If we wish to find the probability of events, for instance, <span class="math inline">\(P(Y \le 4)\)</span>, we sum up the heights of the bars.</p>
+<p>Continuous random variables are defined by what is known as a probability density function. Continuous random variables can take on an uncountable number of values, for instance, all real numbers in the interval <span class="math inline">\([0,1]\)</span>.</p>
+<div id="c26e31da" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, num<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>y <span class="op">=</span> norm.pdf(x)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>), facecolor<span class="op">=</span><span class="st">'0.9'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>plt.subplot(<span class="dv">131</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>plt.plot(x,y)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>plt.title(<span class="st">'Normal pdf'</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>y <span class="op">=</span> expon.pdf(x[x<span class="op">&gt;</span><span class="dv">0</span>])</span>
+<span id="cb4-10"><a href="#cb4-10"></a>plt.subplot(<span class="dv">132</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>plt.plot(x[x<span class="op">&gt;</span><span class="dv">0</span>],y)</span>
+<span id="cb4-12"><a href="#cb4-12"></a>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb4-13"><a href="#cb4-13"></a>plt.title(<span class="st">'Exponential pdf'</span>)<span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, num<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb4-16"><a href="#cb4-16"></a>y <span class="op">=</span> uniform.pdf(x)</span>
+<span id="cb4-17"><a href="#cb4-17"></a>plt.subplot(<span class="dv">133</span>)</span>
+<span id="cb4-18"><a href="#cb4-18"></a>plt.plot(x,y)</span>
+<span id="cb4-19"><a href="#cb4-19"></a>plt.ylim(<span class="dv">0</span>,<span class="fl">1.1</span>)</span>
+<span id="cb4-20"><a href="#cb4-20"></a>plt.title(<span class="st">'Uniform pdf'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-5-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="943" height="357"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="generating-random-variates" class="level3">
+<h3 class="anchored" data-anchor-id="generating-random-variates">Generating Random Variates</h3>
+<p>With a computer, we can generate random variables from almost any distribution. There are built-in routines to generate from the ‘named’ distributions. For instance,</p>
+<div id="e84b85c5" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">5003</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>yvals <span class="op">=</span> np.zeros((<span class="dv">3</span>,<span class="dv">300</span>))</span>
+<span id="cb5-4"><a href="#cb5-4"></a>yvals[<span class="dv">0</span>,:] <span class="op">=</span> rng.normal(size<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>yvals[<span class="dv">1</span>,:] <span class="op">=</span> rng.exponential(size<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>yvals[<span class="dv">2</span>, :] <span class="op">=</span> rng.uniform(size<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>pdfs <span class="op">=</span> [<span class="st">'Normal'</span>, <span class="st">'Exponential'</span>, <span class="st">'Uniform'</span>]</span>
+<span id="cb5-8"><a href="#cb5-8"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>), facecolor<span class="op">=</span><span class="st">'0.9'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="cf">for</span> i <span class="kw">in</span> np.arange(<span class="dv">0</span>,<span class="dv">3</span>):</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, i<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb5-12"><a href="#cb5-12"></a>    plt.hist(yvals[i,:], density<span class="op">=</span><span class="va">True</span>, histtype<span class="op">=</span><span class="st">'step'</span>)</span>
+<span id="cb5-13"><a href="#cb5-13"></a>    plt.title(pdfs[i])</span>
+<span id="cb5-14"><a href="#cb5-14"></a>    plt.ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-6-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="943" height="357"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice how the (normalised) histograms look a lot like the corresponding pdfs.</p>
+</section>
+</section>
+<section id="general-principles-in-simulation-studies" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="general-principles-in-simulation-studies"><span class="header-section-number">7.2</span> General Principles in Simulation Studies</h2>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>The objective of any simulation study is to estimate an expectation <span class="math inline">\(E(X)\)</span>. Simulation studies involve the use of a computer to generate independent copies of the random variable of interest <span class="math inline">\(X\)</span>. Here are a couple of examples where simulation studies would be applicable.</p>
+<p>Through the estimation of <span class="math inline">\(E(X)\)</span>, simulation studies allow us to:</p>
+<ol type="1">
+<li>Consider different planning scenarios and estimate the throughput from them.</li>
+<li>Study the emergent behaviour of complex situations.</li>
+</ol>
+<div id="exm-insurance-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 7.1 (Example: Insurance Claims)</strong></span> </p>
+<p>Before the financial year begins, an insurance company has to decide how much cash to keep, in order to pay out the claims for that year. Suppose that claims are independent of each other and are distributed as <span class="math inline">\(Exp(1/200)\)</span> dollars. This means that the probability density function (pdf) of the random variable is <span class="math inline">\(f_X(x) = \frac{1}{200} \exp(-x/200),\; x &gt; 0\)</span></p>
+<p>Also suppose that the number of claims in a year is a Poisson random variable with mean 8.2.</p>
+<p>An actuary has been asked to determine the size of the reserve fund that should be set up, and he recommends $12,000. We might consider answering the following question using simulation:</p>
+<ul>
+<li>What is the probability that the total claims will exceed the reserve fund?</li>
+</ul>
+<p>If we let <span class="math inline">\(Y\)</span> be the random variable representing the total sum of claims, we are interested in estimating <span class="math inline">\(P(Y &gt; 12000)\)</span>. Since probabilities are expectations, we can use simulation to estimate this value.</p>
+</div>
+<div id="exm-sandwich-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 7.2 (Example: Sandwich Shop Closing Time)</strong></span> </p>
+<p>Here is a slightly more sophisticated example.</p>
+<p>Suppose that you run a sandwich shop, which is open from 9am till 5pm. Your philosophy has always been to serve every customer who has entered before 5pm, even if that requires you to stay back until they have been served. You would like to estimate the mean amount of overtime you have to work.</p>
+<p>If you are willing to assume that the inter-arrival times of customers is <span class="math inline">\(Exp(3)\)</span> hours, then it is possible to simulate this process to estimate the mean time that you would have to remain open, beyond 5pm.</p>
+</div>
+</section>
+<section id="steps-in-a-simulation-study" class="level3">
+<h3 class="anchored" data-anchor-id="steps-in-a-simulation-study">Steps in a Simulation Study</h3>
+<p>The two examples above are known as Discrete Event Simulations. It is one type of simulation study. Another type of simulations are Agent-Based Models. No matter the type of simulation, the basic steps in a simulation study are:</p>
+<ol type="1">
+<li>Identify the random variable of interest and write a program to simulate it.</li>
+<li>Generate an iid sample <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> using this program.</li>
+<li>Estimate <span class="math inline">\(E(X)\)</span> using <span class="math inline">\(\bar{X}\)</span>.</li>
+</ol>
+<p>Before proceeding, let us refresh our knowledge of the properties of the sample mean.</p>
+</section>
+<section id="theory" class="level3">
+<h3 class="anchored" data-anchor-id="theory">Theory</h3>
+<p>There are two important theorems that simulation studies rely on. The first is the Strong Law of Large Numbers (SLLN).</p>
+<section id="strong-law-of-large-numbers" class="level4">
+<h4 class="anchored" data-anchor-id="strong-law-of-large-numbers">Strong Law of Large Numbers</h4>
+<p>If <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are independent and identically distributed with <span class="math inline">\(E(X) &lt; \infty\)</span>, then <span class="math display">\[
+\bar{X} =\frac{1}{n} \sum_{i=1}^n X_i\rightarrow E(X) \quad \text{with probability 1.}
+\]</span></p>
+<p>In the simulation context, it means that as we generate more and more samples (i.e.&nbsp;increase <span class="math inline">\(n\)</span>), our sample mean <span class="math inline">\(\bar{X}\)</span> converges to the desired value <span class="math inline">\(E(X)\)</span>, <em>no matter what the distribution of <span class="math inline">\(X\)</span> is.</em></p>
+<p>The second theorem that aids us is the Central Limit Theorem (CLT).</p>
+</section>
+<section id="central-limit-theorem" class="level4">
+<h4 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h4>
+<p>Let <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> be i.i.d., and suppose that</p>
+<ul>
+<li><span class="math inline">\(-\infty &lt; E(X_1) = \mu &lt; \infty\)</span>.</li>
+<li><span class="math inline">\(Var(X_1) = \sigma^2 &lt; \infty\)</span>.</li>
+</ul>
+<p>Then <span class="math display">\[
+\frac{\sqrt{n} (\bar{X} - \mu)}{\sigma} \Rightarrow N(0,1)
+\]</span> where <span class="math inline">\(\Rightarrow\)</span> denotes convergence in distribution.</p>
+<p>This is sometimes informally interpreted to mean that when <span class="math inline">\(n\)</span> is large, <span class="math inline">\(\bar{X}\)</span> is approximately Normal with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>. In the simulation context, we can use this theorem to obtain a confidence interval for the expectation that we are estimating.</p>
+<p>Also take note of the following properties of the sample mean and variance:</p>
+</section>
+<section id="sample-estimates" class="level4">
+<h4 class="anchored" data-anchor-id="sample-estimates">Sample Estimates</h4>
+<p>It can be shown that both the sample mean and sample standard deviation are unbiased estimators. <span class="math display">\[
+E(\bar{X}) = E(X), \quad E(s^2) = \sigma^2
+\]</span> where <span class="math inline">\(s^2 = \frac{\sum (X_i - \bar{X})^2}{n-1}\)</span>. :::</p>
+<p>To obtain a <span class="math inline">\((1-\alpha)100%\)</span> confidence interval for <span class="math inline">\(\mu\)</span>, we use the following formula, from the CLT:</p>
+<p><span class="math display">\[
+\bar{X} \pm z_{1-\alpha/2} \frac{s}{\sqrt{n}}
+\]</span></p>
+<p>When our goal is to estimate a probability <span class="math inline">\(p\)</span>, we have to introduce a corresponding indicator variable <span class="math inline">\(X\)</span> such that</p>
+<p><span class="math display">\[
+X =
+\begin{cases}
+1 &amp; \text{with probability $p$} \\
+0 &amp; \text{with probability $1- p$}
+\end{cases}
+\]</span></p>
+<p>In this case, the formula for the CI becomes <span class="math display">\[
+\bar{X} \pm z_{1-\alpha/2} \sqrt{\frac{\bar{X}(1-\bar{X})}{n}}
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="object-oriented-programming-in-python" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="object-oriented-programming-in-python"><span class="header-section-number">7.3</span> Object-Oriented Programming in Python</h2>
+<p>Python has been developed as both a functional and object-oriented programming language. Much of the code we will soon use for the mesa package involves creation of an instance, and then accessing the attributes (data or methods) of that instance.</p>
+<p>The syntax for <em>defining</em> a class is:</p>
+<pre><code>class ClassName:
+    &lt;statement-1&gt;
+    .
+    .
+    &lt;statement-N&gt;</code></pre>
+<p>A class definition typically consists of function definitions and attributes. A special function within a class definition, <code>__init__()</code>, can be used to set the initial state of <em>instances</em> of a class. Think of a class definition as a template, and instances as copies made using that template.</p>
+<p>Consider the following class Circle.</p>
+<div id="3218b09f" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span> Circle:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">""" A simple class definition </span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">    </span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    c0 = Circle()</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">    c0.radius</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">    </span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">    """</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, radius <span class="op">=</span> <span class="fl">1.0</span>):</span>
+<span id="cb7-9"><a href="#cb7-9"></a>        <span class="va">self</span>.radius <span class="op">=</span> radius</span>
+<span id="cb7-10"><a href="#cb7-10"></a>        </span>
+<span id="cb7-11"><a href="#cb7-11"></a>    <span class="kw">def</span> area(<span class="va">self</span>):</span>
+<span id="cb7-12"><a href="#cb7-12"></a>        <span class="co">""" Compute area of circle"""</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>        <span class="cf">return</span> pi<span class="op">*</span>(<span class="va">self</span>.radius<span class="op">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can create multiple circles using this template. Note the use of the keyword <code>self</code> to refer to attributes of the instance.</p>
+<div id="5f39a86e" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>c1 <span class="op">=</span> Circle(<span class="fl">3.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="12745a63" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>c2 <span class="op">=</span> Circle(<span class="fl">4.0</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>c2.area()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>50.26548245743669</code></pre>
+</div>
+</div>
+<div id="ac67fe37" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="ss">The radius of c1 is </span><span class="sc">{</span>c1<span class="sc">.</span>radius<span class="sc">}</span><span class="ss"> and the radius of c2 is </span><span class="sc">{</span>c2<span class="sc">.</span>radius<span class="sc">}</span><span class="ss">.</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="ss">The area of c1 is </span><span class="sc">{</span>c1<span class="sc">.</span>area()<span class="sc">:.3f}</span><span class="ss"> and the area of c2 is </span><span class="sc">{</span>c2<span class="sc">.</span>area()<span class="sc">:.3f}</span><span class="ss">.</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+The radius of c1 is 3.2 and the radius of c2 is 4.0.
+The area of c1 is 32.170 and the area of c2 is 50.265.
+</code></pre>
+</div>
+</div>
+</section>
+<section id="introduction-to-agent-based-models" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="introduction-to-agent-based-models"><span class="header-section-number">7.4</span> Introduction to Agent Based Models</h2>
+<p>Agent-based models (ABM) consist of individual elements (agents) interacting with one another. One of the most common uses of an agent-based model is to understand how the behaviour of the system, as a whole, emerges from simple rules for the agents’ and their interactions. A very famous example is from the simulation software used to create battle scenes in The Lord of The Rings movies from the early 2000s. The following video was from an <a href="https://www.cnet.com/culture/entertainment/features/how-lord-of-the-rings-used-ai-to-change-big-screen-battles-forever/">article on the MASSIVE software</a>.</p>
+<div id="0f3fe542" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#IFrame(src='https://house-fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/6415844878001/e4f4a5c9-0393-4fe5-9986-d5c5b237070a/c276cef7-9eba-4498-a802-9f7867c41334/main.mp4?fastly_token=NjZlYjgxYzlfYWYzYzhmNDQ0ODhmM2Y4NmE1ODIzNzU1ZmE3ODhiNmM4NGZiNjAxNTc2YzZhYmI1NWNlMzYxNzliOGNjY2QxZF9odHRwczovL2hvdXNlLWZhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNjQxNTg0NDg3ODAwMS9lNGY0YTVjOS0wMzkzLTRmZTUtOTk4Ni1kNWM1YjIzNzA3MGEvYzI3NmNlZjctOWViYS00NDk4LWE4MDItOWY3ODY3YzQxMzM0L21haW4ubXA0', </span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#       width=960, height=480)</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>Video(<span class="st">"../data/lotr.mp4"</span>, width<span class="op">=</span><span class="dv">960</span>, height<span class="op">=</span><span class="dv">480</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Today, ABM are used in scenarios where the overall behaviour of a system is to complicated to predict by modeling the stages of interaction. Examples of these scenarios are:</p>
+<ol type="1">
+<li>COVID-19 modeling,</li>
+<li>Modeling of driver behaviour on roads for the purpose of understanding traffic,</li>
+<li>Modeling of swarms, e.g.&nbsp;locusts, fish, etc, and</li>
+<li>Modeling of effects of networks in marketing and in organisations.</li>
+</ol>
+<p>The essential characteristics of an ABM are the following:</p>
+<ol type="1">
+<li>Agents at various scales,</li>
+<li>Agents make decisions, based on defined behaviours</li>
+<li>Agents interact with one another in time and possibly space.</li>
+</ol>
+<p>Remember that our role as analysts is to imbue the agents with the appropriate traits (behaviours), interactions and probabilities. Otherwise, our model is not going to yield useful results.</p>
+<section id="introduction-to-mesa" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-to-mesa">Introduction to Mesa</h3>
+<p>Mesa is a Python package for running simulations using Agent-Based Models (ABM). Before we proceed, here are a few overarching concepts about this framework:</p>
+<ol type="1">
+<li><em>Agents</em> are defined using classes. Within the class definition for an agent, we need to define:
+<ul>
+<li>how the agent is initialised,</li>
+<li>what the agent does at each time-step.</li>
+</ul></li>
+<li>The <em>model</em> is defined as a class as well. The model constitutes agents (defined through the class(es) above) and a <em>scheduler</em> that determines the sequence in which agents act, and the space in which they act.</li>
+</ol>
+<p>Mesa also comes equipped with data collection tools to extract information from agents and/or the model at each step of the scheduler. Both the agent and the model classes should define a <code>step()</code> method. In ABM, a <em>step</em> is the smallest unit of time. It is also sometimes referred to as a “tick”.</p>
+</section>
+</section>
+<section id="boltzmann-model-overview" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="boltzmann-model-overview"><span class="header-section-number">7.5</span> Boltzmann Model Overview</h2>
+<p>This is a simple model from social sciences, to demonstrate the use of mesa for agent-based modeling. In this agent-based economy, the assumptions are:</p>
+<ol type="1">
+<li>There are a certain number of agents.</li>
+<li>All agents begin with 1 unit of money.</li>
+<li>At every step of the model, an agent gives 1 unit of money (if they have it), to another, randomly chosen, agent.</li>
+</ol>
+<p>The reference for this paper is <span class="citation" data-cites="dragulescu2002statistical">Dragulescu and Yakovenko (<a href="references.html#ref-dragulescu2002statistical" role="doc-biblioref">2002</a>)</span>. Before we begin the model, think about what you expect to see after some time.</p>
+</section>
+<section id="agent-and-model-classes-v1" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="agent-and-model-classes-v1"><span class="header-section-number">7.6</span> Agent and Model Classes (v1)</h2>
+<p>The code below contains our initial definition for the agent class. The initialisation simply consists of setting the wealth for the agent. The <code>step</code> method defines that the agent will pick an agent (possibly itself) and transfer 1 unit of money to that agent.</p>
+<div id="4c7bb0bc" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co">"""An agent with fixed initial wealth."""</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model):</span>
+<span id="cb14-5"><a href="#cb14-5"></a>        <span class="co"># Pass the parameters to the parent class.</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(model)</span>
+<span id="cb14-7"><a href="#cb14-7"></a></span>
+<span id="cb14-8"><a href="#cb14-8"></a>        <span class="co"># Create the agent's variable and set the initial values.</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a>        <span class="va">self</span>.wealth <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a></span>
+<span id="cb14-11"><a href="#cb14-11"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
+<span id="cb14-12"><a href="#cb14-12"></a>        <span class="co"># Verify agent has some wealth</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a>        <span class="cf">if</span> <span class="va">self</span>.wealth <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb14-14"><a href="#cb14-14"></a>            other_agent <span class="op">=</span> <span class="va">self</span>.random.choice(<span class="va">self</span>.model.agents)</span>
+<span id="cb14-15"><a href="#cb14-15"></a>            other_agent.wealth <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a>            <span class="va">self</span>.wealth <span class="op">-=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The following flowchart depicts the flow of events for each agent. It is useful to sketch such a flowchart when implementing agent-based models, since it allows for easier debugging and information sharing with colleagues.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/money_agent_flowchart.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Agent trajectory</figcaption>
+</figure>
+</div>
+<p>The next class defines the model itself. The initialisation of a model typically consists of populating it with various agents. However, it is also important to define the scheduler. In this case, the scheduler is based on <code>RandomActivation</code>. This means that <em>at every step</em>, the agents are shuffled, and then each of their <code>step</code> methods are executed in that order. The order changes at every time step. It is necessary to avoid running all agents’ steps at the same time to avoid clashes.</p>
+<div id="e532b9eb" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N):</span>
+<span id="cb15-5"><a href="#cb15-5"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb15-6"><a href="#cb15-6"></a>        <span class="va">self</span>.num_agents <span class="op">=</span> N</span>
+<span id="cb15-7"><a href="#cb15-7"></a>        <span class="co"># Create scheduler and assign it to the model</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>        <span class="co"># self.schedule = mesa.time.RandomActivation(self)</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>        <span class="co"># self.agents.shuffle_do("step")</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a></span>
+<span id="cb15-11"><a href="#cb15-11"></a>        <span class="co"># Create agents</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_agents):</span>
+<span id="cb15-13"><a href="#cb15-13"></a>            a <span class="op">=</span> MoneyAgent(<span class="va">self</span>)</span>
+<span id="cb15-14"><a href="#cb15-14"></a>            <span class="co"># Add the agent to the scheduler</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a>            <span class="co">#self.schedule.add(a)</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a></span>
+<span id="cb15-17"><a href="#cb15-17"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
+<span id="cb15-18"><a href="#cb15-18"></a>        <span class="co">"""Advance the model by one step."""</span></span>
+<span id="cb15-19"><a href="#cb15-19"></a></span>
+<span id="cb15-20"><a href="#cb15-20"></a>        <span class="co"># The model's step will go here for now this will call the step method of each agent and print the agent's unique_id</span></span>
+<span id="cb15-21"><a href="#cb15-21"></a>        <span class="co"># self.schedule.step()</span></span>
+<span id="cb15-22"><a href="#cb15-22"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next cell creates a model with 10 agents, and runs the model for 100 steps. At the end of this run, we compute the proportion of customers with wealth 0. This is a simple initial metric that we define on the model. Once again, just as with the parameters of the model, the metrics we extract determine how well we can use the model.</p>
+<p>Remember that, to begin with, all agents had equal wealth. If this proportion is high, it indicates a severe imbalance in wealth distribution after 100 time steps.</p>
+<div id="3435323b" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>all_wealth <span class="op">=</span> []</span>
+<span id="cb16-2"><a href="#cb16-2"></a>model <span class="op">=</span> MoneyModel(<span class="dv">10</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co"># allows replicability of results; useful for debugging</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>model.reset_randomizer(seed<span class="op">=</span><span class="dv">5003</span>) </span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb16-8"><a href="#cb16-8"></a>    model.step()</span>
+<span id="cb16-9"><a href="#cb16-9"></a></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co"># Extract the results</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co"># for agent in model.schedule.agents:</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="cf">for</span> agent <span class="kw">in</span> model.agents:</span>
+<span id="cb16-13"><a href="#cb16-13"></a>    all_wealth.append(agent.wealth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="49efaae4" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>prop <span class="op">=</span> (np.array(all_wealth) <span class="op">==</span> <span class="dv">0</span>).mean()</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="bu">print</span>(<span class="ss">f"The proportion of agents with zero wealth is </span><span class="sc">{</span>prop<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The proportion of agents with zero wealth is 0.300.</code></pre>
+</div>
+</div>
+<section id="data-collection" class="level3">
+<h3 class="anchored" data-anchor-id="data-collection">Data Collection</h3>
+<p>However, remember that when we perform simulations, we need to repeat the run multiple times, take the average, and then form a confidence interval. To prepare the mesa model to perform data collection, we write a function that, given a model, will compute the proportion of zero-wealth agents.</p>
+<div id="9ef21707" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">def</span> compute_zero_prop(mesa_model):</span>
+<span id="cb19-2"><a href="#cb19-2"></a>    all_wealth <span class="op">=</span> []</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    <span class="co"># Extract the results</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>    <span class="cf">for</span> agent <span class="kw">in</span> mesa_model.agents:</span>
+<span id="cb19-5"><a href="#cb19-5"></a>        all_wealth.append(agent.wealth)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>    prop <span class="op">=</span> (np.array(all_wealth) <span class="op">==</span> <span class="dv">0</span>).mean()</span>
+<span id="cb19-7"><a href="#cb19-7"></a>    <span class="cf">return</span> prop</span>
+<span id="cb19-8"><a href="#cb19-8"></a></span>
+<span id="cb19-9"><a href="#cb19-9"></a>compute_zero_prop(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>0.3</code></pre>
+</div>
+</div>
+<p>Next, we update the model class to define a data collector that calls the <code>compute_zero_prop()</code> function that we just defined. With Mesa, the data collector can be based on the model, or it could be a function that operates on individual agents.</p>
+<div id="d570bc61" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<span id="cb21-2"><a href="#cb21-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N):</span>
+<span id="cb21-5"><a href="#cb21-5"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb21-6"><a href="#cb21-6"></a>        <span class="va">self</span>.num_agents <span class="op">=</span> N</span>
+<span id="cb21-7"><a href="#cb21-7"></a>        <span class="co"># Create scheduler and assign it to the model</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>        <span class="co"># self.schedule = mesa.time.RandomActivation(self)</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a></span>
+<span id="cb21-10"><a href="#cb21-10"></a>        <span class="co"># Create agents</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_agents):</span>
+<span id="cb21-12"><a href="#cb21-12"></a>            a <span class="op">=</span> MoneyAgent(<span class="va">self</span>)</span>
+<span id="cb21-13"><a href="#cb21-13"></a>            <span class="co"># Add the agent to the scheduler</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a>            <span class="co"># self.schedule.add(a)</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a></span>
+<span id="cb21-16"><a href="#cb21-16"></a>        <span class="co"># initialise the data collector, telling it to use the compute_zero_prop() function</span></span>
+<span id="cb21-17"><a href="#cb21-17"></a>        <span class="co"># on the model.</span></span>
+<span id="cb21-18"><a href="#cb21-18"></a>        <span class="va">self</span>.datacollector <span class="op">=</span> mesa.DataCollector(</span>
+<span id="cb21-19"><a href="#cb21-19"></a>            model_reporters<span class="op">=</span>{<span class="st">"zero_prop"</span>: compute_zero_prop}</span>
+<span id="cb21-20"><a href="#cb21-20"></a>        )</span>
+<span id="cb21-21"><a href="#cb21-21"></a></span>
+<span id="cb21-22"><a href="#cb21-22"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
+<span id="cb21-23"><a href="#cb21-23"></a>        <span class="co"># self.schedule.step()</span></span>
+<span id="cb21-24"><a href="#cb21-24"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span>
+<span id="cb21-25"><a href="#cb21-25"></a>        <span class="co"># Collect data at every step</span></span>
+<span id="cb21-26"><a href="#cb21-26"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once again, we reset the seed and re-run the model. We can then retrieve the zero-wealth proprortion at <em>every step of the model</em>.</p>
+<div id="b83d9dc1" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>model <span class="op">=</span> MoneyModel(<span class="dv">10</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a>model.reset_randomizer(seed<span class="op">=</span><span class="dv">5003</span>)</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb22-5"><a href="#cb22-5"></a>    model.step()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="ef9a4a3d" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>model.datacollector.get_model_vars_dataframe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">zero_prop</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">95</td>
+<td>0.1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">96</td>
+<td>0.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">97</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">98</td>
+<td>0.3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">99</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+
+<p>100 rows × 1 columns</p>
+</div>
+</div>
+</div>
+<p>Take note that this is considered <em>a single simulation</em>. Any simulation model requires time to reach an equilibrium phase. In this case, we are interested in measuring the average proportion of zeros after 100 time steps. To do so, we need to run several simulations, compute the zero-wealth proportion at each step and take the average.</p>
+</section>
+</section>
+<section id="multiple-iterations" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="multiple-iterations"><span class="header-section-number">7.7</span> Multiple Iterations</h2>
+<p>The mesa package has features to help us to run multiple simulations and then to collate the results. The primary method is <code>.batch_run()</code>. Now we shall run the model for 50 iterations. Remember that each iteration consists of a fresh set of 100 time steps.</p>
+<div id="6ce5abc9" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="co">#params = {"N": [10, 50, 100]}</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a>results <span class="op">=</span> mesa.batch_run(</span>
+<span id="cb24-5"><a href="#cb24-5"></a>    MoneyModel,</span>
+<span id="cb24-6"><a href="#cb24-6"></a>    parameters<span class="op">=</span>params,</span>
+<span id="cb24-7"><a href="#cb24-7"></a>    iterations<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb24-8"><a href="#cb24-8"></a>    max_steps<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb24-9"><a href="#cb24-9"></a>    number_processes<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb24-10"><a href="#cb24-10"></a>    data_collection_period<span class="op">=-</span><span class="dv">1</span>,</span>
+<span id="cb24-11"><a href="#cb24-11"></a>    display_progress<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb24-12"><a href="#cb24-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"8597fd12e8d64b26b5ae7698cfcf17aa","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+<div id="cb1b05dc" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb25-2"><a href="#cb25-2"></a></span>
+<span id="cb25-3"><a href="#cb25-3"></a>results_df.zero_prop.hist(grid<span class="op">=</span><span class="va">False</span>, bins<span class="op">=</span>np.arange(<span class="fl">0.10</span>, <span class="fl">1.00</span>, <span class="fl">0.05</span>))<span class="op">;</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="co"># results_df.zero_prop.groupby(results_df.N).describe()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-21-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="566" height="411"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="c4bf07cc" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>stats.ttest_1samp(results_df.zero_prop, <span class="fl">0.0</span>).confidence_interval()</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co">#results_df.zero_prop.groupby(results_df.N).apply(lambda x: </span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#                                                 stats.ttest_1samp(x, 0.0).confidence_interval())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>ConfidenceInterval(low=0.3931118578144421, high=0.4588881421855579)</code></pre>
+</div>
+</div>
+<p>We can see that the proportion of agents with zero income is approximately 0.42. This is considerably higher than the 0.0 that the population began with.</p>
+</section>
+<section id="agent-and-model-classes-v2" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="agent-and-model-classes-v2"><span class="header-section-number">7.8</span> Agent and Model Classes (v2)</h2>
+<section id="assessment-of-income-inequality" class="level3">
+<h3 class="anchored" data-anchor-id="assessment-of-income-inequality">Assessment of Income Inequality</h3>
+<p>The Gini coefficient is a common measure of the income inequality of a population. The Gini coefficient can be defined using a Lorenz curve for a population:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/Economics_Gini_coefficient2.svg.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Lorenz curve</figcaption>
+</figure>
+</div>
+<p>The x- and y-axes both run from 0 to 100%. The x-axis depicts the cumulative proportion of a population (increasing from left to right), ranked by income. The y-axis depicts the cumulative proportion of total income earned by the population. If all members earned an equal amount, the Lorenz curve would be a straight line, from bottom left to top right. Gini coefficient measures deviation from this equality as:</p>
+<p><span class="math display">\[
+\frac{A}{A+B}
+\]</span></p>
+<p>The Gini coefficient is a measure between 0 and 1. A value of 0 indicates income equality, while a value of 1 indicates that only 1 member of the population earns all the income (extreme inequality). Here is an interactive visualisation from Our World in Data on Gini coefficient values around the world, across time.</p>
+<div id="998aec37" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> IFrame</span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a>IFrame(src<span class="op">=</span><span class="st">'https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map'</span>, width<span class="op">=</span><span class="dv">1024</span>, height<span class="op">=</span><span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+
+        <iframe width="1024" height="600" src="https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map" frameborder="0" allowfullscreen=""></iframe>
+        
+</div>
+</div>
+<p>The <a href="https://en.wikipedia.org/wiki/Gini_coefficient">wikipedia page</a> on Gini coefficient contains a formula for computing Gini coefficient, given the income of all agents. After implementing it, we include it in the model class, along with our earlier metric.</p>
+<div id="203160c9" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">def</span> compute_gini(model):</span>
+<span id="cb29-2"><a href="#cb29-2"></a>    agent_wealths <span class="op">=</span> [agent.wealth <span class="cf">for</span> agent <span class="kw">in</span> model.agents]</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    x <span class="op">=</span> <span class="bu">sorted</span>(agent_wealths)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>    N <span class="op">=</span> model.num_agents</span>
+<span id="cb29-5"><a href="#cb29-5"></a>    B <span class="op">=</span> <span class="bu">sum</span>(xi <span class="op">*</span> (N <span class="op">-</span> i) <span class="cf">for</span> i, xi <span class="kw">in</span> <span class="bu">enumerate</span>(x)) <span class="op">/</span> (N <span class="op">*</span> <span class="bu">sum</span>(x))</span>
+<span id="cb29-6"><a href="#cb29-6"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">1</span> <span class="op">/</span> N) <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> B</span>
+<span id="cb29-7"><a href="#cb29-7"></a></span>
+<span id="cb29-8"><a href="#cb29-8"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<span id="cb29-9"><a href="#cb29-9"></a>    <span class="co">"""A model with some number of agents."""</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a></span>
+<span id="cb29-11"><a href="#cb29-11"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N):</span>
+<span id="cb29-12"><a href="#cb29-12"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb29-13"><a href="#cb29-13"></a>        <span class="va">self</span>.num_agents <span class="op">=</span> N</span>
+<span id="cb29-14"><a href="#cb29-14"></a>        <span class="co"># Create scheduler and assign it to the model</span></span>
+<span id="cb29-15"><a href="#cb29-15"></a>        <span class="co"># self.schedule = mesa.time.RandomActivation(self)</span></span>
+<span id="cb29-16"><a href="#cb29-16"></a></span>
+<span id="cb29-17"><a href="#cb29-17"></a>        <span class="co"># Create agents</span></span>
+<span id="cb29-18"><a href="#cb29-18"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_agents):</span>
+<span id="cb29-19"><a href="#cb29-19"></a>            a <span class="op">=</span> MoneyAgent(<span class="va">self</span>)</span>
+<span id="cb29-20"><a href="#cb29-20"></a>            <span class="co"># Add the agent to the scheduler</span></span>
+<span id="cb29-21"><a href="#cb29-21"></a>            <span class="co"># self.schedule.add(a)</span></span>
+<span id="cb29-22"><a href="#cb29-22"></a></span>
+<span id="cb29-23"><a href="#cb29-23"></a>        <span class="co"># initialise the data collector, telling it to use the gini() and compute_zero_prop() function</span></span>
+<span id="cb29-24"><a href="#cb29-24"></a>        <span class="co"># on the model.</span></span>
+<span id="cb29-25"><a href="#cb29-25"></a>        <span class="va">self</span>.datacollector <span class="op">=</span> mesa.DataCollector(</span>
+<span id="cb29-26"><a href="#cb29-26"></a>            model_reporters<span class="op">=</span>{<span class="st">"Gini"</span>: compute_gini, <span class="st">"zero_prop"</span>: compute_zero_prop}</span>
+<span id="cb29-27"><a href="#cb29-27"></a>        )</span>
+<span id="cb29-28"><a href="#cb29-28"></a></span>
+<span id="cb29-29"><a href="#cb29-29"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
+<span id="cb29-30"><a href="#cb29-30"></a>        <span class="co"># self.schedule.step()</span></span>
+<span id="cb29-31"><a href="#cb29-31"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span>
+<span id="cb29-32"><a href="#cb29-32"></a>        <span class="co"># Collect data at every step</span></span>
+<span id="cb29-33"><a href="#cb29-33"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-collection-1" class="level3">
+<h3 class="anchored" data-anchor-id="data-collection-1">Data Collection</h3>
+<p>Suppose we are interested to study how the Gini coefficient of our little population evolves over time. We shall use the <code>batch_run</code> to run 50 iterations, and then create a summary visualisation of the evolution of Gini coefficient for each iteration.</p>
+<div id="328d3a4f" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
+<span id="cb30-2"><a href="#cb30-2"></a></span>
+<span id="cb30-3"><a href="#cb30-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
+<span id="cb30-4"><a href="#cb30-4"></a>    MoneyModel,</span>
+<span id="cb30-5"><a href="#cb30-5"></a>    parameters<span class="op">=</span>params,</span>
+<span id="cb30-6"><a href="#cb30-6"></a>    iterations<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb30-7"><a href="#cb30-7"></a>    max_steps<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb30-8"><a href="#cb30-8"></a>    number_processes<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb30-9"><a href="#cb30-9"></a>    data_collection_period<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb30-10"><a href="#cb30-10"></a>    display_progress<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb30-11"><a href="#cb30-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"a4fe65025f864fed98ec9357f6eef48b","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+<p>We would like to inspect how the inequality varies over the time steps. Hence, at each time step, we obtain the lower and upper quantiles along with the median and plot them.</p>
+<div id="2cb14427" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>grp_by_step <span class="op">=</span> results_df.Gini.groupby(results_df.Step).describe()</span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="co">#grp_by_step.head()</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a></span>
+<span id="cb31-5"><a href="#cb31-5"></a>grp_by_step[[<span class="st">'25%'</span>, <span class="st">'50%'</span>, <span class="st">'75%'</span>]].plot(style<span class="op">=</span>[<span class="st">'--'</span>, <span class="st">'-'</span>, <span class="st">'--'</span>])</span>
+<span id="cb31-6"><a href="#cb31-6"></a>plt.ylim([<span class="dv">0</span>, <span class="dv">1</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-26-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="571" height="434"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that the Gini index quickly achieves one of the highest inequality values that we observe in the world, and remains there.</p>
+</section>
+</section>
+<section id="agent-and-model-classes-v3" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="agent-and-model-classes-v3"><span class="header-section-number">7.9</span> Agent and Model Classes (v3)</h2>
+<section id="adding-a-spatial-component" class="level3">
+<h3 class="anchored" data-anchor-id="adding-a-spatial-component">Adding a spatial component</h3>
+<p>Next we introduce another critical component of agent-based modeling - the spatial component. We retain the Gini coefficient computation, but we are going to modify the model behaviour such that agents only exchange money if the other agent is nearby. The <code>MultiGrid</code> defines a rectangular grid, indexed by <code>[x, y]</code>, where <code>[0, 0]</code> is assumed to be at bottom-left and <code>[width - 1, height - 1]</code> is the top-right. If a grid is toroidal, the top and bottom, and left and right, edges wrap to each other.</p>
+<p>In the loop to create agents, the agents are added to a random x- and y- cell of the grid.</p>
+<div id="a73b409a" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<span id="cb32-2"><a href="#cb32-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a></span>
+<span id="cb32-4"><a href="#cb32-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N, width, height):</span>
+<span id="cb32-5"><a href="#cb32-5"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb32-6"><a href="#cb32-6"></a>        <span class="va">self</span>.num_agents <span class="op">=</span> N</span>
+<span id="cb32-7"><a href="#cb32-7"></a>        <span class="va">self</span>.grid <span class="op">=</span> mesa.space.MultiGrid(width, height, <span class="va">True</span>)</span>
+<span id="cb32-8"><a href="#cb32-8"></a>        <span class="co"># self.schedule = mesa.time.RandomActivation(self)</span></span>
+<span id="cb32-9"><a href="#cb32-9"></a></span>
+<span id="cb32-10"><a href="#cb32-10"></a>        <span class="co"># Create agents</span></span>
+<span id="cb32-11"><a href="#cb32-11"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.num_agents):</span>
+<span id="cb32-12"><a href="#cb32-12"></a>            a <span class="op">=</span> MoneyAgent(<span class="va">self</span>)</span>
+<span id="cb32-13"><a href="#cb32-13"></a>            <span class="co"># self.schedule.add(a)</span></span>
+<span id="cb32-14"><a href="#cb32-14"></a>            <span class="co"># Add the agent to a random grid cell</span></span>
+<span id="cb32-15"><a href="#cb32-15"></a>            x <span class="op">=</span> <span class="va">self</span>.random.randrange(<span class="va">self</span>.grid.width)</span>
+<span id="cb32-16"><a href="#cb32-16"></a>            y <span class="op">=</span> <span class="va">self</span>.random.randrange(<span class="va">self</span>.grid.height)</span>
+<span id="cb32-17"><a href="#cb32-17"></a>            <span class="va">self</span>.grid.place_agent(a, (x, y))</span>
+<span id="cb32-18"><a href="#cb32-18"></a>            </span>
+<span id="cb32-19"><a href="#cb32-19"></a>        <span class="co"># Data collectors for the model</span></span>
+<span id="cb32-20"><a href="#cb32-20"></a>        <span class="va">self</span>.datacollector <span class="op">=</span> mesa.DataCollector(</span>
+<span id="cb32-21"><a href="#cb32-21"></a>            model_reporters<span class="op">=</span>{<span class="st">"Gini"</span>: compute_gini}, </span>
+<span id="cb32-22"><a href="#cb32-22"></a>            agent_reporters<span class="op">=</span>{<span class="st">"Wealth"</span>: <span class="st">"wealth"</span>}</span>
+<span id="cb32-23"><a href="#cb32-23"></a>        )</span>
+<span id="cb32-24"><a href="#cb32-24"></a></span>
+<span id="cb32-25"><a href="#cb32-25"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
+<span id="cb32-26"><a href="#cb32-26"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span>
+<span id="cb32-27"><a href="#cb32-27"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span>
+<span id="cb32-28"><a href="#cb32-28"></a>        <span class="co"># self.schedule.step()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we turn to the agent class. The new version defines methods to <code>move()</code> and to <code>give_money()</code>. Within the <code>move</code> method, we define that the agent could move to a neighbouring cell. With mesa, it is possible to define a couple of types of neighbourhoods: Moore and Von Neumann. In this case, we use the Moore neighbourghood.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/Moore_neighborhood_with_cardinal_directions.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:30.0%"></p>
+</figure>
+</div>
+<p>In the <code>give_money</code> method, the logic proceeds as follows:</p>
+<ol type="1">
+<li>Retrieve the agents in neighbouring cells.</li>
+<li>Remove the agent itself from the list of neighbours, so that an agent will not give money to itself.</li>
+<li>Choose one of the neighbouring agents at random and give money to it.</li>
+</ol>
+<div id="e7f8ad04" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
+<span id="cb33-2"><a href="#cb33-2"></a>    <span class="co">"""An agent with fixed initial wealth."""</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a></span>
+<span id="cb33-4"><a href="#cb33-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model):</span>
+<span id="cb33-5"><a href="#cb33-5"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(model)</span>
+<span id="cb33-6"><a href="#cb33-6"></a>        <span class="va">self</span>.wealth <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a></span>
+<span id="cb33-8"><a href="#cb33-8"></a>    <span class="kw">def</span> move(<span class="va">self</span>):</span>
+<span id="cb33-9"><a href="#cb33-9"></a>        possible_steps <span class="op">=</span> <span class="va">self</span>.model.grid.get_neighborhood(</span>
+<span id="cb33-10"><a href="#cb33-10"></a>            <span class="va">self</span>.pos, moore<span class="op">=</span><span class="va">True</span>, include_center<span class="op">=</span><span class="va">False</span></span>
+<span id="cb33-11"><a href="#cb33-11"></a>        )</span>
+<span id="cb33-12"><a href="#cb33-12"></a>        new_position <span class="op">=</span> <span class="va">self</span>.random.choice(possible_steps)</span>
+<span id="cb33-13"><a href="#cb33-13"></a>        <span class="va">self</span>.model.grid.move_agent(<span class="va">self</span>, new_position)</span>
+<span id="cb33-14"><a href="#cb33-14"></a></span>
+<span id="cb33-15"><a href="#cb33-15"></a>    <span class="kw">def</span> give_money(<span class="va">self</span>):</span>
+<span id="cb33-16"><a href="#cb33-16"></a>        cellmates <span class="op">=</span> <span class="va">self</span>.model.grid.get_cell_list_contents([<span class="va">self</span>.pos])</span>
+<span id="cb33-17"><a href="#cb33-17"></a>        cellmates.pop(</span>
+<span id="cb33-18"><a href="#cb33-18"></a>            cellmates.index(<span class="va">self</span>)</span>
+<span id="cb33-19"><a href="#cb33-19"></a>        )  <span class="co"># Ensure agent is not giving money to itself</span></span>
+<span id="cb33-20"><a href="#cb33-20"></a>        <span class="cf">if</span> <span class="bu">len</span>(cellmates) <span class="op">&gt;=</span> <span class="dv">1</span>:</span>
+<span id="cb33-21"><a href="#cb33-21"></a>            other <span class="op">=</span> <span class="va">self</span>.random.choice(cellmates)</span>
+<span id="cb33-22"><a href="#cb33-22"></a>            other.wealth <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb33-23"><a href="#cb33-23"></a>            <span class="va">self</span>.wealth <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb33-24"><a href="#cb33-24"></a>                </span>
+<span id="cb33-25"><a href="#cb33-25"></a>    <span class="co"># First, the agent moves. Then, it might give money away to another agent in the neighbouring cell.</span></span>
+<span id="cb33-26"><a href="#cb33-26"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
+<span id="cb33-27"><a href="#cb33-27"></a>        <span class="va">self</span>.move()</span>
+<span id="cb33-28"><a href="#cb33-28"></a>        <span class="cf">if</span> <span class="va">self</span>.wealth <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb33-29"><a href="#cb33-29"></a>            <span class="va">self</span>.give_money()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-collection-2" class="level3">
+<h3 class="anchored" data-anchor-id="data-collection-2">Data Collection</h3>
+<p>The next code cell runs a single iteration with 100 agents in a 10x10 grid.</p>
+<div id="5174da91" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>model <span class="op">=</span> MoneyModel(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb34-3"><a href="#cb34-3"></a>    model.step()</span>
+<span id="cb34-4"><a href="#cb34-4"></a></span>
+<span id="cb34-5"><a href="#cb34-5"></a>gini <span class="op">=</span> model.datacollector.get_model_vars_dataframe()</span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="co"># Plot the Gini coefficient over time</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a>g <span class="op">=</span> sns.lineplot(data<span class="op">=</span>gini)</span>
+<span id="cb34-8"><a href="#cb34-8"></a>g.<span class="bu">set</span>(title<span class="op">=</span><span class="st">"Gini Coefficient over Time"</span>, ylabel<span class="op">=</span><span class="st">"Gini Coefficient"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-29-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="589" height="431"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="9c1b3786" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>params <span class="op">=</span> {<span class="st">"width"</span>: <span class="dv">10</span>, <span class="st">"height"</span>: <span class="dv">10</span>, <span class="st">"N"</span>: <span class="bu">range</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">5</span>)}</span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
+<span id="cb35-4"><a href="#cb35-4"></a>    MoneyModel,</span>
+<span id="cb35-5"><a href="#cb35-5"></a>    parameters<span class="op">=</span>params,</span>
+<span id="cb35-6"><a href="#cb35-6"></a>    iterations<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb35-7"><a href="#cb35-7"></a>    max_steps<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb35-8"><a href="#cb35-8"></a>    number_processes<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb35-9"><a href="#cb35-9"></a>    data_collection_period<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb35-10"><a href="#cb35-10"></a>    display_progress<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb35-11"><a href="#cb35-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"649553e8994a4a2a88e1c87f33dc4a3b","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+<p>For a visualisation of the results, we shall compute the mean Gini coefficient at each time step, grouped by <code>N</code>.</p>
+<div id="a636909f" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb36-2"><a href="#cb36-2"></a>grp_by_step <span class="op">=</span> results_df.Gini.groupby([results_df.Step, results_df.N]).describe()</span>
+<span id="cb36-3"><a href="#cb36-3"></a>grp_by_step.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-4"><a href="#cb36-4"></a></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="co">#grp_by_step.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="ca4c1fd2" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>grouped <span class="op">=</span> grp_by_step.groupby(<span class="st">'N'</span>)</span>
+<span id="cb37-2"><a href="#cb37-2"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb37-3"><a href="#cb37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="cf">for</span> group <span class="kw">in</span> grouped:</span>
+<span id="cb37-5"><a href="#cb37-5"></a>    plt.plot(group[<span class="dv">1</span>][<span class="st">'Step'</span>], group[<span class="dv">1</span>][<span class="st">'mean'</span>], label<span class="op">=</span>group[<span class="dv">0</span>], alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb37-6"><a href="#cb37-6"></a></span>
+<span id="cb37-7"><a href="#cb37-7"></a>plt.xlabel(<span class="st">'Step'</span>)</span>
+<span id="cb37-8"><a href="#cb37-8"></a>plt.ylabel(<span class="st">'Gini'</span>)</span>
+<span id="cb37-9"><a href="#cb37-9"></a>plt.title(<span class="st">'Gini vs Step by N (number of agents)'</span>)<span class="op">;</span></span>
+<span id="cb37-10"><a href="#cb37-10"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-32-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="812" height="523"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see, the value at which the Gini coefficient converges to differs for varying <code>N</code>. For smaller <code>N</code>, the final Gini value seems to be lower. For all the settings, the convergence does appear to happen at approximately the same time step.</p>
+</section>
+</section>
+<section id="visualisations" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="visualisations"><span class="header-section-number">7.10</span> Visualisations</h2>
+<p>As with most ABM software, it is possible to visualise the steps. This is not to be used for conveying results to management; it is more for debugging, and for study for the purpose of understanding the behaviour and for generating hypothesis.</p>
+<div id="1e8a3055" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">def</span> agent_portrayal(agent):</span>
+<span id="cb38-2"><a href="#cb38-2"></a>    <span class="co">#return {</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a>    <span class="co">#    "color": "tab:blue",</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a>    <span class="co">#    "size": 50,</span></span>
+<span id="cb38-5"><a href="#cb38-5"></a>    <span class="co">#}</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a>    size <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb38-7"><a href="#cb38-7"></a>    color <span class="op">=</span> <span class="st">"tab:red"</span></span>
+<span id="cb38-8"><a href="#cb38-8"></a>    <span class="cf">if</span> agent.wealth <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb38-9"><a href="#cb38-9"></a>        size <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb38-10"><a href="#cb38-10"></a>        color <span class="op">=</span> <span class="st">"tab:blue"</span></span>
+<span id="cb38-11"><a href="#cb38-11"></a>    <span class="cf">return</span> {<span class="st">"size"</span>: size, <span class="st">"color"</span>: color}</span>
+<span id="cb38-12"><a href="#cb38-12"></a></span>
+<span id="cb38-13"><a href="#cb38-13"></a>model_params <span class="op">=</span> {</span>
+<span id="cb38-14"><a href="#cb38-14"></a>    <span class="st">"N"</span>: {</span>
+<span id="cb38-15"><a href="#cb38-15"></a>        <span class="st">"type"</span>: <span class="st">"SliderInt"</span>,</span>
+<span id="cb38-16"><a href="#cb38-16"></a>        <span class="st">"value"</span>: <span class="dv">50</span>,</span>
+<span id="cb38-17"><a href="#cb38-17"></a>        <span class="st">"label"</span>: <span class="st">"Number of agents:"</span>,</span>
+<span id="cb38-18"><a href="#cb38-18"></a>        <span class="st">"min"</span>: <span class="dv">10</span>,</span>
+<span id="cb38-19"><a href="#cb38-19"></a>        <span class="st">"max"</span>: <span class="dv">100</span>,</span>
+<span id="cb38-20"><a href="#cb38-20"></a>        <span class="st">"step"</span>: <span class="dv">1</span>,</span>
+<span id="cb38-21"><a href="#cb38-21"></a>    },</span>
+<span id="cb38-22"><a href="#cb38-22"></a>    <span class="st">"width"</span>: <span class="dv">10</span>,</span>
+<span id="cb38-23"><a href="#cb38-23"></a>    <span class="st">"height"</span>: <span class="dv">10</span>,</span>
+<span id="cb38-24"><a href="#cb38-24"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="34471179" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="co">#from mesa.experimental import JupyterViz</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co">#page = JupyterViz(</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="co">#    MoneyModel,</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="co">#    model_params,</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a><span class="co">#    measures=["Gini"],</span></span>
+<span id="cb39-7"><a href="#cb39-7"></a><span class="co">#    name="Money Model",</span></span>
+<span id="cb39-8"><a href="#cb39-8"></a><span class="co">#    agent_portrayal=agent_portrayal,</span></span>
+<span id="cb39-9"><a href="#cb39-9"></a><span class="co">#)</span></span>
+<span id="cb39-10"><a href="#cb39-10"></a><span class="co"># This is required to render the visualization in the Jupyter notebook</span></span>
+<span id="cb39-11"><a href="#cb39-11"></a><span class="co">#page</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Remember that simulations are a risk-free approach to trying out different scenarios. They are especially useful when it is difficult to guage what interactions the output depends on. In this case, here are some modifications you can try to understand the Boltzmann Wealth Distribution model better.</p>
+<ul>
+<li>Vary the number of agents, to understand the Gini coefficient after 100 steps.</li>
+<li>When there are N agents, what is the proportion of agents that own 80% of the total wealth after a certain number of steps?</li>
+<li>How can we measure social mobility in this population?</li>
+<li>What if we change the starting income distribution?</li>
+<li>What if we want to know when Gini coefficient first crosses a threshold?</li>
+<li>What if we want to use <a href="ttps://en.wikipedia.org/wiki/Income_inequality_metrics#Palma_ratio">Palma Ratio</a> instead?</li>
+</ul>
+</section>
+<section id="simpler-simulation-models" class="level2" data-number="7.11">
+<h2 data-number="7.11" class="anchored" data-anchor-id="simpler-simulation-models"><span class="header-section-number">7.11</span> Simpler Simulation Models</h2>
+<p>In this section, we provide two examples of “simpler” simulation scenarios. These are not agent-based models, but they use probability distributions to model language, and then to represent the scenario where we intend to perform a 2-sample <span class="math inline">\(t\)</span>-test.</p>
+<section id="n-gram-models" class="level3">
+<h3 class="anchored" data-anchor-id="n-gram-models">N-gram models</h3>
+<p>Here is an example of how we can simulate from distributions to generate random (nonsensical) sentences that are “similar” to actual sentences from a text.</p>
+<div id="5f1e49f6" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="co">#nltk.download('genesis')</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a></span>
+<span id="cb40-3"><a href="#cb40-3"></a>kjv <span class="op">=</span> nltk.corpus.genesis.words(<span class="st">'english-kjv.txt'</span>)</span>
+<span id="cb40-4"><a href="#cb40-4"></a>bg <span class="op">=</span> nltk.bigrams(kjv)</span>
+<span id="cb40-5"><a href="#cb40-5"></a>cfd <span class="op">=</span> nltk.ConditionalFreqDist(bg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The object <code>cfd</code> contains information on the distribution of words that come after. For instance, these are the words that come after “she”:</p>
+<div id="642e7e71" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>cfd[<span class="st">'she'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>FreqDist({'said': 22, 'was': 14, 'bare': 14, 'called': 13, 'conceived': 11, 'had': 11, 'saw': 6, 'shall': 5, 'is': 5, 'went': 5, ...})</code></pre>
+</div>
+</div>
+<p>The object <code>kjv</code> contains all the words and punctuations from the King James Bible. Here are the first 20 words:</p>
+<div id="214b905d" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a><span class="co">' '</span>.join(kjv[:<span class="dv">20</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>'In the beginning God created the heaven and the earth . And the earth was without form , and void'</code></pre>
+</div>
+</div>
+<p>Next, we extract all bigrams and create a dictionary of frequency distributions. Each frequency distribution tabulates the occurences of the <em>next</em> word.</p>
+<p>Suppose we are interested in what words/tokens come after the word ‘And’ in the bible:</p>
+<div id="9c7d6465" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>cfd[<span class="st">'And'</span>].keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>dict_keys(['the', 'God', 'let', 'to', 'on', 'every', 'out', 'a', 'Adam', 'they', 'he', 'when', 'I', 'unto', 'she', 'Abel', 'in', 'Cain', 'now', 'Lamech', 'Adah', 'his', 'Zillah', 'all', 'Seth', 'Enos', 'Cainan', 'Mahalaleel', 'Jared', 'Enoch', 'Methuselah', 'Noah', 'it', 'this', ',', 'of', 'take', 'surely', 'you', 'with', 'Ham', 'Shem', 'Cush', 'Resen', 'Mizraim', 'Pathrusim', 'Canaan', 'Arphaxad', 'Joktan', 'Hadoram', 'Obal', 'Ophir', 'their', 'Salah', 'Eber', 'Peleg', 'Reu', 'Serug', 'Nahor', 'Terah', 'Haran', 'Abram', 'there', 'Pharaoh', 'Lot', 'Melchizedek', 'blessed', 'also', 'thou', 'Sarai', 'Hagar', 'ye', 'Abraham', 'as', 'Ishmael', 'said', 'Sarah', 'while', 'Abimelech', 'yet', 'Isaac', 'Chesed', 'Bethuel', 'Ephron', 'after', 'if', 'Rebekah', 'my', 'before', 'her', 'Jokshan', 'these', 'Mishma', 'Jacob', 'Esau', 'make', 'by', 'tarry', 'give', 'that', 'thy', 'thither', 'Laban', 'Leah', 'Bilhah', 'Rachel', 'Zilpah', 'Reuben', 'afterwards', 'your', 'hast', 'Mizpah', 'early', 'so', 'say', 'Dinah', 'Shechem', 'Hamor', 'Israel', 'Bashemath', 'Aholibamah', 'Timna', 'Dishon', 'Bela', 'Jobab', 'Husham', 'Hadad', 'Samlah', 'Saul', 'Baalhanan', 'Joseph', 'Judah', 'Er', 'Onan', 'Tamar', 'afterward', 'we', 'for', 'bring', 'other', 'put', 'our', 'told', 'one', 'forty'])</code></pre>
+</div>
+</div>
+<p>Thus ‘the’ is the most likely word after ‘And’. The second most likely pairing would be ‘And the’, and so on. We can convert this into a pmf, just by normalising to ensure that it sums to 1. Then we are ready to generate a pairing once we know that the first word is ‘And’. With the second word, we turn to its frequency distribution and simulate the third word, and so on.</p>
+<div id="6c8a3b0f" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">1361</span>)</span>
+<span id="cb47-2"><a href="#cb47-2"></a></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="kw">def</span> generate_model(cfdist, word, num<span class="op">=</span><span class="dv">15</span>):</span>
+<span id="cb47-4"><a href="#cb47-4"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num):</span>
+<span id="cb47-5"><a href="#cb47-5"></a>        <span class="bu">print</span>(word, end<span class="op">=</span><span class="st">' '</span>)</span>
+<span id="cb47-6"><a href="#cb47-6"></a>        </span>
+<span id="cb47-7"><a href="#cb47-7"></a>        choices <span class="op">=</span> np.array(<span class="bu">list</span>(cfdist[word].keys()))</span>
+<span id="cb47-8"><a href="#cb47-8"></a>        pp <span class="op">=</span> np.array(<span class="bu">list</span>(cfdist[word].values()))</span>
+<span id="cb47-9"><a href="#cb47-9"></a>        pp <span class="op">=</span> pp <span class="op">/</span> np.<span class="bu">sum</span>(pp)</span>
+<span id="cb47-10"><a href="#cb47-10"></a>        word <span class="op">=</span> rng.choice(choices, size<span class="op">=</span><span class="dv">1</span>, p <span class="op">=</span> pp)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="36dba06a" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a>generate_model(cfd, <span class="st">'God'</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>God amongst the daughter of his hands , to Jacob </code></pre>
+</div>
+</div>
+</section>
+<section id="power-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="power-analysis">Power Analysis</h3>
+<p>Recall that this is the general form of a 2-sample <span class="math inline">\(t\)</span>-test: <span class="math display">\[\begin{eqnarray}
+H_0 :&amp; \mu = \mu_0 \\
+H_1 :&amp; \mu \neq \mu_0
+\end{eqnarray}\]</span></p>
+<p>Instead of using the <span class="math inline">\(p\)</span>-value alone to assess the strength of evidence against the null hypothesis, an alternative method is to specify a significance level and then compare the <span class="math inline">\(p\)</span>-value to it.</p>
+<p>This returns the possible four outcomes of a test: * <span class="math inline">\(H_0\)</span> was true, but we rejected it (Type I error). * <span class="math inline">\(H_0\)</span> was true, and we did not reject it. * <span class="math inline">\(H_0\)</span> was false, and we rejected it. * <span class="math inline">\(H_0\)</span> was false, but we did not reject it (Type II error).</p>
+<p>We want the Type I and II errors to be small. 1 minus the Type II error is known as the power of a test. Typically, we have to specify a particular value of the parameter in order to compute the power of a test. We cannot simply leave it as <span class="math inline">\(\mu \neq \mu_0\)</span>. These ideas can be used to compute a sample size for an experiment that we wish to conduct. Let’s think about this for a minute.</p>
+<p>Suppose we wish to perform some simple A/B testing: we have two groups, and we wish to be able to detect a difference. What sample size do I need?</p>
+<p>The question is actually a little more complex than that. Let’s think about what we need to consider: * How does the true difference affect my sample size? * How does the variability within each group affect my sample size? * How does the significance level affect the sample size I need? Recall that the significance level determines my Type I error.</p>
+<p>Suppose now, that we fix the significance level to be 5%, with power of at least 0.9 and we are interested in detecting a difference between the means of the value of 1, when the standard deviation of observed values is 1.2. What sample size do I need?</p>
+<div id="45c7c370" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a><span class="kw">def</span> generate_one_sample(alpha, delta_m, sd1, n):</span>
+<span id="cb50-2"><a href="#cb50-2"></a>    X <span class="op">=</span> np.random.randn(n)<span class="op">*</span>sd1</span>
+<span id="cb50-3"><a href="#cb50-3"></a>    Y <span class="op">=</span> np.random.randn(n)<span class="op">*</span>sd1 <span class="op">+</span> delta_m</span>
+<span id="cb50-4"><a href="#cb50-4"></a>    </span>
+<span id="cb50-5"><a href="#cb50-5"></a>    ts2 <span class="op">=</span> stats.ttest_ind(X, Y)</span>
+<span id="cb50-6"><a href="#cb50-6"></a>    <span class="cf">if</span> ts2.pvalue <span class="op">&lt;</span> alpha:</span>
+<span id="cb50-7"><a href="#cb50-7"></a>        <span class="cf">return</span> <span class="dv">1</span> <span class="co"># 1 means reject H0</span></span>
+<span id="cb50-8"><a href="#cb50-8"></a>    <span class="cf">else</span>:</span>
+<span id="cb50-9"><a href="#cb50-9"></a>        <span class="cf">return</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="975292d8" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a>n_vals <span class="op">=</span> np.arange(<span class="dv">5</span>, <span class="dv">50</span>, step<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb51-2"><a href="#cb51-2"></a></span>
+<span id="cb51-3"><a href="#cb51-3"></a>power_est <span class="op">=</span> []</span>
+<span id="cb51-4"><a href="#cb51-4"></a><span class="cf">for</span> n_ <span class="kw">in</span> n_vals:</span>
+<span id="cb51-5"><a href="#cb51-5"></a>    x <span class="op">=</span> [generate_one_sample(<span class="fl">0.05</span>, <span class="dv">1</span>, <span class="fl">1.2</span>, n_) <span class="cf">for</span> ii <span class="kw">in</span> np.arange(<span class="dv">0</span>, <span class="dv">2000</span>)]</span>
+<span id="cb51-6"><a href="#cb51-6"></a>    power_est.append(np.mean(x))</span>
+<span id="cb51-7"><a href="#cb51-7"></a>    <span class="bu">print</span>(<span class="st">"Done with sample size "</span> <span class="op">+</span> <span class="bu">str</span>(n_))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Done with sample size 5
+Done with sample size 9
+Done with sample size 13
+Done with sample size 17
+Done with sample size 21
+Done with sample size 25
+Done with sample size 29
+Done with sample size 33
+Done with sample size 37
+Done with sample size 41
+Done with sample size 45
+Done with sample size 49</code></pre>
+</div>
+</div>
+<div id="04bcc20f" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a>ax <span class="op">=</span> plt.plot(n_vals, power_est, <span class="st">'go-'</span>)</span>
+<span id="cb53-2"><a href="#cb53-2"></a>plt.hlines(<span class="fl">0.9</span>, n_vals[<span class="dv">0</span>], n_vals[<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'b'</span>, linestyles<span class="op">=</span><span class="st">'dotted'</span>)</span>
+<span id="cb53-3"><a href="#cb53-3"></a>plt.title(<span class="st">'Power Estimates'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07-simulation_files/figure-html/cell-43-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="571" height="431"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary-simulation-based-modeling" class="level2" data-number="7.12">
+<h2 data-number="7.12" class="anchored" data-anchor-id="summary-simulation-based-modeling"><span class="header-section-number">7.12</span> Summary: Simulation-Based Modeling</h2>
+<p>In simulation-based modeling, we have several things to consider.</p>
+<ol type="1">
+<li>What input distributions should I use?</li>
+<li>How complicated does my simulation need to be?</li>
+<li>How do I know it is giving the right results?</li>
+<li>How many simulations should I run?</li>
+</ol>
+<p>Here are some general guidelines to begin with your simulation model:</p>
+<ol type="1">
+<li>Start simple.</li>
+<li>Use your own data to decide what distributions should be used.</li>
+<li>Try with different distributions to see how sensitive your results are to those choices.</li>
+<li>Add more and more realistic layers to our simulation as you proceed.</li>
+<li>Remember that simulation is used in estimating mean values. You will be able to estimate standard deviations around your estimate too.</li>
+</ol>
+</section>
+<section id="references" class="level2" data-number="7.13">
+<h2 data-number="7.13" class="anchored" data-anchor-id="references"><span class="header-section-number">7.13</span> References</h2>
+<section id="mesa-links" class="level3">
+<h3 class="anchored" data-anchor-id="mesa-links">Mesa Links</h3>
+<ol type="1">
+<li><a href="https://mesa.readthedocs.io/en/stable/index.html">Mesa documentation</a>: The Boltzmann tutorial in our lecture was modified from this page.</li>
+<li><a href="https://github.com/projectmesa/mesa-examples">Mesa examples on github</a></li>
+</ol>
+</section>
+<section id="other-abm-software" class="level3">
+<h3 class="anchored" data-anchor-id="other-abm-software">Other ABM Software</h3>
+<ol type="1">
+<li><a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>: Netlogo is an open-source software for ABM. There are a host of examples that you can take a look. However NetLogo uses it’s own programming language.
+<ul>
+<li>https://ccl.northwestern.edu/netlogo/models/index.cgi : Several of the examples can be run directly on the web. The mesa examples repository has several mesa versions of these NetLogo models.</li>
+</ul></li>
+<li><a href="https://www.anylogic.com/">AnyLogic</a>: AnyLogic is a commercial software from a Russian company that combines ABM with DES. It is very powerful and allows for the creation of impressive animations.</li>
+</ol>
+</section>
+<section id="reference-papers-and-websites" class="level3">
+<h3 class="anchored" data-anchor-id="reference-papers-and-websites">Reference Papers and Websites</h3>
+<ol type="1">
+<li><a href="http://arxiv.org/abs/cond-mat/0211175">Statistical Mechanics of Money, Income, and Wealth: A Short Survey</a>: This paper contains more information about more complex versions of the Boltzmann model.</li>
+<li><a href="https://cs.stanford.edu/people/eroberts/courses/soco/projects/2008-09/modeling-natural-systems/boids.html">Explanation of Boids model</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hotelling%27s_law">Hotelling’s Law</a></li>
+<li><a href="https://ncase.me/polygons/">Segregation in polygons</a></li>
+</ol>
+</section>
+<section id="other-simulation-software" class="level3">
+<h3 class="anchored" data-anchor-id="other-simulation-software">Other Simulation Software</h3>
+<ol type="1">
+<li><a href="https://simpy.readthedocs.io/en/latest/">Simpy documentation</a> Simpy is a Python package for Discrete Event Simulations (DES). It is appropriate when there are arrivals to a set of queues.</li>
+<li><a href="https://www.rockwellautomation.com/en-us/products/software/arena-simulation.html">Arena</a> ARENA is a commercial DES software. There is a free license for academic use.</li>
+</ol>
+</section>
+<section id="other-links" class="level3">
+<h3 class="anchored" data-anchor-id="other-links">Other Links</h3>
+<ol type="1">
+<li><a href="https://docs.python.org/3.10/tutorial/classes.html">Python documentation on classes</a></li>
+</ol>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-dragulescu2002statistical" class="csl-entry" role="listitem">
+Dragulescu, Adrian A, and Victor M Yakovenko. 2002. <span>“Statistical Mechanics of Money, Income, and Wealth: A Short Survey.”</span> <em>arXiv Preprint Cond-Mat/0211175</em>.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="application/vnd.jupyter.widget-state+json">
+{"state":{"0228b021898d4c29aaba41004a3cc0e1":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"0846ce6c1d2a4870988214dfd99250a7":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"11a8a005293a401086296761221e06fd":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"11cad7c805494de596073fd78adf72a5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_574160593f9f4133b3a0fba8b37bf339","placeholder":"​","style":"IPY_MODEL_0846ce6c1d2a4870988214dfd99250a7","tabbable":null,"tooltip":null,"value":"100%"}},"31368cf3ab5c4f4a88c062ce9d620f8e":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"33ddfb43860a46a3a03e22803d51443b":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"4fd890f79e5a4ca893194683fafcbc67":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"5676122478d04faa8ad05c952708c06a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_9e5cc7a26ae84983ad9e0d1578857c08","max":150,"min":0,"orientation":"horizontal","style":"IPY_MODEL_b1eeb8c2cb004a50a5f6894b8b1be247","tabbable":null,"tooltip":null,"value":150}},"574160593f9f4133b3a0fba8b37bf339":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5cf4d89cd0f246298ca580e6565647bf":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5de4f7d5e3db456e85d0a73e92efd280":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5e488ae8e5884cc0bafc78d692f60f8a":{"model_module":"jupyter-vuetify","model_module_version":"^1.11.2","model_name":"ThemeColorsModel","state":{"_model_module":"jupyter-vuetify","_model_module_version":"^1.11.2","_model_name":"ThemeColorsModel","_theme_name":"dark","_view_count":null,"_view_module":null,"_view_module_version":"^1.11.2","_view_name":null,"accent":"#FF4081","anchor":null,"error":"#FF5252","info":"#2196F3","primary":"#2196F3","secondary":"#424242","success":"#4CAF50","warning":"#FB8C00"}},"5e4e6b8a8425477c920df79678c6d792":{"model_module":"jupyter-vue","model_module_version":"^1.11.2","model_name":"ForceLoadModel","state":{"_dom_classes":[],"_model_module":"jupyter-vue","_model_module_version":"^1.11.2","_model_name":"ForceLoadModel","_view_count":null,"_view_module":null,"_view_module_version":"","_view_name":null,"layout":"IPY_MODEL_bfbc58214f874b59bfd7614c8829a672","tabbable":null,"tooltip":null}},"5ffe305a82cb4f689263bcba9487c18d":{"model_module":"jupyter-vuetify","model_module_version":"^1.11.2","model_name":"ThemeColorsModel","state":{"_model_module":"jupyter-vuetify","_model_module_version":"^1.11.2","_model_name":"ThemeColorsModel","_theme_name":"light","_view_count":null,"_view_module":null,"_view_module_version":"^1.11.2","_view_name":null,"accent":"#82B1FF","anchor":null,"error":"#FF5252","info":"#2196F3","primary":"#1976D2","secondary":"#424242","success":"#4CAF50","warning":"#FB8C00"}},"649553e8994a4a2a88e1c87f33dc4a3b":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_11cad7c805494de596073fd78adf72a5","IPY_MODEL_5676122478d04faa8ad05c952708c06a","IPY_MODEL_872f502dbe8440918f24727b0d51e253"],"layout":"IPY_MODEL_79710a7d08604de48ab58dd40d1f62ee","tabbable":null,"tooltip":null}},"6e8fb50ca8274ed481f515e8c3e549e6":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_f33932a5b4bf4879ba1a9366784786d2","placeholder":"​","style":"IPY_MODEL_d50ad95adb7448af93fd5b102ebe5495","tabbable":null,"tooltip":null,"value":"100%"}},"79710a7d08604de48ab58dd40d1f62ee":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"8597fd12e8d64b26b5ae7698cfcf17aa":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_d2be5777f5e54e698766551f8b226755","IPY_MODEL_a5d727c8e73b491fbe01b16494f012ad","IPY_MODEL_e82033f361b14ca08f5d1e0e97a4fed3"],"layout":"IPY_MODEL_bd1926b992e7475381568ff76391afd2","tabbable":null,"tooltip":null}},"872f502dbe8440918f24727b0d51e253":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_5de4f7d5e3db456e85d0a73e92efd280","placeholder":"​","style":"IPY_MODEL_9f0852c346e049e682b2c3e436505a08","tabbable":null,"tooltip":null,"value":" 150/150 [00:01&lt;00:00, 137.04it/s]"}},"92aced39a5df4947ac9915f791f0c706":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_f8bd754bf7c94307ba862f18357ebea4","placeholder":"​","style":"IPY_MODEL_31368cf3ab5c4f4a88c062ce9d620f8e","tabbable":null,"tooltip":null,"value":" 50/50 [00:00&lt;00:00, 171.07it/s]"}},"9e5cc7a26ae84983ad9e0d1578857c08":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"9f0852c346e049e682b2c3e436505a08":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"a293abe66eaf4bb3a0563eeff8cfc139":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"a4fe65025f864fed98ec9357f6eef48b":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_6e8fb50ca8274ed481f515e8c3e549e6","IPY_MODEL_f49310ca5fd641488affbfaf56c025a9","IPY_MODEL_92aced39a5df4947ac9915f791f0c706"],"layout":"IPY_MODEL_db256ba6ce6940df9ce6c641bec16f7d","tabbable":null,"tooltip":null}},"a5d727c8e73b491fbe01b16494f012ad":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_a293abe66eaf4bb3a0563eeff8cfc139","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_b80e0826f0564b79a39db73b4fb11974","tabbable":null,"tooltip":null,"value":50}},"b1eeb8c2cb004a50a5f6894b8b1be247":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"b80e0826f0564b79a39db73b4fb11974":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"bd1926b992e7475381568ff76391afd2":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"bfbc58214f874b59bfd7614c8829a672":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d2be5777f5e54e698766551f8b226755":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_11a8a005293a401086296761221e06fd","placeholder":"​","style":"IPY_MODEL_4fd890f79e5a4ca893194683fafcbc67","tabbable":null,"tooltip":null,"value":"100%"}},"d50ad95adb7448af93fd5b102ebe5495":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"db256ba6ce6940df9ce6c641bec16f7d":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"e82033f361b14ca08f5d1e0e97a4fed3":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_5cf4d89cd0f246298ca580e6565647bf","placeholder":"​","style":"IPY_MODEL_fda8ac024a0f44509fd52e5f0caba181","tabbable":null,"tooltip":null,"value":" 50/50 [00:00&lt;00:00, 192.50it/s]"}},"ea80aeb60d70485d8c7a027586fa653d":{"model_module":"jupyter-vuetify","model_module_version":"^1.11.2","model_name":"ThemeModel","state":{"_model_module":"jupyter-vuetify","_model_module_version":"^1.11.2","_model_name":"ThemeModel","_view_count":null,"_view_module":null,"_view_module_version":"^1.11.2","_view_name":null,"dark":null,"dark_effective":null}},"f33932a5b4bf4879ba1a9366784786d2":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"f49310ca5fd641488affbfaf56c025a9":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_33ddfb43860a46a3a03e22803d51443b","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_0228b021898d4c29aaba41004a3cc0e1","tabbable":null,"tooltip":null,"value":50}},"f8bd754bf7c94307ba862f18357ebea4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"fda8ac024a0f44509fd52e5f0caba181":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}}},"version_major":2,"version_minor":0}
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./06-ts.html" class="pagination-link" aria-label="Time Series Analysis">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./08-supervised.html" class="pagination-link" aria-label="Supervised Learning">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

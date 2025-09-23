@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Statistical Inference – Data Analytics for Sense-Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./03-unsupervised.html" rel="next">
+<link href="./01-intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-inference.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analytics for Sense-Making</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-inference.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Academic References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">2.1</span> Introduction</a></li>
+  <li><a href="#comparing-means" id="toc-comparing-means" class="nav-link" data-scroll-target="#comparing-means"><span class="header-section-number">2.2</span> Comparing Means</a></li>
+  <li><a href="#paired-sample-tests" id="toc-paired-sample-tests" class="nav-link" data-scroll-target="#paired-sample-tests"><span class="header-section-number">2.3</span> Paired Sample Tests</a></li>
+  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="header-section-number">2.4</span> ANoVA</a></li>
+  <li><a href="#categorical-variables" id="toc-categorical-variables" class="nav-link" data-scroll-target="#categorical-variables"><span class="header-section-number">2.5</span> Categorical Variables</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">2.6</span> Summary</a></li>
+  <li><a href="#sec-02-ref" id="toc-sec-02-ref" class="nav-link" data-scroll-target="#sec-02-ref"><span class="header-section-number">2.7</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2.1</span> Introduction</h2>
+<p>In statistics, we often wish to make inference about a <em>population</em>, using a <em>sample</em>. The sample typically has uncertainty associated with it, because the precise values will differ each time we draw a sample from the population. The process of utilising the observations from the sample to make conclusions regarding population characteristics, is known as <strong>statistical inference</strong>. This topic introduces two main techniques for statistical inference in common application contexts. The two techniques are (1) hypothesis tests and (2) confidence intervals.</p>
+<section id="hypothesis-tests" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-tests">Hypothesis Tests</h3>
+<p>You might have been introduced to hypothesis tests in an introductory course before, but just to get us all on the same page, here is the general approach for conducting a hypothesis test:</p>
+<section id="step-1-assumptions" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-assumptions">Step 1: Assumptions</h4>
+<p>In this step, we make a note of the assumptions required for the test to be valid. In some tests, this step is carried out last, but, it is nonetheless essential to perform as it could invalidate the test. Some tests are very sensitive to the assumptions - this is in fact the main reason that the class of <a href="https://statisticsbyjim.com/basics/robust-statistics/"><em>robust statistics</em></a> was invented.</p>
+</section>
+<section id="step-2-state-the-hypotheses-and-significance-level" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-state-the-hypotheses-and-significance-level">Step 2: State the hypotheses and significance level</h4>
+<p>The purpose of hypothesis testing is to make an inferential statement about the population from which the data arose. This inferential statement is what we refer to as the hypothesis regarding the population.</p>
+<p>The hypotheses will be stated as a pair: The first hypothesis is the null hypothesis <span class="math inline">\(H_0\)</span> and the second is the alternative hypothesis <span class="math inline">\(H_1\)</span>. Both statements will involve the <strong>population parameter</strong> (not the data summary) of interest. For example, if we have a sample of observations from two groups <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, and we wish to assess if the mean of the populations is different, the hypotheses would be</p>
+<p><span class="math display">\[\begin{eqnarray}
+H_0: &amp; \mu_A = \mu_B \\
+H_1: &amp; \mu_A \ne \mu_B
+\end{eqnarray}\]</span></p>
+<p><span class="math inline">\(H_0\)</span> is usually a statement that indicates “no difference”, and <span class="math inline">\(H_1\)</span> is the complement of <span class="math inline">\(H_0\)</span>, or a subset of it.</p>
+<p>At this stage, it is also crucial to state the significance level of the test. The significance level corresponds to the Type I error of the test - the probability of rejecting <span class="math inline">\(H_0\)</span> when in fact it was true. This level is usually denoted as <span class="math inline">\(\alpha\)</span>, and is usually taken to be 5%, but there is no reason to adopt this blindly. Where possible, the significance level should be chosen to be appropriate for the problem at hand.</p>
+<blockquote class="blockquote">
+<p>Think of the choice of 5% as corresponding to accepting an error at a rate of 1 in 20 - that’s how it was originally decided upon by <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">R A Fisher</a>.</p>
+</blockquote>
+</section>
+<section id="step-3-compute-the-test-statistic" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-compute-the-test-statistic">Step 3: Compute the test statistic</h4>
+<p>The test statistic is usually a measure of how far the observed data deviates from the scenario defined by <span class="math inline">\(H_0\)</span>. Usually, the larger it is, the more evidence we have against <span class="math inline">\(H_0\)</span>. The construction of a hypothesis test (by theoretical statisticians) involves the derivation of the exact or approximate distribution of the test statistic under <span class="math inline">\(H_0\)</span>. Deviations from the assumption could render this distribution incorrect.</p>
+</section>
+<section id="step-4-compute-the-p-value" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-compute-the-p-value">Step 4: Compute the <span class="math inline">\(p\)</span>-value</h4>
+<p>The <span class="math inline">\(p\)</span>-value quantifies the chance of occurrence of a dataset as extreme as the one observed, under the assumptions of <span class="math inline">\(H_0\)</span>. The distribution of the test statistic under <span class="math inline">\(H_0\)</span> is used to compute this value between 0 and 1. A value closer to 0 indicates stronger evidence against <span class="math inline">\(H_0\)</span>.</p>
+</section>
+<section id="step-5-state-your-conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-state-your-conclusion">Step 5: State your conclusion</h4>
+<p>This is the binary decision stage - either we reject <span class="math inline">\(H_0\)</span>, or we do not reject <span class="math inline">\(H_0\)</span>. It is conventional to use this terminology (instead of “accepting <span class="math inline">\(H_1\)</span>”) since our <span class="math inline">\(p\)</span>-value is a measure of evidence <em>against</em> <span class="math inline">\(H_0\)</span> (not <em>for</em> it).</p>
+</section>
+</section>
+<section id="confidence-intervals" class="level3">
+<h3 class="anchored" data-anchor-id="confidence-intervals">Confidence Intervals</h3>
+<p>Confidence intervals are an alternative method of inference for population parameters. Instead of yielding a binary reject/do-not-reject result, they return an<br>
+interval that contains the plausible values for the population parameter. Many confidence intervals are derived by inverting hypothesis tests, and almost all confidence intervals are of the form</p>
+<blockquote class="blockquote">
+<p>Sample estimate <span class="math inline">\(\pm\)</span> margin of error</p>
+</blockquote>
+<p>For instance, if we observe <span class="math inline">\(x_1, \ldots, x_n\)</span> from a Normal distribution, and wish to estimate the mean of the distribution, the 95% confidence interval based on the the <span class="math inline">\(t\)</span> distribution is</p>
+<p><span class="math display">\[\begin{equation*}
+\bar{x} \pm t_{0.025, n-1} \times \frac{s}{\sqrt{n}}
+\end{equation*}\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\bar{x}\)</span> is the sample mean,</li>
+<li><span class="math inline">\(s\)</span> is the sample standard deviation, and</li>
+<li><span class="math inline">\(t_{0.025, n-1}\)</span> is the 0.025-quantile from the <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-1\)</span> degrees of freedom.</li>
+</ul>
+<p>The formulas for many confidence intervals rely on asymptotic Normality of the estimator. However, this is an assumption that can be overcome with the technique of bootstrapping. If time permits, we shall touch on this in a later topic of our course. Bootstrapping can also be used to sidestep the distributional assumptions in hypothesis tests, but I still much prefer confidence intervals to tests because they yield an interval; they provide much more information than a binary outcome.</p>
+</section>
+</section>
+<section id="comparing-means" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="comparing-means"><span class="header-section-number">2.2</span> Comparing Means</h2>
+<section id="sample-tests" class="level3">
+<h3 class="anchored" data-anchor-id="sample-tests">2-sample Tests</h3>
+<p>In an independent samples <span class="math inline">\(t\)</span>-test, observations in one group yield <em>no information</em> about the observations in the other group. Independent samples can arise in a few ways:</p>
+<ul>
+<li>In an experimental study, study units could be assigned randomly to different treatments, thus forming the two groups.</li>
+<li>In an observational study, we could draw a random sample from the population, and then record an explanatory categorical variable on each unit, such as the gender or senior-citizen status.</li>
+<li>In an observational study, we could draw a random sample from a group (say smokers), and then a random sample from another group (say non-smokers). This would result in a situation where the independent 2-sample <span class="math inline">\(t\)</span>-test is appropriate.</li>
+</ul>
+<section id="formal-set-up" class="level4">
+<h4 class="anchored" data-anchor-id="formal-set-up">Formal Set-up</h4>
+<p>Formally speaking, this is how the independent 2-sample t-test works:</p>
+<p>Suppose that <span class="math inline">\(X_1,X_2,\ldots,X_{n_1}\)</span> are independent observations from group 1, and <span class="math inline">\(Y_1, \ldots Y_{n_2}\)</span> are independent observations from group 2. It is assumed that</p>
+<p><span class="math display">\[\begin{eqnarray}
+X_i &amp;\sim&amp; N(\mu_1,\, \sigma^2),\; i=1,\ldots,n_1 \\
+Y_j &amp;\sim&amp; N(\mu_2,\, \sigma^2),\; j=1,\ldots,n_2
+\end{eqnarray}\]</span></p>
+<p>The null and alternative hypotheses would be</p>
+<p><span class="math display">\[\begin{eqnarray}
+H_0: &amp; \mu_1 = \mu_2 \\
+H_1: &amp; \mu_1 \ne \mu_2
+\end{eqnarray}\]</span></p>
+<p>The test statistic for this test is:</p>
+<p><span class="math display">\[
+T_1 = \frac{(\bar{X} - \bar{Y}) - 0 }{s_p\sqrt{1/n_1 + 1/n_2} }
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[\begin{equation*}
+s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
+\end{equation*}\]</span></p>
+<p>Notice that the numerator of <span class="math inline">\(T_1\)</span> will be large (in absolute value) when the difference in sample group means is also large. This is what we mean when we say that the test-statistic measures deviation from the null hypothesis.</p>
+<p>Under <span class="math inline">\(H_0\)</span>, the test statistic <span class="math inline">\(T_1\)</span> follows a <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n_1 + n_2 -2\)</span> degrees of freedom. When we use a software to apply the test above, it will typically also return a confidence interval, computed as</p>
+<p><span class="math display">\[\begin{equation*}
+(\bar{X} - \bar{Y}) \pm t_{n_1 + n_2 -2, 1 - \alpha/2} \times s_p\sqrt{1/n_1 + 1/n_2}
+\end{equation*}\]</span></p>
+<p>For more details on the test, refer to the links in the references section <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>.</p>
+<div id="35b7727f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> statsmodels.formula.api <span class="im">import</span> ols</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">import</span> statsmodels.stats.multicomp <span class="im">as</span> mc</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> itables <span class="im">import</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="exm-abalone-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.1 (Example: Abalone Measurements)</strong></span> </p>
+<p>The dataset on abalone measurements from the <a href="https://archive.ics.uci.edu/dataset/1/abalone">UCI machine learning repository</a> contains measurements of physical characteristics, along with the gender status. We derive a sample of 50 measurements of male and female abalone records for use here. Our goal is to study if there is a significant difference between the viscera weight between males and females. The derived dataset can be found on Canvas.</p>
+<div id="90879f63" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>abl <span class="op">=</span> pd.read_csv(<span class="st">"data/abalone_sub.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>show(abl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table id="itables_ec56810f_0ec4_4563_b836_90aff24ee951" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<thead>
+    <tr style="text-align: right;">
+      
+      <th>gender</th>
+      <th>viscera</th>
+    </tr>
+  </thead><tbody><tr>
+<td style="vertical-align:middle; text-align:left">
+<a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+Loading ITables v2.3.0 from the internet...
+(need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)</td>
+</tr></tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
+
+    document.querySelectorAll("#itables_ec56810f_0ec4_4563_b836_90aff24ee951:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        // Define the table data
+        const data = [["F", 0.175], ["F", 0.3825], ["F", 0.13], ["F", 0.2345], ["F", 0.403], ["F", 0.3965], ["F", 0.355], ["F", 0.25], ["F", 0.2335], ["F", 0.305], ["F", 0.125], ["F", 0.215], ["F", 0.4215], ["F", 0.24], ["F", 0.2745], ["F", 0.2875], ["F", 0.3065], ["F", 0.162], ["F", 0.2765], ["F", 0.317], ["F", 0.4375], ["F", 0.275], ["F", 0.275], ["F", 0.13], ["F", 0.575], ["F", 0.29], ["F", 0.185], ["F", 0.2], ["F", 0.155], ["F", 0.22], ["F", 0.33], ["F", 0.375], ["F", 0.205], ["F", 0.513], ["F", 0.3185], ["F", 0.246], ["F", 0.42], ["F", 0.315], ["F", 0.44], ["F", 0.31], ["F", 0.42], ["F", 0.1515], ["F", 0.095], ["F", 0.225], ["F", 0.39], ["F", 0.265], ["F", 0.2], ["F", 0.1], ["F", 0.2], ["F", 0.3685], ["M", 0.04], ["M", 0.255], ["M", 0.371], ["M", 0.35], ["M", 0.3555], ["M", 0.2365], ["M", 0.335], ["M", 0.185], ["M", 0.31], ["M", 0.178], ["M", 0.4075], ["M", 0.4405], ["M", 0.255], ["M", 0.31], ["M", 0.335], ["M", 0.21], ["M", 0.24], ["M", 0.287], ["M", 0.295], ["M", 0.125], ["M", 0.317], ["M", 0.28], ["M", 0.341], ["M", 0.345], ["M", 0.273], ["M", 0.279], ["M", 0.1225], ["M", 0.29], ["M", 0.31], ["M", 0.3445], ["M", 0.4865], ["M", 0.2195], ["M", 0.1775], ["M", 0.325], ["M", 0.355], ["M", 0.295], ["M", 0.401], ["M", 0.52], ["M", 0.2525], ["M", 0.4755], ["M", 0.091], ["M", 0.638], ["M", 0.305], ["M", 0.141], ["M", 0.335], ["M", 0.355], ["M", 0.265], ["M", 0.335], ["M", 0.3845], ["M", 0.33]];
+
+        // Define the dt_args
+        let dt_args = {"layout": {"topStart": "pageLength", "topEnd": "search", "bottomStart": "info", "bottomEnd": "paging"}, "order": [], "warn_on_selected_rows_not_rendered": true};
+        dt_args["data"] = data;
+
+        
+        new DataTable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+<div id="5521a070" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>x <span class="op">=</span> abl.viscera[abl.gender <span class="op">==</span> <span class="st">"F"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2"></a>y <span class="op">=</span> abl.viscera[abl.gender <span class="op">==</span> <span class="st">"M"</span>]</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>t_out <span class="op">=</span> stats.ttest_ind(y, x)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>ci_95 <span class="op">=</span> t_out.confidence_interval()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="429eebf9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">print</span>(<span class="ss">f"The $p$-value for the test is </span><span class="sc">{</span>t_out<span class="sc">.</span>pvalue<span class="sc">:.3f}</span><span class="ss">."</span>)<span class="co">#</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">print</span>(<span class="ss">f"The actual value of the test statistic is </span><span class="sc">{</span>t_out<span class="sc">.</span>statistic<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="bu">print</span>(<span class="ss">f"The upper and lower limits of the CI are (</span><span class="sc">{</span>ci_95[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ci_95[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">)."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The $p$-value for the test is 0.365.
+The actual value of the test statistic is 0.910.
+The upper and lower limits of the CI are (-0.023, 0.063).</code></pre>
+</div>
+</div>
+</div>
+<p>To assess the normality assumption, we make histograms and qq-plots. Histograms of data from a Normal distribution should appear symmetric and bell-shaped. The tails on both sides should come down at a moderate pace. If we observe asymmetry in our histogram, we might suspect deviation from Normality. As we can see from the figure below, a histogram with a long tail on the right (left) is referred to as right-skewed (corr. left-skewed).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/summ_data-05.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Sample Histograms</figcaption>
+</figure>
+</div>
+<div id="exm-abalone-1a" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.2 (Example: Abalone Measurements)</strong></span> </p>
+<p>Now we turn back to the histograms for the abalone data. Indeed, they do indicate some deviation from Normality - the female group is a little skewed to the right, while the male group appears to have a sharper peak than a Normal.</p>
+<div id="ff74ac75" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>sns.displot(abl, x<span class="op">=</span><span class="st">'viscera'</span>, col<span class="op">=</span><span class="st">'gender'</span>, kind<span class="op">=</span><span class="st">'hist'</span>, stat<span class="op">=</span><span class="st">'density'</span>, </span>
+<span id="cb6-2"><a href="#cb6-2"></a>            binwidth<span class="op">=</span><span class="fl">0.1</span>, height<span class="op">=</span><span class="dv">4</span>, aspect<span class="op">=</span><span class="fl">1.2</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-6-output-1.png" width="912" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>A Quantile-Quantile plot is a graphical diagnostic tool for assessing if a dataset follows a particular distribution. Most of the time we would be interested in comparing against a Normal distribution.</p>
+<p>A QQ-plot plots the standardized sample quantiles against the theoretical quantiles of a N(0; 1) distribution. If they fall on a straight line, then we would say that there is evidence that the data came from a normal distribution. Especially for unimodal datasets, the points in the middle will fall close to the line. The value of a QQ-plot is in judging if the tails of the data are fatter or thinner than the tails of the Normal.</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/fig-qq-1-3.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Thinner</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/fig-qq-1-4.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Fatter</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-abalone-1b" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.3 (Example: Abalone Measurements)</strong></span> </p>
+<p>If we compare the qq-plots from the data (below) with the reference (above), we can infer that for females, the left tail is thinner than a Normal - it abruptly cuts off. For males, both the left and the right tail are fatter than a Normal’s.</p>
+<div id="d0d254d0" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>f, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">121</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>sm.qqplot(x, line<span class="op">=</span><span class="st">"q"</span>, ax<span class="op">=</span>tmp)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>tmp.set_title(<span class="st">'Females'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">122</span>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>sm.qqplot(y, line<span class="op">=</span><span class="st">"q"</span>, ax<span class="op">=</span>tmp)</span>
+<span id="cb7-7"><a href="#cb7-7"></a>tmp.set_title(<span class="st">'Males'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-7-output-1.png" width="812" height="376" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>If you are keen on learning about particular hypothesis tests for Normality, take a look at the references <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>.</p>
+<p>We also need to assess if the variances are equal. While there are many hypothesis tests specifically for assessing if variances are equal (e.g.&nbsp;Levene, Bartlett), in our class, I advocate a simple rule of thumb. If the larger s.d is more than twice the smaller one, than we should not use the equal variance form of the test. This rule of thumb is widely used in practice (see the references <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>).</p>
+<div id="d0292518" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>abl.groupby(<span class="st">'gender'</span>).describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th colspan="8" data-quarto-table-cell-role="th" data-halign="left">viscera</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+<tr class="header">
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">F</td>
+<td>50.0</td>
+<td>0.28241</td>
+<td>0.108707</td>
+<td>0.095</td>
+<td>0.201250</td>
+<td>0.275</td>
+<td>0.365125</td>
+<td>0.575</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">M</td>
+<td>50.0</td>
+<td>0.30220</td>
+<td>0.108746</td>
+<td>0.040</td>
+<td>0.253125</td>
+<td>0.310</td>
+<td>0.348750</td>
+<td>0.638</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>We would conclude that there is no significant difference between the mean viscera weight of males and females.</p>
+</section>
+</section>
+</section>
+<section id="paired-sample-tests" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="paired-sample-tests"><span class="header-section-number">2.3</span> Paired Sample Tests</h2>
+<p>The data in a paired sample test also arises from two groups, but the two groups are not independent. A very common scenario that gives rise to this test is when the same subject receives both treatments. His/her measurement under each treatment gives rise to a measurement in each group. However, the measurements are no longer independent.</p>
+<div id="exm-reaction-time" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.4 (Example: Reaction time of drivers)</strong></span> </p>
+<p>Consider a study on 32 drivers sampled from a driving school. Each driver is put in a simulation of a driving situation, where a target flashes red and green at random periods. Whenever the driver sees red, he/she has to press a brake button.</p>
+<p>For each driver, the study is carried out twice - at one of the repetitions, the individual carries on a phone conversation while at the other, the driver listens to the radio. Each measurement falls under one of two groups - “phone” or “radio”, but the measurements for driver <span class="math inline">\(i\)</span> are clearly related.</p>
+<p><em>Some people might just have a slower/faster baseline reaction time!</em></p>
+<p>This is a situation where a paired sample test is appropriate, not an independent sample test.</p>
+</div>
+<section id="formal-set-up-1" class="level3">
+<h3 class="anchored" data-anchor-id="formal-set-up-1">Formal Set-up</h3>
+<p>Suppose that we observe <span class="math inline">\(X_1, \ldots , X_n\)</span> independent observations from group 1 and <span class="math inline">\(Y_1, \ldots, Y_n\)</span> independent observations from group 2. However the pair <span class="math inline">\((X_i, Y_i)\)</span> are correlated. Similar to the previous section, it is assumed that</p>
+<p><span class="math display">\[\begin{eqnarray}
+X_i &amp;\sim&amp; N(\mu_1,\, \sigma_1^2),\; i=1,\ldots,n \\
+Y_j &amp;\sim&amp; N(\mu_2,\, \sigma_2^2),\; j=1,\ldots,n
+\end{eqnarray}\]</span></p>
+<p>We let <span class="math inline">\(D_i = X_i - Y_i\)</span> for <span class="math inline">\(i=1, \ldots, n\)</span>. It follows that <span class="math display">\[
+D_i \sim N(\mu_1 - \mu_2,\; \sigma^2_1 + \sigma^2_2 - 2 cov(X_i, Y_i))
+\]</span> The null and alternative hypotheses are stated in terms of the distribution of <span class="math inline">\(D_i\)</span>:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+H_0: &amp; \mu_D = 0 \\
+H_1: &amp; \mu_D \ne 0
+\end{eqnarray*}\]</span></p>
+<p>The test statistic for this test is:</p>
+<p><span class="math display">\[
+T_2 = \frac{\bar{D} - 0 }{s / \sqrt{n} }
+\]</span> where <span class="math display">\[
+s^2 = \frac{\sum_{i=1}^n (D_i - \bar{D})^2}{(n - 1)}
+\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, the test statistic <span class="math inline">\(T_2 \sim t_{n - 1}\)</span>. When we use a software to apply the test above, it will typically also return a confidence interval, computed as</p>
+<p><span class="math display">\[
+\bar{D} \pm t_{n - 1, 1 - \alpha/2} \times s / \sqrt{n}
+\]</span></p>
+<div id="exm-hr-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.5 (Example: Heart Rate Before/After Treadmill)</strong></span> </p>
+<p>The following dataset comes from a textbook. In a self-recorded experiment, an individual recorded his heart rate before using a treadmill (baseline) and 5 minutes after use, for 12 days in 2006.</p>
+<div id="da6d5b44" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>hr_df <span class="op">=</span> pd.read_csv(<span class="st">"data/health_promo_hr.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#hr_df.head()</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>p_test_out <span class="op">=</span> stats.ttest_rel(hr_df.baseline, hr_df.after5)</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="bu">print</span>(<span class="ss">f"The $p$-value for the test is </span><span class="sc">{</span>p_test_out<span class="sc">.</span>pvalue<span class="sc">:.2g}</span><span class="ss">."</span>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="ss">The difference in means is </span><span class="sc">{</span>hr_df<span class="sc">.</span>baseline<span class="sc">.</span>mean() <span class="op">-</span> hr_df<span class="sc">.</span>after5<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">.</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="ss">       """</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The $p$-value for the test is 2.2e-10.
+
+The difference in means is -15.229.
+       </code></pre>
+</div>
+</div>
+<p>While we do not include them here, it is imperative to also make the checks for Normality. If you were to make them, you would realise that the sample size is rather small. Even so, it is difficult to make the case for Normality here.</p>
+<p>Here is a plot that is particularly useful in paired sample studies:</p>
+<div id="0abd1a0a" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>ax1 <span class="op">=</span> hr_df.plot(x<span class="op">=</span><span class="st">'baseline'</span>, y<span class="op">=</span><span class="st">'after5'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>, marker<span class="op">=</span><span class="st">'o'</span>, </span>
+<span id="cb11-2"><a href="#cb11-2"></a>                 edgecolor<span class="op">=</span><span class="st">'blue'</span>, color<span class="op">=</span><span class="st">'none'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>group_means <span class="op">=</span> hr_df.loc[:, [<span class="st">'baseline'</span>, <span class="st">'after5'</span>]].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>ax1.set_xlim(<span class="dv">75</span>, <span class="dv">105</span>)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>ax1.set_ylim(<span class="dv">75</span>,<span class="dv">105</span>)</span>
+<span id="cb11-6"><a href="#cb11-6"></a>ax1.plot([<span class="dv">75</span>,<span class="dv">105</span>], [<span class="dv">75</span>,<span class="dv">105</span>], color<span class="op">=</span><span class="st">"lightblue"</span>, linestyle<span class="op">=</span><span class="st">"dashed"</span>)<span class="op">;</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>ax1.scatter(group_means.iloc[<span class="dv">0</span>], group_means.iloc[<span class="dv">1</span>],  marker<span class="op">=</span><span class="st">'o'</span>, </span>
+<span id="cb11-8"><a href="#cb11-8"></a>            edgecolor<span class="op">=</span><span class="st">'blue'</span>, color<span class="op">=</span><span class="st">'none'</span>, s<span class="op">=</span><span class="dv">100</span>)<span class="op">;</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>ax1.set_title(<span class="st">'Agreement of after5 and baseline'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-10-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="606" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="anova" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="anova"><span class="header-section-number">2.4</span> ANoVA</h2>
+<p>In this section, we introduce the <em>one-way analysis of variance</em> (ANOVA), which generalises the <span class="math inline">\(t\)</span>-test methodology to more than 2 groups. Hypothesis tests in the ANOVA framework require the assumption of Normality.</p>
+<p>While the <span class="math inline">\(F\)</span>-test in ANOVA provides a determination of whether or not the group means are different, in practice, we would always want to follow up with specific comparisons between groups as well.</p>
+<div id="exm-antibiotics-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.6 (Example: Heifers)</strong></span> </p>
+<p>The following example was taken from <a href="https://biostatistics.dk/isdals/">Introduction to Statistical Data Analysis for Life Sciences</a>.</p>
+<p>An experiment with dung from heifers was carried out in order to explore the influence of antibiotics on the decomposition of dung organic material. As part of the experiment, 36 heifers were randomly assigned into six groups. Note that a heifer is a young, female cow that has not had her first calf yet.</p>
+<p>Antibiotics of different types were added to the feed for heifers in five of the groups. The remaining group served as a control group. For each heifer, a bag of dung was dug into the soil, and after 8 weeks the amount of organic material was measured for each bag.</p>
+<p>Here is a boxplot of the data from each group, along with summary statistics in a table below.</p>
+<div id="3cbdad23" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>heifers <span class="op">=</span> pd.read_csv(<span class="st">'data/antibio.csv'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>sns.boxplot(heifers, x<span class="op">=</span><span class="st">'type'</span>, y<span class="op">=</span><span class="st">'org'</span>,)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-11-output-1.png" width="589" height="429" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compared to the control group, it does appear that the median organic weight of the dung from the other heifer groups is higher. The following table displays the mean, standard deviation, and count from each group:</p>
+<div id="4dd049fb" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>heifers.groupby(<span class="st">'type'</span>).describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th colspan="8" data-quarto-table-cell-role="th" data-halign="left">org</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+<tr class="header">
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Alfacyp</td>
+<td>6.0</td>
+<td>2.895000</td>
+<td>0.116748</td>
+<td>2.75</td>
+<td>2.7950</td>
+<td>2.915</td>
+<td>2.9900</td>
+<td>3.02</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Control</td>
+<td>6.0</td>
+<td>2.603333</td>
+<td>0.118771</td>
+<td>2.43</td>
+<td>2.5450</td>
+<td>2.595</td>
+<td>2.6825</td>
+<td>2.76</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Enroflox</td>
+<td>6.0</td>
+<td>2.710000</td>
+<td>0.161988</td>
+<td>2.42</td>
+<td>2.6775</td>
+<td>2.735</td>
+<td>2.8075</td>
+<td>2.88</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Fenbenda</td>
+<td>6.0</td>
+<td>2.833333</td>
+<td>0.123558</td>
+<td>2.66</td>
+<td>2.7675</td>
+<td>2.850</td>
+<td>2.8725</td>
+<td>3.02</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Ivermect</td>
+<td>6.0</td>
+<td>3.001667</td>
+<td>0.109438</td>
+<td>2.81</td>
+<td>2.9625</td>
+<td>3.045</td>
+<td>3.0600</td>
+<td>3.11</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Spiramyc</td>
+<td>4.0</td>
+<td>2.855000</td>
+<td>0.054467</td>
+<td>2.80</td>
+<td>2.8300</td>
+<td>2.845</td>
+<td>2.8700</td>
+<td>2.93</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Observe that the Spiramycin group only yielded 4 readings instead of 6. Our goal in this topic is to understand a technique for assessing if group means are statistically different from one another. Here are the specific analyses that we shall carry out:</p>
+<section id="heifers-questions-of-interest" class="level4">
+<h4 class="anchored" data-anchor-id="heifers-questions-of-interest">Heifers: Questions of Interest</h4>
+<ol type="1">
+<li>Is there any significant difference, at 5% level, between the mean decomposition level of the groups?</li>
+<li>At 5% level, is the mean level for Enrofloxacin different from the control group?</li>
+<li>Pharmacologically speaking, Ivermectin and Fenbendazole are similar to each other. Let us call this sub-group (A). They work differently than Enrofloxacin. At 5% level, is there a significant difference between the mean from sub-group A and Enrofloxacin?</li>
+</ol>
+</section>
+</div>
+<section id="formal-set-up-2" class="level3">
+<h3 class="anchored" data-anchor-id="formal-set-up-2">Formal Set-up</h3>
+<p>Suppose there are <span class="math inline">\(k\)</span> groups with <span class="math inline">\(n_i\)</span> observations in the <span class="math inline">\(i\)</span>-th group. The <span class="math inline">\(j\)</span>-th observation in the <span class="math inline">\(i\)</span>-th group will be denoted by <span class="math inline">\(Y_{ij}\)</span>. In the One-Way ANOVA, we assume the following model:</p>
+<p><span class="math display">\[\begin{equation}
+Y_{ij}  = \mu + \alpha_i + e_{ij},\; i=1,\ldots,k,\; j=1,\ldots,n_i
+\end{equation}\]</span></p>
+<ul>
+<li><span class="math inline">\(\mu\)</span> is a constant, representing the underlying mean of all groups taken together.</li>
+<li><span class="math inline">\(\alpha_i\)</span> is a constant specific to the <span class="math inline">\(i\)</span>-th group. It represents the difference between the mean of the <span class="math inline">\(i\)</span>-th group and the overall mean.</li>
+<li><span class="math inline">\(e_{ij}\)</span> represents random error about the mean <span class="math inline">\(\mu + \alpha_i\)</span> for an individual observation from the <span class="math inline">\(i\)</span>-th group.</li>
+</ul>
+<p>In terms of distributions, we assume that the <span class="math inline">\(e_{ij}\)</span> are i.i.d from a Normal distribution with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>. This leads to the model for each observation:</p>
+<p><span class="math display">\[
+Y_{ij} \sim N(\mu + \alpha_i,\; \sigma^2)
+\]</span></p>
+<p>It is not possible to estimate both <span class="math inline">\(\mu\)</span> and all the <span class="math inline">\(k\)</span> different <span class="math inline">\(\alpha_i\)</span>’s, since we only have <span class="math inline">\(k\)</span> observed mean values for the <span class="math inline">\(k\)</span> groups. For identifiability purposes, we need to constrain the parameters. There are two common constraints used, and note that different software have different defaults:</p>
+<ol type="1">
+<li>Setting <span class="math inline">\(\sum_{i=1}^k \alpha_i = 0\)</span>, or</li>
+<li>Setting <span class="math inline">\(\alpha_1= 0\)</span>.</li>
+</ol>
+<p>Continuing on from the equation for <span class="math inline">\(Y_{ij}\)</span>, let us denote the mean for the <span class="math inline">\(i\)</span>-th group as <span class="math inline">\(\overline{Y_i}\)</span>, and the overall mean of all observations as <span class="math inline">\(\overline{\overline{Y}}\)</span>. We can then write the deviation of an individual observation from the overall mean as:</p>
+<p><span class="math display">\[
+Y_{ij} - \overline{\overline{Y}} = \underbrace{(Y_{ij} - \overline{Y_i})}_{\text{within}} +
+\underbrace{(\overline{Y_i} - \overline{\overline{Y}})}_{\text{between}}
+\]</span></p>
+<p>The first term on the right of the above equation is an indication of <em>within-group variability</em>. The second term on the right is an indication of <em>between-group variability</em>. The intuition behind the ANOVA procedure is that if the between-group variability is large and the within-group variability is small, then we have evidence that the group means are different.</p>
+<p>If we square both sides of the above equation and sum over all observations, we arrive at the following equation; the essence of ANOVA:</p>
+<p><span class="math display">\[
+\sum_{i=1}^k \sum_{j=1}^{n_i} \left( Y_{ij} - \overline{\overline{Y}} \right)^2 =
+\sum_{i=1}^k \sum_{j=1}^{n_i} \left( Y_{ij} - \overline{Y_i} \right)^2 +
+\sum_{i=1}^k \sum_{j=1}^{n_i} \left( \overline{Y_i} -
+                                     \overline{\overline{Y}} \right)^2
+\]</span></p>
+<p>The squared sums above are referred to as: <span class="math display">\[
+SS_T = SS_W + SS_B
+\]</span></p>
+<ul>
+<li><span class="math inline">\(SS_T\)</span>: Sum of Squares Total,</li>
+<li><span class="math inline">\(SS_W\)</span>: Sum of Squares Within, and</li>
+<li><span class="math inline">\(SS_B\)</span>: Sum of Squares Between.</li>
+</ul>
+<p>In addition the following definitions are important for understanding the ANOVA output:</p>
+<ol type="1">
+<li>The Between Mean Square: <span class="math display">\[
+MS_B = \frac{SS_B}{k-1}
+\]</span></li>
+<li>The Within Mean Square: <span class="math display">\[
+MS_W = \frac{SS_W}{n - k}
+\]</span></li>
+</ol>
+<p>The mean squares are estimates of the variability between and within groups. The ratio of these quantities is the test statistic.</p>
+</section>
+<section id="f-test-in-one-way-anova" class="level3">
+<h3 class="anchored" data-anchor-id="f-test-in-one-way-anova"><span class="math inline">\(F\)</span>-Test in One-Way ANOVA</h3>
+<p>The null and alternative hypotheses are:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+H_0 &amp;:&amp; \alpha_i = 0 \text{ for all } i \\
+H_1 &amp;:&amp; \alpha_i \ne 0 \text{ for at least one } i
+\end{eqnarray*}\]</span></p>
+<p>The test statistic is given by <span class="math display">\[
+F = \frac{MS_B}{MS_W}
+\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, the statistic <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span> distribution with <span class="math inline">\(k-1\)</span> and <span class="math inline">\(n-k\)</span> degrees of freedom.</p>
+</section>
+<section id="assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="assumptions">Assumptions</h3>
+<p>These are the assumptions that will need to be validated.</p>
+<ol type="1">
+<li>The observations are independent of each other. This is usually a characteristic of the design of the experiment, and is not something we can always check from the data.</li>
+<li>The errors are Normally distributed. Residuals can be calculated as follows: <span class="math display">\[
+Y_{ij} - \overline{Y_i}
+\]</span> The distribution of these residuals should be checked for Normality.</li>
+<li>The variance within each group is the same. In ANOVA, the <span class="math inline">\(MS_W\)</span> is a pooled estimate (across the groups) that is used; in order for this to be valid, the variance within each group should be identical. As in the 2-sample situation, we shall avoid separate hypotheses tests and proceed with the rule-of-thumb that if the ratio of the largest to smallest standard deviation is less than 2, we can proceed with the analysis.</li>
+</ol>
+<div id="exm-antibiotics-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.7 (Example: Heifers (Cont’d))</strong></span> </p>
+<p>Let us now apply the F-test to the heifers dataset.</p>
+<div id="c8e7fd9d" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>heifer_lm <span class="op">=</span> ols(<span class="st">'org ~ type'</span>, data<span class="op">=</span>heifers).fit()</span>
+<span id="cb14-2"><a href="#cb14-2"></a>anova_tab <span class="op">=</span> sm.stats.anova_lm(heifer_lm, <span class="bu">type</span><span class="op">=</span><span class="dv">3</span>,)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>anova_tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">df</th>
+<th data-quarto-table-cell-role="th">sum_sq</th>
+<th data-quarto-table-cell-role="th">mean_sq</th>
+<th data-quarto-table-cell-role="th">F</th>
+<th data-quarto-table-cell-role="th">PR(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">type</td>
+<td>5.0</td>
+<td>0.590824</td>
+<td>0.118165</td>
+<td>7.972558</td>
+<td>0.00009</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Residual</td>
+<td>28.0</td>
+<td>0.415000</td>
+<td>0.014821</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>At the 5% significance level, we reject the null hypothesis to conclude that the group means are significantly different from one another. This answers the first question we set out to.</p>
+<p>To extract the estimated parameters, we can use the following code:</p>
+<div id="3b4c8ad2" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>heifer_lm.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>org</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.587</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.514</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>7.973</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 23 Sep 2025</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>8.95e-05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>09:05:59</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>26.655</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>34</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>-41.31</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>28</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>-32.15</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>5</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>2.8950</td>
+<td>0.050</td>
+<td>58.248</td>
+<td>0.000</td>
+<td>2.793</td>
+<td>2.997</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">type[T.Control]</td>
+<td>-0.2917</td>
+<td>0.070</td>
+<td>-4.150</td>
+<td>0.000</td>
+<td>-0.436</td>
+<td>-0.148</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">type[T.Enroflox]</td>
+<td>-0.1850</td>
+<td>0.070</td>
+<td>-2.632</td>
+<td>0.014</td>
+<td>-0.329</td>
+<td>-0.041</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">type[T.Fenbenda]</td>
+<td>-0.0617</td>
+<td>0.070</td>
+<td>-0.877</td>
+<td>0.388</td>
+<td>-0.206</td>
+<td>0.082</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">type[T.Ivermect]</td>
+<td>0.1067</td>
+<td>0.070</td>
+<td>1.518</td>
+<td>0.140</td>
+<td>-0.037</td>
+<td>0.251</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">type[T.Spiramyc]</td>
+<td>-0.0400</td>
+<td>0.079</td>
+<td>-0.509</td>
+<td>0.615</td>
+<td>-0.201</td>
+<td>0.121</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>2.172</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>2.146</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.338</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>1.704</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.545</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.427</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>2.876</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>6.71</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+<p><br></p>
+<p>When estimating, Python sets one of the <span class="math inline">\(\alpha_i\)</span> to be equal to 0. We can tell from the output that the constraint has been placed on the coefficient for <code>Alfacyp</code> (since it is missing).</p>
+<p>From the output, we can read off (the Intercept term) that the estimate for <code>Alfacyp</code> is precisely <span class="math display">\[
+2.895 + 0 = 2.895
+\]</span></p>
+<p>To check the assumptions, we can use the following code:</p>
+<div id="f02852f9" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>f, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
+<span id="cb16-2"><a href="#cb16-2"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">121</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>heifer_lm.resid.hist()<span class="op">;</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">122</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a>sm.qqplot(heifer_lm.resid, line<span class="op">=</span><span class="st">"q"</span>, ax<span class="op">=</span>tmp)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-15-output-1.png" width="781" height="356" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-spec-grps" class="level3">
+<h3 class="anchored" data-anchor-id="sec-spec-grps">Comparing specific groups</h3>
+<p>The <span class="math inline">\(F\)</span>-test in a One-Way ANOVA indicates if all means are equal, but does not provide further insight into which particular groups differ. If we had specified beforehand that we wished to test if two particular groups <span class="math inline">\(i_1\)</span> and <span class="math inline">\(i_2\)</span> had different means, we could do so with a t-test. Here are the details to compute a confidence interval in this case:</p>
+<ol type="1">
+<li>Compute the estimate of the difference between the two means: <span class="math display">\[
+\overline{Y_{i_1}} - \overline{Y_{i_2}}
+\]</span></li>
+<li>Compute the standard error of the above estimator: <span class="math display">\[
+\sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
+\]</span></li>
+<li>Compute the <span class="math inline">\(100(1- \alpha)%\)</span> confidence interval as: <span class="math display">\[
+\overline{Y_{i_1}} - \overline{Y_{i_2}} \pm
+t_{n-k, \alpha/2}  \times
+\sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
+\]</span></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you notice from the summary statistics output for each group, the rule-of-thumb regarding standard deviations has not been satisfied. The ratio of largest to smallest standard deviations is slightly more than 2. Hence <em>we should not continue with ANOVA</em>; the pooled estimate of the variance may not be valid.</p>
+<p>However, we shall proceed with this dataset just to demonstrate the next few techniques, instead of introducing a new dataset.</p>
+</div>
+</div>
+<div id="exm-antibiotics-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.8 (Example: Enrofloxacin vs.&nbsp;Control)</strong></span> </p>
+<p>Let us attempt to answer question (2), that we had set out earlier.</p>
+<div id="6f61b5a9" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>est1  <span class="op">=</span> heifer_lm.params.iloc[<span class="dv">2</span>] <span class="op">-</span> heifer_lm.params.iloc[<span class="dv">1</span>]</span>
+<span id="cb17-2"><a href="#cb17-2"></a>MSW <span class="op">=</span> heifer_lm.mse_resid</span>
+<span id="cb17-3"><a href="#cb17-3"></a>df <span class="op">=</span> heifer_lm.df_resid</span>
+<span id="cb17-4"><a href="#cb17-4"></a>q1 <span class="op">=</span> <span class="op">-</span>stats.t.ppf(<span class="fl">0.025</span>, df)</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a>lower_ci <span class="op">=</span> est1 <span class="op">-</span> q1<span class="op">*</span>np.sqrt(MSW <span class="op">*</span> (<span class="dv">1</span><span class="op">/</span><span class="dv">6</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>))</span>
+<span id="cb17-7"><a href="#cb17-7"></a>upper_ci <span class="op">=</span> est1 <span class="op">+</span> q1<span class="op">*</span>np.sqrt(MSW <span class="op">*</span> (<span class="dv">1</span><span class="op">/</span><span class="dv">6</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>))</span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="bu">print</span>(<span class="st">"The 95% CI for the diff. between Enrofloxacin and control is"</span> <span class="op">+</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>      <span class="ss">f"(</span><span class="sc">{</span>lower_ci<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>upper_ci<span class="sc">:.3f}</span><span class="ss">)."</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 95% CI for the diff. between Enrofloxacin and control is(-0.054, 0.268).</code></pre>
+</div>
+</div>
+<p>As the confidence interval contains the value 0, the binary conclusion would be to not reject the null hypothesis at the 5% level.</p>
+</div>
+</section>
+<section id="contrast-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="contrast-estimation">Contrast Estimation</h3>
+<p>A more general comparison, such as the comparison of a collection of <span class="math inline">\(l_1\)</span> groups with another collection of <span class="math inline">\(l_2\)</span> groups, is also possible. First, note that a linear contrast is any linear combination of the individual group means such that the linear coefficients add up to 0. In other words, consider <span class="math inline">\(L\)</span> such that</p>
+<p><span class="math display">\[
+L = \sum_{i=1}^k c_i \overline{Y_i}, \text{ where } \sum_{i=1}^k c_i = 0
+\]</span></p>
+<p>Note that the comparison of two groups in <a href="#sec-spec-grps" class="quarto-xref"><span>Section 2.4.4</span></a> is a special case of this linear contrast.</p>
+<p>Here is the procedure for computing confidence intervals for a linear contrast:</p>
+<ol type="1">
+<li>Compute the estimate of the contrast: <span class="math display">\[
+L = \sum_{i=1}^k c_i \overline{Y_i}
+\]</span></li>
+<li>Compute the standard error of the above estimator: <span class="math display">\[
+\sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
+\]</span></li>
+<li>Compute the <span class="math inline">\(100(1- \alpha)%\)</span> confidence interval as: <span class="math display">\[
+L \pm
+t_{n-k, \alpha/2}  \times
+\sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
+\]</span></li>
+</ol>
+<div id="exm-antibiotics-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.9 (Example: Enrofloxacin vs.&nbsp;Control)</strong></span> </p>
+<p>As we mentioned earliers, let sub-group 1 consist of Ivermectin and Fenbendazole. Here is how we can compute a confidence interval for the difference between this sub-group, and Enrofloxacin.</p>
+<div id="49850181" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>c1 <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>])</span>
+<span id="cb19-2"><a href="#cb19-2"></a>n_vals <span class="op">=</span> np.array([<span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">6</span>,])</span>
+<span id="cb19-3"><a href="#cb19-3"></a>L <span class="op">=</span> np.<span class="bu">sum</span>(c1 <span class="op">*</span> heifer_lm.params.iloc[<span class="dv">2</span>:<span class="dv">5</span>])</span>
+<span id="cb19-4"><a href="#cb19-4"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a>MSW <span class="op">=</span> heifer_lm.mse_resid</span>
+<span id="cb19-6"><a href="#cb19-6"></a>df <span class="op">=</span> heifer_lm.df_resid</span>
+<span id="cb19-7"><a href="#cb19-7"></a>q1 <span class="op">=</span> <span class="op">-</span>stats.t.ppf(<span class="fl">0.025</span>, df)</span>
+<span id="cb19-8"><a href="#cb19-8"></a>se1 <span class="op">=</span> np.sqrt(MSW<span class="op">*</span>np.<span class="bu">sum</span>(c1<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> n_vals))</span>
+<span id="cb19-9"><a href="#cb19-9"></a></span>
+<span id="cb19-10"><a href="#cb19-10"></a>lower_ci <span class="op">=</span> L <span class="op">-</span> q1<span class="op">*</span>se1</span>
+<span id="cb19-11"><a href="#cb19-11"></a>upper_ci <span class="op">=</span> L <span class="op">+</span> q1<span class="op">*</span>se1</span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="bu">print</span>(<span class="st">"The 95% CI for the diff. between the two groups is "</span> <span class="op">+</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a>      <span class="ss">f"(</span><span class="sc">{</span>lower_ci<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>upper_ci<span class="sc">:.3f}</span><span class="ss">)."</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 95% CI for the diff. between the two groups is (0.083, 0.332).</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="multiple-comparisons" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-comparisons">Multiple Comparisons</h3>
+<p>The procedures in the previous two subsections correspond to contrasts that we had specified before collecting or studying the data. If, instead, we wished to perform particular comparisons after studying the group means, or if we wish to compute all pairwise contrasts, then we need to adjust for the fact that we are conducting multiple tests. If we do not do so, the chance of making at least one false positive increases greatly.</p>
+<section id="bonferroni" class="level4">
+<h4 class="anchored" data-anchor-id="bonferroni">Bonferroni</h4>
+<p>The simplest method for correcting for multiple comparisons is to use the Bonferroni correction. Suppose we wish to perform <span class="math inline">\(m\)</span> pairwise comparisons, either as a test or by computing confidence intervals. If we wish to maintain the significance level of each test at <span class="math inline">\(\alpha\)</span>, then we should perform each of the <span class="math inline">\(m\)</span> tests/confidence intervals at <span class="math inline">\(\alpha/m\)</span>.</p>
+</section>
+<section id="tukeyhsd" class="level4">
+<h4 class="anchored" data-anchor-id="tukeyhsd">TukeyHSD</h4>
+<p>This procedure is known as Tukey’s Honestly Significant Difference. It is designed to construct confidence intervals for <strong>all</strong> pairwise comparisons. For the same <span class="math inline">\(\alpha\)</span>-level, Tukey’s HSD method provides shorter confidence intervals than a Bonferroni correction for all pairwise comparisons.</p>
+<div id="exm-antibiotics-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.10 (Example: Multiple Comparisons)</strong></span> </p>
+<p>Let us apply Tukey’s procedure to the heifers dataset.</p>
+<div id="bd7c6f06" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>cp <span class="op">=</span> mc.MultiComparison(heifers.org, heifers.<span class="bu">type</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>tk <span class="op">=</span> cp.tukeyhsd()</span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#print(tk)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7fea51ce" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>tk.plot_simultaneous()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-19-output-1.png" width="838" height="505" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="categorical-variables" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="categorical-variables"><span class="header-section-number">2.5</span> Categorical Variables</h2>
+<p>There are two sub-types of categorical variables:</p>
+<ul>
+<li>A categorical variable is <em>ordinal</em> if the observations can be ordered, but do not have specific quantitative values.</li>
+<li>A categorical variable is <em>nominal</em> if the observations can be classified into categories, but the categories have no specific ordering.</li>
+</ul>
+<p>In this topic, we shall discuss techniques for identifying the presence, and for measuring the strength, of the association between two categorical variables.</p>
+<div id="exm-chest-pain-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.11 (Example: Chest Pain and Gender)</strong></span> </p>
+<p>Suppose that 1073 NUH patients who were at high risk for cardiovascular disease (CVD) were randomly sampled. They were then queried on two things:</p>
+<ol type="1">
+<li>Had they experienced the onset of severe chest pain in the preceding 6 months? (yes/no)</li>
+<li>What was their gender? (male/female)</li>
+</ol>
+<p>The data would probably be summarised and presented in this format, which is known as a <em>contingency table</em>.</p>
+<div id="cb66d7a0" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>chest_array <span class="op">=</span> np.array([[<span class="dv">46</span>, <span class="dv">474</span>], [<span class="dv">37</span>, <span class="dv">516</span>]])</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#print(chest_array)</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a></span>
+<span id="cb23-4"><a href="#cb23-4"></a>sns.heatmap(chest_array, annot<span class="op">=</span><span class="va">True</span>, square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">''</span>, </span>
+<span id="cb23-5"><a href="#cb23-5"></a>            xticklabels<span class="op">=</span>[<span class="st">'pain'</span>, <span class="st">'no pain'</span>],</span>
+<span id="cb23-6"><a href="#cb23-6"></a>            yticklabels<span class="op">=</span>[<span class="st">'Male'</span>, <span class="st">'Female'</span>], </span>
+<span id="cb23-7"><a href="#cb23-7"></a>            cmap<span class="op">=</span><span class="st">'Reds'</span>, cbar<span class="op">=</span><span class="va">False</span>, )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-20-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="411" height="411"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the above table, the rows correspond to gender (Male, followed by Female) and the columns correspond to chest pain (from left to right: presence, then absence). Hence 516 of the 1073 patients were females who did not experience chest pain.</p>
+<p>In a contingency table, each observation from the dataset falls in exactly one of the cells. The sum of all entries in the cells equals the number of independent observations in the dataset. All the techniques we shall touch upon in this chapter are applicable to contingency tables.</p>
+</div>
+<section id="chi2-test-for-independence" class="level3">
+<h3 class="anchored" data-anchor-id="chi2-test-for-independence"><span class="math inline">\(\chi^2\)</span>-Test for Independence</h3>
+<p>In the contingency table above, the two categorical variables are <em>Gender</em> and <em>Presence/absence of Pain</em>. With contingency tables, the main inferential task usually relates to assessing the association between the two categorical variables.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If two categorical variables are <strong>independent</strong>, then the joint distribution of the variables would be equal to the product of the marginals. If two variables are not independent, we say that they are <strong>associated</strong>.</p>
+</div>
+</div>
+<p>The <span class="math inline">\(\chi^2\)</span>-test uses the definition above to assess if two variables in a contingency table are associated. The null and alternative hypotheses are</p>
+<p><span class="math display">\[\begin{eqnarray*}
+H_0 &amp;:&amp; \text{The two variables are indepdendent.}  \\
+H_1 &amp;:&amp; \text{The two variables are not indepdendent.}
+\end{eqnarray*}\]</span></p>
+<p>Under the null hypothesis, we can estimate the joint distribution from the observed marginal counts. Based on this estimated joint distribution, we then compute <em>expected</em> counts (which may not be integers) for each cell. The test statistic essentially compares the deviation of <em>observed</em> cell counts from the expected cell counts.</p>
+<div id="exm-chest-pain-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.12 (Example: Chest Pain and Gender Expected Counts)</strong></span> </p>
+<p>Continuing from the chest pain example, we can compute the estimated marginals using row and column proportions</p>
+<div id="9a090470" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>col_prop,row_prop <span class="op">=</span> sm.stats.Table(chest_array).marginal_probabilities</span>
+<span id="cb24-2"><a href="#cb24-2"></a></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="bu">print</span>(<span class="ss">f"The proportion of males in the sample was </span><span class="sc">{</span>col_prop[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="bu">print</span>(<span class="st">"The proportion of all patients who experienced chest pain "</span> <span class="op">+</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>      <span class="ss">f"was </span><span class="sc">{</span>row_prop[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The proportion of males in the sample was 0.485.
+The proportion of all patients who experienced chest pain was 0.077.</code></pre>
+</div>
+</div>
+<p>If we let <span class="math inline">\(X\)</span> represent gender and <span class="math inline">\(Y\)</span> represent chest pain, then we can estimate that:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+\widehat{P}(X = \text{male}) &amp;=&amp; 0.485  \\
+\widehat{P}(Y = \text{pain}) &amp;=&amp; 0.077
+\end{eqnarray*}\]</span></p>
+<p>Consequently, <em>under <span class="math inline">\(H_0\)</span></em> (independence), we would estimate <span class="math display">\[
+\widehat{P}(X = \text{male},\, Y= \text{pain}) = 0.485 \times 0.077 \approx 0.04
+\]</span></p>
+<p>From a sample of size 1073, the expected count for this cell is then</p>
+<p><span class="math display">\[
+0.04 \times 1073 = 42.92
+\]</span></p>
+</div>
+<p>Using the approach above, we can derive a general formula for the expected count in each cell: <span class="math display">\[
+\text{Expected count} = \frac{\text{Row total} \times \text{Column total}}{\text{Total sample size}}
+\]</span></p>
+<p>The formula for the <span class="math inline">\(\chi^2\)</span>-test statistic (with continuity correction) is: <span class="math display">\[
+\chi^2 = \sum \frac{|\text{expected} - \text{observed} |^2}{\text{expected count}}
+\]</span></p>
+<p>The sum is taken over every cell in the table. Hence in a <span class="math inline">\(2\times2\)</span> table, as we have here, there would be 4 terms in the summation.</p>
+<div id="exm-chest-pain-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.13 (Example: Chest Pain and Gender <span class="math inline">\(\chi^2\)</span> Test)</strong></span> </p>
+<p>Let us see how we can apply and interpret the <span class="math inline">\(\chi^2\)</span>-test for the data in the chest pain example.</p>
+<div id="401d5370" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>chisq_output <span class="op">=</span> stats.chi2_contingency(chest_array, correction<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-2"><a href="#cb26-2"></a></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="bu">print</span>(<span class="ss">f"The p-value is </span><span class="sc">{</span>chisq_output<span class="sc">.</span>pvalue<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="bu">print</span>(<span class="ss">f"The test-statistic value is </span><span class="sc">{</span>chisq_output<span class="sc">.</span>statistic<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The p-value is 0.187.
+The test-statistic value is 1.744.</code></pre>
+</div>
+</div>
+<p>Since the <span class="math inline">\(p\)</span>-value is 0.1817, we would not reject the null hypothesis at significance level 5%. We do not have sufficient evidence to conclude that the variables are not independent.</p>
+<p>To extract the expected cell counts, we can use the following code:</p>
+<div id="d7a1b713" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>chisq_output.expected_freq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>array([[ 40.22367195, 479.77632805],
+       [ 42.77632805, 510.22367195]])</code></pre>
+</div>
+</div>
+<p>The test statistic in the <span class="math inline">\(\chi^2\)</span>-test compares the above table to the <em>observed</em> table.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is only suitable to use the <span class="math inline">\(\chi^2\)</span>-test when all <em>expected cell counts</em> are larger than 5. If this condition fails, one recommendation is to use a continuity correction, which modifies the test statistic to be</p>
+<p><span class="math display">\[
+\chi^2 = \sum \frac{(|\text{expected} - \text{observed}| - 0.5)^2}{\text{expected count}}
+\]</span></p>
+<p>However, I advocate using <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html">Fisher’s exact test</a>, which is also a test of independence, but measures deviations under slightly different assumptions. The test uses the exact distribution of the test statistic (not an approximation) so it will apply to small datasets as well.</p>
+</div>
+</div>
+<div id="ee9d56f4" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>stats.fisher_exact(chest_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>SignificanceResult(statistic=1.3534040369483407, pvalue=0.2088776906675503)</code></pre>
+</div>
+</div>
+</section>
+<section id="measures-of-association" class="level3">
+<h3 class="anchored" data-anchor-id="measures-of-association">Measures of Association</h3>
+<p>Measures of association quantify how two random variables vary together. When both variables are continuous, a common measure that is used is Pearson correlation. We shall return to this in topics such as regression. For now, we touch on bivariate measures of association for contingency tables (two categorical variables).</p>
+</section>
+<section id="odds-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="odds-ratio">Odds Ratio</h3>
+<p>The most generally applicable measure of association, for 2x2 tables with nominal variables, is the Odds Ratio (OR). Suppose we have <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> to be Bernoulli random variables with (population) success probabilities <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span>.</p>
+<p>We define the odds of success for <span class="math inline">\(X\)</span> to be <span class="math display">\[
+\frac{p_1}{1-p_1}
+\]</span> Similarly, the odds of success for random variable <span class="math inline">\(Y\)</span> is <span class="math inline">\(\frac{p_2}{1-p_2}\)</span>.</p>
+<p>In order to measure the strength of their association, we use the <em>odds ratio</em>: <span class="math display">\[
+\frac{p_1/ (1-p_1)}{p_2/(1-p_2)}
+\]</span></p>
+<p>The odds ratio can take on any value from 0 to <span class="math inline">\(\infty\)</span>.</p>
+<ul>
+<li>A value of 1 indicates no association between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> were independent, this is what we would observe.</li>
+<li>Deviations from 1 indicate stronger association between the variables.</li>
+<li>Note that deviations from 1 are not symmetric. For a given pair of variables, an association of 0.25 or 4 is the same - it is just a matter of which variable we put in the numerator odds.</li>
+</ul>
+<p>Due to the above asymmetry, we often use the log-odds-ratio instead: <span class="math display">\[
+\log \frac{p_1/ (1-p_1)}{p_2/(1-p_2)}
+\]</span></p>
+<ul>
+<li>Log-odds-ratios can take values from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(\infty\)</span>.</li>
+<li>A value of 0 indicates no association between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Deviations from 0 indicate stronger association between the variables, and deviations are now symmetric; a log-odds-ratio of -0.2 indicates the same <em>strength</em> as 0.2, just the opposite direction.</li>
+</ul>
+<p>To obtain a confidence interval for the odds-ratio, we work with the log-odds ratio and then exponentiate the resulting interval. Here are the steps:</p>
+<ol type="1">
+<li>The sample data in a 2x2 table can be labelled as <span class="math inline">\(n_{11}, n_{12}, n_{21}, n_{22}\)</span>.</li>
+<li>The <em>sample</em> odds ratio is <span class="math display">\[
+\widehat{OR} = \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}}
+\]</span></li>
+<li>For a large sample size, it can be shown that <span class="math inline">\(\log \widehat{OR}\)</span> follows a Normal distribution. Hence a 95% confidence interval can be obtained through <span class="math display">\[
+\log \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}} \pm z_{0.025}
+\times ASE(\log \widehat{OR})
+\]</span></li>
+</ol>
+<p>where</p>
+<ul>
+<li>the ASE (Asymptotic Standard Error) of the estimator is <span class="math display">\[
+\sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}
+\]</span></li>
+</ul>
+<div id="exm-chest-pain-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.14 (Example: Chest Pain and Gender Odds Ratio)</strong></span> </p>
+<p>Let us compute the confidence interval for the odds ratio in the chest pain and gender example from earlier.</p>
+<div id="37fbb5b7" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>chest_tab2 <span class="op">=</span> sm.stats.Table2x2(chest_array)</span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a>chest_tab2.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">Estimate</td>
+<td data-quarto-table-cell-role="th">SE</td>
+<td data-quarto-table-cell-role="th">LCB</td>
+<td data-quarto-table-cell-role="th">UCB</td>
+<td data-quarto-table-cell-role="th">p-value</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Odds ratio</td>
+<td>1.353</td>
+<td></td>
+<td>0.863</td>
+<td>2.123</td>
+<td>0.188</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Log odds ratio</td>
+<td>0.303</td>
+<td>0.230</td>
+<td>-0.148</td>
+<td>0.753</td>
+<td>0.188</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Risk ratio</td>
+<td>1.322</td>
+<td></td>
+<td>0.872</td>
+<td>2.004</td>
+<td>0.188</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Log risk ratio</td>
+<td>0.279</td>
+<td>0.212</td>
+<td>-0.137</td>
+<td>0.695</td>
+<td>0.188</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="for-ordinal-variables" class="level3">
+<h3 class="anchored" data-anchor-id="for-ordinal-variables">For Ordinal Variables</h3>
+<p>When both variables are ordinal, it is often useful to compute the strength (or lack) of any monotone trend association. It allows us to assess if</p>
+<blockquote class="blockquote">
+<p>As the level of <span class="math inline">\(X\)</span> increases, responses on <span class="math inline">\(Y\)</span> tend to increase toward higher levels, or responses on <span class="math inline">\(Y\)</span> tend to decrease towards lower levels.</p>
+</blockquote>
+<p>For instance, perhaps job satisfaction tends to increase as income does. In this section, we shall discuss a measure for ordinal variables, analogous to Pearson’s correlation for quantitative variables, that describes the degree to which the relationship is monotone. It is based on the idea of a concordant or discordant pair of subjects.</p>
+<ul>
+<li>A <strong>pair of subjects</strong> is <em>concordant</em> if the subject ranked higher on <span class="math inline">\(X\)</span> also ranks higher on <span class="math inline">\(Y\)</span>.</li>
+<li>A <strong>pair</strong> is <em>discordant</em> if the subject ranking higher on <span class="math inline">\(X\)</span> ranks lower on <span class="math inline">\(Y\)</span>.</li>
+<li>A <strong>pair</strong> is <em>tied</em> if the subjects have the same classification on <span class="math inline">\(X\)</span> and/or <span class="math inline">\(Y\)</span>.</li>
+</ul>
+<p>If we let</p>
+<ul>
+<li><span class="math inline">\(C\)</span>: number of concordant pairs in a dataset, and</li>
+<li><span class="math inline">\(D\)</span>: number of discordant pairs in a dataset.</li>
+</ul>
+<p>Then if <span class="math inline">\(C\)</span> is much larger than <span class="math inline">\(D\)</span>, we would have reason to believe that there is a strong positive association between the two variables. Here are two measures of association based on <span class="math inline">\(C\)</span> and <span class="math inline">\(D\)</span>:</p>
+<ol type="1">
+<li>Goodman-Kruskal <span class="math inline">\(\gamma\)</span> is computed as <span class="math display">\[
+\gamma = \frac{C - D}{C + D}
+\]</span></li>
+<li>Kendall <span class="math inline">\(\tau_b\)</span> is <span class="math display">\[
+\tau_b = \frac{C - D}{A}
+\]</span> where <span class="math inline">\(A\)</span> is a normalising constant that results in a measure that works better with ties, and is less sensitive than <span class="math inline">\(\gamma\)</span> to the cut-points defining the categories. <span class="math inline">\(\gamma\)</span> has the advantage that it is more easily interpretable.</li>
+</ol>
+<p>For both measures, values close to 0 indicate a very weak trend, while values close to 1 (or -1) indicate a strong positive (negative) association.</p>
+<div id="exm-job-income-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.15 (Example: Job Satisfaction by Income)</strong></span> </p>
+<p>Consider the following table, obtained from <span class="citation" data-cites="agresti2012categorical">Agresti (<a href="references.html#ref-agresti2012categorical" role="doc-biblioref">2012</a>)</span>. The original data come from a nationwide survey conducted in the US in 1996.</p>
+<div id="c377e29c" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>us_svy_tab <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">6</span>], </span>
+<span id="cb33-2"><a href="#cb33-2"></a>                      [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">7</span>],</span>
+<span id="cb33-3"><a href="#cb33-3"></a>                      [<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">14</span>, <span class="dv">12</span>],</span>
+<span id="cb33-4"><a href="#cb33-4"></a>                      [<span class="dv">0</span>, <span class="dv">1</span>,  <span class="dv">9</span>, <span class="dv">11</span>]])</span>
+<span id="cb33-5"><a href="#cb33-5"></a>col_names <span class="op">=</span> [<span class="st">'V. Diss'</span>, <span class="st">'L. Diss'</span>, <span class="st">'M. Sat'</span>, <span class="st">'V. Sat'</span>]</span>
+<span id="cb33-6"><a href="#cb33-6"></a>row_names <span class="op">=</span> [<span class="st">'&lt;15K'</span>, <span class="st">'15-25K'</span>, <span class="st">'25-40K'</span>, <span class="st">'&gt;40K'</span>]</span>
+<span id="cb33-7"><a href="#cb33-7"></a>sns.heatmap(us_svy_tab, annot<span class="op">=</span><span class="va">True</span>, square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">''</span>, </span>
+<span id="cb33-8"><a href="#cb33-8"></a>            xticklabels<span class="op">=</span>col_names,</span>
+<span id="cb33-9"><a href="#cb33-9"></a>            yticklabels<span class="op">=</span>row_names, </span>
+<span id="cb33-10"><a href="#cb33-10"></a>            cmap<span class="op">=</span><span class="st">'Reds'</span>, cbar<span class="op">=</span><span class="va">False</span>, )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-inference_files/figure-html/cell-26-output-1.png" width="411" height="411" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In measuring the association between these two variables (job satisfaction and income), we are interested in answering questions such as:</p>
+<blockquote class="blockquote">
+<p>If individual A has higher income than individual B, is individual A more likely to be satisfied in his/her job?</p>
+</blockquote>
+<p><span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\tau_b\)</span> are measures that quantify this association. For the function in <code>scipy.stats</code> that computes this association, we need the data in “long format”. Hence we unroll it manually before summoning the method.</p>
+<div id="0a66971f" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>dim1 <span class="op">=</span> us_svy_tab.shape</span>
+<span id="cb34-2"><a href="#cb34-2"></a>x <span class="op">=</span> []<span class="op">;</span> y<span class="op">=</span>[]</span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, dim1[<span class="dv">0</span>]):</span>
+<span id="cb34-4"><a href="#cb34-4"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, dim1[<span class="dv">1</span>]):</span>
+<span id="cb34-5"><a href="#cb34-5"></a>        <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, us_svy_tab[i,j]):</span>
+<span id="cb34-6"><a href="#cb34-6"></a>            x.append(i)</span>
+<span id="cb34-7"><a href="#cb34-7"></a>            y.append(j)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="f419e2bd" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>stats.kendalltau(x, y, variant<span class="op">=</span><span class="st">'b'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>SignificanceResult(statistic=0.15235215134659688, pvalue=0.0860294855671433)</code></pre>
+</div>
+</div>
+<p>The output shows that <span class="math inline">\(\tau_b =0.15\)</span> is positive, and is borderline significant at 5% level. We can conclude that there is a weak association between job satisfaction and income.</p>
+</div>
+</section>
+</section>
+<section id="summary" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="summary"><span class="header-section-number">2.6</span> Summary</h2>
+<p>In this topic, the primary take-aways are the notions of hypothesis tests (HT) and confidence intervals (CI). Both of these approaches aim to uncover information about a population using a sample. I strongly advocate the choice of CI over HT, as the latter option only provides a binary decision. CIs, on the other hand, provide a range of values to provide a better understanding of the situation.</p>
+<p>Using a small set of applications, we have demonstrated these techniques. We covered a common scenario where a researcher may need to compare the means between several groups. We then moved onto another common situation, where one might be faced with a contingency table. A common query is: What should we do if the assumptions of the test are not fulfilled? In those circumstances, one possibility is to turn to nonparametric versions of the test. For instance, the Kruskal-Wallis test is a HT for comparing the means of several groups whose distributions are not Normal.</p>
+<p>In the section on categorical data, we introduced measures of association for categorical variables - odds ratio, and Kendall <span class="math inline">\(\tau\)</span>. When we have contingency tables, a common choice has been to display barcharts, or heat maps and use those to make decisions on. However, I encourage you to use the measures of association instead. They are intuitive to understand, and can allow you to compare sub-groups or variation of association over time.</p>
+<p>With HT and with CI, there has been a tendency to manipulate the data or tests until the desired outcome has been reached. Do be watchful of this. Conducting multiple tests increases the false positive error rate, so please do avoid this as well. If you conduct multiple tests, adjust for multiple testing. Use statitsical inference techniques as a guide together with common sense and domain expertise.</p>
+</section>
+<section id="sec-02-ref" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="sec-02-ref"><span class="header-section-number">2.7</span> References</h2>
+<section id="website-references" class="level3">
+<h3 class="anchored" data-anchor-id="website-references">Website References</h3>
+<ol type="1">
+<li>Inference recap from Penn State:
+<ul>
+<li><a href="https://online.stat.psu.edu/statprogram/reviews/statistical-concepts/hypothesis-testing">Hypothesis testing recap</a></li>
+<li><a href="https://online.stat.psu.edu/statprogram/reviews/statistical-concepts/confidence-intervals">Confidence intervals recap</a></li>
+</ul></li>
+<li><a href="https://online.stat.psu.edu/stat501/lesson/7/7.5">Tests for Normality</a> More information on the Kolmogorov-Smirnov and Shapiro-Wilks Tests for Normality.</li>
+<li><a href="https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/7-t-tests">Overview of <span class="math inline">\(t\)</span>-tests</a> This page includes the rule of thumb about deciding when to use the equal variance test, and when to use the unequal variances version.</li>
+</ol>
+</section>
+<section id="documentation-links" class="level3">
+<h3 class="anchored" data-anchor-id="documentation-links">Documentation links</h3>
+<ol type="1">
+<li><a href="https://www.statsmodels.org/stable/examples/notebooks/generated/interactions_anova.html">statsmodels ANOVA</a> A more complete example on the application of ANOVA. Return to this when we complete the topic on regression.<br>
+</li>
+<li><a href="https://docs.scipy.org/doc/scipy/reference/stats.html">Useful functions from scipy.stats</a>: Under the “Hypothesis Tests” section of this page, you can find:
+<ul>
+<li>Kruskal Wallis - the nonparametric equivalent of ANOVA</li>
+<li>Wilcoxon signed rank - the nonparametric equivalent of paired sample t-test</li>
+<li>Mann Whitney test - the nonparametric equivalent of independent samples t test</li>
+<li>Somer’s D - measure of association for two categorical variables (one ordinal and one nominal).</li>
+</ul></li>
+</ol>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-agresti2012categorical" class="csl-entry" role="listitem">
+Agresti, Alan. 2012. <em>Categorical Data Analysis</em>. Vol. 792. John Wiley &amp; Sons.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./01-intro.html" class="pagination-link" aria-label="Introduction to Python">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./03-unsupervised.html" class="pagination-link" aria-label="Unsupervised Learning">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

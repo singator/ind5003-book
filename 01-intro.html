@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Introduction to Python – Data Analytics for Sense-Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02-inference.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analytics for Sense-Making</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Natural Language Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Linear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-ts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Time Series Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Simulation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-supervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Computer Vision</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Academic References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1.1</span> Introduction</a></li>
+  <li><a href="#installing-python-and-jupyter-lab" id="toc-installing-python-and-jupyter-lab" class="nav-link" data-scroll-target="#installing-python-and-jupyter-lab"><span class="header-section-number">1.2</span> Installing Python and Jupyter Lab</a></li>
+  <li><a href="#basic-data-structures-in-python" id="toc-basic-data-structures-in-python" class="nav-link" data-scroll-target="#basic-data-structures-in-python"><span class="header-section-number">1.3</span> Basic Data Structures in Python</a></li>
+  <li><a href="#slice-operator-in-python" id="toc-slice-operator-in-python" class="nav-link" data-scroll-target="#slice-operator-in-python"><span class="header-section-number">1.4</span> Slice Operator in Python</a></li>
+  <li><a href="#loops-in-python" id="toc-loops-in-python" class="nav-link" data-scroll-target="#loops-in-python"><span class="header-section-number">1.5</span> Loops in Python</a></li>
+  <li><a href="#strings" id="toc-strings" class="nav-link" data-scroll-target="#strings"><span class="header-section-number">1.6</span> Strings</a></li>
+  <li><a href="#functions-modules-and-packages" id="toc-functions-modules-and-packages" class="nav-link" data-scroll-target="#functions-modules-and-packages"><span class="header-section-number">1.7</span> Functions, Modules and Packages</a></li>
+  <li><a href="#object-oriented-programming" id="toc-object-oriented-programming" class="nav-link" data-scroll-target="#object-oriented-programming"><span class="header-section-number">1.8</span> Object-Oriented Programming</a></li>
+  <li><a href="#numpy" id="toc-numpy" class="nav-link" data-scroll-target="#numpy"><span class="header-section-number">1.9</span> Numpy</a></li>
+  <li><a href="#pandas" id="toc-pandas" class="nav-link" data-scroll-target="#pandas"><span class="header-section-number">1.10</span> Pandas</a></li>
+  <li><a href="#sec-01-ref" id="toc-sec-01-ref" class="nav-link" data-scroll-target="#sec-01-ref"><span class="header-section-number">1.11</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Python</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.1</span> Introduction</h2>
+<p>Python is a general-purpose programming language. It is a higher-level language than C, C++ and Java in the sense that a Python program does not have to be compiled before execution.</p>
+<p>It was originally conceived back in the 1980s by Guido van Rossum at Centrum Wiskunde &amp; Informatica (CWI) in the Netherlands. The language is named after a BBC TV show (Guido’s favorite program) “Monty Python’s Flying Circus”.</p>
+<p>Python reached version 1.0 in January 1994. Python 2.0 was released on October 16, 2000. Python 3.0, which is backwards-<em>incompatible</em> with earlier versions, was released on 3 December 2008.</p>
+<p>Python is a very flexible language; it is simple to learn yet is fast enough to be used in production. Over the past ten years, more and more comprehensive data science toolkits (e.g.&nbsp;scikit-learn, NTLK, tensorflow, keras) have been written in Python and are now the standard frameworks for those models.</p>
+<p>Python is an open-source software. It is free to use and extend.</p>
+</section>
+<section id="installing-python-and-jupyter-lab" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="installing-python-and-jupyter-lab"><span class="header-section-number">1.2</span> Installing Python and Jupyter Lab</h2>
+<p>To install Python, navigate to the official <a href="https://www.python.org/downloads/">Python download page</a> to obtain the appropriate installer for your operating system.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For our class, please ensure that you are using Python 3.10.12.</p>
+</div>
+</div>
+<p>The next step is to create a virtual environment for this course. Virtual environments are specific to Python. They allow you to retain multiple versions of Python, and of packages, on the same computer. Go through the videos on Canvas relevant to your operating system to create a virtual environment and install Jupyter Lab on your machine.</p>
+<p>Jupyter notebooks are great for interactive work with Python, but more advanced users may prefer a full-fledged IDE. If you are an advanced user, and are comfortable with an IDE of your own choice (e.g.&nbsp;Spyder or VSCode), feel free to continue using that to run the codes for this course.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Even if you are using Anaconda/Spyder/VSCode, you still need to create a virtual environment.</p>
+</div>
+</div>
+<p>Jupyter notebooks consist of cells, which can be of three main types:</p>
+<ul>
+<li>code cells,</li>
+<li>output cells, and</li>
+<li>markdown cells.</li>
+</ul>
+<div id="fig-jupyter" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Jupyter Lab" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-jupyter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/jupyter_lab2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Jupyter Lab">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jupyter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Jupyter Lab
+</figcaption>
+</figure>
+</div>
+<p>In <a href="#fig-jupyter" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>, the red box labelled 1 is a markdown cell. It can be used to contain descriptions or summary of the code. The cells in the box labelled 2 are code cells. To run the codes from our notes, you can copy and paste the codes into a new cell, and then execute them with Ctrl-Enter.</p>
+<p>Try out this Easter egg that comes with any Python installation:</p>
+<div id="99e452cf" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> this</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!</code></pre>
+</div>
+</div>
+<p>More information on using Jupyter notebooks can be obtained from <a href="https://jupyterlab.readthedocs.io/en/stable/user/interface.html">this link</a>.</p>
+</section>
+<section id="basic-data-structures-in-python" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="basic-data-structures-in-python"><span class="header-section-number">1.3</span> Basic Data Structures in Python</h2>
+<p>The main objects in native<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Python that contain data are</p>
+<ul>
+<li><strong>Lists</strong>, which are defined with [ ]. Lists are mutable.</li>
+<li><strong>Tuples</strong>, which are defined with ( ). Tuples are immutable.</li>
+<li><strong>Dictionaries</strong>, which are defined with { }. Dictionaries have keys and items. They are also mutable.</li>
+</ul>
+<p>Very soon, we shall see that for data analysis, the more common objects we shall deal with are dataframes (from pandas) and arrays (from numpy). However, the latter two require add-on packages; the three object classes listed above are baked into Python.</p>
+<p>By the way, this is what mean by (im)mutable:</p>
+<div id="a15526ec" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># The following is OK, because "x" is a list, and hence mutable</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>x[<span class="dv">3</span>] <span class="op">=</span> <span class="dv">17</span>     </span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="bu">print</span>(x)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 3, 5, 17, 8, 9, 10]</code></pre>
+</div>
+</div>
+<div id="f5d46ff4" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># The following will return an error, because x_tuple is a tuple, and hence </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># immutable.</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>x_tuple <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>x_tuple[<span class="dv">3</span>] <span class="op">=</span> <span class="dv">17</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is how we create lists, tuples and dictionaries.</p>
+<div id="98ba9f59" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>x_list <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb6-2"><a href="#cb6-2"></a>x_tuple <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>x_dict <span class="op">=</span> {<span class="st">'a'</span>: <span class="dv">1</span>, <span class="st">'b'</span>: <span class="dv">2</span>, <span class="st">'c'</span>: <span class="dv">3</span>} <span class="co"># access with x_dict['a']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="slice-operator-in-python" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="slice-operator-in-python"><span class="header-section-number">1.4</span> Slice Operator in Python</h2>
+<p>One important point to take note is that, Python begins indexing of objects starting with 0. Second, indexing is aided by the slicing operator ‘:’. It is used in Python to extract regular sequences from a list, tuple or string easily.</p>
+<p>In general, the syntax is <code>&lt;list-like object&gt;[a:b]</code>, where <code>a</code> and <code>b</code> are integers. Such a call would return the elements at indices <code>a</code>, <code>a+1</code> until <code>b-1</code>. Take note that the end point index is not included.</p>
+<div id="0c4fa166" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>char_list <span class="op">=</span> [<span class="st">'P'</span>, <span class="st">'y'</span>, <span class="st">'t'</span>, <span class="st">'h'</span>, <span class="st">'o'</span>, <span class="st">'n'</span>]</span>
+<span id="cb7-2"><a href="#cb7-2"></a>char_list[<span class="dv">0</span>]           <span class="co"># returns first element</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>char_list[<span class="op">-</span><span class="dv">1</span>]          <span class="co"># returns last element</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="bu">len</span>(char_list)         <span class="co"># returns number of elements in list-like object.</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>char_list[::<span class="dv">2</span>]         <span class="co"># from first to last, every 2 apart.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>['P', 't', 'o']</code></pre>
+</div>
+</div>
+<p>This indexing syntax is used in the additional packages we use as well, so it is good to know about it. <a href="#fig-py-slice" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> displays a pictorial representation of how positive and negative indexes work together.</p>
+<div id="fig-py-slice" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Python slice" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-py-slice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/python_slice.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%" alt="Python slice">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-py-slice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Positive and negative indices
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="loops-in-python" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="loops-in-python"><span class="header-section-number">1.5</span> Loops in Python</h2>
+<p>It is extremely efficient to execute “for” loops in Python. Many objects in Python are <em>iterators</em>, which means they can be iterated over. Lists, tuples and dictionaries can all be iterated over very easily.</p>
+<p>Before getting down to examples, take note that Python does not use curly braces to denote code blocks. Instead, these are defined by the number of indentations in a line.</p>
+<div id="6b7b04dc" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">for</span> i <span class="kw">in</span> x[:<span class="dv">2</span>]:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="bu">print</span>(<span class="ss">f"The current element is </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The current element is 1.
+The current element is 3.</code></pre>
+</div>
+</div>
+<p>Notice how we do not need to set up any running index; the object is just iterated over directly. The argument to the <code>print()</code> function is an f-string. It is the recommended way to create string literals that can vary according to arguments.</p>
+<p>Here is another example of iteration, this time using dictionaries which have key-value pairs. In this case, we iterate over the keys.</p>
+<div id="870bf338" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>dict1 <span class="op">=</span> {<span class="st">'holmes'</span>: <span class="st">'male'</span>, <span class="st">'watson'</span>: <span class="st">'male'</span>, <span class="st">'mycroft'</span>: <span class="st">'male'</span>, </span>
+<span id="cb11-2"><a href="#cb11-2"></a>         <span class="st">'hudson'</span>: <span class="st">'female'</span>, <span class="st">'moriarty'</span>: <span class="st">'male'</span>, <span class="st">'adler'</span>: <span class="st">'female'</span>}</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co"># dict1['hudson']</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="cf">for</span> x <span class="kw">in</span> dict1.keys():</span>
+<span id="cb11-6"><a href="#cb11-6"></a>    <span class="bu">print</span>(<span class="ss">f"The gender of </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>dict1[x]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The gender of holmes is male
+The gender of watson is male
+The gender of mycroft is male
+The gender of hudson is female
+The gender of moriarty is male
+The gender of adler is female</code></pre>
+</div>
+</div>
+</section>
+<section id="strings" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="strings"><span class="header-section-number">1.6</span> Strings</h2>
+<p>Text data in Python is handled with <code>str</code> objects. A string object is an <strong>immutable</strong> sequence of characters. Here are some useful string methods and properties:</p>
+<ul>
+<li>catenating (joining) strings.</li>
+<li>finding sub-strings.</li>
+<li>iterating over strings.</li>
+<li>converting to lower/upper-case.</li>
+</ul>
+<p>A few cells earlier, we saw how we can format a string before sending it to the <code>print()</code> function. Here’s another such example. This is useful when we are debugging loops.</p>
+<div id="37f9d3b5" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>):</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="bu">print</span>(<span class="ss">f"Sq:</span><span class="sc">{</span>x<span class="op">*</span>x<span class="sc">:3d}</span><span class="ss"> Cu:</span><span class="sc">{</span>x<span class="op">*</span>x<span class="op">*</span>x<span class="sc">:4d}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sq:  1 Cu:   1.
+Sq:  4 Cu:   8.
+Sq:  9 Cu:  27.
+Sq: 16 Cu:  64.
+Sq: 25 Cu: 125.
+Sq: 36 Cu: 216.
+Sq: 49 Cu: 343.
+Sq: 64 Cu: 512.
+Sq: 81 Cu: 729.
+Sq:100 Cu:1000.</code></pre>
+</div>
+</div>
+<p>Here are more examples of working with strings.</p>
+<div id="3fa1a893" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>test_str <span class="op">=</span> <span class="st">"Where in the World is Carmen san Diego?"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Remember that a string is immutable, just like a tuple, so this assignment will <em>not</em> work:</p>
+<p><code>test_str[5] = 'z'</code></p>
+<p>But like a tuple, we can also iterate over a string.</p>
+<div id="09d26122" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="cf">for</span> x <span class="kw">in</span> test_str:</span>
+<span id="cb16-3"><a href="#cb16-3"></a>    <span class="cf">if</span> x.isupper():</span>
+<span id="cb16-4"><a href="#cb16-4"></a>        count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="bu">print</span>(<span class="ss">f"There were </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> upper-case characters in the sentence."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There were 4 upper-case characters in the sentence.</code></pre>
+</div>
+</div>
+<div id="31bc9d08" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>test_str.lower()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>'where in the world is carmen san diego?'</code></pre>
+</div>
+</div>
+<p>To join strings, we can use the ‘+’ operator, the <code>str.join()</code> method, or, if they are part of the same expression, we can just place them next to each other separated by whitespace.</p>
+<div id="0f339833" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>x <span class="op">=</span> <span class="st">"Where shall "</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>y <span class="op">=</span> <span class="st">"we "</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="bu">print</span>(<span class="st">"Where shall "</span> <span class="st">"we "</span> <span class="st">"go today?"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co"># also works - the '+' operator is overloaded to work with strings:</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="co"># "Where " + "shall" +" we go" + " today?"</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co"># join using another character:</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co"># ':'.join(["Where", "shall", "we", "go", "today?"])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Where shall we go today?</code></pre>
+</div>
+</div>
+<p>To find simple patterns, we may turn to the <code>find</code>, <code>replace</code>, <code>startswith</code> and <code>endswith</code> methods.</p>
+<div id="e199055b" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>test_str.find(<span class="st">'Carmen'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>22</code></pre>
+</div>
+</div>
+<div id="d1d2dd95" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>test_str.replace(<span class="st">'Carmen'</span>, <span class="st">'John'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>'Where in the World is John san Diego?'</code></pre>
+</div>
+</div>
+<p>For more complicated search operations over strings, we use a special mini-language known as regular expressions. These are used in several other languages such as R and Perl, so it is worth knowing about them if you have time. See <a href="#sec-01-ref" class="quarto-xref"><span>Section 1.11</span></a> for a good introduction.</p>
+</section>
+<section id="functions-modules-and-packages" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="functions-modules-and-packages"><span class="header-section-number">1.7</span> Functions, Modules and Packages</h2>
+<p>Functions provide a way to package code that you can re-use several times. To define a function in Python, use the <code>def</code> keyword.</p>
+<div id="42fd5330" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">def</span> test_function(x):</span>
+<span id="cb26-2"><a href="#cb26-2"></a>    <span class="bu">print</span>(<span class="st">'You typed'</span>, x)</span>
+<span id="cb26-3"><a href="#cb26-3"></a>    </span>
+<span id="cb26-4"><a href="#cb26-4"></a>test_function(<span class="st">'test'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>You typed test</code></pre>
+</div>
+</div>
+<p>A Python module is a file containing Python definitions (of functions and constants) and statements. Instead of re-typing functions every time, we can simply load the module. We would then have access to the updated functions. We access objects within the module using the “dot” notation. There are several modules that ship with the default Python installation. Note that Python packages are collections of modules.</p>
+<p>Here are a couple of ways of importing (and then using) constants from the math module.</p>
+<div id="8072ee6e" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="im">import</span> math</span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co"># compute e^2</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a>math.exp(<span class="dv">2</span>)</span>
+<span id="cb28-5"><a href="#cb28-5"></a></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co"># print pi</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a>math.pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>3.141592653589793</code></pre>
+</div>
+</div>
+<p>Alternatively, we could import the constant <span class="math inline">\(\pi\)</span> so that we do not need to use the dot notation.</p>
+<div id="056b9d55" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="im">from</span> math <span class="im">import</span> pi</span>
+<span id="cb30-2"><a href="#cb30-2"></a>pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>3.141592653589793</code></pre>
+</div>
+</div>
+</section>
+<section id="object-oriented-programming" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="object-oriented-programming"><span class="header-section-number">1.8</span> Object-Oriented Programming</h2>
+<p>Python has been developed as both a functional and object-oriented programming language. Much of the code we will soon use involves creation of an instance, and then accessing the attributes (data or methods) of that instance.</p>
+<p>Consider the following class Circle.</p>
+<div id="3bee049d" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">class</span> Circle:</span>
+<span id="cb32-2"><a href="#cb32-2"></a>    <span class="co">""" A simple class definition </span></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co">    </span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="co">    c0 = Circle()</span></span>
+<span id="cb32-5"><a href="#cb32-5"></a><span class="co">    c0.radius</span></span>
+<span id="cb32-6"><a href="#cb32-6"></a><span class="co">    </span></span>
+<span id="cb32-7"><a href="#cb32-7"></a><span class="co">    """</span></span>
+<span id="cb32-8"><a href="#cb32-8"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, radius <span class="op">=</span> <span class="fl">1.0</span>):</span>
+<span id="cb32-9"><a href="#cb32-9"></a>        <span class="va">self</span>.radius <span class="op">=</span> radius</span>
+<span id="cb32-10"><a href="#cb32-10"></a>        </span>
+<span id="cb32-11"><a href="#cb32-11"></a>    <span class="kw">def</span> area(<span class="va">self</span>):</span>
+<span id="cb32-12"><a href="#cb32-12"></a>        <span class="co">""" Compute area of circle"""</span></span>
+<span id="cb32-13"><a href="#cb32-13"></a>        <span class="cf">return</span> pi<span class="op">*</span>(<span class="va">self</span>.radius<span class="op">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Having defined the class, we can <em>instantiate</em> it and use the methods it contains.</p>
+<div id="3348e075" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>c1 <span class="op">=</span> Circle(<span class="fl">3.2</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a>c2 <span class="op">=</span> Circle(<span class="fl">4.0</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>c2.area()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>50.26548245743669</code></pre>
+</div>
+</div>
+<p>In this simple class, we can also set the value of the attribute of an instance, although this is not the recommended way.</p>
+<div id="df3db090" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>c1.radius <span class="op">=</span> <span class="dv">6</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a>c1.area()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>113.09733552923255</code></pre>
+</div>
+</div>
+</section>
+<section id="numpy" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="numpy"><span class="header-section-number">1.9</span> Numpy</h2>
+<div id="02c8634b" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="im">from</span> itables <span class="im">import</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The basic object in this package is the <code>ndarray</code> object, which can represent <em>n</em>-dimensional arrays of homogeneous data types. This is the key difference between NumPy and Pandas objects, which we shall encounter later on in this chapter. While Pandas objects are also tabular in nature, they allow you to deal with inhomogenous objects. Specifically, Pandas’ <code>DataFrame</code>s allow columns to be of different types.</p>
+<p>An <code>ndarray</code> object is an <em>n</em>-dimensional array (i.e., a <a href="https://www.i2tutorials.com/wp-content/uploads/2019/09/Tensor-Datatype-and-Ranks-1i2tutorials.jpg">tensor</a>) of elements, indexed by a tuple of non-negative integers.</p>
+<p>The dimensions of the array are referred to as <strong>axes</strong> in NumPy: a three-dimensional array will have three axes.</p>
+<p>Each array has several attributes. These include:</p>
+<ul>
+<li><code>ndim</code>: the number of axes/dimensions.</li>
+<li><code>shape</code>: a tuple describing the length of each dimension.</li>
+<li><code>size</code>: the total number of elements in the array. This is a product of the integers in the shape attribute.</li>
+</ul>
+<div id="412f7540" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>arr <span class="op">=</span> np.array([(<span class="fl">1.5</span>, <span class="dv">2</span>, <span class="dv">3</span>), (<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)])</span>
+<span id="cb38-2"><a href="#cb38-2"></a></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="co"># number of axes</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a>arr.ndim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>2</code></pre>
+</div>
+</div>
+<div id="b2cdd036" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># the length of each axis</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>arr.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>(2, 3)</code></pre>
+</div>
+</div>
+<div id="e0ca8ebe" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># number of elements in the array</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a>arr.size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>6</code></pre>
+</div>
+</div>
+<section id="array-creation" class="level3">
+<h3 class="anchored" data-anchor-id="array-creation">Array Creation</h3>
+<p>One way to create an array containing regular sequences is to use the <code>np.arange()</code> function. This creates a sequence of integers, with a specified separation.</p>
+<div id="1766ec72" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>seq <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">3</span>)</span>
+<span id="cb44-2"><a href="#cb44-2"></a>seq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>array([0, 3, 6, 9])</code></pre>
+</div>
+</div>
+<p>The shape of an <code>ndarray</code> is given by a tuple. Note that an array of shape (4,) is different from one with shape (4, 1). The former has only <strong>1 dimension</strong>, while the latter has <strong>2 dimensions</strong>.</p>
+<div id="1580ce7b" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># seq.shape</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a>col_vect <span class="op">=</span> seq.reshape(<span class="dv">4</span>,<span class="dv">1</span>)</span>
+<span id="cb46-3"><a href="#cb46-3"></a>col_vect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>array([[0],
+       [3],
+       [6],
+       [9]])</code></pre>
+</div>
+</div>
+<p>To create an array of regularly spaced <strong>real numbers</strong>, use <code>np.linspace()</code>.</p>
+<div id="5f1f897a" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a>arr_real <span class="op">=</span> np.linspace(start <span class="op">=</span> <span class="fl">0.2</span>, stop <span class="op">=</span> <span class="fl">3.3</span>, num <span class="op">=</span> <span class="dv">24</span>).reshape(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)  </span>
+<span id="cb48-2"><a href="#cb48-2"></a>arr_real</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>array([[[0.2       , 0.33478261, 0.46956522, 0.60434783],
+        [0.73913043, 0.87391304, 1.00869565, 1.14347826],
+        [1.27826087, 1.41304348, 1.54782609, 1.6826087 ]],
+
+       [[1.8173913 , 1.95217391, 2.08695652, 2.22173913],
+        [2.35652174, 2.49130435, 2.62608696, 2.76086957],
+        [2.89565217, 3.03043478, 3.16521739, 3.3       ]]])</code></pre>
+</div>
+</div>
+<p>Sometimes we need to create a placeholder array with the appropriate dimensions, and then fill it in later. This is preferrable to growing an array by appending to it.</p>
+<div id="6eb10426" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a>np.zeros((<span class="dv">3</span>, <span class="dv">5</span>)) <span class="co"># there is also an np.ones() function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>array([[0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.]])</code></pre>
+</div>
+</div>
+<p>Instead of specifying the dimensions of an array ourselves, we can create arrays of zeros or ones in the shape of other existing arrays.</p>
+<div id="26d39d62" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Creates an array of zeros, of the same shape as "arr_real".</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a>np.ones_like(arr_real)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>array([[[1., 1., 1., 1.],
+        [1., 1., 1., 1.],
+        [1., 1., 1., 1.]],
+
+       [[1., 1., 1., 1.],
+        [1., 1., 1., 1.],
+        [1., 1., 1., 1.]]])</code></pre>
+</div>
+</div>
+</section>
+<section id="slice-operator-in-multiple-dimensions" class="level3">
+<h3 class="anchored" data-anchor-id="slice-operator-in-multiple-dimensions">Slice Operator in Multiple Dimensions</h3>
+<p>Multidimensional NumPy arrays can be accessed with comma separated slice notation. When fewer indices are provided than the number of axes, the missing indices are considered complete slices for the remaining dimensions.</p>
+<p>By the way, when printing, the <em>last</em> axis will be printed left-to-right, and the second last axis will be printed from top-to-bottom. The remaining axes will be printed with a line in between:</p>
+<div id="691aea22" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a>arr_real</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>array([[[0.2       , 0.33478261, 0.46956522, 0.60434783],
+        [0.73913043, 0.87391304, 1.00869565, 1.14347826],
+        [1.27826087, 1.41304348, 1.54782609, 1.6826087 ]],
+
+       [[1.8173913 , 1.95217391, 2.08695652, 2.22173913],
+        [2.35652174, 2.49130435, 2.62608696, 2.76086957],
+        [2.89565217, 3.03043478, 3.16521739, 3.3       ]]])</code></pre>
+</div>
+</div>
+<p>Here are examples based on this array. Try to guess what each will return before you run it:</p>
+<div id="b902557a" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1"></a>arr_real[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</span>
+<span id="cb56-2"><a href="#cb56-2"></a>arr_real[<span class="dv">0</span>, <span class="dv">2</span>, ::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb56-3"><a href="#cb56-3"></a>arr_real[<span class="dv">1</span>, <span class="dv">0</span>:<span class="dv">3</span>:<span class="dv">2</span>]</span>
+<span id="cb56-4"><a href="#cb56-4"></a>arr_real[:,<span class="dv">2</span>,:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here are examples using Boolean indexing, which means that we use an array of <code>True</code> and <code>False</code> entries to determine which elements to return.</p>
+<div id="67de6f5d" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1"></a>arr_real <span class="op">&gt;</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>array([[[False, False, False, False],
+        [False, False, False, False],
+        [False, False, False, False]],
+
+       [[False, False, False, False],
+        [False, False, False, False],
+        [False,  True,  True,  True]]])</code></pre>
+</div>
+</div>
+<div id="026f636b" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1"></a>arr_real[arr_real <span class="op">&gt;</span> <span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>array([3.03043478, 3.16521739, 3.3       ])</code></pre>
+</div>
+</div>
+</section>
+<section id="basic-operations" class="level3">
+<h3 class="anchored" data-anchor-id="basic-operations">Basic Operations</h3>
+<div id="2bca138b" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1"></a><span class="co"># Setting a seed allows for reproducibility of random number generation</span></span>
+<span id="cb61-2"><a href="#cb61-2"></a><span class="co"># across sessions.</span></span>
+<span id="cb61-3"><a href="#cb61-3"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1361</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="625ebf2d" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1"></a>a <span class="op">=</span> rng.uniform(size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">5</span>))</span>
+<span id="cb62-2"><a href="#cb62-2"></a>b <span class="op">=</span> rng.uniform(size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">5</span>))</span>
+<span id="cb62-3"><a href="#cb62-3"></a>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>array([[0.47031767, 0.43520574, 0.74929584, 0.19794778, 0.91397998],
+       [0.95979996, 0.10301973, 0.82972687, 0.61118187, 0.04727632],
+       [0.51642555, 0.32188431, 0.57800994, 0.73144202, 0.74020866]])</code></pre>
+</div>
+</div>
+<div id="ee6c9450" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># Element-wise addition.</span></span>
+<span id="cb64-2"><a href="#cb64-2"></a>a <span class="op">+</span> b </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>array([[0.92582851, 0.90610288, 1.3360719 , 0.43528561, 1.30890054],
+       [1.78346478, 0.31376731, 1.51889626, 1.40816571, 0.21158293],
+       [0.52725269, 0.57843605, 1.07039529, 1.54221413, 0.82312206]])</code></pre>
+</div>
+</div>
+<div id="cce80041" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1"></a><span class="co"># Element-wise multiplication: NOT matrix multiplication.</span></span>
+<span id="cb66-2"><a href="#cb66-2"></a>a <span class="op">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>array([[0.2142348 , 0.20493714, 0.43966886, 0.0469805 , 0.36094949],
+       [0.79055346, 0.02171116, 0.57182236, 0.48710208, 0.00776781],
+       [0.00559141, 0.08257998, 0.28460362, 0.59303279, 0.06137322]])</code></pre>
+</div>
+</div>
+<div id="f75d0dc1" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># Matrix multiplication (need to transpose "b" to match get the right dimensions).</span></span>
+<span id="cb68-2"><a href="#cb68-2"></a><span class="co"># We can also do "a @ b.T".</span></span>
+<span id="cb68-3"><a href="#cb68-3"></a>a.dot(b.T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>array([[1.26677078, 1.13630182, 1.19189672],
+       [1.30342857, 1.87895687, 1.5961133 ],
+       [0.721959  , 0.94481619, 1.02718103]])</code></pre>
+</div>
+</div>
+</section>
+<section id="axis-wise-operations" class="level3">
+<h3 class="anchored" data-anchor-id="axis-wise-operations">Axis-wise Operations</h3>
+<div id="53528790" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1"></a>arr_real.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>(2, 3, 4)</code></pre>
+</div>
+</div>
+<div id="9d23fd33" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1"></a>arr_real.mean(axis <span class="op">=</span> <span class="dv">0</span>) <span class="co"># mean across the 0th ("first") axis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>array([[1.00869565, 1.14347826, 1.27826087, 1.41304348],
+       [1.54782609, 1.6826087 , 1.8173913 , 1.95217391],
+       [2.08695652, 2.22173913, 2.35652174, 2.49130435]])</code></pre>
+</div>
+</div>
+<p>The top-left element comes from the average of <code>arr_real[0,0,0]</code> and <code>arr_real[1,0,0]</code>. Similarly, the element to the right of it comes from the average of <code>arr_real[0,0,1]</code> and <code>arr_real[1,0,1]</code>:</p>
+<div id="dda99407" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1"></a>(arr_real[<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>] <span class="op">+</span> arr_real[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>]) <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>1.143478260869565</code></pre>
+</div>
+</div>
+<div id="f8849d6b" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1"></a>arr_real.mean(axis <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>array([[0.73913043, 0.87391304, 1.00869565, 1.14347826],
+       [2.35652174, 2.49130435, 2.62608696, 2.76086957]])</code></pre>
+</div>
+</div>
+<p>Note that <code>arr_real[0]</code> is a 2D array, with shape (3, 4). Suppose we wish to compute the row means. This means we have to apply the operation by the column axis (axis = 1).</p>
+<div id="e2c5e651" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1"></a><span class="co"># the mean across the second axis of arr_real[0], not of arr_real itself.</span></span>
+<span id="cb78-2"><a href="#cb78-2"></a>arr_real[<span class="dv">0</span>].mean(axis <span class="op">=</span> <span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>array([0.40217391, 0.94130435, 1.48043478])</code></pre>
+</div>
+</div>
+<p>If we wanted to identify the row with the largest mean, we use <code>argmax()</code> on the resulting array.</p>
+<div id="adaae26e" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1"></a>arr_real[<span class="dv">0</span>].mean(axis<span class="op">=</span><span class="dv">1</span>).argmax()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>2</code></pre>
+</div>
+</div>
+<p>Here is a table with some common operations that you can apply on a numpy array.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 77%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>shape</code></td>
+<td>Returns dimensions, e.g.&nbsp;<code>matrix1.shape</code></td>
+</tr>
+<tr class="even">
+<td><code>T</code></td>
+<td>Transposes the array, e.g.&nbsp;<code>matrix1.T</code></td>
+</tr>
+<tr class="odd">
+<td><code>mean</code></td>
+<td>Computes col- or row-wise means, e.g.&nbsp;<code>matrix1.mean(axis=0)</code> or <code>matrix1.mean(axis=1)</code></td>
+</tr>
+<tr class="even">
+<td><code>sum</code></td>
+<td>Computes col- or row-wise means, e.g.&nbsp;<code>matrix1.sum(axis=0)</code> or <code>matrix1.sum(axis=1)</code></td>
+</tr>
+<tr class="odd">
+<td><code>argmax</code></td>
+<td>Return the index corresponding to the max within the specified dimension, e.g.&nbsp;<code>matrix1.argmax(axis=0)</code> for the position with the max within each column.</td>
+</tr>
+<tr class="even">
+<td><code>reshape</code></td>
+<td>To change the dimensions, e.g.&nbsp;<code>array1.reshape((5,1))</code> converts the array into a 5x1 matrix</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="pandas" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="pandas"><span class="header-section-number">1.10</span> Pandas</h2>
+<section id="series" class="level3">
+<h3 class="anchored" data-anchor-id="series">Series</h3>
+<p>A <em>Series</em> is a one-dimensional labeled array. The axis labels are referred to as the <strong>index</strong>. The simplest way to create a Series is to pass a sequence and an index to <code>pd.Series()</code>.</p>
+<div id="exm-pd-series-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 1.1 (Creating Pandas Series)</strong></span> </p>
+<p>Consider the following data, from the football league in Spain.</p>
+<div id="b1f22a09" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1"></a>year <span class="op">=</span> pd.Series(<span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">2010</span>, <span class="dv">2013</span>) ) <span class="op">*</span> <span class="dv">3</span>)</span>
+<span id="cb82-2"><a href="#cb82-2"></a></span>
+<span id="cb82-3"><a href="#cb82-3"></a>team <span class="op">=</span> [<span class="st">"Barcelona"</span>, <span class="st">"RealMadrid"</span>, <span class="st">"Valencia"</span>] <span class="op">*</span> <span class="dv">3</span></span>
+<span id="cb82-4"><a href="#cb82-4"></a>team.sort()</span>
+<span id="cb82-5"><a href="#cb82-5"></a>team <span class="op">=</span> pd.Series(team)</span>
+<span id="cb82-6"><a href="#cb82-6"></a></span>
+<span id="cb82-7"><a href="#cb82-7"></a>wins <span class="op">=</span> pd.Series([<span class="dv">30</span>, <span class="dv">28</span>, <span class="dv">32</span>, <span class="dv">29</span>, <span class="dv">32</span>, <span class="dv">26</span>, <span class="dv">21</span>, <span class="dv">17</span>, <span class="dv">19</span>])</span>
+<span id="cb82-8"><a href="#cb82-8"></a>draws <span class="op">=</span> pd.Series([<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">8</span>])</span>
+<span id="cb82-9"><a href="#cb82-9"></a>losses <span class="op">=</span> pd.Series([<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">11</span>])</span>
+<span id="cb82-10"><a href="#cb82-10"></a></span>
+<span id="cb82-11"><a href="#cb82-11"></a><span class="co">#wins.index</span></span>
+<span id="cb82-12"><a href="#cb82-12"></a><span class="co">#wins.values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To access particular values, we can use the slice operator.</p>
+<div id="7d966759" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1"></a>wins[<span class="dv">0</span>:<span class="dv">6</span>:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>0    30
+2    32
+4    32
+dtype: int64</code></pre>
+</div>
+</div>
+<p>To convert a Series object to an <code>ndarray</code>, we use the following method:</p>
+<div id="40ddf582" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1"></a>wins.to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+<pre><code>array([30, 28, 32, 29, 32, 26, 21, 17, 19])</code></pre>
+</div>
+</div>
+<p>If we specify an index, we can use it to access values in the Series.</p>
+<div id="e57e22d8" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1"></a>s <span class="op">=</span> pd.Series(rng.uniform(size<span class="op">=</span><span class="dv">5</span>), </span>
+<span id="cb87-2"><a href="#cb87-2"></a>             index<span class="op">=</span>[<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="st">'d'</span>, <span class="st">'e'</span>])</span>
+<span id="cb87-3"><a href="#cb87-3"></a><span class="co"># s</span></span>
+<span id="cb87-4"><a href="#cb87-4"></a><span class="co"># s.index</span></span>
+<span id="cb87-5"><a href="#cb87-5"></a><span class="co"># s.values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="5e8965d6" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1"></a>s[[<span class="st">'a'</span>, <span class="st">'c'</span>]] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>a    0.974173
+c    0.948907
+dtype: float64</code></pre>
+</div>
+</div>
+<p>Be careful when you combine the slice operator with label-based indexing. Unlike vanilla Python, Pandas includes <strong>both</strong> end-points!</p>
+<div id="adf155e3" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1"></a>s[<span class="st">'a'</span>:<span class="st">'d'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="48">
+<pre><code>a    0.974173
+b    0.270230
+c    0.948907
+d    0.675365
+dtype: float64</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="dataframes">DataFrames</h3>
+<p>A <em>DataFrame</em> is a 2-dimensional labeled data structure with possibly <strong>different</strong> data types. It is the most commonly used Pandas object. The <em>index</em> of a DataFrame refers to the row labels (axis 0). The <em>columns</em> refer to the column labels (axis 1).</p>
+<p>DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays. For our course, we will typically create a DataFrame directly from a file.</p>
+<div id="exm-pd-df-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 1.2 (Creating Pandas DataFrame from Series)</strong></span> </p>
+<p>We can create a DataFrame from the earlier series.</p>
+<div id="2441e871" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1"></a>laliga <span class="op">=</span> pd.DataFrame({<span class="st">'Year'</span>: year,</span>
+<span id="cb92-2"><a href="#cb92-2"></a>              <span class="st">'Team'</span>: team,</span>
+<span id="cb92-3"><a href="#cb92-3"></a>              <span class="st">'Wins'</span>: wins,</span>
+<span id="cb92-4"><a href="#cb92-4"></a>              <span class="st">'Draws'</span>: draws,</span>
+<span id="cb92-5"><a href="#cb92-5"></a>              <span class="st">'Losses'</span>: losses</span>
+<span id="cb92-6"><a href="#cb92-6"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To inspect a DataFrame, we can use <code>info()</code>, <code>head()</code> and <code>tail()</code> methods.</p>
+<div id="74422904" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1"></a>show(laliga.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table id="itables_4b3e04e5_1365_4d3a_84d0_564869d9496f" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<thead>
+    <tr style="text-align: right;">
+      
+      <th>Year</th>
+      <th>Team</th>
+      <th>Wins</th>
+      <th>Draws</th>
+      <th>Losses</th>
+    </tr>
+  </thead><tbody><tr>
+<td style="vertical-align:middle; text-align:left">
+<a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+Loading ITables v2.3.0 from the internet...
+(need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)</td>
+</tr></tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
+
+    document.querySelectorAll("#itables_4b3e04e5_1365_4d3a_84d0_564869d9496f:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        // Define the table data
+        const data = [[2010, "Barcelona", 30, 6, 2], [2011, "Barcelona", 28, 7, 3], [2012, "Barcelona", 32, 4, 2], [2010, "RealMadrid", 29, 5, 4], [2011, "RealMadrid", 32, 4, 2]];
+
+        // Define the dt_args
+        let dt_args = {"layout": {"topStart": null, "topEnd": null, "bottomStart": null, "bottomEnd": null}, "order": [], "warn_on_selected_rows_not_rendered": true};
+        dt_args["data"] = data;
+
+        
+        new DataTable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+</div>
+</section>
+<section id="reading-in-data" class="level3">
+<h3 class="anchored" data-anchor-id="reading-in-data">Reading in Data</h3>
+<p>Pandas can read in data stored in multiple formats, including CSV, tab-separated files, Excel files and HDF5 files.</p>
+<div id="exm-pd-happ-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 1.3 (Happiness Dataset)</strong></span> </p>
+<p>The CSV file read in here contains the happiness scores of 164 countries from 2015 to 2017. Click <a href="https://worldhappiness.report/ed/2017/">here</a> for a full report on the dataset. The final score was based on many other factors (such as GDP per capita, family, freedom etc) which is included in the file as well. We will simplify things by just reading in the country, final score computed and year.</p>
+<p>In each year, not all of the 164 countries had their scores surveyed and taken. This results in some countries having missing values (<code>NaN</code>) in certain years.</p>
+<div id="19099a82" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1"></a>happ <span class="op">=</span> pd.read_csv(<span class="st">'data/happiness_report.csv'</span>, header<span class="op">=</span><span class="dv">0</span>, </span>
+<span id="cb94-2"><a href="#cb94-2"></a>                    na_values<span class="op">=</span><span class="st">'NA'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="bb8ff52b" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1"></a>show(happ)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table id="itables_2fca9874_5254_482c_a912_564a83dccda7" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<thead>
+    <tr style="text-align: right;">
+      
+      <th>Country</th>
+      <th>Happiness.Rank</th>
+      <th>Happiness.Score</th>
+      <th>GDP</th>
+      <th>Family</th>
+      <th>Life.Expectancy</th>
+      <th>Freedom</th>
+      <th>Govt.Corruption</th>
+      <th>Generosity</th>
+      <th>Dystopia.Residual</th>
+      <th>Year</th>
+    </tr>
+  </thead><tbody><tr>
+<td style="vertical-align:middle; text-align:left">
+<a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+Loading ITables v2.3.0 from the internet...
+(need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)</td>
+</tr></tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
+
+    document.querySelectorAll("#itables_2fca9874_5254_482c_a912_564a83dccda7:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        // Define the table data
+        const data = [["Switzerland", 1.0, 7.587, 1.39651, 1.34951, 0.94143, 0.66557, 0.41978, 0.29678, 2.51738, 2015], ["Iceland", 2.0, 7.561, 1.30232, 1.40223, 0.94784, 0.62877, 0.14145, 0.4363, 2.70201, 2015], ["Denmark", 3.0, 7.527, 1.32548, 1.36058, 0.87464, 0.64938, 0.48357, 0.34139, 2.49204, 2015], ["Norway", 4.0, 7.522, 1.459, 1.33095, 0.88521, 0.66973, 0.36503, 0.34699, 2.46531, 2015], ["Canada", 5.0, 7.427, 1.32629, 1.32261, 0.90563, 0.63297, 0.32957, 0.45811, 2.45176, 2015], ["Finland", 6.0, 7.406, 1.29025, 1.31826, 0.88911, 0.64169, 0.41372, 0.23351, 2.61955, 2015], ["Netherlands", 7.0, 7.378, 1.32944, 1.28017, 0.89284, 0.61576, 0.31814, 0.4761, 2.4657, 2015], ["Sweden", 8.0, 7.364, 1.33171, 1.28907, 0.91087, 0.6598, 0.43844, 0.36262, 2.37119, 2015], ["New Zealand", 9.0, 7.286, 1.25018, 1.31967, 0.90837, 0.63938, 0.42922, 0.47501, 2.26425, 2015], ["Australia", 10.0, 7.284, 1.33358, 1.30923, 0.93156, 0.65124, 0.35637, 0.43562, 2.26646, 2015], ["Israel", 11.0, 7.278, 1.22857, 1.22393, 0.91387, 0.41319, 0.07785, 0.33172, 3.08854, 2015], ["Costa Rica", 12.0, 7.226, 0.95578, 1.23788, 0.86027, 0.63376, 0.10583, 0.25497, 3.17728, 2015], ["Austria", 13.0, 7.2, 1.33723, 1.29704, 0.89042, 0.62433, 0.18676, 0.33088, 2.5332, 2015], ["Mexico", 14.0, 7.187, 1.02054, 0.91451, 0.81444, 0.48181, 0.21312, 0.14074, 3.60214, 2015], ["United States", 15.0, 7.119, 1.39451, 1.24711, 0.86179, 0.54604, 0.1589, 0.40105, 2.51011, 2015], ["Brazil", 16.0, 6.983, 0.98124, 1.23287, 0.69702, 0.49049, 0.17521, 0.14574, 3.26001, 2015], ["Luxembourg", 17.0, 6.946, 1.56391, 1.21963, 0.91894, 0.61583, 0.37798, 0.28034, 1.96961, 2015], ["Ireland", 18.0, 6.94, 1.33596, 1.36948, 0.89533, 0.61777, 0.28703, 0.45901, 1.9757, 2015], ["Belgium", 19.0, 6.937, 1.30782, 1.28566, 0.89667, 0.5845, 0.2254, 0.2225, 2.41484, 2015], ["United Arab Emirates", 20.0, 6.901, 1.42727, 1.12575, 0.80925, 0.64157, 0.38583, 0.26428, 2.24743, 2015], ["United Kingdom", 21.0, 6.867, 1.26637, 1.28548, 0.90943, 0.59625, 0.32067, 0.51912, 1.96994, 2015], ["Oman", 22.0, 6.853, 1.36011, 1.08182, 0.76276, 0.63274, 0.32524, 0.21542, 2.47489, 2015], ["Venezuela", 23.0, 6.81, 1.04424, 1.25596, 0.72052, 0.42908, 0.11069, 0.05841, 3.19131, 2015], ["Singapore", 24.0, 6.798, 1.52186, 1.02, 1.02525, 0.54252, 0.4921, 0.31105, 1.88501, 2015], ["Panama", 25.0, 6.786, 1.06353, 1.1985, 0.79661, 0.5421, 0.0927, 0.24434, 2.84848, 2015], ["Germany", 26.0, 6.75, 1.32792, 1.29937, 0.89186, 0.61477, 0.21843, 0.28214, 2.11569, 2015], ["Chile", 27.0, 6.67, 1.10715, 1.12447, 0.85857, 0.44132, 0.12869, 0.33363, 2.67585, 2015], ["Qatar", 28.0, 6.611, 1.69042, 1.0786, 0.79733, 0.6404, 0.52208, 0.32573, 1.55674, 2015], ["France", 29.0, 6.575, 1.27778, 1.26038, 0.94579, 0.55011, 0.20646, 0.12332, 2.21126, 2015], ["Argentina", 30.0, 6.574, 1.05351, 1.24823, 0.78723, 0.44974, 0.08484, 0.11451, 2.836, 2015], ["Czech Republic", 31.0, 6.505, 1.17898, 1.20643, 0.84483, 0.46364, 0.02652, 0.10686, 2.67782, 2015], ["Uruguay", 32.0, 6.485, 1.06166, 1.2089, 0.8116, 0.60362, 0.24558, 0.2324, 2.32142, 2015], ["Colombia", 33.0, 6.477, 0.91861, 1.24018, 0.69077, 0.53466, 0.0512, 0.18401, 2.85737, 2015], ["Thailand", 34.0, 6.455, 0.9669, 1.26504, 0.7385, 0.55664, 0.03187, 0.5763, 2.31945, 2015], ["Saudi Arabia", 35.0, 6.411, 1.39541, 1.08393, 0.72025, 0.31048, 0.32524, 0.13706, 2.43872, 2015], ["Spain", 36.0, 6.329, 1.23011, 1.31379, 0.95562, 0.45951, 0.06398, 0.18227, 2.12367, 2015], ["Malta", 37.0, 6.302, 1.2074, 1.30203, 0.88721, 0.60365, 0.13586, 0.51752, 1.6488, 2015], ["Taiwan", 38.0, 6.298, 1.29098, 1.07617, 0.8753, 0.3974, 0.08129, 0.25376, 2.32323, 2015], ["Kuwait", 39.0, 6.295, 1.55422, 1.16594, 0.72492, 0.55499, 0.25609, 0.16228, 1.87634, 2015], ["Suriname", 40.0, 6.269, 0.99534, 0.972, 0.6082, 0.59657, 0.13633, 0.16991, 2.79094, 2015], ["Trinidad and Tobago", 41.0, 6.168, 1.21183, 1.18354, 0.61483, 0.55884, 0.0114, 0.31844, 2.26882, 2015], ["El Salvador", 42.0, 6.13, 0.76454, 1.02507, 0.67737, 0.4035, 0.11776, 0.10692, 3.035, 2015], ["Guatemala", 43.0, 6.123, 0.74553, 1.04356, 0.64425, 0.57733, 0.09472, 0.27489, 2.74255, 2015], ["Uzbekistan", 44.0, 6.003, 0.63244, 1.34043, 0.59772, 0.65821, 0.30826, 0.22837, 2.23741, 2015], ["Slovakia", 45.0, 5.995, 1.16891, 1.26999, 0.78902, 0.31751, 0.03431, 0.16893, 2.24639, 2015], ["Japan", 46.0, 5.987, 1.27074, 1.25712, 0.99111, 0.49615, 0.1806, 0.10705, 1.68435, 2015], ["South Korea", 47.0, 5.984, 1.24461, 0.95774, 0.96538, 0.33208, 0.07857, 0.18557, 2.21978, 2015], ["Ecuador", 48.0, 5.975, 0.86402, 0.99903, 0.79075, 0.48574, 0.1809, 0.11541, 2.53942, 2015], ["Bahrain", 49.0, 5.96, 1.32376, 1.21624, 0.74716, 0.45492, 0.306, 0.17362, 1.73797, 2015], ["Italy", 50.0, 5.948, 1.25114, 1.19777, 0.95446, 0.26236, 0.02901, 0.22823, 2.02518, 2015], ["Bolivia", 51.0, 5.89, 0.68133, 0.97841, 0.5392, 0.57414, 0.088, 0.20536, 2.82334, 2015], ["Moldova", 52.0, 5.889, 0.59448, 1.01528, 0.61826, 0.32818, 0.01615, 0.20951, 3.10712, 2015], ["Paraguay", 53.0, 5.878, 0.75985, 1.30477, 0.66098, 0.53899, 0.08242, 0.3424, 2.18896, 2015], ["Kazakhstan", 54.0, 5.855, 1.12254, 1.12241, 0.64368, 0.51649, 0.08454, 0.11827, 2.24729, 2015], ["Slovenia", 55.0, 5.848, 1.18498, 1.27385, 0.87337, 0.60855, 0.03787, 0.25328, 1.61583, 2015], ["Lithuania", 56.0, 5.833, 1.14723, 1.25745, 0.73128, 0.21342, 0.01031, 0.02641, 2.44649, 2015], ["Nicaragua", 57.0, 5.828, 0.59325, 1.14184, 0.74314, 0.55475, 0.19317, 0.27815, 2.32407, 2015], ["Peru", 58.0, 5.824, 0.90019, 0.97459, 0.73017, 0.41496, 0.05989, 0.14982, 2.5945, 2015], ["Belarus", 59.0, 5.813, 1.03192, 1.23289, 0.73608, 0.37938, 0.1909, 0.11046, 2.1309, 2015], ["Poland", 60.0, 5.791, 1.12555, 1.27948, 0.77903, 0.53122, 0.04212, 0.16759, 1.86565, 2015], ["Malaysia", 61.0, 5.77, 1.12486, 1.07023, 0.72394, 0.53024, 0.10501, 0.33075, 1.88541, 2015], ["Croatia", 62.0, 5.759, 1.08254, 0.79624, 0.78805, 0.25883, 0.0243, 0.05444, 2.75414, 2015], ["Libya", 63.0, 5.754, 1.13145, 1.11862, 0.7038, 0.41668, 0.11023, 0.18295, 2.09066, 2015], ["Russia", 64.0, 5.716, 1.13764, 1.23617, 0.66926, 0.36679, 0.03005, 0.00199, 2.27394, 2015], ["Jamaica", 65.0, 5.709, 0.81038, 1.15102, 0.68741, 0.50442, 0.02299, 0.2123, 2.32038, 2015], ["North Cyprus", 66.0, 5.695, 1.20806, 1.07008, 0.92356, 0.49027, 0.1428, 0.26169, 1.59888, 2015], ["Cyprus", 67.0, 5.689, 1.20813, 0.89318, 0.92356, 0.40672, 0.06146, 0.30638, 1.88931, 2015], ["Algeria", 68.0, 5.605, 0.93929, 1.07772, 0.61766, 0.28579, 0.17383, 0.07822, 2.43209, 2015], ["Kosovo", 69.0, 5.589, 0.80148, 0.81198, 0.63132, 0.24749, 0.04741, 0.2831, 2.76579, 2015], ["Turkmenistan", 70.0, 5.548, 0.95847, 1.22668, 0.53886, 0.4761, 0.30844, 0.16979, 1.86984, 2015], ["Mauritius", 71.0, 5.477, 1.00761, 0.98521, 0.7095, 0.56066, 0.07521, 0.37744, 1.76145, 2015], ["Hong Kong", 72.0, 5.474, 1.38604, 1.05818, 1.01328, 0.59608, 0.37124, 0.39478, 0.65429, 2015], ["Estonia", 73.0, 5.429, 1.15174, 1.22791, 0.77361, 0.44888, 0.15184, 0.0868, 1.58782, 2015], ["Indonesia", 74.0, 5.399, 0.82827, 1.08708, 0.63793, 0.46611, 0.0, 0.51535, 1.86399, 2015], ["Vietnam", 75.0, 5.36, 0.63216, 0.91226, 0.74676, 0.59444, 0.10441, 0.1686, 2.20173, 2015], ["Turkey", 76.0, 5.332, 1.06098, 0.94632, 0.73172, 0.22815, 0.15746, 0.12253, 2.08528, 2015], ["Kyrgyzstan", 77.0, 5.286, 0.47428, 1.15115, 0.65088, 0.43477, 0.04232, 0.3003, 2.2327, 2015], ["Nigeria", 78.0, 5.268, 0.65435, 0.90432, 0.16007, 0.34334, 0.0403, 0.27233, 2.89319, 2015], ["Bhutan", 79.0, 5.253, 0.77042, 1.10395, 0.57407, 0.53206, 0.15445, 0.47998, 1.63794, 2015], ["Azerbaijan", 80.0, 5.212, 1.02389, 0.93793, 0.64045, 0.3703, 0.16065, 0.07799, 2.00073, 2015], ["Pakistan", 81.0, 5.194, 0.59543, 0.41411, 0.51466, 0.12102, 0.10464, 0.33671, 3.10709, 2015], ["Jordan", 82.0, 5.192, 0.90198, 1.05392, 0.69639, 0.40661, 0.14293, 0.11053, 1.87996, 2015], ["Montenegro", 82.0, 5.192, 0.97438, 0.90557, 0.72521, 0.1826, 0.14296, 0.1614, 2.10017, 2015], ["China", 84.0, 5.14, 0.89012, 0.94675, 0.81658, 0.51697, 0.02781, 0.08185, 1.8604, 2015], ["Zambia", 85.0, 5.129, 0.47038, 0.91612, 0.29924, 0.48827, 0.12468, 0.19591, 2.6343, 2015], ["Romania", 86.0, 5.124, 1.04345, 0.88588, 0.7689, 0.35068, 0.00649, 0.13748, 1.93129, 2015], ["Serbia", 87.0, 5.123, 0.92053, 1.00964, 0.74836, 0.20107, 0.02617, 0.19231, 2.025, 2015], ["Portugal", 88.0, 5.102, 1.15991, 1.13935, 0.87519, 0.51469, 0.01078, 0.13719, 1.26462, 2015], ["Latvia", 89.0, 5.098, 1.11312, 1.09562, 0.72437, 0.29671, 0.06332, 0.18226, 1.62215, 2015], ["Philippines", 90.0, 5.073, 0.70532, 1.03516, 0.58114, 0.62545, 0.12279, 0.24991, 1.7536, 2015], ["Somaliland region", 91.0, 5.057, 0.18847, 0.95152, 0.43873, 0.46582, 0.39928, 0.50318, 2.11032, 2015], ["Morocco", 92.0, 5.013, 0.73479, 0.64095, 0.60954, 0.41691, 0.08546, 0.07172, 2.45373, 2015], ["Macedonia", 93.0, 5.007, 0.91851, 1.00232, 0.73545, 0.33457, 0.05327, 0.22359, 1.73933, 2015], ["Mozambique", 94.0, 4.971, 0.08308, 1.02626, 0.09131, 0.34037, 0.15603, 0.22269, 3.05137, 2015], ["Albania", 95.0, 4.959, 0.87867, 0.80434, 0.81325, 0.35733, 0.06413, 0.14272, 1.89894, 2015], ["Bosnia and Herzegovina", 96.0, 4.949, 0.83223, 0.91916, 0.79081, 0.09245, 0.00227, 0.24808, 2.06367, 2015], ["Lesotho", 97.0, 4.898, 0.37545, 1.04103, 0.07612, 0.31767, 0.12504, 0.16388, 2.79832, 2015], ["Dominican Republic", 98.0, 4.885, 0.89537, 1.17202, 0.66825, 0.57672, 0.14234, 0.21684, 1.21305, 2015], ["Laos", 99.0, 4.876, 0.59066, 0.73803, 0.54909, 0.59591, 0.24249, 0.42192, 1.73799, 2015], ["Mongolia", 100.0, 4.874, 0.82819, 1.3006, 0.60268, 0.43626, 0.02666, 0.3323, 1.34759, 2015], ["Swaziland", 101.0, 4.867, 0.71206, 1.07284, 0.07566, 0.30658, 0.0306, 0.18259, 2.48676, 2015], ["Greece", 102.0, 4.857, 1.15406, 0.92933, 0.88213, 0.07699, 0.01397, 0.0, 1.80101, 2015], ["Lebanon", 103.0, 4.839, 1.02564, 0.80001, 0.83947, 0.33916, 0.04582, 0.21854, 1.57059, 2015], ["Hungary", 104.0, 4.8, 1.12094, 1.20215, 0.75905, 0.32112, 0.02758, 0.128, 1.24074, 2015], ["Honduras", 105.0, 4.788, 0.59532, 0.95348, 0.6951, 0.40148, 0.06825, 0.23027, 1.84408, 2015], ["Tajikistan", 106.0, 4.786, 0.39047, 0.85563, 0.57379, 0.47216, 0.15072, 0.22974, 2.11399, 2015], ["Tunisia", 107.0, 4.739, 0.88113, 0.60429, 0.73793, 0.26268, 0.06358, 0.06431, 2.12466, 2015], ["Palestinian Territories", 108.0, 4.715, 0.59867, 0.92558, 0.66015, 0.24499, 0.12905, 0.11251, 2.04384, 2015], ["Bangladesh", 109.0, 4.694, 0.39753, 0.43106, 0.60164, 0.4082, 0.12569, 0.21222, 2.51767, 2015], ["Iran", 110.0, 4.686, 1.0088, 0.54447, 0.69805, 0.30033, 0.05863, 0.38086, 1.6944, 2015], ["Ukraine", 111.0, 4.681, 0.79907, 1.20278, 0.6739, 0.25123, 0.02961, 0.15275, 1.5714, 2015], ["Iraq", 112.0, 4.677, 0.98549, 0.81889, 0.60237, 0.0, 0.13788, 0.17922, 1.95335, 2015], ["South Africa", 113.0, 4.642, 0.92049, 1.18468, 0.27688, 0.33207, 0.08884, 0.11973, 1.71956, 2015], ["Ghana", 114.0, 4.633, 0.54558, 0.67954, 0.40132, 0.42342, 0.04355, 0.23087, 2.30919, 2015], ["Zimbabwe", 115.0, 4.61, 0.271, 1.03276, 0.33475, 0.25861, 0.08079, 0.18987, 2.44191, 2015], ["Liberia", 116.0, 4.571, 0.0712, 0.78968, 0.34201, 0.28531, 0.06232, 0.24362, 2.77729, 2015], ["India", 117.0, 4.565, 0.64499, 0.38174, 0.51529, 0.39786, 0.08492, 0.26475, 2.27513, 2015], ["Sudan", 118.0, 4.55, 0.52107, 1.01404, 0.36878, 0.10081, 0.1466, 0.19062, 2.20857, 2015], ["Haiti", 119.0, 4.518, 0.26673, 0.74302, 0.38847, 0.24425, 0.17175, 0.46187, 2.24173, 2015], ["Congo (Kinshasa)", 120.0, 4.517, 0.0, 1.0012, 0.09806, 0.22605, 0.07625, 0.24834, 2.86712, 2015], ["Nepal", 121.0, 4.514, 0.35997, 0.86449, 0.56874, 0.38282, 0.05907, 0.32296, 1.95637, 2015], ["Ethiopia", 122.0, 4.512, 0.19073, 0.60406, 0.44055, 0.4345, 0.15048, 0.24325, 2.44876, 2015], ["Sierra Leone", 123.0, 4.507, 0.33024, 0.95571, 0.0, 0.4084, 0.08786, 0.21488, 2.51009, 2015], ["Mauritania", 124.0, 4.436, 0.45407, 0.86908, 0.35874, 0.24232, 0.17461, 0.219, 2.11773, 2015], ["Kenya", 125.0, 4.419, 0.36471, 0.99876, 0.41435, 0.42215, 0.05839, 0.37542, 1.78555, 2015], ["Djibouti", 126.0, 4.369, 0.44025, 0.59207, 0.36291, 0.46074, 0.28105, 0.18093, 2.05125, 2015], ["Armenia", 127.0, 4.35, 0.76821, 0.77711, 0.7299, 0.19847, 0.039, 0.07855, 1.75873, 2015], ["Botswana", 128.0, 4.332, 0.99355, 1.10464, 0.04776, 0.49495, 0.12474, 0.10461, 1.46181, 2015], ["Myanmar", 129.0, 4.307, 0.27108, 0.70905, 0.48246, 0.44017, 0.19034, 0.79588, 1.41805, 2015], ["Georgia", 130.0, 4.297, 0.7419, 0.38562, 0.72926, 0.40577, 0.38331, 0.05547, 1.59541, 2015], ["Malawi", 131.0, 4.292, 0.01604, 0.41134, 0.22562, 0.43054, 0.06977, 0.33128, 2.80791, 2015], ["Sri Lanka", 132.0, 4.271, 0.83524, 1.01905, 0.70806, 0.53726, 0.09179, 0.40828, 0.67108, 2015], ["Cameroon", 133.0, 4.252, 0.4225, 0.88767, 0.23402, 0.49309, 0.05786, 0.20618, 1.95071, 2015], ["Bulgaria", 134.0, 4.218, 1.01216, 1.10614, 0.76649, 0.30587, 0.00872, 0.11921, 0.89991, 2015], ["Egypt", 135.0, 4.194, 0.8818, 0.747, 0.61712, 0.17288, 0.06324, 0.11291, 1.59927, 2015], ["Yemen", 136.0, 4.077, 0.54649, 0.68093, 0.40064, 0.35571, 0.07854, 0.09131, 1.92313, 2015], ["Angola", 137.0, 4.033, 0.75778, 0.8604, 0.16683, 0.10384, 0.07122, 0.12344, 1.94939, 2015], ["Mali", 138.0, 3.995, 0.26074, 1.03526, 0.20583, 0.38857, 0.12352, 0.18798, 1.79293, 2015], ["Congo (Brazzaville)", 139.0, 3.989, 0.67866, 0.6629, 0.31051, 0.41466, 0.11686, 0.12388, 1.68135, 2015], ["Comoros", 140.0, 3.956, 0.23906, 0.79273, 0.36315, 0.22917, 0.199, 0.17441, 1.95812, 2015], ["Uganda", 141.0, 3.931, 0.21102, 1.13299, 0.33861, 0.45727, 0.07267, 0.29066, 1.42766, 2015], ["Senegal", 142.0, 3.904, 0.36498, 0.97619, 0.4354, 0.36772, 0.10713, 0.20843, 1.44395, 2015], ["Gabon", 143.0, 3.896, 1.06024, 0.90528, 0.43372, 0.31914, 0.11091, 0.06822, 0.99895, 2015], ["Niger", 144.0, 3.845, 0.0694, 0.77265, 0.29707, 0.47692, 0.15639, 0.19387, 1.87877, 2015], ["Cambodia", 145.0, 3.819, 0.46038, 0.62736, 0.61114, 0.66246, 0.07247, 0.40359, 0.98195, 2015], ["Tanzania", 146.0, 3.781, 0.2852, 1.00268, 0.38215, 0.32878, 0.05747, 0.34377, 1.38079, 2015], ["Madagascar", 147.0, 3.681, 0.20824, 0.66801, 0.46721, 0.19184, 0.08124, 0.21333, 1.851, 2015], ["Central African Republic", 148.0, 3.678, 0.0785, 0.0, 0.06699, 0.48879, 0.08289, 0.23835, 2.7223, 2015], ["Chad", 149.0, 3.667, 0.34193, 0.76062, 0.1501, 0.23501, 0.05269, 0.18386, 1.94296, 2015], ["Guinea", 150.0, 3.656, 0.17417, 0.46475, 0.24009, 0.37725, 0.12139, 0.28657, 1.99172, 2015], ["Ivory Coast", 151.0, 3.655, 0.46534, 0.77115, 0.15185, 0.46866, 0.17922, 0.20165, 1.41723, 2015], ["Burkina Faso", 152.0, 3.587, 0.25812, 0.85188, 0.27125, 0.39493, 0.12832, 0.21747, 1.46494, 2015], ["Afghanistan", 153.0, 3.575, 0.31982, 0.30285, 0.30335, 0.23414, 0.09719, 0.3651, 1.9521, 2015], ["Rwanda", 154.0, 3.465, 0.22208, 0.7737, 0.42864, 0.59201, 0.55191, 0.22628, 0.67042, 2015], ["Benin", 155.0, 3.34, 0.28665, 0.35386, 0.3191, 0.4845, 0.0801, 0.1826, 1.63328, 2015], ["Syria", 156.0, 3.006, 0.6632, 0.47489, 0.72193, 0.15684, 0.18906, 0.47179, 0.32858, 2015], ["Burundi", 157.0, 2.905, 0.0153, 0.41587, 0.22396, 0.1185, 0.10062, 0.19727, 1.83302, 2015], ["Togo", 158.0, 2.839, 0.20868, 0.13995, 0.28443, 0.36453, 0.10731, 0.16681, 1.56726, 2015], ["Taiwan Province of China", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2015], ["Belize", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2015], ["Hong Kong S.A.R., China", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2015], ["Somalia", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2015], ["Namibia", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2015], ["South Sudan", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2015], ["Switzerland", 1.0, 7.587, 1.39651, 1.34951, 0.94143, 0.66557, 0.41978, 0.29678, 2.51738, 2016], ["Iceland", 2.0, 7.561, 1.30232, 1.40223, 0.94784, 0.62877, 0.14145, 0.4363, 2.70201, 2016], ["Denmark", 3.0, 7.527, 1.32548, 1.36058, 0.87464, 0.64938, 0.48357, 0.34139, 2.49204, 2016], ["Norway", 4.0, 7.522, 1.459, 1.33095, 0.88521, 0.66973, 0.36503, 0.34699, 2.46531, 2016], ["Canada", 5.0, 7.427, 1.32629, 1.32261, 0.90563, 0.63297, 0.32957, 0.45811, 2.45176, 2016], ["Finland", 6.0, 7.406, 1.29025, 1.31826, 0.88911, 0.64169, 0.41372, 0.23351, 2.61955, 2016], ["Netherlands", 7.0, 7.378, 1.32944, 1.28017, 0.89284, 0.61576, 0.31814, 0.4761, 2.4657, 2016], ["Sweden", 8.0, 7.364, 1.33171, 1.28907, 0.91087, 0.6598, 0.43844, 0.36262, 2.37119, 2016], ["New Zealand", 9.0, 7.286, 1.25018, 1.31967, 0.90837, 0.63938, 0.42922, 0.47501, 2.26425, 2016], ["Australia", 10.0, 7.284, 1.33358, 1.30923, 0.93156, 0.65124, 0.35637, 0.43562, 2.26646, 2016], ["Israel", 11.0, 7.278, 1.22857, 1.22393, 0.91387, 0.41319, 0.07785, 0.33172, 3.08854, 2016], ["Costa Rica", 12.0, 7.226, 0.95578, 1.23788, 0.86027, 0.63376, 0.10583, 0.25497, 3.17728, 2016], ["Austria", 13.0, 7.2, 1.33723, 1.29704, 0.89042, 0.62433, 0.18676, 0.33088, 2.5332, 2016], ["Mexico", 14.0, 7.187, 1.02054, 0.91451, 0.81444, 0.48181, 0.21312, 0.14074, 3.60214, 2016], ["United States", 15.0, 7.119, 1.39451, 1.24711, 0.86179, 0.54604, 0.1589, 0.40105, 2.51011, 2016], ["Brazil", 16.0, 6.983, 0.98124, 1.23287, 0.69702, 0.49049, 0.17521, 0.14574, 3.26001, 2016], ["Luxembourg", 17.0, 6.946, 1.56391, 1.21963, 0.91894, 0.61583, 0.37798, 0.28034, 1.96961, 2016], ["Ireland", 18.0, 6.94, 1.33596, 1.36948, 0.89533, 0.61777, 0.28703, 0.45901, 1.9757, 2016], ["Belgium", 19.0, 6.937, 1.30782, 1.28566, 0.89667, 0.5845, 0.2254, 0.2225, 2.41484, 2016], ["United Arab Emirates", 20.0, 6.901, 1.42727, 1.12575, 0.80925, 0.64157, 0.38583, 0.26428, 2.24743, 2016], ["United Kingdom", 21.0, 6.867, 1.26637, 1.28548, 0.90943, 0.59625, 0.32067, 0.51912, 1.96994, 2016], ["Oman", 22.0, 6.853, 1.36011, 1.08182, 0.76276, 0.63274, 0.32524, 0.21542, 2.47489, 2016], ["Venezuela", 23.0, 6.81, 1.04424, 1.25596, 0.72052, 0.42908, 0.11069, 0.05841, 3.19131, 2016], ["Singapore", 24.0, 6.798, 1.52186, 1.02, 1.02525, 0.54252, 0.4921, 0.31105, 1.88501, 2016], ["Panama", 25.0, 6.786, 1.06353, 1.1985, 0.79661, 0.5421, 0.0927, 0.24434, 2.84848, 2016], ["Germany", 26.0, 6.75, 1.32792, 1.29937, 0.89186, 0.61477, 0.21843, 0.28214, 2.11569, 2016], ["Chile", 27.0, 6.67, 1.10715, 1.12447, 0.85857, 0.44132, 0.12869, 0.33363, 2.67585, 2016], ["Qatar", 28.0, 6.611, 1.69042, 1.0786, 0.79733, 0.6404, 0.52208, 0.32573, 1.55674, 2016], ["France", 29.0, 6.575, 1.27778, 1.26038, 0.94579, 0.55011, 0.20646, 0.12332, 2.21126, 2016], ["Argentina", 30.0, 6.574, 1.05351, 1.24823, 0.78723, 0.44974, 0.08484, 0.11451, 2.836, 2016], ["Czech Republic", 31.0, 6.505, 1.17898, 1.20643, 0.84483, 0.46364, 0.02652, 0.10686, 2.67782, 2016], ["Uruguay", 32.0, 6.485, 1.06166, 1.2089, 0.8116, 0.60362, 0.24558, 0.2324, 2.32142, 2016], ["Colombia", 33.0, 6.477, 0.91861, 1.24018, 0.69077, 0.53466, 0.0512, 0.18401, 2.85737, 2016], ["Thailand", 34.0, 6.455, 0.9669, 1.26504, 0.7385, 0.55664, 0.03187, 0.5763, 2.31945, 2016], ["Saudi Arabia", 35.0, 6.411, 1.39541, 1.08393, 0.72025, 0.31048, 0.32524, 0.13706, 2.43872, 2016], ["Spain", 36.0, 6.329, 1.23011, 1.31379, 0.95562, 0.45951, 0.06398, 0.18227, 2.12367, 2016], ["Malta", 37.0, 6.302, 1.2074, 1.30203, 0.88721, 0.60365, 0.13586, 0.51752, 1.6488, 2016], ["Taiwan", 38.0, 6.298, 1.29098, 1.07617, 0.8753, 0.3974, 0.08129, 0.25376, 2.32323, 2016], ["Kuwait", 39.0, 6.295, 1.55422, 1.16594, 0.72492, 0.55499, 0.25609, 0.16228, 1.87634, 2016], ["Suriname", 40.0, 6.269, 0.99534, 0.972, 0.6082, 0.59657, 0.13633, 0.16991, 2.79094, 2016], ["Trinidad and Tobago", 41.0, 6.168, 1.21183, 1.18354, 0.61483, 0.55884, 0.0114, 0.31844, 2.26882, 2016], ["El Salvador", 42.0, 6.13, 0.76454, 1.02507, 0.67737, 0.4035, 0.11776, 0.10692, 3.035, 2016], ["Guatemala", 43.0, 6.123, 0.74553, 1.04356, 0.64425, 0.57733, 0.09472, 0.27489, 2.74255, 2016], ["Uzbekistan", 44.0, 6.003, 0.63244, 1.34043, 0.59772, 0.65821, 0.30826, 0.22837, 2.23741, 2016], ["Slovakia", 45.0, 5.995, 1.16891, 1.26999, 0.78902, 0.31751, 0.03431, 0.16893, 2.24639, 2016], ["Japan", 46.0, 5.987, 1.27074, 1.25712, 0.99111, 0.49615, 0.1806, 0.10705, 1.68435, 2016], ["South Korea", 47.0, 5.984, 1.24461, 0.95774, 0.96538, 0.33208, 0.07857, 0.18557, 2.21978, 2016], ["Ecuador", 48.0, 5.975, 0.86402, 0.99903, 0.79075, 0.48574, 0.1809, 0.11541, 2.53942, 2016], ["Bahrain", 49.0, 5.96, 1.32376, 1.21624, 0.74716, 0.45492, 0.306, 0.17362, 1.73797, 2016], ["Italy", 50.0, 5.948, 1.25114, 1.19777, 0.95446, 0.26236, 0.02901, 0.22823, 2.02518, 2016], ["Bolivia", 51.0, 5.89, 0.68133, 0.97841, 0.5392, 0.57414, 0.088, 0.20536, 2.82334, 2016], ["Moldova", 52.0, 5.889, 0.59448, 1.01528, 0.61826, 0.32818, 0.01615, 0.20951, 3.10712, 2016], ["Paraguay", 53.0, 5.878, 0.75985, 1.30477, 0.66098, 0.53899, 0.08242, 0.3424, 2.18896, 2016], ["Kazakhstan", 54.0, 5.855, 1.12254, 1.12241, 0.64368, 0.51649, 0.08454, 0.11827, 2.24729, 2016], ["Slovenia", 55.0, 5.848, 1.18498, 1.27385, 0.87337, 0.60855, 0.03787, 0.25328, 1.61583, 2016], ["Lithuania", 56.0, 5.833, 1.14723, 1.25745, 0.73128, 0.21342, 0.01031, 0.02641, 2.44649, 2016], ["Nicaragua", 57.0, 5.828, 0.59325, 1.14184, 0.74314, 0.55475, 0.19317, 0.27815, 2.32407, 2016], ["Peru", 58.0, 5.824, 0.90019, 0.97459, 0.73017, 0.41496, 0.05989, 0.14982, 2.5945, 2016], ["Belarus", 59.0, 5.813, 1.03192, 1.23289, 0.73608, 0.37938, 0.1909, 0.11046, 2.1309, 2016], ["Poland", 60.0, 5.791, 1.12555, 1.27948, 0.77903, 0.53122, 0.04212, 0.16759, 1.86565, 2016], ["Malaysia", 61.0, 5.77, 1.12486, 1.07023, 0.72394, 0.53024, 0.10501, 0.33075, 1.88541, 2016], ["Croatia", 62.0, 5.759, 1.08254, 0.79624, 0.78805, 0.25883, 0.0243, 0.05444, 2.75414, 2016], ["Libya", 63.0, 5.754, 1.13145, 1.11862, 0.7038, 0.41668, 0.11023, 0.18295, 2.09066, 2016], ["Russia", 64.0, 5.716, 1.13764, 1.23617, 0.66926, 0.36679, 0.03005, 0.00199, 2.27394, 2016], ["Jamaica", 65.0, 5.709, 0.81038, 1.15102, 0.68741, 0.50442, 0.02299, 0.2123, 2.32038, 2016], ["North Cyprus", 66.0, 5.695, 1.20806, 1.07008, 0.92356, 0.49027, 0.1428, 0.26169, 1.59888, 2016], ["Cyprus", 67.0, 5.689, 1.20813, 0.89318, 0.92356, 0.40672, 0.06146, 0.30638, 1.88931, 2016], ["Algeria", 68.0, 5.605, 0.93929, 1.07772, 0.61766, 0.28579, 0.17383, 0.07822, 2.43209, 2016], ["Kosovo", 69.0, 5.589, 0.80148, 0.81198, 0.63132, 0.24749, 0.04741, 0.2831, 2.76579, 2016], ["Turkmenistan", 70.0, 5.548, 0.95847, 1.22668, 0.53886, 0.4761, 0.30844, 0.16979, 1.86984, 2016], ["Mauritius", 71.0, 5.477, 1.00761, 0.98521, 0.7095, 0.56066, 0.07521, 0.37744, 1.76145, 2016], ["Hong Kong", 72.0, 5.474, 1.38604, 1.05818, 1.01328, 0.59608, 0.37124, 0.39478, 0.65429, 2016], ["Estonia", 73.0, 5.429, 1.15174, 1.22791, 0.77361, 0.44888, 0.15184, 0.0868, 1.58782, 2016], ["Indonesia", 74.0, 5.399, 0.82827, 1.08708, 0.63793, 0.46611, 0.0, 0.51535, 1.86399, 2016], ["Vietnam", 75.0, 5.36, 0.63216, 0.91226, 0.74676, 0.59444, 0.10441, 0.1686, 2.20173, 2016], ["Turkey", 76.0, 5.332, 1.06098, 0.94632, 0.73172, 0.22815, 0.15746, 0.12253, 2.08528, 2016], ["Kyrgyzstan", 77.0, 5.286, 0.47428, 1.15115, 0.65088, 0.43477, 0.04232, 0.3003, 2.2327, 2016], ["Nigeria", 78.0, 5.268, 0.65435, 0.90432, 0.16007, 0.34334, 0.0403, 0.27233, 2.89319, 2016], ["Bhutan", 79.0, 5.253, 0.77042, 1.10395, 0.57407, 0.53206, 0.15445, 0.47998, 1.63794, 2016], ["Azerbaijan", 80.0, 5.212, 1.02389, 0.93793, 0.64045, 0.3703, 0.16065, 0.07799, 2.00073, 2016], ["Pakistan", 81.0, 5.194, 0.59543, 0.41411, 0.51466, 0.12102, 0.10464, 0.33671, 3.10709, 2016], ["Jordan", 82.0, 5.192, 0.90198, 1.05392, 0.69639, 0.40661, 0.14293, 0.11053, 1.87996, 2016], ["Montenegro", 82.0, 5.192, 0.97438, 0.90557, 0.72521, 0.1826, 0.14296, 0.1614, 2.10017, 2016], ["China", 84.0, 5.14, 0.89012, 0.94675, 0.81658, 0.51697, 0.02781, 0.08185, 1.8604, 2016], ["Zambia", 85.0, 5.129, 0.47038, 0.91612, 0.29924, 0.48827, 0.12468, 0.19591, 2.6343, 2016], ["Romania", 86.0, 5.124, 1.04345, 0.88588, 0.7689, 0.35068, 0.00649, 0.13748, 1.93129, 2016], ["Serbia", 87.0, 5.123, 0.92053, 1.00964, 0.74836, 0.20107, 0.02617, 0.19231, 2.025, 2016], ["Portugal", 88.0, 5.102, 1.15991, 1.13935, 0.87519, 0.51469, 0.01078, 0.13719, 1.26462, 2016], ["Latvia", 89.0, 5.098, 1.11312, 1.09562, 0.72437, 0.29671, 0.06332, 0.18226, 1.62215, 2016], ["Philippines", 90.0, 5.073, 0.70532, 1.03516, 0.58114, 0.62545, 0.12279, 0.24991, 1.7536, 2016], ["Somaliland region", 91.0, 5.057, 0.18847, 0.95152, 0.43873, 0.46582, 0.39928, 0.50318, 2.11032, 2016], ["Morocco", 92.0, 5.013, 0.73479, 0.64095, 0.60954, 0.41691, 0.08546, 0.07172, 2.45373, 2016], ["Macedonia", 93.0, 5.007, 0.91851, 1.00232, 0.73545, 0.33457, 0.05327, 0.22359, 1.73933, 2016], ["Mozambique", 94.0, 4.971, 0.08308, 1.02626, 0.09131, 0.34037, 0.15603, 0.22269, 3.05137, 2016], ["Albania", 95.0, 4.959, 0.87867, 0.80434, 0.81325, 0.35733, 0.06413, 0.14272, 1.89894, 2016], ["Bosnia and Herzegovina", 96.0, 4.949, 0.83223, 0.91916, 0.79081, 0.09245, 0.00227, 0.24808, 2.06367, 2016], ["Lesotho", 97.0, 4.898, 0.37545, 1.04103, 0.07612, 0.31767, 0.12504, 0.16388, 2.79832, 2016], ["Dominican Republic", 98.0, 4.885, 0.89537, 1.17202, 0.66825, 0.57672, 0.14234, 0.21684, 1.21305, 2016], ["Laos", 99.0, 4.876, 0.59066, 0.73803, 0.54909, 0.59591, 0.24249, 0.42192, 1.73799, 2016], ["Mongolia", 100.0, 4.874, 0.82819, 1.3006, 0.60268, 0.43626, 0.02666, 0.3323, 1.34759, 2016], ["Swaziland", 101.0, 4.867, 0.71206, 1.07284, 0.07566, 0.30658, 0.0306, 0.18259, 2.48676, 2016], ["Greece", 102.0, 4.857, 1.15406, 0.92933, 0.88213, 0.07699, 0.01397, 0.0, 1.80101, 2016], ["Lebanon", 103.0, 4.839, 1.02564, 0.80001, 0.83947, 0.33916, 0.04582, 0.21854, 1.57059, 2016], ["Hungary", 104.0, 4.8, 1.12094, 1.20215, 0.75905, 0.32112, 0.02758, 0.128, 1.24074, 2016], ["Honduras", 105.0, 4.788, 0.59532, 0.95348, 0.6951, 0.40148, 0.06825, 0.23027, 1.84408, 2016], ["Tajikistan", 106.0, 4.786, 0.39047, 0.85563, 0.57379, 0.47216, 0.15072, 0.22974, 2.11399, 2016], ["Tunisia", 107.0, 4.739, 0.88113, 0.60429, 0.73793, 0.26268, 0.06358, 0.06431, 2.12466, 2016], ["Palestinian Territories", 108.0, 4.715, 0.59867, 0.92558, 0.66015, 0.24499, 0.12905, 0.11251, 2.04384, 2016], ["Bangladesh", 109.0, 4.694, 0.39753, 0.43106, 0.60164, 0.4082, 0.12569, 0.21222, 2.51767, 2016], ["Iran", 110.0, 4.686, 1.0088, 0.54447, 0.69805, 0.30033, 0.05863, 0.38086, 1.6944, 2016], ["Ukraine", 111.0, 4.681, 0.79907, 1.20278, 0.6739, 0.25123, 0.02961, 0.15275, 1.5714, 2016], ["Iraq", 112.0, 4.677, 0.98549, 0.81889, 0.60237, 0.0, 0.13788, 0.17922, 1.95335, 2016], ["South Africa", 113.0, 4.642, 0.92049, 1.18468, 0.27688, 0.33207, 0.08884, 0.11973, 1.71956, 2016], ["Ghana", 114.0, 4.633, 0.54558, 0.67954, 0.40132, 0.42342, 0.04355, 0.23087, 2.30919, 2016], ["Zimbabwe", 115.0, 4.61, 0.271, 1.03276, 0.33475, 0.25861, 0.08079, 0.18987, 2.44191, 2016], ["Liberia", 116.0, 4.571, 0.0712, 0.78968, 0.34201, 0.28531, 0.06232, 0.24362, 2.77729, 2016], ["India", 117.0, 4.565, 0.64499, 0.38174, 0.51529, 0.39786, 0.08492, 0.26475, 2.27513, 2016], ["Sudan", 118.0, 4.55, 0.52107, 1.01404, 0.36878, 0.10081, 0.1466, 0.19062, 2.20857, 2016], ["Haiti", 119.0, 4.518, 0.26673, 0.74302, 0.38847, 0.24425, 0.17175, 0.46187, 2.24173, 2016], ["Congo (Kinshasa)", 120.0, 4.517, 0.0, 1.0012, 0.09806, 0.22605, 0.07625, 0.24834, 2.86712, 2016], ["Nepal", 121.0, 4.514, 0.35997, 0.86449, 0.56874, 0.38282, 0.05907, 0.32296, 1.95637, 2016], ["Ethiopia", 122.0, 4.512, 0.19073, 0.60406, 0.44055, 0.4345, 0.15048, 0.24325, 2.44876, 2016], ["Sierra Leone", 123.0, 4.507, 0.33024, 0.95571, 0.0, 0.4084, 0.08786, 0.21488, 2.51009, 2016], ["Mauritania", 124.0, 4.436, 0.45407, 0.86908, 0.35874, 0.24232, 0.17461, 0.219, 2.11773, 2016], ["Kenya", 125.0, 4.419, 0.36471, 0.99876, 0.41435, 0.42215, 0.05839, 0.37542, 1.78555, 2016], ["Djibouti", 126.0, 4.369, 0.44025, 0.59207, 0.36291, 0.46074, 0.28105, 0.18093, 2.05125, 2016], ["Armenia", 127.0, 4.35, 0.76821, 0.77711, 0.7299, 0.19847, 0.039, 0.07855, 1.75873, 2016], ["Botswana", 128.0, 4.332, 0.99355, 1.10464, 0.04776, 0.49495, 0.12474, 0.10461, 1.46181, 2016], ["Myanmar", 129.0, 4.307, 0.27108, 0.70905, 0.48246, 0.44017, 0.19034, 0.79588, 1.41805, 2016], ["Georgia", 130.0, 4.297, 0.7419, 0.38562, 0.72926, 0.40577, 0.38331, 0.05547, 1.59541, 2016], ["Malawi", 131.0, 4.292, 0.01604, 0.41134, 0.22562, 0.43054, 0.06977, 0.33128, 2.80791, 2016], ["Sri Lanka", 132.0, 4.271, 0.83524, 1.01905, 0.70806, 0.53726, 0.09179, 0.40828, 0.67108, 2016], ["Cameroon", 133.0, 4.252, 0.4225, 0.88767, 0.23402, 0.49309, 0.05786, 0.20618, 1.95071, 2016], ["Bulgaria", 134.0, 4.218, 1.01216, 1.10614, 0.76649, 0.30587, 0.00872, 0.11921, 0.89991, 2016], ["Egypt", 135.0, 4.194, 0.8818, 0.747, 0.61712, 0.17288, 0.06324, 0.11291, 1.59927, 2016], ["Yemen", 136.0, 4.077, 0.54649, 0.68093, 0.40064, 0.35571, 0.07854, 0.09131, 1.92313, 2016], ["Angola", 137.0, 4.033, 0.75778, 0.8604, 0.16683, 0.10384, 0.07122, 0.12344, 1.94939, 2016], ["Mali", 138.0, 3.995, 0.26074, 1.03526, 0.20583, 0.38857, 0.12352, 0.18798, 1.79293, 2016], ["Congo (Brazzaville)", 139.0, 3.989, 0.67866, 0.6629, 0.31051, 0.41466, 0.11686, 0.12388, 1.68135, 2016], ["Comoros", 140.0, 3.956, 0.23906, 0.79273, 0.36315, 0.22917, 0.199, 0.17441, 1.95812, 2016], ["Uganda", 141.0, 3.931, 0.21102, 1.13299, 0.33861, 0.45727, 0.07267, 0.29066, 1.42766, 2016], ["Senegal", 142.0, 3.904, 0.36498, 0.97619, 0.4354, 0.36772, 0.10713, 0.20843, 1.44395, 2016], ["Gabon", 143.0, 3.896, 1.06024, 0.90528, 0.43372, 0.31914, 0.11091, 0.06822, 0.99895, 2016], ["Niger", 144.0, 3.845, 0.0694, 0.77265, 0.29707, 0.47692, 0.15639, 0.19387, 1.87877, 2016], ["Cambodia", 145.0, 3.819, 0.46038, 0.62736, 0.61114, 0.66246, 0.07247, 0.40359, 0.98195, 2016], ["Tanzania", 146.0, 3.781, 0.2852, 1.00268, 0.38215, 0.32878, 0.05747, 0.34377, 1.38079, 2016], ["Madagascar", 147.0, 3.681, 0.20824, 0.66801, 0.46721, 0.19184, 0.08124, 0.21333, 1.851, 2016], ["Central African Republic", 148.0, 3.678, 0.0785, 0.0, 0.06699, 0.48879, 0.08289, 0.23835, 2.7223, 2016], ["Chad", 149.0, 3.667, 0.34193, 0.76062, 0.1501, 0.23501, 0.05269, 0.18386, 1.94296, 2016], ["Guinea", 150.0, 3.656, 0.17417, 0.46475, 0.24009, 0.37725, 0.12139, 0.28657, 1.99172, 2016], ["Ivory Coast", 151.0, 3.655, 0.46534, 0.77115, 0.15185, 0.46866, 0.17922, 0.20165, 1.41723, 2016], ["Burkina Faso", 152.0, 3.587, 0.25812, 0.85188, 0.27125, 0.39493, 0.12832, 0.21747, 1.46494, 2016], ["Afghanistan", 153.0, 3.575, 0.31982, 0.30285, 0.30335, 0.23414, 0.09719, 0.3651, 1.9521, 2016], ["Rwanda", 154.0, 3.465, 0.22208, 0.7737, 0.42864, 0.59201, 0.55191, 0.22628, 0.67042, 2016], ["Benin", 155.0, 3.34, 0.28665, 0.35386, 0.3191, 0.4845, 0.0801, 0.1826, 1.63328, 2016], ["Syria", 156.0, 3.006, 0.6632, 0.47489, 0.72193, 0.15684, 0.18906, 0.47179, 0.32858, 2016], ["Burundi", 157.0, 2.905, 0.0153, 0.41587, 0.22396, 0.1185, 0.10062, 0.19727, 1.83302, 2016], ["Togo", 158.0, 2.839, 0.20868, 0.13995, 0.28443, 0.36453, 0.10731, 0.16681, 1.56726, 2016], ["Taiwan Province of China", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2016], ["Belize", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2016], ["Hong Kong S.A.R., China", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2016], ["Somalia", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2016], ["Namibia", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2016], ["South Sudan", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2016], ["Norway", 1.0, 7.537, 1.616463, 1.533524, 0.796667, 0.635423, 0.315964, 0.362012, 2.277027, 2017], ["Denmark", 2.0, 7.522, 1.482383, 1.551122, 0.792566, 0.626007, 0.40077, 0.35528, 2.313707, 2017], ["Iceland", 3.0, 7.504, 1.480633, 1.610574, 0.833552, 0.627163, 0.153527, 0.47554, 2.322715, 2017], ["Switzerland", 4.0, 7.494, 1.56498, 1.516912, 0.858131, 0.620071, 0.367007, 0.290549, 2.276716, 2017], ["Finland", 5.0, 7.469, 1.443572, 1.540247, 0.809158, 0.617951, 0.382612, 0.245483, 2.430182, 2017], ["Netherlands", 6.0, 7.377, 1.503945, 1.428939, 0.810696, 0.585384, 0.282662, 0.47049, 2.294804, 2017], ["Canada", 7.0, 7.316, 1.479204, 1.481349, 0.834558, 0.611101, 0.287372, 0.43554, 2.187264, 2017], ["New Zealand", 8.0, 7.314, 1.405706, 1.548195, 0.81676, 0.614062, 0.382817, 0.500005, 2.046456, 2017], ["Sweden", 9.0, 7.284, 1.494387, 1.478162, 0.830875, 0.612924, 0.384399, 0.385399, 2.097538, 2017], ["Australia", 10.0, 7.284, 1.484415, 1.510042, 0.843887, 0.601607, 0.301184, 0.477699, 2.065211, 2017], ["Israel", 11.0, 7.213, 1.375382, 1.37629, 0.838404, 0.405989, 0.085242, 0.330083, 2.801757, 2017], ["Costa Rica", 12.0, 7.079, 1.109706, 1.416404, 0.759509, 0.580132, 0.100107, 0.214613, 2.898639, 2017], ["Austria", 13.0, 7.006, 1.487097, 1.459945, 0.815328, 0.567766, 0.22106, 0.316472, 2.138506, 2017], ["United States", 14.0, 6.993, 1.546259, 1.419921, 0.774287, 0.505741, 0.135639, 0.392579, 2.218113, 2017], ["Ireland", 15.0, 6.977, 1.535707, 1.558231, 0.809783, 0.57311, 0.298388, 0.427858, 1.773869, 2017], ["Germany", 16.0, 6.951, 1.487923, 1.47252, 0.798951, 0.562511, 0.276732, 0.336269, 2.01577, 2017], ["Belgium", 17.0, 6.891, 1.463781, 1.462313, 0.818092, 0.539771, 0.251343, 0.231503, 2.12421, 2017], ["Luxembourg", 18.0, 6.863, 1.741944, 1.457584, 0.845089, 0.596628, 0.318834, 0.283181, 1.619512, 2017], ["United Kingdom", 19.0, 6.714, 1.441634, 1.49646, 0.805336, 0.50819, 0.265428, 0.492774, 1.704144, 2017], ["Chile", 20.0, 6.652, 1.252785, 1.284025, 0.81948, 0.376895, 0.082288, 0.326662, 2.509586, 2017], ["United Arab Emirates", 21.0, 6.648, 1.626343, 1.26641, 0.726798, 0.608345, 0.32449, 0.360942, 1.734704, 2017], ["Brazil", 22.0, 6.635, 1.107353, 1.431306, 0.616552, 0.437454, 0.111093, 0.16235, 2.769267, 2017], ["Czech Republic", 23.0, 6.609, 1.352682, 1.433885, 0.754444, 0.490946, 0.036873, 0.088107, 2.451862, 2017], ["Argentina", 24.0, 6.599, 1.185295, 1.440451, 0.695137, 0.494519, 0.05974, 0.109457, 2.614005, 2017], ["Mexico", 25.0, 6.578, 1.153184, 1.210862, 0.709979, 0.41273, 0.132774, 0.12099, 2.837155, 2017], ["Singapore", 26.0, 6.572, 1.692278, 1.353814, 0.949492, 0.549841, 0.464308, 0.345966, 1.216362, 2017], ["Malta", 27.0, 6.527, 1.34328, 1.488412, 0.821944, 0.588767, 0.153066, 0.574731, 1.556863, 2017], ["Uruguay", 28.0, 6.454, 1.21756, 1.412228, 0.719217, 0.579392, 0.178062, 0.175097, 2.17241, 2017], ["Guatemala", 29.0, 6.454, 0.872002, 1.255585, 0.54024, 0.531311, 0.077223, 0.283488, 2.893891, 2017], ["Panama", 30.0, 6.452, 1.233748, 1.373193, 0.706156, 0.550027, 0.070984, 0.210557, 2.3072, 2017], ["France", 31.0, 6.442, 1.430923, 1.387777, 0.844466, 0.470222, 0.172502, 0.129762, 2.005955, 2017], ["Thailand", 32.0, 6.424, 1.127869, 1.425792, 0.647239, 0.580201, 0.031613, 0.572123, 2.039508, 2017], ["Taiwan Province of China", 33.0, 6.422, 1.433627, 1.384565, 0.793984, 0.361467, 0.063829, 0.25836, 2.126607, 2017], ["Spain", 34.0, 6.403, 1.384398, 1.532091, 0.888961, 0.408781, 0.070914, 0.190134, 1.927758, 2017], ["Qatar", 35.0, 6.375, 1.870766, 1.274297, 0.710098, 0.604131, 0.439299, 0.330474, 1.145464, 2017], ["Colombia", 36.0, 6.357, 1.070622, 1.402183, 0.595028, 0.477487, 0.046669, 0.149014, 2.616068, 2017], ["Saudi Arabia", 37.0, 6.344, 1.530624, 1.286678, 0.590148, 0.449751, 0.273432, 0.147616, 2.06543, 2017], ["Trinidad and Tobago", 38.0, 6.168, 1.361356, 1.380229, 0.519983, 0.518631, 0.008965, 0.325296, 2.053247, 2017], ["Kuwait", 39.0, 6.105, 1.632952, 1.259699, 0.632106, 0.496338, 0.21516, 0.22829, 1.640425, 2017], ["Slovakia", 40.0, 6.098, 1.325394, 1.505059, 0.712733, 0.295817, 0.024211, 0.136544, 2.097777, 2017], ["Bahrain", 41.0, 6.087, 1.488412, 1.32311, 0.653133, 0.536747, 0.257042, 0.172668, 1.656149, 2017], ["Malaysia", 42.0, 6.084, 1.291215, 1.284646, 0.618784, 0.402265, 0.065601, 0.416609, 2.004449, 2017], ["Nicaragua", 43.0, 6.071, 0.737299, 1.287216, 0.653096, 0.447552, 0.130688, 0.301674, 2.513931, 2017], ["Ecuador", 44.0, 6.008, 1.00082, 1.286169, 0.685636, 0.455198, 0.140135, 0.150112, 2.290353, 2017], ["El Salvador", 45.0, 6.003, 0.909784, 1.182125, 0.596019, 0.432453, 0.089981, 0.078258, 2.714594, 2017], ["Poland", 46.0, 5.973, 1.291788, 1.445712, 0.699475, 0.520342, 0.059308, 0.158466, 1.797723, 2017], ["Uzbekistan", 47.0, 5.971, 0.786441, 1.548969, 0.498273, 0.658249, 0.246528, 0.415984, 1.816914, 2017], ["Italy", 48.0, 5.964, 1.395067, 1.444923, 0.853144, 0.256451, 0.028028, 0.17279, 1.813312, 2017], ["Russia", 49.0, 5.963, 1.281778, 1.469282, 0.547349, 0.373783, 0.032963, 0.052264, 2.205607, 2017], ["Belize", 50.0, 5.956, 0.907975, 1.081418, 0.450192, 0.547509, 0.096581, 0.240016, 2.631956, 2017], ["Japan", 51.0, 5.92, 1.416915, 1.436338, 0.913476, 0.505626, 0.163761, 0.120573, 1.363224, 2017], ["Lithuania", 52.0, 5.902, 1.314582, 1.473516, 0.62895, 0.234232, 0.011866, 0.010165, 2.228441, 2017], ["Algeria", 53.0, 5.872, 1.091864, 1.146217, 0.617585, 0.233336, 0.146096, 0.069437, 2.567604, 2017], ["Latvia", 54.0, 5.85, 1.260749, 1.404715, 0.638567, 0.325708, 0.073843, 0.153075, 1.993655, 2017], ["South Korea", 55.0, 5.838, 1.401678, 1.128274, 0.900214, 0.257922, 0.063283, 0.206674, 1.880378, 2017], ["Moldova", 56.0, 5.838, 0.728871, 1.251826, 0.589465, 0.240729, 0.010091, 0.208779, 2.807808, 2017], ["Romania", 57.0, 5.825, 1.217684, 1.150091, 0.685158, 0.457004, 0.004388, 0.13352, 2.176831, 2017], ["Bolivia", 58.0, 5.823, 0.833757, 1.227619, 0.47363, 0.558733, 0.060478, 0.225561, 2.443279, 2017], ["Turkmenistan", 59.0, 5.822, 1.130777, 1.493149, 0.437726, 0.418272, 0.25927, 0.249925, 1.83291, 2017], ["Kazakhstan", 60.0, 5.819, 1.284556, 1.384369, 0.606042, 0.437454, 0.119283, 0.201964, 1.784893, 2017], ["North Cyprus", 61.0, 5.81, 1.346911, 1.186303, 0.834647, 0.471204, 0.155353, 0.266846, 1.549158, 2017], ["Slovenia", 62.0, 5.758, 1.341206, 1.452519, 0.790828, 0.572576, 0.045129, 0.242649, 1.313317, 2017], ["Peru", 63.0, 5.715, 1.035225, 1.21877, 0.630166, 0.450003, 0.047049, 0.12682, 2.207269, 2017], ["Mauritius", 64.0, 5.629, 1.189396, 1.209561, 0.638007, 0.491247, 0.042182, 0.360934, 1.697584, 2017], ["Cyprus", 65.0, 5.621, 1.355938, 1.131363, 0.844715, 0.355112, 0.041238, 0.271254, 1.621249, 2017], ["Estonia", 66.0, 5.611, 1.320879, 1.476671, 0.695168, 0.479131, 0.183249, 0.098891, 1.357509, 2017], ["Belarus", 67.0, 5.569, 1.156558, 1.444945, 0.637714, 0.2954, 0.156314, 0.155138, 1.723233, 2017], ["Libya", 68.0, 5.525, 1.101803, 1.357564, 0.520169, 0.465733, 0.09261, 0.152074, 1.835011, 2017], ["Turkey", 69.0, 5.5, 1.198274, 1.337753, 0.637606, 0.300741, 0.099672, 0.046693, 1.879278, 2017], ["Paraguay", 70.0, 5.493, 0.932537, 1.507285, 0.579251, 0.473508, 0.091066, 0.224151, 1.685333, 2017], ["Hong Kong S.A.R., China", 71.0, 5.472, 1.551675, 1.262791, 0.943062, 0.490969, 0.293934, 0.374466, 0.554633, 2017], ["Philippines", 72.0, 5.43, 0.857699, 1.253918, 0.468009, 0.585215, 0.099332, 0.193513, 1.972605, 2017], ["Serbia", 73.0, 5.395, 1.069318, 1.25819, 0.650785, 0.208716, 0.040904, 0.220126, 1.947084, 2017], ["Jordan", 74.0, 5.336, 0.991012, 1.239089, 0.60459, 0.418421, 0.119803, 0.17217, 1.791177, 2017], ["Hungary", 75.0, 5.324, 1.286012, 1.343133, 0.687763, 0.175864, 0.036637, 0.078402, 1.716459, 2017], ["Jamaica", 76.0, 5.311, 0.925579, 1.368218, 0.641022, 0.474307, 0.055268, 0.233818, 1.612326, 2017], ["Croatia", 77.0, 5.293, 1.222556, 0.967983, 0.701289, 0.255772, 0.043103, 0.248003, 1.854492, 2017], ["Kosovo", 78.0, 5.279, 0.951484, 1.137854, 0.541452, 0.260288, 0.057472, 0.319931, 2.010541, 2017], ["China", 79.0, 5.273, 1.081166, 1.160837, 0.741416, 0.472788, 0.022794, 0.028807, 1.764939, 2017], ["Pakistan", 80.0, 5.269, 0.726884, 0.672691, 0.402048, 0.235215, 0.124348, 0.315446, 2.792489, 2017], ["Indonesia", 81.0, 5.262, 0.995539, 1.274445, 0.492346, 0.443323, 0.015317, 0.611705, 1.429477, 2017], ["Venezuela", 82.0, 5.25, 1.128431, 1.431338, 0.617144, 0.153997, 0.064491, 0.06502, 1.789464, 2017], ["Montenegro", 83.0, 5.237, 1.121129, 1.238376, 0.667465, 0.194989, 0.088174, 0.197911, 1.729192, 2017], ["Morocco", 84.0, 5.235, 0.878115, 0.774864, 0.597711, 0.408158, 0.087763, 0.03221, 2.456189, 2017], ["Azerbaijan", 85.0, 5.234, 1.153602, 1.1524, 0.540776, 0.398156, 0.180988, 0.045269, 1.762482, 2017], ["Dominican Republic", 86.0, 5.23, 1.079374, 1.402417, 0.574874, 0.55259, 0.113945, 0.186968, 1.319465, 2017], ["Greece", 87.0, 5.227, 1.289487, 1.239415, 0.810199, 0.095731, 0.04329, 0.0, 1.749222, 2017], ["Lebanon", 88.0, 5.225, 1.074988, 1.129624, 0.735081, 0.288516, 0.037514, 0.264451, 1.695074, 2017], ["Portugal", 89.0, 5.195, 1.315175, 1.367043, 0.795844, 0.498465, 0.015869, 0.095103, 1.107683, 2017], ["Bosnia and Herzegovina", 90.0, 5.182, 0.982409, 1.069336, 0.705186, 0.204403, 0.0, 0.328867, 1.892173, 2017], ["Honduras", 91.0, 5.181, 0.730573, 1.143945, 0.582569, 0.34808, 0.073345, 0.236189, 2.065811, 2017], ["Macedonia", 92.0, 5.175, 1.064578, 1.207893, 0.644948, 0.325906, 0.060278, 0.253761, 1.617469, 2017], ["Somalia", 93.0, 5.151, 0.022643, 0.721151, 0.113989, 0.602127, 0.28241, 0.291631, 3.117485, 2017], ["Vietnam", 94.0, 5.074, 0.788548, 1.277491, 0.652169, 0.571056, 0.087633, 0.234968, 1.462319, 2017], ["Nigeria", 95.0, 5.074, 0.783756, 1.21577, 0.056916, 0.394953, 0.026122, 0.230947, 2.365391, 2017], ["Tajikistan", 96.0, 5.041, 0.524714, 1.271463, 0.529235, 0.471567, 0.146377, 0.248998, 1.849049, 2017], ["Bhutan", 97.0, 5.011, 0.885416, 1.340127, 0.495879, 0.501538, 0.17338, 0.474055, 1.140184, 2017], ["Kyrgyzstan", 98.0, 5.004, 0.59622, 1.394239, 0.553458, 0.454943, 0.039439, 0.42858, 1.536723, 2017], ["Nepal", 99.0, 4.962, 0.47982, 1.179283, 0.504131, 0.440306, 0.072976, 0.394096, 1.891241, 2017], ["Mongolia", 100.0, 4.955, 1.027236, 1.493011, 0.557783, 0.394144, 0.032902, 0.338464, 1.111292, 2017], ["South Africa", 101.0, 4.829, 1.054699, 1.384789, 0.18708, 0.479247, 0.072509, 0.139362, 1.510909, 2017], ["Tunisia", 102.0, 4.805, 1.007266, 0.868351, 0.613212, 0.289681, 0.086723, 0.049693, 1.890251, 2017], ["Palestinian Territories", 103.0, 4.775, 0.716249, 1.155647, 0.565667, 0.254711, 0.089283, 0.114173, 1.87889, 2017], ["Egypt", 104.0, 4.735, 0.989702, 0.997471, 0.520187, 0.28211, 0.114381, 0.128631, 1.702161, 2017], ["Bulgaria", 105.0, 4.714, 1.161459, 1.434379, 0.708218, 0.289232, 0.011052, 0.113178, 0.996139, 2017], ["Sierra Leone", 106.0, 4.709, 0.368421, 0.984136, 0.005565, 0.318698, 0.071095, 0.293041, 2.66846, 2017], ["Cameroon", 107.0, 4.695, 0.564305, 0.946018, 0.132892, 0.430389, 0.051307, 0.236298, 2.333646, 2017], ["Iran", 108.0, 4.692, 1.156873, 0.711551, 0.639333, 0.249323, 0.048761, 0.387243, 1.498735, 2017], ["Albania", 109.0, 4.644, 0.996193, 0.803685, 0.73116, 0.381499, 0.039864, 0.201313, 1.490442, 2017], ["Bangladesh", 110.0, 4.608, 0.586683, 0.735132, 0.533241, 0.478357, 0.123718, 0.172255, 1.978736, 2017], ["Namibia", 111.0, 4.574, 0.964434, 1.098471, 0.338612, 0.520304, 0.093147, 0.077134, 1.48189, 2017], ["Kenya", 112.0, 4.553, 0.560479, 1.067951, 0.309988, 0.452764, 0.064641, 0.44486, 1.651902, 2017], ["Mozambique", 113.0, 4.55, 0.234306, 0.870701, 0.106654, 0.480791, 0.179436, 0.322228, 2.355651, 2017], ["Myanmar", 114.0, 4.545, 0.367111, 1.123236, 0.397523, 0.514492, 0.188816, 0.838075, 1.11529, 2017], ["Senegal", 115.0, 4.535, 0.479309, 1.179692, 0.409363, 0.377922, 0.11546, 0.183469, 1.789646, 2017], ["Zambia", 116.0, 4.514, 0.636407, 1.003187, 0.257836, 0.461603, 0.078214, 0.24958, 1.826705, 2017], ["Iraq", 117.0, 4.497, 1.10271, 0.978613, 0.50118, 0.288556, 0.107216, 0.199637, 1.318907, 2017], ["Gabon", 118.0, 4.465, 1.19821, 1.15562, 0.356579, 0.312329, 0.076047, 0.043785, 1.322916, 2017], ["Ethiopia", 119.0, 4.46, 0.339234, 0.864669, 0.35341, 0.408843, 0.165456, 0.312651, 2.015744, 2017], ["Sri Lanka", 120.0, 4.44, 1.00985, 1.259976, 0.625131, 0.561213, 0.073654, 0.490864, 0.419389, 2017], ["Armenia", 121.0, 4.376, 0.900597, 1.007484, 0.637524, 0.198303, 0.026674, 0.083488, 1.521499, 2017], ["India", 122.0, 4.315, 0.792221, 0.754373, 0.455428, 0.469987, 0.092227, 0.231538, 1.519117, 2017], ["Mauritania", 123.0, 4.292, 0.648457, 1.272031, 0.285349, 0.096098, 0.136957, 0.20187, 1.651637, 2017], ["Congo (Brazzaville)", 124.0, 4.291, 0.808964, 0.832044, 0.289957, 0.435026, 0.079618, 0.120852, 1.724136, 2017], ["Georgia", 125.0, 4.286, 0.950613, 0.570615, 0.649547, 0.30941, 0.251667, 0.054009, 1.500138, 2017], ["Congo (Kinshasa)", 126.0, 4.28, 0.092102, 1.229023, 0.191407, 0.235961, 0.060241, 0.246456, 2.224959, 2017], ["Mali", 127.0, 4.19, 0.47618, 1.281473, 0.169366, 0.306614, 0.10497, 0.183354, 1.668191, 2017], ["Ivory Coast", 128.0, 4.18, 0.603049, 0.90478, 0.048642, 0.447706, 0.130062, 0.201237, 1.844964, 2017], ["Cambodia", 129.0, 4.168, 0.601765, 1.006238, 0.429783, 0.633376, 0.068106, 0.385923, 1.042941, 2017], ["Sudan", 130.0, 4.139, 0.659517, 1.214009, 0.290921, 0.014996, 0.089848, 0.182317, 1.687066, 2017], ["Ghana", 131.0, 4.12, 0.667225, 0.873665, 0.295638, 0.423026, 0.025336, 0.256924, 1.577868, 2017], ["Ukraine", 132.0, 4.096, 0.894652, 1.394538, 0.575904, 0.122975, 0.023029, 0.270061, 0.814382, 2017], ["Uganda", 133.0, 4.081, 0.381431, 1.129828, 0.217633, 0.443186, 0.05707, 0.325766, 1.526363, 2017], ["Burkina Faso", 134.0, 4.032, 0.350228, 1.04328, 0.215844, 0.324368, 0.120328, 0.250865, 1.727213, 2017], ["Niger", 135.0, 4.028, 0.161925, 0.993025, 0.268505, 0.363659, 0.138573, 0.228674, 1.873983, 2017], ["Malawi", 136.0, 3.97, 0.233442, 0.512569, 0.31509, 0.466915, 0.072712, 0.28717, 2.081786, 2017], ["Chad", 137.0, 3.936, 0.438013, 0.953856, 0.041135, 0.162342, 0.053582, 0.216114, 2.071238, 2017], ["Zimbabwe", 138.0, 3.875, 0.375847, 1.083096, 0.196764, 0.336384, 0.095375, 0.189143, 1.59797, 2017], ["Lesotho", 139.0, 3.808, 0.521021, 1.190095, 0.0, 0.390661, 0.119095, 0.157497, 1.429835, 2017], ["Angola", 140.0, 3.795, 0.858428, 1.104412, 0.049869, 0.0, 0.06972, 0.097926, 1.614482, 2017], ["Afghanistan", 141.0, 3.794, 0.401477, 0.581543, 0.180747, 0.10618, 0.061158, 0.311871, 2.150801, 2017], ["Botswana", 142.0, 3.766, 1.122094, 1.221555, 0.341756, 0.505196, 0.098583, 0.099348, 0.377914, 2017], ["Benin", 143.0, 3.657, 0.431085, 0.4353, 0.20993, 0.425963, 0.060929, 0.207948, 1.885631, 2017], ["Madagascar", 144.0, 3.644, 0.305809, 0.91302, 0.375223, 0.189197, 0.067232, 0.208733, 1.584613, 2017], ["Haiti", 145.0, 3.603, 0.36861, 0.64045, 0.277321, 0.03037, 0.099872, 0.489204, 1.697168, 2017], ["Yemen", 146.0, 3.593, 0.591683, 0.935382, 0.310081, 0.249464, 0.056767, 0.104125, 1.345601, 2017], ["South Sudan", 147.0, 3.591, 0.397249, 0.601323, 0.163486, 0.147062, 0.116794, 0.285671, 1.879567, 2017], ["Liberia", 148.0, 3.533, 0.119042, 0.872118, 0.229918, 0.332881, 0.038948, 0.26655, 1.673286, 2017], ["Guinea", 149.0, 3.507, 0.24455, 0.791245, 0.194129, 0.348588, 0.110938, 0.264815, 1.552312, 2017], ["Togo", 150.0, 3.495, 0.305445, 0.431883, 0.247106, 0.380426, 0.095665, 0.196896, 1.837229, 2017], ["Rwanda", 151.0, 3.471, 0.368746, 0.945707, 0.326425, 0.581844, 0.45522, 0.252756, 0.540061, 2017], ["Syria", 152.0, 3.462, 0.777153, 0.396103, 0.500533, 0.081539, 0.151347, 0.493664, 1.061574, 2017], ["Tanzania", 153.0, 3.349, 0.511136, 1.04199, 0.364509, 0.390018, 0.066035, 0.354256, 0.62113, 2017], ["Burundi", 154.0, 2.905, 0.091623, 0.629794, 0.151611, 0.059901, 0.084148, 0.204435, 1.683024, 2017], ["Central African Republic", 155.0, 2.693, 0.0, 0.0, 0.018773, 0.270842, 0.056565, 0.280876, 2.066005, 2017], ["Oman", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Taiwan", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Suriname", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Hong Kong", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Somaliland region", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Laos", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Swaziland", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Djibouti", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017], ["Comoros", NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 2017]];
+
+        // Define the dt_args
+        let dt_args = {"layout": {"topStart": "pageLength", "topEnd": "search", "bottomStart": "info", "bottomEnd": "paging"}, "order": [], "warn_on_selected_rows_not_rendered": true};
+        dt_args["data"] = data;
+
+        
+        new DataTable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+</div>
+</section>
+<section id="basic-selection" class="level3">
+<h3 class="anchored" data-anchor-id="basic-selection">Basic Selection</h3>
+<p>In dataframes, row selection can be done with integers in with the slice operator. In practice, this is not used, because we typically wish to select a set of rows based on a condition.</p>
+<div id="b87d312e" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1"></a><span class="bu">print</span>(happ[<span class="dv">10</span>:<span class="dv">12</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Country  Happiness.Rank  Happiness.Score      GDP   Family  \
+10      Israel            11.0            7.278  1.22857  1.22393   
+11  Costa Rica            12.0            7.226  0.95578  1.23788   
+
+    Life.Expectancy  Freedom  Govt.Corruption  Generosity  Dystopia.Residual  \
+10          0.91387  0.41319          0.07785     0.33172            3.08854   
+11          0.86027  0.63376          0.10583     0.25497            3.17728   
+
+    Year  
+10  2015  
+11  2015  </code></pre>
+</div>
+</div>
+<p>To select columns, you may use a list of column names.</p>
+<div id="e1d0fb43" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1"></a>happ[[<span class="st">'GDP'</span>, <span class="st">'Freedom'</span>]] <span class="co"># note the difference with happ['GDP']</span></span>
+<span id="cb98-2"><a href="#cb98-2"></a><span class="co"># happ.GDP.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="56">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">GDP</th>
+<th data-quarto-table-cell-role="th">Freedom</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1.39651</td>
+<td>0.66557</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1.30232</td>
+<td>0.62877</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1.32548</td>
+<td>0.64938</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1.45900</td>
+<td>0.66973</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1.32629</td>
+<td>0.63297</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">487</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">488</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">489</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">490</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">491</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+<p>492 rows × 2 columns</p>
+</div>
+</div>
+</div>
+<p>Remember that we are not working with numpy arrays, so this will <em>not</em> work:</p>
+<div id="184e5ec6" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1"></a>happ[<span class="dv">0</span>:<span class="dv">10</span>, <span class="dv">2</span>:<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="indexing-and-selecting-data" class="level3">
+<h3 class="anchored" data-anchor-id="indexing-and-selecting-data">Indexing and Selecting Data</h3>
+<p>The two main methods of advanced data selection use the <code>.loc</code> and <code>.iloc</code> functions. Although we call them functions, they are summoned using the <code>[ ]</code> notation. The <code>.loc</code> is primarily label-based. The common allowed inputs to <code>.loc</code> are</p>
+<ul>
+<li>a single label,</li>
+<li>a list of labels,</li>
+<li>a slice object,</li>
+<li>a boolean array.</li>
+</ul>
+<p>The <code>.iloc</code> is primarily an integer-based input. The common allowed inputs to <code>.iloc</code> are</p>
+<ul>
+<li>a single integer,</li>
+<li>a list of integers,</li>
+<li>a slice object,</li>
+<li>a boolean array.</li>
+</ul>
+<p>When selecting from a DataFrame with <code>.loc</code> or <code>.iloc</code>, we can provide a comma-separated index, just as with NumPy. It is good to keep this <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html">reference</a> page bookmarked.</p>
+<p><em>Take note that this next command will only work if the index is made up of integers!</em></p>
+<div id="99c94cbc" class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1"></a><span class="bu">print</span>(happ.loc[<span class="dv">2</span>:<span class="dv">5</span>])</span>
+<span id="cb100-2"><a href="#cb100-2"></a></span>
+<span id="cb100-3"><a href="#cb100-3"></a><span class="co"># happ.loc[[2,3,4,5]]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Country  Happiness.Rank  Happiness.Score      GDP   Family  \
+2  Denmark             3.0            7.527  1.32548  1.36058   
+3   Norway             4.0            7.522  1.45900  1.33095   
+4   Canada             5.0            7.427  1.32629  1.32261   
+5  Finland             6.0            7.406  1.29025  1.31826   
+
+   Life.Expectancy  Freedom  Govt.Corruption  Generosity  Dystopia.Residual  \
+2          0.87464  0.64938          0.48357     0.34139            2.49204   
+3          0.88521  0.66973          0.36503     0.34699            2.46531   
+4          0.90563  0.63297          0.32957     0.45811            2.45176   
+5          0.88911  0.64169          0.41372     0.23351            2.61955   
+
+   Year  
+2  2015  
+3  2015  
+4  2015  
+5  2015  </code></pre>
+</div>
+</div>
+<p>Notice below how the slice operator is inclusive when we use <code>.loc</code>, but not inclusive when we use <code>.iloc</code>.</p>
+<div id="46ba77f7" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1"></a>happ.loc[<span class="dv">2</span>:<span class="dv">10</span>:<span class="dv">4</span>, <span class="st">"GDP"</span>:<span class="st">"Generosity"</span>:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="58">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">GDP</th>
+<th data-quarto-table-cell-role="th">Life.Expectancy</th>
+<th data-quarto-table-cell-role="th">Govt.Corruption</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1.32548</td>
+<td>0.87464</td>
+<td>0.48357</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>1.32944</td>
+<td>0.89284</td>
+<td>0.31814</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>1.22857</td>
+<td>0.91387</td>
+<td>0.07785</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="9c6792a6" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1"></a>happ.iloc[<span class="dv">2</span>:<span class="dv">11</span>:<span class="dv">4</span>, <span class="dv">3</span>:<span class="dv">8</span>:<span class="dv">2</span>] <span class="co"># Same as above, but with .iloc</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="59">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">GDP</th>
+<th data-quarto-table-cell-role="th">Life.Expectancy</th>
+<th data-quarto-table-cell-role="th">Govt.Corruption</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1.32548</td>
+<td>0.87464</td>
+<td>0.48357</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>1.32944</td>
+<td>0.89284</td>
+<td>0.31814</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>1.22857</td>
+<td>0.91387</td>
+<td>0.07785</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="filtering-data" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-data">Filtering Data</h3>
+<p>Suppose we are interested in the very happy countries. Here is how we can filter the data with a boolean array.</p>
+<div id="exm-pd-happ-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 1.4 (Happiest Countries)</strong></span> </p>
+<p>Suppose we retrieve the happiest countries; those with a score more than 6.95. Can you surmise why we use this value?</p>
+<div id="5186e094" class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1"></a>happiest <span class="op">=</span> happ[happ[<span class="st">'Happiness.Score'</span>] <span class="op">&gt;</span> <span class="fl">6.95</span>]</span>
+<span id="cb104-2"><a href="#cb104-2"></a></span>
+<span id="cb104-3"><a href="#cb104-3"></a>happiest.Country.unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="60">
+<pre><code>array(['Switzerland', 'Iceland', 'Denmark', 'Norway', 'Canada', 'Finland',
+       'Netherlands', 'Sweden', 'New Zealand', 'Australia', 'Israel',
+       'Costa Rica', 'Austria', 'Mexico', 'United States', 'Brazil',
+       'Ireland', 'Germany'], dtype=object)</code></pre>
+</div>
+</div>
+<p>Notice that there isn’t a single Asian or African country in the happiest 10% of countries!</p>
+</div>
+<p>When filtering, we can also combine Boolean indices.</p>
+<div id="8ed4dab0" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1"></a><span class="co"># Top 3 happiest countries in 2015</span></span>
+<span id="cb106-2"><a href="#cb106-2"></a><span class="bu">print</span>(happ[(happ.Year <span class="op">==</span> <span class="dv">2015</span>) <span class="op">&amp;</span> (happ[<span class="st">'Happiness.Rank'</span>] <span class="op">&lt;=</span> <span class="dv">3</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Country  Happiness.Rank  Happiness.Score      GDP   Family  \
+0  Switzerland             1.0            7.587  1.39651  1.34951   
+1      Iceland             2.0            7.561  1.30232  1.40223   
+2      Denmark             3.0            7.527  1.32548  1.36058   
+
+   Life.Expectancy  Freedom  Govt.Corruption  Generosity  Dystopia.Residual  \
+0          0.94143  0.66557          0.41978     0.29678            2.51738   
+1          0.94784  0.62877          0.14145     0.43630            2.70201   
+2          0.87464  0.64938          0.48357     0.34139            2.49204   
+
+   Year  
+0  2015  
+1  2015  
+2  2015  </code></pre>
+</div>
+</div>
+</section>
+<section id="missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values">Missing Values</h3>
+<p>The <code>.info()</code> method will yield information on missing values, column by column. We can see there are 21 rows with missing values.</p>
+<div id="ba87f0b8" class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1"></a>happ.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 492 entries, 0 to 491
+Data columns (total 11 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   Country            492 non-null    object 
+ 1   Happiness.Rank     471 non-null    float64
+ 2   Happiness.Score    471 non-null    float64
+ 3   GDP                471 non-null    float64
+ 4   Family             471 non-null    float64
+ 5   Life.Expectancy    471 non-null    float64
+ 6   Freedom            471 non-null    float64
+ 7   Govt.Corruption    471 non-null    float64
+ 8   Generosity         471 non-null    float64
+ 9   Dystopia.Residual  471 non-null    float64
+ 10  Year               492 non-null    int64  
+dtypes: float64(9), int64(1), object(1)
+memory usage: 42.4+ KB</code></pre>
+</div>
+</div>
+<p><em>Sometimes</em>, it is appropriate to drop rows with missing values. This can be done with the <code>.dropna</code> method. Remember that it returns a new dataframe. The original one remains unchanged, unless you include the <code>inplace=True</code> argument.</p>
+<div id="a3b67993" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1"></a>new_df <span class="op">=</span> happ.dropna()</span>
+<span id="cb110-2"><a href="#cb110-2"></a></span>
+<span id="cb110-3"><a href="#cb110-3"></a><span class="co"># pd.isna(happ)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="sec-01-ref" class="level2" data-number="1.11">
+<h2 data-number="1.11" class="anchored" data-anchor-id="sec-01-ref"><span class="header-section-number">1.11</span> References</h2>
+<p>In this chapter, we have introduced the following data science tools:</p>
+<ul>
+<li>Python programming language</li>
+<li>Jupyter notebooks for working with Python</li>
+<li>Computer set-up for data science with Python</li>
+</ul>
+<p>Python is very widely used for data science, and especially for the machine learning aspect of it. For those of you with intentions to take up the GC in Deep Learning or Data Mining, it will be critical to be familiar with the language. It will be used again in at least DSA5102.</p>
+<ol type="1">
+<li><a href="https://docs.python.org/3.10/howto/regex.html">Regular expression HOWTO</a> A tutorial with examples on regular expressions (for manipulating and searching through strings).</li>
+<li><a href="https://docs.python.org/3/reference/lexical_analysis.html#f-strings">Formatting string literals</a>: Or just f-strings</li>
+<li><a href="https://docs.python.org/3/">Python documentation</a>: This is the official Python documentation page. It contains a tutorial, detailed description of the usual libraries and HOWTOs for many specific tasks. Most sections contain working examples that you can learn from, or modify to suit your task. It is good to bookmark it.</li>
+<li><a href="https://education.github.com/discount_requests/application?type=student">Obtaining a github copilot license</a> For proof of student status, access EduRec -&gt; Academics -&gt; Academic Records -&gt; View Student Status Letter, then take a photo of the pdf. Your application status should be shown in the same GitHub page. It will take a few days for the copilot access to be granted after your application is approved.</li>
+</ol>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>i.e., Python without any packages imported.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./02-inference.html" class="pagination-link" aria-label="Statistical Inference">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical Inference</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
