@@ -1,0 +1,320 @@
+---
+title: "Statistical Inference"
+format: 
+  beamer:
+    aspectratio: 169
+    theme: Boadilla
+    navigation: empty
+    colortheme: lily
+    footer: "ST2137-2420"
+
+execute:
+  echo: true
+---
+
+## Introduction {.smaller}
+
+* In statistics, we often wish to make inference about a *population*, using a *sample*. 
+
+* The sample typically has uncertainty associated with it, because the precise
+  values will differ each time we draw a sample from the population. 
+
+* The process of utilising the observations from the sample to make conclusions
+  regarding population characteristics, is known as **statistical inference**. 
+
+* This topic introduces two main techniques for statistical inference in common application contexts. 
+
+* The two techniques are (1) hypothesis tests and (2) confidence intervals.
+
+## Hypothesis Tests {.smaller}
+
+You might have been introduced to hypothesis tests in an introductory course before, but just to get us all on the same page, here is the general approach for conducting a hypothesis test:
+
+- Step 1: Assumptions
+- Step 2: State the hypotheses and significance level
+- Step 3: Compute the test statistic
+- Step 4: Compute the $p$-value
+- Step 5: State your conclusion
+
+## Confidence Intervals {.smaller}
+
+* Instead of yielding a binary reject/do-not-reject result, they return an
+  interval that contains the plausible values for the population parameter. 
+
+::: {.callout-note}
+Sample estimate $\pm$ margin of error
+:::
+
+* For instance, if we observe $x_1, \ldots, x_n$ from a Normal distribution,
+  and wish to estimate the mean of the distribution, the 95% confidence
+  interval based on the the $t$ distribution is
+
+\begin{equation*}
+\bar{x} \pm t_{0.025, n-1} \times \frac{s}{\sqrt{n}}
+\end{equation*}
+
+* $\bar{x}$ is the sample mean,
+* $s$ is the sample standard deviation, and 
+* $t_{0.025, n-1}$ is the 0.025-quantile from the $t$ distribution with $n-1$ degrees
+of freedom.
+
+## 2-sample Tests {.smaller}
+
+* Suppose that $X_1,X_2,\ldots,X_{n_1}$ are independent observations from group 1,
+* $Y_1, \ldots Y_{n_2}$ are independent observations from group 2. 
+* It is assumed that 
+
+\begin{eqnarray}
+X_i &\sim& N(\mu_1,\, \sigma^2),\; i=1,\ldots,n_1 \\
+Y_j &\sim& N(\mu_2,\, \sigma^2),\; j=1,\ldots,n_2
+\end{eqnarray}
+
+The null and alternative hypotheses would be 
+
+\begin{eqnarray}
+H_0: & \mu_1 = \mu_2 \\
+H_1: & \mu_1 \ne \mu_2
+\end{eqnarray}
+
+## 2-sample Tests {.smaller}
+
+The test statistic for this test is:
+
+$$
+T_1 = \frac{(\bar{X} - \bar{Y}) - 0 }{s_p\sqrt{1/n_1 + 1/n_2} }
+$$
+
+where
+
+\begin{equation*}
+s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
+\end{equation*}
+
+## 2-sample Tests {.smaller}
+
+
+Under $H_0$, the test statistic $T_1$ follows a $t$-distribution with $n_1 +
+n_2 -2$ degrees of freedom. When we use a software to apply the test above, it
+will typically also return a confidence interval, computed as
+
+\begin{equation*}
+(\bar{X} - \bar{Y}) \pm t_{n_1 + n_2 -2, 1 - \alpha/2} \times s_p\sqrt{1/n_1 + 1/n_2}
+\end{equation*}
+
+```{python}
+#| echo: false
+import pandas as pd
+import numpy as np
+
+from scipy import stats
+
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+import statsmodels.stats.multicomp as mc
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from itables import show
+%matplotlib inline
+```
+
+## Example: Abalone Measurements
+
+```{python}
+abl = pd.read_csv("../data/abalone_sub.csv")
+abl.head()
+```
+
+## Example: Abalone Measurements
+
+```{python}
+x = abl.viscera[abl.gender == "F"]
+y = abl.viscera[abl.gender == "M"]
+
+t_out = stats.ttest_ind(y, x)
+ci_95 = t_out.confidence_interval()
+
+print(f"The p-value for the test is {t_out.pvalue:.3f}.")
+print(f"The actual value of the test statistic is {t_out.statistic:.3f}.")
+print(f"The upper and lower limits of the CI are ({ci_95[0]:.3f}, {ci_95[1]:.3f}).")
+```
+
+## Assessing Normality
+
+Histograms of data from a Normal distribution should appear symmetric and
+bell-shaped. The tails on both sides should come down at a moderate pace.
+
+![](../figs/summ_data-05.png){fig-align="center" width=40%} 
+
+## Assessing Normality
+
+Histograms from Abalone Measurements data
+
+```{python}
+sns.displot(abl, x='viscera', col='gender', kind='hist', 
+            stat='density', binwidth=0.1, height=4, 
+	    aspect=1.2)
+```
+
+## Assessing Normality
+
+A QQ-plot plots the standardized sample quantiles against the theoretical
+quantiles of a N(0; 1) distribution.  If they fall on a straight line, then we
+would say that there is evidence that the data came from a normal distribution.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](../figs/fig-qq-1-3.png){fig-align="center"}
+
+:::
+
+::: {.column width="50%"}
+
+![](../figs/fig-qq-1-4.png){fig-align="center"}
+
+:::
+
+::::
+
+## Assessing Normality
+
+QQ-plots from Abalone Measurements data
+
+```{python}
+f, axs = plt.subplots(1, 2, figsize=(10,4))
+tmp = plt.subplot(121)
+sm.qqplot(x, line="q", ax=tmp)
+tmp.set_title('Females')
+tmp = plt.subplot(122)
+sm.qqplot(y, line="q", ax=tmp)
+tmp.set_title('Males')
+```
+
+## Assessing Equal Variance
+
+If the larger s.d is more than twice the smaller one, than we should not use
+the equal variance form of the test.
+
+```{python}
+abl.groupby('gender').describe()
+```
+
+## Paired Sample Tests
+
+The data in a paired sample test also arises from two groups, but the two
+groups are not independent.
+
+### Example: Reaction time of drivers
+
+Consider a study on 32 drivers sampled from a driving school. Each driver is
+put in a simulation of a driving situation, where a target flashes red and
+green at random periods. Whenever the driver sees red, he/she has to press a
+brake button.
+
+For each driver, the study is carried out twice - at one of the repetitions,
+the individual carries on a phone conversation while at the other, the driver
+listens to the radio. Each measurement falls under one of two groups - "phone"
+or "radio", but the measurements for driver $i$ are clearly related. 
+
+*Some people might just have a slower/faster baseline reaction time!*
+
+## Paired Sample Tests - Formal Set-up
+
+Suppose that we observe $X_1, \ldots , X_n$ independent observations from group
+1 and $Y_1, \ldots, Y_n$ independent observations from group 2. However the pair 
+$(X_i, Y_i)$ are correlated. Similar to the previous section, it is assumed that
+
+\begin{eqnarray}
+X_i &\sim& N(\mu_1,\, \sigma_1^2),\; i=1,\ldots,n \\
+Y_j &\sim& N(\mu_2,\, \sigma_2^2),\; j=1,\ldots,n
+\end{eqnarray}
+
+## Paired Sample Tests
+
+We let $D_i = X_i - Y_i$ for $i=1, \ldots, n$. It follows that 
+$$
+D_i \sim N(\mu_1 - \mu_2,\; \sigma^2_1 + \sigma^2_2 - 2 cov(X_i, Y_i))
+$$
+The null and alternative hypotheses are stated in terms of the distribution of
+$D_i$:
+
+\begin{eqnarray*}
+H_0: & \mu_D = 0 \\
+H_1: & \mu_D \ne 0
+\end{eqnarray*}
+
+## Paired Sample Tests
+
+The test statistic for this test is:
+
+$$
+T_2 = \frac{\bar{D} - 0 }{s / \sqrt{n} }
+$$
+where 
+$$
+s^2 = \frac{\sum_{i=1}^n (D_i - \bar{D})^2}{(n - 1)}
+$$
+
+## Paired Sample Tests
+
+
+Under $H_0$, the test statistic $T_2 \sim t_{n - 1}$. When we use a software to
+apply the test above, it will typically also return a confidence interval,
+computed as
+
+$$
+\bar{D} \pm t_{n - 1, 1 - \alpha/2} \times s / \sqrt{n}
+$$
+
+
+## Example: Heart Rate Before/After Treadmill
+
+### p-value
+
+```{python}
+hr_df = pd.read_csv("../data/health_promo_hr.csv")
+p_test_out = stats.ttest_rel(hr_df.baseline, hr_df.after5)
+
+print(f"The p-value for the test is {p_test_out.pvalue:.2g}.")
+print(f"The difference in means is {hr_df.baseline.mean() - hr_df.after5.mean():.3f}.")
+```
+
+## Example: Heart Rate Before/After Treadmill
+
+### Plot
+
+```{python}
+#| echo: false
+
+ax1 = hr_df.plot(x='baseline', y='after5',kind='scatter', marker='o', edgecolor='blue', color='none')
+group_means = hr_df.loc[:, ['baseline', 'after5']].mean(axis=0)
+ax1.set_xlim(75, 105)
+ax1.set_ylim(75,105)
+ax1.plot([75,105], [75,105], color="lightblue", linestyle="dashed");
+ax1.scatter(group_means.iloc[0], group_means.iloc[1],  marker='o', edgecolor='blue', color='none', s=100);
+ax1.set_title('Agreement of after5 and baseline')
+```
+
+## ANoVA
+
+Generalises the $t$-test methodology to more than 2 groups. Hypothesis tests in
+the ANOVA framework require the assumption of Normality.
+
+## Example: Heifers
+
+### Boxplots
+
+```{python}
+heifers = pd.read_csv('../data/antibio.csv')
+sns.boxplot(heifers, x='type', y='org',);
+```
+
+## Example: Heifers
+
+### Summary Statistics
+
+```{python}
+heifers.groupby('type').describe()
+```
