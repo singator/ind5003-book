@@ -1,0 +1,358 @@
+---
+title: "Introduction to Python"
+format: 
+  beamer:
+    aspectratio: 169
+    theme: Boadilla
+    navigation: empty
+    colortheme: lily
+    footer: "ST2137-2420"
+
+execute:
+  echo: true
+---
+
+## Easter Egg {.smaller}
+
+```{python}
+import this
+```
+
+## Introduction {.smaller}
+
+In interactive mode, Python can serve as a calculator. Try out the following commands:
+
+```{python}
+2 + 2
+
+17/ 3
+
+w = 4.0
+h = w * 2.3
+```
+
+Strings can be created using single or double quotes, and they are indexed starting from 0.
+
+```{python}
+word = 'Python'
+word[0]
+```
+
+## Slice Operator {.smaller}
+
+The slice operator ':' is used in Python to pick out subsequences from collections of items. Here's a pictorial representation of how slice indices should be envisioned:
+
+![Indexing with the slice operator](../figs/python_slice.png){fig-align="center" width=40%} 
+
+Try to guess what these will output before running them.
+
+```{python}
+#| eval: false
+word[0::2]
+word[-3:-1]
+word[1::2]
+```
+
+## Inbuilt Data Structures
+
+There are three main types of containers for data in Python. They can be
+distinguished by the character that denotes them:
+
+* `[  ]` for lists.
+* `(  )` for tuples.
+* `{  }` for dictionaries.
+
+## Iterables {.smaller}
+
+Lists, tuples and dictionaries are *iterables*. When you know an object is an
+iterable, it can be *iterated over* in `for` loops. This is a convenient
+concept in Python.
+
+```{python}
+# the object xr is not a list, but it is an iterable.
+xr = range(1, 11, 2)
+xr
+
+# convert to a list
+list(xr)
+
+# iterate over xr
+for xx in xr:
+    print(xx)
+```
+
+## Dictionaries {.smaller}
+
+Dictionaries contain keys and values tied to them. We can retrieve values
+through their associated keys, or we can iterate over all items in the
+dictionary.
+
+```{python}
+comics = {'marvel': 1, 'dc':0}
+
+#for x,y in comics.items():
+#for x,(k,v) in enumerate(comics.items()):
+for _,y in comics.items():
+    print(f"This leaves only {y}.")
+```
+
+::: {.callout-note}
+* Note the use of `_`, enumerate and *f-strings*.
+:::
+
+## Strings {.smaller}
+
+Text data in Python is handled with `str` objects. A string object is an
+**immutable** sequence of characters. Here are some useful string methods and
+properties:
+
+ * catenating (joining) strings.
+ * finding sub-strings.
+ * iterating over strings.
+ * converting to lower/upper-case.
+
+```{python}
+test_str = "Where in the World is Carmen san Diego?"
+```
+
+## String Operations: Iteration {.smaller}
+
+```{python}
+count = 0
+for x in test_str:
+    if x.isupper():
+        count += 1
+print(f"There were {count} upper-case characters in the sentence.")
+```
+
+## String Operations: Joining {.smaller}
+
+```{python}
+x = "Where shall "
+y = "we "
+print("Where shall " "we " "go today?")
+
+# also works - the '+' operator is overloaded to work with strings
+"Where " + "shall" +" we go" + " today?"
+
+# join using another character
+':'.join(["Where", "shall", "we", "go", "today?"])
+```
+
+## String Operations: Find/replace {.smaller}
+
+```{python}
+test_str.find('Carmen')
+```
+
+```{python}
+test_str.replace('Carmen', 'John')
+```
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+
+from itables import show
+```
+
+## Numpy arrays {.smaller}
+
+Each array has several attributes. These include:
+
+* `ndim`: the number of axes/dimensions.
+* `shape`: a tuple describing the length of each dimension.
+* `size`: the total number of elements in the array. This is a product of the integers in the shape attribute.
+
+```{python}
+#| collapse: true
+arr = np.array([(1.5, 2, 3), (4, 5, 6)])
+
+print(arr.ndim)
+print(arr.shape)
+print(arr.size)
+```
+
+## Array Creation: Int sequence {.smaller}
+
+`np.arange()` creates a sequence of integers, with a specified separation.
+
+```{python}
+seq = np.arange(0, 10, 3)
+seq
+```
+
+## Array Creation: Reshaping {.smaller}
+
+```{python}
+# seq.shape
+col_vect = seq.reshape(4,1)
+col_vect
+```
+
+## Array Creation: Real sequence {.smaller}
+
+```{python}
+#| scrolled: true
+arr_real = np.linspace(start = 0.2, stop = 3.3, num = 24).reshape(2, 3, 4)  
+arr_real
+```
+
+## Slice Operator in Multiple Dimensions {.smaller}
+
+* Use comma separated slice notation. 
+* Missing indices are considered complete slices for those dimensions.
+* When printing, the *last* axis will be printed left-to-right, and 
+  the second last axis will be printed from top-to-bottom. 
+
+Try to guess what each will return before you run it:
+
+```{python}
+#| eval: false
+arr_real[1,2,3]
+arr_real[0, 2, ::-1]
+arr_real[1, 0:3:2]
+arr_real[:,2,:]
+```
+
+## Basic Operations:  Random numbers {.smaller}
+
+```{python}
+# Setting a seed allows for reproducibility of random number generation
+# across sessions.
+rng = np.random.default_rng(1361)
+a = rng.uniform(size=(3,5))
+b = rng.uniform(size=(3,5))
+b
+```
+## Basic Operations:  Element-wise  {.smaller}
+
+```{python}
+# Element-wise addition.
+a + b 
+```
+
+```{python}
+# Element-wise multiplication: NOT matrix multiplication.
+a * b
+```
+
+## Basic Operations:  Matrix mult.  {.smaller}
+
+```{python}
+# Matrix multiplication (need to transpose "b" to match get the right dimensions).
+# We can also do "a @ b.T".
+a.dot(b.T)
+```
+
+:::
+
+## Basic Operations:  Axis-wise Operations {.smaller}
+
+```{python}
+arr_real.shape
+```
+
+## Basic Operations:  "1st" axis  {.smaller}
+
+```{python}
+arr_real.mean(axis = 0) # mean across the 0th ("first") axis
+```
+
+## Basic Operations:  "2nd" axis  {.smaller}
+
+```{python}
+arr_real.mean(axis = 1)
+```
+
+## Pandas Series  {.smaller}
+
+A *Series* is a one-dimensional labeled array. 
+
+```{python}
+year = pd.Series(list(range(2010, 2013) ) * 3)
+
+team = ["Barcelona", "RealMadrid", "Valencia"] * 3
+team.sort()
+team = pd.Series(team)
+
+wins = pd.Series([30, 28, 32, 29, 32, 26, 21, 17, 19])
+draws = pd.Series([6, 7, 4, 5, 4, 7, 8, 10, 8])
+losses = pd.Series([2, 3, 2, 4, 2, 5, 9, 11, 11])
+```
+
+## Accessing Values {.smaller}
+
+* To access particular values, we can use the slice operator.
+
+```{python}
+wins[0:6:2]
+```
+
+* If we specify an index, we can use it to access values in the Series.
+
+```{python}
+s = pd.Series(rng.uniform(size=5), 
+             index=['a', 'b', 'c', 'd', 'e'])
+s[['a', 'c']] 
+```
+
+* Be careful when you combine the slice operator with label-based indexing.
+
+```{python}
+s['a':'d']
+```
+
+## DataFrames {.smaller}
+
+* A *DataFrame* is a 2-dimensional labeled data structure with possibly **different** data types. 
+  * The *index* of a DataFrame refers to the row labels (axis 0). 
+  * The *columns* refer to the column labels (axis 1).
+* DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays.
+
+```{python}
+laliga = pd.DataFrame({'Year': year,
+              'Team': team,
+              'Wins': wins,
+              'Draws': draws,
+              'Losses': losses
+})
+happ = pd.read_csv('../data/happiness_report.csv', header=0, na_values='NA')
+```
+
+## Indexing and Selecting Data {.smaller}
+
+The `.loc` is primarily label-based. Inputs to `.loc` are 
+
+* a single label,
+* a list of labels,
+* a slice object, 
+* a boolean array.
+
+The `.iloc` is primarily an integer-based input. Inputs to `.iloc` are 
+
+* a single integer,
+* a list of integers,
+* a slice object, 
+* a boolean array.
+
+
+## Filtering Data {.smaller}
+
+* Here is how we can filter the data with a boolean array.
+
+```{python}
+happiest = happ[happ['Happiness.Score'] > 6.95]
+```
+
+```{python}
+happiest.Country.unique()
+```
+
+* We can also combine Boolean indices.
+
+```{python}
+# Top 3 happiest countries in 2015
+happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)]
+```
