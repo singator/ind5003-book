@@ -1,0 +1,101 @@
+---
+title: "Unsupervised Learning"
+format: 
+  beamer:
+    aspectratio: 169
+    theme: Boadilla
+    navigation: empty
+    colortheme: lily
+    footer: "ST2137-2420"
+
+execute:
+  echo: true
+---
+
+## Introduction {.smaller}
+
+* Suppose that we have a set of $N$ observations $(x_1, x_2, \ldots, x_N)$ of a
+  random $p$-vector $X$. 
+* The goal in unsupervised learning is to infer properties of the probability
+  density of $X$. 
+* This topic introduces techniques that we can use, even when $p$ is large, to:
+    1. Understand and interpret the main sources of variation in the data,
+    2. Identify "groups" or clusters within the data for further study.
+    3. Visualise high-dimensional data
+
+## Wine Quality Data
+
+* The UCI Machine Learning Repository contains a data on Wine Quality
+* It consists of two tables - one corresponding to white wine and one corresponding to red wine.
+
+```{python}
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+import plotly.express as px
+
+from itables import show
+from ind5003 import clust
+import folium
+import geopandas
+
+from sklearn import decomposition, preprocessing
+from sklearn.metrics import pairwise_distances
+from sklearn.manifold import MDS, TSNE
+from sklearn.ensemble import IsolationForest
+
+from scipy.cluster import hierarchy
+
+from sentence_transformers import SentenceTransformer
+
+wine_red = pd.read_csv("../data/wine+quality/winequality-red.csv", delimiter=";" )
+wine_red['type'] = "red"
+wine_white = pd.read_csv("../data/wine+quality/winequality-white.csv", delimiter=";")
+wine_white['type'] = "white"
+
+# remove spaces in column names:
+col_names = ['fixed_acidity', 'volatile_acidity', 'citric_acid', 'residual_sugar',
+             'chlorides', 'free_sulfur_dioxide', 'total_sulfur_dioxide',
+             'density', 'pH', 'sulphates', 'alcohol', 'quality', 'type']
+wine2 = pd.concat([wine_red, wine_white], ignore_index=True)
+wine2.columns = col_names
+```
+
+```{python}
+wine2.head()
+```
+
+## Principal Components Analysis
+
+A Principal Components Analysis (PCA) explains the covariance matrix of a set
+of variables through a few *linear combinations* of these variables. The
+general objectives are 
+
+1. data reduction, into features that are uncorrelated with one another,
+2. interpretation, and
+3. visualisation.
+
+## PCA Formal Set-up {.smaller}
+
+Suppose that we have $N$ observations of a random vector of length $p$. We can
+represent these values in a matrix with $N$ rows and $p$ columns:
+
+$$
+\mathbf{X}_{N\times p} = 
+\begin{bmatrix}
+x_{1,1} & x_{1,2} & \ldots & x_{1,p}\\
+\cdots & \cdots & \cdots & \cdots \\
+x_{N,1} & x_{N,2} & \ldots & x_{N,p}
+\end{bmatrix}
+$$
+
+Let $\mathbf{x}_j = \begin{bmatrix} x_{1,j} & x_{2,j} & \cdots & x_{N,j} \end{bmatrix}^T$ correspond to column $j$ in $\mathbf{X}$, for $j=1,\ldots,p$. We 
+represent the mean of column $j$ with
+
+$$
+\bar{x}_j = \frac{1}{N} \sum_{i=1}^N x_{i,j}
+$$
