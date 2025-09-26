@@ -92,7 +92,6 @@ s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
 
 ## 2-sample Tests {.smaller}
 
-
 Under $H_0$, the test statistic $T_1$ follows a $t$-distribution with $n_1 +
 n_2 -2$ degrees of freedom. When we use a software to apply the test above, it
 will typically also return a confidence interval, computed as
@@ -318,3 +317,452 @@ sns.boxplot(heifers, x='type', y='org',);
 ```{python}
 heifers.groupby('type').describe()
 ```
+
+## Heifers: Questions of Interest
+
+1. Is there any significant difference, at 5% level, between the mean decomposition
+   level of the groups?
+2. At 5% level, is the mean level for Enrofloxacin different from the control group?
+3. Pharmacologically speaking, Ivermectin and Fenbendazole are similar to each
+   other. Let us call this sub-group (A). They work differently than Enrofloxacin.
+   At 5% level, is there a significant difference between the mean from sub-group 
+   A and Enrofloxacin?
+
+## ANoVA - Formal Set-up
+
+In the One-Way ANOVA, we assume the following model:
+
+\begin{equation}
+Y_{ij}  = \mu + \alpha_i + e_{ij},\; i=1,\ldots,k,\; j=1,\ldots,n_i
+\end{equation}
+
+$$
+Y_{ij} \sim N(\mu + \alpha_i,\; \sigma^2)
+$$
+
+with constraint $\sum_{i=1}^k \alpha_i = 0$, or $\alpha_1= 0$ for identifiability purpose
+
+## ANoVA - Formal Set-up
+
+Deviation of an individual observation from the overall mean as the sum of
+within-group variability and between-group variability:
+
+$$
+Y_{ij} - \overline{\overline{Y}} = \underbrace{(Y_{ij} - \overline{Y_i})}_{\text{within}} + 
+\underbrace{(\overline{Y_i} - \overline{\overline{Y}})}_{\text{between}}
+$$
+
+If we square both sides of the above equation and sum over all observations, we
+arrive at the following equation; the essence of ANOVA:
+
+$$
+\sum_{i=1}^k \sum_{j=1}^{n_i} \left( Y_{ij} - \overline{\overline{Y}} \right)^2 =
+\sum_{i=1}^k \sum_{j=1}^{n_i} \left( Y_{ij} - \overline{Y_i} \right)^2 + 
+\sum_{i=1}^k \sum_{j=1}^{n_i} \left( \overline{Y_i} - 
+                                     \overline{\overline{Y}} \right)^2 
+$$
+
+## ANoVA - Formal Set-up
+
+The squared sums above are referred to as:
+$$
+SS_T = SS_W + SS_B
+$$
+
+And some additional definitions:
+
+1. The Between Mean Square:
+$$
+MS_B = \frac{SS_B}{k-1}
+$$
+2. The Within Mean Square:
+$$
+MS_W = \frac{SS_W}{n - k}
+$$
+
+The mean squares are estimates of the variability between and within groups.
+
+## $F$-Test in One-Way ANOVA
+
+The null and alternative hypotheses are:
+
+\begin{eqnarray*}
+H_0 &:& \alpha_i = 0 \text{ for all } i \\
+H_1 &:& \alpha_i \ne 0 \text{ for at least one } i
+\end{eqnarray*}
+
+The test statistic is given by 
+$$
+F = \frac{MS_B}{MS_W}
+$$
+
+Under $H_0$, the statistic $F$ follows an $F$ distribution with $k-1$ and $n-k$
+degrees of freedom.
+
+## $F$-Test in One-Way ANOVA
+
+::: {.callout-note}
+**Assumptions**: 
+
+* The observations are independent of each other.
+* The errors are Normally distributed. The residuals are $Y_{ij} - \overline{Y_i}$
+* The variance within each group is the same.
+:::
+
+## Example: Heifers (Cont'd)
+
+### F-test
+
+```{python}
+heifer_lm = ols('org ~ type', data=heifers).fit()
+anova_tab = sm.stats.anova_lm(heifer_lm, type=3,)
+anova_tab
+```
+
+## Example: Heifers (Cont'd)
+
+### Model Summary
+
+```{python}
+heifer_lm.summary()
+```
+
+## Example: Heifers (Cont'd)
+
+### Assumption Check
+
+```{python}
+f, axs = plt.subplots(1, 2, figsize=(10,4))
+tmp = plt.subplot(121)
+heifer_lm.resid.hist();
+tmp = plt.subplot(122)
+sm.qqplot(heifer_lm.resid, line="q", ax=tmp);
+```
+
+## Comparing specific groups
+
+1. Compute the estimate of the difference between the two means:
+$$
+\overline{Y_{i_1}} - \overline{Y_{i_2}}
+$$
+2. Compute the standard error of the above estimator:
+$$
+\sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
+$$
+3. Compute the $100(1- \alpha)%$ confidence interval as:
+$$
+\overline{Y_{i_1}} - \overline{Y_{i_2}} \pm 
+t_{n-k, \alpha/2}  \times
+\sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
+$$
+
+## Example: Enrofloxacin vs. Control
+
+```{python}
+est1  = heifer_lm.params.iloc[2] - heifer_lm.params.iloc[1]
+MSW = heifer_lm.mse_resid
+df = heifer_lm.df_resid
+q1 = -stats.t.ppf(0.025, df)
+
+lower_ci = est1 - q1*np.sqrt(MSW * (1/6 + 1/4))
+upper_ci = est1 + q1*np.sqrt(MSW * (1/6 + 1/4))
+print(f"The 95% CI for the diff. between Enrofloxacin and control is ({lower_ci:.3f}, {upper_ci:.3f}).") 
+```
+
+## Contrast Estimation
+
+Comparison of a collection of $l_1$ groups with another collection of $l_2$
+groups. Consider $L$ such that 
+
+$$
+L = \sum_{i=1}^k c_i \overline{Y_i}, \text{ where } \sum_{i=1}^k c_i = 0
+$$
+
+Procedure for computing confidence intervals for a linear contrast:
+
+1. Compute the estimate of the contrast:
+$$
+L = \sum_{i=1}^k c_i \overline{Y_i}
+$$
+2. Compute the standard error of the above estimator:
+$$
+\sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
+$$
+3. Compute the $100(1- \alpha)%$ confidence interval as:
+$$
+L \pm
+t_{n-k, \alpha/2}  \times
+\sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
+$$
+
+## Example: Comparing collection of groups
+
+```{python}
+c1 = np.array([-1, 0.5, 0.5])
+n_vals = np.array([6, 6, 6,])
+L = np.sum(c1 * heifer_lm.params.iloc[2:5])
+
+MSW = heifer_lm.mse_resid
+df = heifer_lm.df_resid
+q1 = -stats.t.ppf(0.025, df)
+se1 = np.sqrt(MSW*np.sum(c1**2 / n_vals))
+
+lower_ci = L - q1*se1
+upper_ci = L + q1*se1
+print(f"The 95% CI for the diff. between the two groups is ({lower_ci:.3f}, {upper_ci:.3f}).") 
+```
+
+## Multiple Comparisons
+
+The procedures in the previous two subsections correspond to contrasts that we
+had specified before collecting or studying the data. If, instead, we wished to
+perform particular comparisons after studying the group means, or if we wish to
+compute all pairwise contrasts, then we need to adjust for the fact that we are
+conducting multiple tests. If we do not do so, the chance of making at least
+one false positive increases greatly.
+
+## Bonferroni
+
+The simplest method for correcting for multiple comparisons is to use the Bonferroni 
+correction. Suppose we wish to perform $m$ pairwise comparisons, either as a test or 
+by computing confidence intervals. If we wish to maintain the significance level
+of each test at $\alpha$, then we should perform each of the $m$ tests/confidence 
+intervals at $\alpha/m$.
+
+## TukeyHSD
+
+This procedure is known as Tukey's Honestly Significant Difference. It is designed 
+to construct confidence intervals for **all** pairwise comparisons. For the same 
+$\alpha$-level, Tukey's HSD method provides shorter confidence intervals than
+a Bonferroni correction for all pairwise comparisons.
+
+## Example: Multiple Comparisons
+
+```{python}
+cp = mc.MultiComparison(heifers.org, heifers.type)
+tk = cp.tukeyhsd()
+tk.plot_simultaneous();
+```
+
+## Categorical Variables
+
+There are two sub-types of categorical variables:
+
+* A categorical variable is *ordinal* if the observations can be ordered, but do not
+have specific quantitative values.
+* A categorical variable is *nominal* if the observations can be classified into
+categories, but the categories have no specific ordering.
+
+In this topic, we shall discuss techniques for identifying the presence, and for 
+measuring the strength, of the association between two categorical variables. 
+
+## Example: Chest Pain and Gender
+
+Suppose that 1073 NUH patients who were at high risk for cardiovascular disease
+(CVD) were randomly sampled. They were then queried on two things:
+
+1. Had they experienced the onset of severe chest pain in the preceding 6
+months? (yes/no)
+2. What was their gender? (male/female)
+
+The data can be summarised and presented in a *contingency table*.
+
+```{python}
+#| echo: false
+
+chest_array = np.array([[46, 474], [37, 516]])
+
+sns.heatmap(chest_array, annot=True, square=True, fmt='', 
+            xticklabels=['pain', 'no pain'],
+            yticklabels=['Male', 'Female'], 
+            cmap='Reds', cbar=False, );
+```
+
+## $\chi^2$-Test for Independence 
+
+The $\chi^2$-test uses the definition above to assess if two variables in a
+contingency table are associated. The null and alternative hypotheses are 
+
+\begin{eqnarray*}
+H_0 &:& \text{The two variables are indepdendent.}  \\
+H_1 &:& \text{The two variables are not indepdendent.}
+\end{eqnarray*}
+
+
+## $\chi^2$-Test for Independence 
+
+*Under $H_0$* (independence), we can derive a general formula for the expected count
+in each cell:
+$$
+\text{Expected count} = \frac{\text{Row total} \times \text{Column total}}{\text{Total sample size}}
+$$
+
+The formula for the $\chi^2$-test statistic (with continuity correction) is:
+$$
+\chi^2 = \sum \frac{|\text{expected} - \text{observed} |^2}{\text{expected count}} 
+$$
+
+The sum is taken over every cell in the table. Hence in a $2\times2$ table, as
+we have here, there would be 4 terms in the summation. 
+
+## Example: Chest Pain and Gender $\chi^2$ Test
+
+
+```{python}
+chisq_output = stats.chi2_contingency(chest_array, correction=False)
+
+print(f"The p-value is {chisq_output.pvalue:.3f}.")
+print(f"The test-statistic value is {chisq_output.statistic:.3f}.")
+```
+
+## Example: Chest Pain and Gender $\chi^2$ Test
+
+Expected cell counts
+
+```{python}
+chisq_output.expected_freq
+```
+
+It is only suitable to use the $\chi^2$-test when all *expected cell counts*
+are larger than 5. If this condition fails, one recommendation is to use a
+continuity correction, which modifies the test statistic to be 
+
+$$
+\chi^2 = \sum \frac{(|\text{expected} - \text{observed}| - 0.5)^2}{\text{expected count}} 
+$$
+
+## Measures of Association
+
+Measures of association quantify how two random variables vary together. Here
+we touch on bivariate measures of association for contingency tables (two
+categorical variables).
+
+## Odds Ratio
+
+* Suppose we have $X$ and $Y$ to be Bernoulli random variables with (population)
+  success probabilities $p_1$ and $p_2$. 
+
+* We define the odds of success for $X$ to be $\frac{p_1}{1-p_1}$ and for $Y$ to
+  be $\frac{p_2}{1-p_2}$. 
+
+* In order to measure the strength of their association, we use the *odds ratio*:
+$$
+\frac{p_1/ (1-p_1)}{p_2/(1-p_2)}
+$$
+
+* The odds ratio can take on any value from 0 to $\infty$. A value of 1
+  indicates no association between $X$ and $Y$.
+
+* Due to the above asymmetry, we often use the log-odds-ratio instead, which
+  can take values from $-\infty$ to $\infty$:
+$$
+\log \frac{p_1/ (1-p_1)}{p_2/(1-p_2)} 
+$$
+
+* log-odds-ratio of 0 indicates no association between $X$ and $Y$.
+
+## Odds Ratio Confidence Interval
+
+To obtain a confidence interval for the odds-ratio, we work with the log-odds ratio and 
+then exponentiate the resulting interval. Here are the steps:
+
+1. The sample data in a 2x2 table can be labelled as $n_{11}, n_{12}, n_{21}, n_{22}$.
+2. The *sample* odds ratio is 
+$$
+\widehat{OR} = \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}}
+$$
+3. For a large sample size, it can be shown that $\log \widehat{OR}$ follows a Normal 
+   distribution. Hence a 95% confidence interval can be obtained through
+$$
+\log \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}} \pm z_{0.025} 
+\times ASE(\log \widehat{OR})
+$$
+
+where 
+
+* the ASE (Asymptotic Standard Error) of the estimator is 
+$$
+\sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}} 
+$$
+
+## Example: Chest Pain and Gender Odds Ratio
+
+```{python}
+chest_tab2 = sm.stats.Table2x2(chest_array)
+
+chest_tab2.summary()
+```
+
+## For Ordinal Variables
+
+* A **pair of subjects** is *concordant* if the subject ranked higher on $X$ also 
+  ranks higher on $Y$. 
+* A **pair** is *discordant* if the subject ranking higher on $X$ ranks lower on $Y$.
+* A **pair** is *tied* if the subjects have the same classification on $X$ and/or $Y$.
+
+If we let 
+
+* $C$: number of concordant pairs in a dataset, and
+* $D$: number of discordant pairs in a dataset.
+
+1. Goodman-Kruskal $\gamma$ is computed as 
+$$
+\gamma = \frac{C - D}{C + D}
+$$
+2. Kendall $\tau_b$ is 
+$$
+\tau_b = \frac{C - D}{A}
+$$
+
+For both measures, values close to 0 indicate a very weak trend, while values 
+close to 1 (or -1) indicate a strong positive (negative) association.
+
+## Example: Job Satisfaction by Income
+
+
+```{python}
+#| echo: false
+
+us_svy_tab = np.array([[1, 3, 10, 6], 
+                      [2, 3, 10, 7],
+                      [1, 6, 14, 12],
+                      [0, 1,  9, 11]])
+col_names = ['V. Diss', 'L. Diss', 'M. Sat', 'V. Sat']
+row_names = ['<15K', '15-25K', '25-40K', '>40K']
+sns.heatmap(us_svy_tab, annot=True, square=True, fmt='', 
+            xticklabels=col_names,
+            yticklabels=row_names, 
+            cmap='Reds', cbar=False, );
+```
+
+## Example: Job Satisfaction by Income
+
+Converting data to long format and compute the metrics.
+
+```{python}
+dim1 = us_svy_tab.shape
+x = []; y=[]
+for i in range(0, dim1[0]):
+    for j in range(0, dim1[1]):
+        for k in range(0, us_svy_tab[i,j]):
+            x.append(i)
+            y.append(j)
+
+stats.kendalltau(x, y, variant='b')
+```
+
+## Summary: Comparing Means
+
+* (Unpaired) 2-sample t-test
+* Paired Sample Tests
+* One-way ANoVA
+  * F-test
+  * Comparing specific groups
+  * Multiple Comparisons
+
+## Summary: Categorical Variables
+
+* $\chi^2$-Test for Independence 
+* Measures of Association
+  * Odds Ratio
+  * Goodman-Kruskal $\gamma$ and Kendall $\tau_b$ for Ordinal Variables
