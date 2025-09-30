@@ -270,7 +270,7 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul class="collapse">
-  <li><a href="#random-variables" id="toc-random-variables" class="nav-link active" data-scroll-target="#random-variables"><span class="header-section-number">7.1</span> Random Variables</a></li>
+  <li><a href="#sec-07-top" id="toc-sec-07-top" class="nav-link active" data-scroll-target="#sec-07-top"><span class="header-section-number">7.1</span> Random Variables</a></li>
   <li><a href="#general-principles-in-simulation-studies" id="toc-general-principles-in-simulation-studies" class="nav-link" data-scroll-target="#general-principles-in-simulation-studies"><span class="header-section-number">7.2</span> General Principles in Simulation Studies</a></li>
   <li><a href="#object-oriented-programming-in-python" id="toc-object-oriented-programming-in-python" class="nav-link" data-scroll-target="#object-oriented-programming-in-python"><span class="header-section-number">7.3</span> Object-Oriented Programming in Python</a></li>
   <li><a href="#introduction-to-agent-based-models" id="toc-introduction-to-agent-based-models" class="nav-link" data-scroll-target="#introduction-to-agent-based-models"><span class="header-section-number">7.4</span> Introduction to Agent Based Models</a></li>
@@ -308,8 +308,8 @@ window.Quarto = {
 </header>
 
 
-<section id="random-variables" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">7.1</span> Random Variables</h2>
+<section id="sec-07-top" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-07-top"><span class="header-section-number">7.1</span> Random Variables</h2>
 <p>In statistics, we use random variables to describe the probabilistic behaviour of phenomenon. Random variables are real numbers that represent the phenomena we observe. For instance, we might let <span class="math inline">\(X\)</span> represent a coin toss, with <span class="math inline">\(X=1\)</span> representing Heads and <span class="math inline">\(X=0\)</span> representing Tails.</p>
 <p>Random variables come with a rule (or function) that prescribes the probabilities with which it takes on particular values. For instance, if we had a fair coin, then the rule would be that <span class="math display">\[
 P(X=1) = P(X=0) = \frac{1}{2}
@@ -318,7 +318,7 @@ P(X=1) = P(X=0) = \frac{1}{2}
 P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 \]</span></p>
 <p>This rule tells us which events are more likely, and which are less likely.</p>
-<div id="a78e00fa" class="cell" data-execution_count="1">
+<div id="a78e00fa" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> math <span class="im">import</span> pi </span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">from</span> IPython.display <span class="im">import</span> IFrame,Video</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -346,7 +346,7 @@ P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 </ul>
 <p>Discrete random variables are defined by their probability mass function (pmf), which is just a table or a function describing <span class="math inline">\(P(X=i)\)</span> for all possible <span class="math inline">\(i\)</span> values. Once we know the pmf of a random variable, we know everything about it - the mean, variance, quantiles, maximum values, etc.</p>
 <p>We can visualise a pmf using a bar-chart. Here is the pmf for the above biased coin.</p>
-<div id="7c8fbf97" class="cell" data-execution_count="2">
+<div id="7c8fbf97" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>plt.bar([<span class="dv">0</span>,<span class="dv">1</span>], [<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="op">/</span><span class="dv">3</span>], tick_label<span class="op">=</span>[<span class="st">'0'</span>, <span class="st">'1'</span>], width<span class="op">=</span><span class="fl">0.3</span>)<span class="op">;</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>plt.xlim(<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span>)<span class="op">;</span> </span>
 <span id="cb2-3"><a href="#cb2-3"></a>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">;</span> </span>
@@ -360,7 +360,7 @@ P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 </div>
 </div>
 <p>Here is the pmf for a random variable representing the total number of Heads after 10 tosses of that same coin. Suppose we call that new random variable <span class="math inline">\(Y\)</span>.</p>
-<div id="439990fd" class="cell" data-execution_count="3">
+<div id="439990fd" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>probs <span class="op">=</span> binom.pmf(np.arange(<span class="dv">0</span>, <span class="dv">11</span>), n<span class="op">=</span><span class="dv">10</span>, p<span class="op">=</span><span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>plt.bar(np.arange(<span class="dv">0</span>, <span class="dv">11</span>), probs)<span class="op">;</span>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>plt.title(<span class="st">'pmf of no. of coin tosses'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -374,7 +374,7 @@ P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 </div>
 <p>If we wish to find the probability of events, for instance, <span class="math inline">\(P(Y \le 4)\)</span>, we sum up the heights of the bars.</p>
 <p>Continuous random variables are defined by what is known as a probability density function. Continuous random variables can take on an uncountable number of values, for instance, all real numbers in the interval <span class="math inline">\([0,1]\)</span>.</p>
-<div id="c26e31da" class="cell" data-execution_count="4">
+<div id="c26e31da" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, num<span class="op">=</span><span class="dv">100</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>y <span class="op">=</span> norm.pdf(x)</span>
 <span id="cb4-3"><a href="#cb4-3"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>), facecolor<span class="op">=</span><span class="st">'0.9'</span>)</span>
@@ -407,7 +407,7 @@ P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 <section id="generating-random-variates" class="level3">
 <h3 class="anchored" data-anchor-id="generating-random-variates">Generating Random Variates</h3>
 <p>With a computer, we can generate random variables from almost any distribution. There are built-in routines to generate from the ‘named’ distributions. For instance,</p>
-<div id="e84b85c5" class="cell" data-execution_count="5">
+<div id="e84b85c5" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">5003</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a>yvals <span class="op">=</span> np.zeros((<span class="dv">3</span>,<span class="dv">300</span>))</span>
@@ -528,7 +528,7 @@ X =
     &lt;statement-N&gt;</code></pre>
 <p>A class definition typically consists of function definitions and attributes. A special function within a class definition, <code>__init__()</code>, can be used to set the initial state of <em>instances</em> of a class. Think of a class definition as a template, and instances as copies made using that template.</p>
 <p>Consider the following class Circle.</p>
-<div id="3218b09f" class="cell" data-execution_count="6">
+<div id="3218b09f" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span> Circle:</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">""" A simple class definition </span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">    </span></span>
@@ -544,17 +544,17 @@ X =
 <span id="cb7-13"><a href="#cb7-13"></a>        <span class="cf">return</span> pi<span class="op">*</span>(<span class="va">self</span>.radius<span class="op">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can create multiple circles using this template. Note the use of the keyword <code>self</code> to refer to attributes of the instance.</p>
-<div id="5f39a86e" class="cell" data-execution_count="7">
+<div id="5f39a86e" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>c1 <span class="op">=</span> Circle(<span class="fl">3.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="12745a63" class="cell" data-execution_count="8">
+<div id="12745a63" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>c2 <span class="op">=</span> Circle(<span class="fl">4.0</span>)</span>
 <span id="cb9-2"><a href="#cb9-2"></a>c2.area()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>50.26548245743669</code></pre>
 </div>
 </div>
-<div id="ac67fe37" class="cell" data-execution_count="9">
+<div id="ac67fe37" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="ss">The radius of c1 is </span><span class="sc">{</span>c1<span class="sc">.</span>radius<span class="sc">}</span><span class="ss"> and the radius of c2 is </span><span class="sc">{</span>c2<span class="sc">.</span>radius<span class="sc">}</span><span class="ss">.</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="ss">The area of c1 is </span><span class="sc">{</span>c1<span class="sc">.</span>area()<span class="sc">:.3f}</span><span class="ss"> and the area of c2 is </span><span class="sc">{</span>c2<span class="sc">.</span>area()<span class="sc">:.3f}</span><span class="ss">.</span></span>
@@ -570,7 +570,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="introduction-to-agent-based-models" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="introduction-to-agent-based-models"><span class="header-section-number">7.4</span> Introduction to Agent Based Models</h2>
 <p>Agent-based models (ABM) consist of individual elements (agents) interacting with one another. One of the most common uses of an agent-based model is to understand how the behaviour of the system, as a whole, emerges from simple rules for the agents’ and their interactions. A very famous example is from the simulation software used to create battle scenes in The Lord of The Rings movies from the early 2000s. The following video was from an <a href="https://www.cnet.com/culture/entertainment/features/how-lord-of-the-rings-used-ai-to-change-big-screen-battles-forever/">article on the MASSIVE software</a>.</p>
-<div id="0f3fe542" class="cell" data-execution_count="10">
+<div id="0f3fe542" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#IFrame(src='https://house-fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/6415844878001/e4f4a5c9-0393-4fe5-9986-d5c5b237070a/c276cef7-9eba-4498-a802-9f7867c41334/main.mp4?fastly_token=NjZlYjgxYzlfYWYzYzhmNDQ0ODhmM2Y4NmE1ODIzNzU1ZmE3ODhiNmM4NGZiNjAxNTc2YzZhYmI1NWNlMzYxNzliOGNjY2QxZF9odHRwczovL2hvdXNlLWZhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNjQxNTg0NDg3ODAwMS9lNGY0YTVjOS0wMzkzLTRmZTUtOTk4Ni1kNWM1YjIzNzA3MGEvYzI3NmNlZjctOWViYS00NDk4LWE4MDItOWY3ODY3YzQxMzM0L21haW4ubXA0', </span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="co">#       width=960, height=480)</span></span>
 <span id="cb13-3"><a href="#cb13-3"></a>Video(<span class="st">"../data/lotr.mp4"</span>, width<span class="op">=</span><span class="dv">960</span>, height<span class="op">=</span><span class="dv">480</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -616,7 +616,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="agent-and-model-classes-v1" class="level2" data-number="7.6">
 <h2 data-number="7.6" class="anchored" data-anchor-id="agent-and-model-classes-v1"><span class="header-section-number">7.6</span> Agent and Model Classes (v1)</h2>
 <p>The code below contains our initial definition for the agent class. The initialisation simply consists of setting the wealth for the agent. The <code>step</code> method defines that the agent will pick an agent (possibly itself) and transfer 1 unit of money to that agent.</p>
-<div id="4c7bb0bc" class="cell" data-execution_count="11">
+<div id="4c7bb0bc" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
 <span id="cb14-2"><a href="#cb14-2"></a>    <span class="co">"""An agent with fixed initial wealth."""</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a></span>
@@ -642,7 +642,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </figure>
 </div>
 <p>The next class defines the model itself. The initialisation of a model typically consists of populating it with various agents. However, it is also important to define the scheduler. In this case, the scheduler is based on <code>RandomActivation</code>. This means that <em>at every step</em>, the agents are shuffled, and then each of their <code>step</code> methods are executed in that order. The order changes at every time step. It is necessary to avoid running all agents’ steps at the same time to avoid clashes.</p>
-<div id="e532b9eb" class="cell" data-execution_count="12">
+<div id="e532b9eb" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
 <span id="cb15-2"><a href="#cb15-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a></span>
@@ -668,7 +668,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 <p>The next cell creates a model with 10 agents, and runs the model for 100 steps. At the end of this run, we compute the proportion of customers with wealth 0. This is a simple initial metric that we define on the model. Once again, just as with the parameters of the model, the metrics we extract determine how well we can use the model.</p>
 <p>Remember that, to begin with, all agents had equal wealth. If this proportion is high, it indicates a severe imbalance in wealth distribution after 100 time steps.</p>
-<div id="3435323b" class="cell" data-execution_count="13">
+<div id="3435323b" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>all_wealth <span class="op">=</span> []</span>
 <span id="cb16-2"><a href="#cb16-2"></a>model <span class="op">=</span> MoneyModel(<span class="dv">10</span>)</span>
 <span id="cb16-3"><a href="#cb16-3"></a></span>
@@ -683,7 +683,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <span id="cb16-12"><a href="#cb16-12"></a><span class="cf">for</span> agent <span class="kw">in</span> model.agents:</span>
 <span id="cb16-13"><a href="#cb16-13"></a>    all_wealth.append(agent.wealth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="49efaae4" class="cell" data-execution_count="14">
+<div id="49efaae4" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>prop <span class="op">=</span> (np.array(all_wealth) <span class="op">==</span> <span class="dv">0</span>).mean()</span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="bu">print</span>(<span class="ss">f"The proportion of agents with zero wealth is </span><span class="sc">{</span>prop<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -693,7 +693,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="data-collection" class="level3">
 <h3 class="anchored" data-anchor-id="data-collection">Data Collection</h3>
 <p>However, remember that when we perform simulations, we need to repeat the run multiple times, take the average, and then form a confidence interval. To prepare the mesa model to perform data collection, we write a function that, given a model, will compute the proportion of zero-wealth agents.</p>
-<div id="9ef21707" class="cell" data-execution_count="15">
+<div id="9ef21707" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">def</span> compute_zero_prop(mesa_model):</span>
 <span id="cb19-2"><a href="#cb19-2"></a>    all_wealth <span class="op">=</span> []</span>
 <span id="cb19-3"><a href="#cb19-3"></a>    <span class="co"># Extract the results</span></span>
@@ -708,7 +708,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 </div>
 <p>Next, we update the model class to define a data collector that calls the <code>compute_zero_prop()</code> function that we just defined. With Mesa, the data collector can be based on the model, or it could be a function that operates on individual agents.</p>
-<div id="d570bc61" class="cell" data-execution_count="16">
+<div id="d570bc61" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
 <span id="cb21-2"><a href="#cb21-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a></span>
@@ -737,14 +737,14 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <span id="cb21-26"><a href="#cb21-26"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once again, we reset the seed and re-run the model. We can then retrieve the zero-wealth proprortion at <em>every step of the model</em>.</p>
-<div id="b83d9dc1" class="cell" data-execution_count="17">
+<div id="b83d9dc1" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>model <span class="op">=</span> MoneyModel(<span class="dv">10</span>)</span>
 <span id="cb22-2"><a href="#cb22-2"></a>model.reset_randomizer(seed<span class="op">=</span><span class="dv">5003</span>)</span>
 <span id="cb22-3"><a href="#cb22-3"></a></span>
 <span id="cb22-4"><a href="#cb22-4"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb22-5"><a href="#cb22-5"></a>    model.step()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ef9a4a3d" class="cell" data-execution_count="18">
+<div id="ef9a4a3d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>model.datacollector.get_model_vars_dataframe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
@@ -815,7 +815,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="multiple-iterations" class="level2" data-number="7.7">
 <h2 data-number="7.7" class="anchored" data-anchor-id="multiple-iterations"><span class="header-section-number">7.7</span> Multiple Iterations</h2>
 <p>The mesa package has features to help us to run multiple simulations and then to collate the results. The primary method is <code>.batch_run()</code>. Now we shall run the model for 50 iterations. Remember that each iteration consists of a fresh set of 100 time steps.</p>
-<div id="6ce5abc9" class="cell" data-execution_count="19">
+<div id="6ce5abc9" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
 <span id="cb24-2"><a href="#cb24-2"></a><span class="co">#params = {"N": [10, 50, 100]}</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a></span>
@@ -834,7 +834,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </script>
 </div>
 </div>
-<div id="cb1b05dc" class="cell" data-execution_count="20">
+<div id="cb1b05dc" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb25-2"><a href="#cb25-2"></a></span>
 <span id="cb25-3"><a href="#cb25-3"></a>results_df.zero_prop.hist(grid<span class="op">=</span><span class="va">False</span>, bins<span class="op">=</span>np.arange(<span class="fl">0.10</span>, <span class="fl">1.00</span>, <span class="fl">0.05</span>))<span class="op">;</span></span>
@@ -847,7 +847,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 </div>
 </div>
-<div id="c4bf07cc" class="cell" data-execution_count="21">
+<div id="c4bf07cc" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>stats.ttest_1samp(results_df.zero_prop, <span class="fl">0.0</span>).confidence_interval()</span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="co">#results_df.zero_prop.groupby(results_df.N).apply(lambda x: </span></span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="co">#                                                 stats.ttest_1samp(x, 0.0).confidence_interval())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -873,7 +873,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 \frac{A}{A+B}
 \]</span></p>
 <p>The Gini coefficient is a measure between 0 and 1. A value of 0 indicates income equality, while a value of 1 indicates that only 1 member of the population earns all the income (extreme inequality). Here is an interactive visualisation from Our World in Data on Gini coefficient values around the world, across time.</p>
-<div id="998aec37" class="cell" data-execution_count="22">
+<div id="998aec37" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> IFrame</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a>IFrame(src<span class="op">=</span><span class="st">'https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map'</span>, width<span class="op">=</span><span class="dv">1024</span>, height<span class="op">=</span><span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -884,7 +884,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 </div>
 <p>The <a href="https://en.wikipedia.org/wiki/Gini_coefficient">wikipedia page</a> on Gini coefficient contains a formula for computing Gini coefficient, given the income of all agents. After implementing it, we include it in the model class, along with our earlier metric.</p>
-<div id="203160c9" class="cell" data-execution_count="23">
+<div id="203160c9" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">def</span> compute_gini(model):</span>
 <span id="cb29-2"><a href="#cb29-2"></a>    agent_wealths <span class="op">=</span> [agent.wealth <span class="cf">for</span> agent <span class="kw">in</span> model.agents]</span>
 <span id="cb29-3"><a href="#cb29-3"></a>    x <span class="op">=</span> <span class="bu">sorted</span>(agent_wealths)</span>
@@ -923,7 +923,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="data-collection-1" class="level3">
 <h3 class="anchored" data-anchor-id="data-collection-1">Data Collection</h3>
 <p>Suppose we are interested to study how the Gini coefficient of our little population evolves over time. We shall use the <code>batch_run</code> to run 50 iterations, and then create a summary visualisation of the evolution of Gini coefficient for each iteration.</p>
-<div id="328d3a4f" class="cell" data-execution_count="24">
+<div id="328d3a4f" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
 <span id="cb30-2"><a href="#cb30-2"></a></span>
 <span id="cb30-3"><a href="#cb30-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
@@ -942,7 +942,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 </div>
 <p>We would like to inspect how the inequality varies over the time steps. Hence, at each time step, we obtain the lower and upper quantiles along with the median and plot them.</p>
-<div id="2cb14427" class="cell" data-execution_count="25">
+<div id="2cb14427" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb31-2"><a href="#cb31-2"></a>grp_by_step <span class="op">=</span> results_df.Gini.groupby(results_df.Step).describe()</span>
 <span id="cb31-3"><a href="#cb31-3"></a><span class="co">#grp_by_step.head()</span></span>
@@ -966,7 +966,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <h3 class="anchored" data-anchor-id="adding-a-spatial-component">Adding a spatial component</h3>
 <p>Next we introduce another critical component of agent-based modeling - the spatial component. We retain the Gini coefficient computation, but we are going to modify the model behaviour such that agents only exchange money if the other agent is nearby. The <code>MultiGrid</code> defines a rectangular grid, indexed by <code>[x, y]</code>, where <code>[0, 0]</code> is assumed to be at bottom-left and <code>[width - 1, height - 1]</code> is the top-right. If a grid is toroidal, the top and bottom, and left and right, edges wrap to each other.</p>
 <p>In the loop to create agents, the agents are added to a random x- and y- cell of the grid.</p>
-<div id="a73b409a" class="cell" data-execution_count="26">
+<div id="a73b409a" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
 <span id="cb32-2"><a href="#cb32-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
 <span id="cb32-3"><a href="#cb32-3"></a></span>
@@ -1008,7 +1008,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <li>Remove the agent itself from the list of neighbours, so that an agent will not give money to itself.</li>
 <li>Choose one of the neighbouring agents at random and give money to it.</li>
 </ol>
-<div id="e7f8ad04" class="cell" data-execution_count="27">
+<div id="e7f8ad04" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
 <span id="cb33-2"><a href="#cb33-2"></a>    <span class="co">"""An agent with fixed initial wealth."""</span></span>
 <span id="cb33-3"><a href="#cb33-3"></a></span>
@@ -1043,7 +1043,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="data-collection-2" class="level3">
 <h3 class="anchored" data-anchor-id="data-collection-2">Data Collection</h3>
 <p>The next code cell runs a single iteration with 100 agents in a 10x10 grid.</p>
-<div id="5174da91" class="cell" data-execution_count="28">
+<div id="5174da91" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>model <span class="op">=</span> MoneyModel(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
 <span id="cb34-2"><a href="#cb34-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb34-3"><a href="#cb34-3"></a>    model.step()</span>
@@ -1060,7 +1060,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 </div>
 </div>
-<div id="9c1b3786" class="cell" data-execution_count="29">
+<div id="9c1b3786" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>params <span class="op">=</span> {<span class="st">"width"</span>: <span class="dv">10</span>, <span class="st">"height"</span>: <span class="dv">10</span>, <span class="st">"N"</span>: <span class="bu">range</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">5</span>)}</span>
 <span id="cb35-2"><a href="#cb35-2"></a></span>
 <span id="cb35-3"><a href="#cb35-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
@@ -1079,14 +1079,14 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 </div>
 <p>For a visualisation of the results, we shall compute the mean Gini coefficient at each time step, grouped by <code>N</code>.</p>
-<div id="a636909f" class="cell" data-execution_count="30">
+<div id="a636909f" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb36-2"><a href="#cb36-2"></a>grp_by_step <span class="op">=</span> results_df.Gini.groupby([results_df.Step, results_df.N]).describe()</span>
 <span id="cb36-3"><a href="#cb36-3"></a>grp_by_step.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb36-4"><a href="#cb36-4"></a></span>
 <span id="cb36-5"><a href="#cb36-5"></a><span class="co">#grp_by_step.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ca4c1fd2" class="cell" data-execution_count="31">
+<div id="ca4c1fd2" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>grouped <span class="op">=</span> grp_by_step.groupby(<span class="st">'N'</span>)</span>
 <span id="cb37-2"><a href="#cb37-2"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
 <span id="cb37-3"><a href="#cb37-3"></a></span>
@@ -1111,7 +1111,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="visualisations" class="level2" data-number="7.10">
 <h2 data-number="7.10" class="anchored" data-anchor-id="visualisations"><span class="header-section-number">7.10</span> Visualisations</h2>
 <p>As with most ABM software, it is possible to visualise the steps. This is not to be used for conveying results to management; it is more for debugging, and for study for the purpose of understanding the behaviour and for generating hypothesis.</p>
-<div id="1e8a3055" class="cell" data-execution_count="32">
+<div id="1e8a3055" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">def</span> agent_portrayal(agent):</span>
 <span id="cb38-2"><a href="#cb38-2"></a>    <span class="co">#return {</span></span>
 <span id="cb38-3"><a href="#cb38-3"></a>    <span class="co">#    "color": "tab:blue",</span></span>
@@ -1137,7 +1137,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <span id="cb38-23"><a href="#cb38-23"></a>    <span class="st">"height"</span>: <span class="dv">10</span>,</span>
 <span id="cb38-24"><a href="#cb38-24"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="34471179" class="cell" data-execution_count="33">
+<div id="34471179" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="co">#from mesa.experimental import JupyterViz</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a></span>
 <span id="cb39-3"><a href="#cb39-3"></a><span class="co">#page = JupyterViz(</span></span>
@@ -1166,7 +1166,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="n-gram-models" class="level3">
 <h3 class="anchored" data-anchor-id="n-gram-models">N-gram models</h3>
 <p>Here is an example of how we can simulate from distributions to generate random (nonsensical) sentences that are “similar” to actual sentences from a text.</p>
-<div id="5f1e49f6" class="cell" data-execution_count="34">
+<div id="5f1e49f6" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="co">#nltk.download('genesis')</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a></span>
 <span id="cb40-3"><a href="#cb40-3"></a>kjv <span class="op">=</span> nltk.corpus.genesis.words(<span class="st">'english-kjv.txt'</span>)</span>
@@ -1174,14 +1174,14 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <span id="cb40-5"><a href="#cb40-5"></a>cfd <span class="op">=</span> nltk.ConditionalFreqDist(bg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The object <code>cfd</code> contains information on the distribution of words that come after. For instance, these are the words that come after “she”:</p>
-<div id="642e7e71" class="cell" data-execution_count="35">
+<div id="642e7e71" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>cfd[<span class="st">'she'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>FreqDist({'said': 22, 'was': 14, 'bare': 14, 'called': 13, 'conceived': 11, 'had': 11, 'saw': 6, 'shall': 5, 'is': 5, 'went': 5, ...})</code></pre>
 </div>
 </div>
 <p>The object <code>kjv</code> contains all the words and punctuations from the King James Bible. Here are the first 20 words:</p>
-<div id="214b905d" class="cell" data-execution_count="36">
+<div id="214b905d" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a><span class="co">' '</span>.join(kjv[:<span class="dv">20</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>'In the beginning God created the heaven and the earth . And the earth was without form , and void'</code></pre>
@@ -1189,14 +1189,14 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 </div>
 <p>Next, we extract all bigrams and create a dictionary of frequency distributions. Each frequency distribution tabulates the occurences of the <em>next</em> word.</p>
 <p>Suppose we are interested in what words/tokens come after the word ‘And’ in the bible:</p>
-<div id="9c7d6465" class="cell" data-execution_count="37">
+<div id="9c7d6465" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>cfd[<span class="st">'And'</span>].keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>dict_keys(['the', 'God', 'let', 'to', 'on', 'every', 'out', 'a', 'Adam', 'they', 'he', 'when', 'I', 'unto', 'she', 'Abel', 'in', 'Cain', 'now', 'Lamech', 'Adah', 'his', 'Zillah', 'all', 'Seth', 'Enos', 'Cainan', 'Mahalaleel', 'Jared', 'Enoch', 'Methuselah', 'Noah', 'it', 'this', ',', 'of', 'take', 'surely', 'you', 'with', 'Ham', 'Shem', 'Cush', 'Resen', 'Mizraim', 'Pathrusim', 'Canaan', 'Arphaxad', 'Joktan', 'Hadoram', 'Obal', 'Ophir', 'their', 'Salah', 'Eber', 'Peleg', 'Reu', 'Serug', 'Nahor', 'Terah', 'Haran', 'Abram', 'there', 'Pharaoh', 'Lot', 'Melchizedek', 'blessed', 'also', 'thou', 'Sarai', 'Hagar', 'ye', 'Abraham', 'as', 'Ishmael', 'said', 'Sarah', 'while', 'Abimelech', 'yet', 'Isaac', 'Chesed', 'Bethuel', 'Ephron', 'after', 'if', 'Rebekah', 'my', 'before', 'her', 'Jokshan', 'these', 'Mishma', 'Jacob', 'Esau', 'make', 'by', 'tarry', 'give', 'that', 'thy', 'thither', 'Laban', 'Leah', 'Bilhah', 'Rachel', 'Zilpah', 'Reuben', 'afterwards', 'your', 'hast', 'Mizpah', 'early', 'so', 'say', 'Dinah', 'Shechem', 'Hamor', 'Israel', 'Bashemath', 'Aholibamah', 'Timna', 'Dishon', 'Bela', 'Jobab', 'Husham', 'Hadad', 'Samlah', 'Saul', 'Baalhanan', 'Joseph', 'Judah', 'Er', 'Onan', 'Tamar', 'afterward', 'we', 'for', 'bring', 'other', 'put', 'our', 'told', 'one', 'forty'])</code></pre>
 </div>
 </div>
 <p>Thus ‘the’ is the most likely word after ‘And’. The second most likely pairing would be ‘And the’, and so on. We can convert this into a pmf, just by normalising to ensure that it sums to 1. Then we are ready to generate a pairing once we know that the first word is ‘And’. With the second word, we turn to its frequency distribution and simulate the third word, and so on.</p>
-<div id="6c8a3b0f" class="cell" data-execution_count="38">
+<div id="6c8a3b0f" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">1361</span>)</span>
 <span id="cb47-2"><a href="#cb47-2"></a></span>
 <span id="cb47-3"><a href="#cb47-3"></a><span class="kw">def</span> generate_model(cfdist, word, num<span class="op">=</span><span class="dv">15</span>):</span>
@@ -1208,7 +1208,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <span id="cb47-9"><a href="#cb47-9"></a>        pp <span class="op">=</span> pp <span class="op">/</span> np.<span class="bu">sum</span>(pp)</span>
 <span id="cb47-10"><a href="#cb47-10"></a>        word <span class="op">=</span> rng.choice(choices, size<span class="op">=</span><span class="dv">1</span>, p <span class="op">=</span> pp)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="36dba06a" class="cell" data-execution_count="39">
+<div id="36dba06a" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a>generate_model(cfd, <span class="st">'God'</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>God amongst the daughter of his hands , to Jacob </code></pre>
@@ -1227,7 +1227,7 @@ H_1 :&amp; \mu \neq \mu_0
 <p>Suppose we wish to perform some simple A/B testing: we have two groups, and we wish to be able to detect a difference. What sample size do I need?</p>
 <p>The question is actually a little more complex than that. Let’s think about what we need to consider: * How does the true difference affect my sample size? * How does the variability within each group affect my sample size? * How does the significance level affect the sample size I need? Recall that the significance level determines my Type I error.</p>
 <p>Suppose now, that we fix the significance level to be 5%, with power of at least 0.9 and we are interested in detecting a difference between the means of the value of 1, when the standard deviation of observed values is 1.2. What sample size do I need?</p>
-<div id="45c7c370" class="cell" data-execution_count="40">
+<div id="45c7c370" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a><span class="kw">def</span> generate_one_sample(alpha, delta_m, sd1, n):</span>
 <span id="cb50-2"><a href="#cb50-2"></a>    X <span class="op">=</span> np.random.randn(n)<span class="op">*</span>sd1</span>
 <span id="cb50-3"><a href="#cb50-3"></a>    Y <span class="op">=</span> np.random.randn(n)<span class="op">*</span>sd1 <span class="op">+</span> delta_m</span>
@@ -1238,7 +1238,7 @@ H_1 :&amp; \mu \neq \mu_0
 <span id="cb50-8"><a href="#cb50-8"></a>    <span class="cf">else</span>:</span>
 <span id="cb50-9"><a href="#cb50-9"></a>        <span class="cf">return</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="975292d8" class="cell" data-execution_count="41">
+<div id="975292d8" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a>n_vals <span class="op">=</span> np.arange(<span class="dv">5</span>, <span class="dv">50</span>, step<span class="op">=</span><span class="dv">4</span>)</span>
 <span id="cb51-2"><a href="#cb51-2"></a></span>
 <span id="cb51-3"><a href="#cb51-3"></a>power_est <span class="op">=</span> []</span>
@@ -1261,7 +1261,7 @@ Done with sample size 45
 Done with sample size 49</code></pre>
 </div>
 </div>
-<div id="04bcc20f" class="cell" data-execution_count="42">
+<div id="04bcc20f" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a>ax <span class="op">=</span> plt.plot(n_vals, power_est, <span class="st">'go-'</span>)</span>
 <span id="cb53-2"><a href="#cb53-2"></a>plt.hlines(<span class="fl">0.9</span>, n_vals[<span class="dv">0</span>], n_vals[<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'b'</span>, linestyles<span class="op">=</span><span class="st">'dotted'</span>)</span>
 <span id="cb53-3"><a href="#cb53-3"></a>plt.title(<span class="st">'Power Estimates'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
