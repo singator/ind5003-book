@@ -5,7 +5,7 @@ execute:
   cache: true
 ---
 
-## Random Variables
+## Random Variables {#sec-07-top}
 
 In statistics, we use random variables to describe the probabilistic behaviour
 of phenomenon. Random variables are real numbers that represent the phenomena we
