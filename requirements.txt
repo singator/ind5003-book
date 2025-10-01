@@ -21,6 +21,7 @@ jupyterlab_widgets==3.0.15
 lime==0.2.0.1
 matplotlib==3.10.1
 matplotlib-inline==0.1.7
+mapclassify
 Mesa==3.0.3
 numpy==1.26.4
 opencv-python==4.11.0.86
