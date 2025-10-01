@@ -21,7 +21,7 @@ be used in production. Over the past ten years, more and more comprehensive data
 science toolkits (e.g. scikit-learn, NTLK, tensorflow, keras) have been written 
 in Python and are now the standard frameworks for those models. 
 
-Python is an open-source software. It is free to use and extend.
+Python is an open-source software and thus it is free to use and extend.
 
 ## Installing Python and Jupyter Lab
 
@@ -70,17 +70,17 @@ import this
 ```
 
 More information on using Jupyter notebooks can be obtained from 
-[this link](https://jupyterlab.readthedocs.io/en/stable/user/interface.html). 
+[this website](https://jupyterlab.readthedocs.io/en/stable/user/interface.html). 
 
 ## Basic Data Structures in Python
 
-The main objects in native[^02-python-1] Python that contain data are
+The main data structures in native[^02-python-1] Python are
 
 [^02-python-1]: i.e., Python without any packages imported.
 
-* **Lists**, which are defined with [ ]. Lists are mutable.
-* **Tuples**, which are defined with ( ). Tuples are immutable.
-* **Dictionaries**,  which are defined with { }. Dictionaries have keys and 
+* **Lists**, which are defined with `[ ]`. Lists are mutable.
+* **Tuples**, which are defined with `( )`. Tuples are immutable.
+* **Dictionaries**,  which are defined with `{ }`. Dictionaries have keys and 
   items. They are also mutable.
   
 Very soon, we shall see that for data analysis, the more common objects we shall
@@ -88,31 +88,31 @@ deal with are dataframes (from pandas) and arrays (from numpy). However, the
 latter two require add-on packages; the three object classes listed above are
 baked into Python.
 
-By the way, this is what mean by (im)mutable:
-
-```{python mutable-1}
-x = [1, 3, 5, 7, 8, 9, 10]
-
-# The following is OK, because "x" is a list, and hence mutable
-x[3] = 17     
-print(x)  
-```
-
-```{python mutable-2}
-#| eval: false
-
-# The following will return an error, because x_tuple is a tuple, and hence 
-# immutable.
-x_tuple = (1, 3, 5, 6, 8, 9, 10)
-x_tuple[3] = 17 
-```
-
 Here is how we create lists, tuples and dictionaries.
 
 ```{python create-obj}
 x_list = [1, 2, 3]
 x_tuple = (1, 2, 3)
 x_dict = {'a': 1, 'b': 2, 'c': 3} # access with x_dict['a']
+```
+
+By the way, this is what mean by (im)mutable. The following is OK, because "x"
+is a list, and hence mutable:
+
+```{python mutable-1}
+x = [1, 3, 5, 7, 8, 9, 10]
+x[3] = 17     
+print(x)  
+```
+
+But the following code will return an error, because x_tuple is a tuple, and hence 
+immutable.
+
+```{python mutable-2}
+#| eval: false
+
+x_tuple = (1, 3, 5, 6, 8, 9, 10)
+x_tuple[3] = 17 
 ```
 
 ## Slice Operator in Python
@@ -129,11 +129,17 @@ the end point index is not included.
 char_list = ['P', 'y', 't', 'h', 'o', 'n']
 char_list[0]           # returns first element
 char_list[-1]          # returns last element
-len(char_list)         # returns number of elements in list-like object.
 char_list[::2]         # from first to last, every 2 apart.
 ```
 
-This indexing syntax is used in the additional packages we use as well, so it is
+To obtain the length of a list-like object, we can use the inbuilt `len()`
+function.
+
+```{python slice-1a}
+len(char_list)        
+```
+
+This slice syntax is used in the additional packages we use as well, so it is
 good to know about it. @fig-py-slice displays a pictorial representation of how
 positive and negative indexes work together.
 
@@ -173,73 +179,39 @@ for x in dict1.keys():
 ## Strings
 
 Text data in Python is handled with `str` objects. A string object is an
-**immutable** sequence of characters. Here are some useful string methods and
-properties:
+**immutable** sequence of characters. In this section, we shall cover some 
+useful string methods and properties:
 
 *   catenating (joining) strings.
 *   finding sub-strings.
 *   iterating over strings.
 *   converting to lower/upper-case.
 
-A few cells earlier, we saw how we can format a string before sending it to the
-`print()` function. Here's another such example. This is useful when we are
-debugging loops.
-
-```{python}
-#| scrolled: true
-for x in range(1, 11):
-    print(f"Sq:{x*x:3d} Cu:{x*x*x:4d}.")
-```
-
-Here are more examples of working with strings.
-
-```{python}
-test_str = "Where in the World is Carmen san Diego?"
-```
-
-Remember that a string is immutable, just like a tuple, so this assignment will
-*not* work:
-
-`test_str[5] = 'z'`
-
-But like a tuple, we can also iterate over a string.
-
-```{python}
-count = 0
-for x in test_str:
-    if x.isupper():
-        count += 1
-print(f"There were {count} upper-case characters in the sentence.")
-```
-
-```{python}
-test_str.lower()
-```
-
 To join strings, we can use the '+' operator, the `str.join()` method, or, if
 they are part of the same expression, we can just place them next to each other
 separated by whitespace.
 
-```{python}
+```{python strings-0}
 x = "Where shall "
 y = "we "
 print("Where shall " "we " "go today?")
-
-# also works - the '+' operator is overloaded to work with strings:
-# "Where " + "shall" +" we go" + " today?"
-
-# join using another character:
-# ':'.join(["Where", "shall", "we", "go", "today?"])
+# Alternatives:
+# print("Where " + "shall" +" we go" + " today?")
+# print(' '.join(["Where", "shall", "we", "go", "today?"]))
 ```
 
 To find simple patterns, we may turn to the `find`, `replace`, `startswith` and
 `endswith` methods.
 
-```{python}
+```{python strings-1}
+test_str = "Where in the World is Carmen san Diego?"
 test_str.find('Carmen')
 ```
 
-```{python}
+The output from the above informs us that `Carmen` is located at position 22 in
+`test_str`.
+
+```{python strings-2}
 test_str.replace('Carmen', 'John')
 ```
 
@@ -247,6 +219,32 @@ For more complicated search operations over strings, we use a special
 mini-language known as regular expressions. These are used in several other
 languages such as R and Perl, so it is worth knowing about them if you have
 time. See @sec-01-ref for a good introduction.
+
+Remember that a string is immutable, just like a tuple, so this assignment will
+*not* work:
+
+```{python strings-3}
+#| eval: false
+test_str[5] = 'z'
+```
+
+But like a tuple, we can also iterate over a string.
+
+```{python strings-4}
+count = 0
+for x in test_str:
+    if x.isupper():
+        count += 1
+print(f"There were {count} upper-case characters in the sentence.")
+```
+
+The corresponding method to convert a string to lower case is:
+
+```{python strings-5}
+test_str.lower()
+```
+
+
 
 ## Functions, Modules and Packages 
 
@@ -264,9 +262,7 @@ A Python module is a file containing Python definitions (of functions and
 constants) and statements. Instead of re-typing functions every time, we can
 simply load the module. We would then have access to the updated functions. We
 access objects within the module using the "dot" notation. There are several
-modules that ship with the default Python installation. Note that Python
-packages are collections of modules.
-
+modules that ship with the default Python installation. 
 Here are a couple of ways of importing (and then using) constants from the math
 module.
 
@@ -287,6 +283,10 @@ dot notation.
 from math import pi
 pi
 ```
+
+::: {.callout-note}
+A Python package is a collection of modules.
+:::
 
 ## Object-Oriented Programming
 
@@ -402,24 +402,25 @@ To create an array of regularly spaced **real numbers**, use `np.linspace()`.
 
 ```{python}
 #| scrolled: true
-arr_real = np.linspace(start = 0.2, stop = 3.3, num = 24).reshape(2, 3, 4)  
+arr_real = np.linspace(start = 0.2, stop = 3.3, num = 24).reshape((2, 3, 4))
 arr_real
 ```
 
 Sometimes we need to create a placeholder array with the appropriate dimensions,
-and then fill it in later. This is preferrable to growing an array by appending
+and then fill it in later. This is preferable to growing an array by appending
 to it.
 
 ```{python}
-np.zeros((3, 5)) # there is also an np.ones() function
+np.zeros((3, 5))
 ```
 
+Similarly, there is also an `np.ones()` function.
+
 Instead of specifying the dimensions of an array ourselves, we can create arrays
-of zeros or ones in the shape of other existing arrays.
+of zeros or ones in the shape of other existing arrays. The following code creates
+an array of ones, of the same shape as `arr_real`.
 
 ```{python}
-#| scrolled: true
-# Creates an array of zeros, of the same shape as "arr_real".
 np.ones_like(arr_real)
 ```
 
@@ -448,55 +449,61 @@ arr_real[1, 0:3:2]
 arr_real[:,2,:]
 ```
 
-Here are examples using Boolean indexing, which means that we use an array of
-`True` and `False` entries to determine which elements to return.
+An alternative to using integers in the selection index is to use Boolean
+indexing. This means that we use an array of `True` and `False` entries to
+determine which elements to return. 
 
-```{python}
+```{python bool-1}
 arr_real > 3
 ```
 
-```{python}
+```{python bool-2}
 arr_real[arr_real > 3]
 ```
 
 ### Basic Operations
 
+The next few commands generate $Unif(0,1)$ random variates and store them in 
+rectangular arrays. We shall see more about these particular functions in the 
+chapter on Simulation (@sec-07-top), but for now, take note that the number 
+`1361` is known as a seed; it ensures the reproducibility of random numbers 
+across sessions.
+
 ```{python}
 # Setting a seed allows for reproducibility of random number generation
 # across sessions.
 rng = np.random.default_rng(1361)
-```
-
-```{python}
 a = rng.uniform(size=(3,5))
 b = rng.uniform(size=(3,5))
 b
 ```
 
+The `+` operator, applied to conformable arrays, performs element-wise addition.
+
 ```{python}
-# Element-wise addition.
 a + b 
 ```
 
+Similarly, the `*` operator performs element-wise multiplication.
+
 ```{python}
-# Element-wise multiplication: NOT matrix multiplication.
 a * b
 ```
 
+For matrix multiplication, we have to transpose `b`.
+
 ```{python}
-# Matrix multiplication (need to transpose "b" to match get the right dimensions).
-# We can also do "a @ b.T".
 a.dot(b.T)
 ```
 
 ### Axis-wise Operations
 
-```{python}
-arr_real.shape
-```
+Numpy and Pandas have several facilities for applying functions across array 
+axes. It is important to be aware of how they work. For instance, this takes the
+mean across the 0th (first) axis. The resulting array has shape `(3,4)`.
 
 ```{python}
-arr_real.mean(axis = 0) # mean across the 0th ("first") axis
+arr_real.mean(axis = 0) 
 ```
 
 The top-left element comes from the average of `arr_real[0,0,0]` and
@@ -507,24 +514,12 @@ of `arr_real[0,0,1]` and `arr_real[1,0,1]`:
 (arr_real[0,0,1] + arr_real[1,0,1]) / 2
 ```
 
-```{python}
-arr_real.mean(axis = 1)
-```
-
 Note that `arr_real[0]` is a 2D array, with shape (3, 4). Suppose we wish to
 compute the row means. This means we have to apply the operation by the column
 axis (axis = 1).
 
 ```{python}
-# the mean across the second axis of arr_real[0], not of arr_real itself.
 arr_real[0].mean(axis = 1) 
-```
-
-If we wanted to identify the row with the largest mean, we use `argmax()` on the
-resulting array.
-
-```{python}
-arr_real[0].mean(axis=1).argmax()
 ```
 
 Here is a table with some common operations that you can apply on a numpy array. 
@@ -537,6 +532,14 @@ Here is a table with some common operations that you can apply on a numpy array.
 | `sum`       | Computes col- or row-wise means, e.g. `matrix1.sum(axis=0)` or `matrix1.sum(axis=1)` |
 | `argmax`    | Return the index corresponding to the max within the specified dimension, e.g. `matrix1.argmax(axis=0)` for the position with the max within each column.  |
 | `reshape`   | To change the dimensions, e.g. `array1.reshape((5,1))` converts the array into a 5x1 matrix |
+
+For instance, if we wanted to identify the row with the largest mean, we use
+`argmax()` on the resulting array.
+
+```{python}
+arr_real[0].mean(axis=1).argmax()
+```
+
 
 ## Pandas
 
@@ -568,6 +571,7 @@ losses = pd.Series([2, 3, 2, 4, 2, 5, 9, 11, 11])
 #wins.values
 ```
 
+:::
 
 To access particular values, we can use the slice operator.
 
@@ -589,19 +593,16 @@ s = pd.Series(rng.uniform(size=5),
 # s
 # s.index
 # s.values
-```
 
-```{python}
 s[['a', 'c']] 
 ```
 
-Be careful when you combine the slice operator with label-based indexing. Unlike vanilla Python, Pandas includes **both** end-points!
+Be careful when you combine the slice operator with label-based indexing. Unlike
+vanilla Python, Pandas includes **both** end-points!
 
 ```{python}
 s['a':'d']
 ```
-
-:::
 
 ### DataFrames
 
@@ -648,7 +649,7 @@ laliga.head()
 ### Reading in Data
 
 Pandas can read in data stored in multiple formats, including CSV, tab-separated
-files, Excel files and HDF5 files.
+files, and Excel files.
 
 ::: {#exm-pd-happ-1 style="background-color: #D5D1D164; padding: 20px"}
 
@@ -658,9 +659,7 @@ files, Excel files and HDF5 files.
 The CSV file read in here contains the happiness scores of 164 countries from
 2015 to 2017. Click [here](https://worldhappiness.report/ed/2017/) for a full
 report on the dataset. The final score was based on many other factors (such as
-GDP per capita, family, freedom etc) which is included in the file as well. We
-will simplify things by just reading in the country, final score computed and
-year.
+GDP per capita, family, freedom etc) which is included in the file as well.
 
 In each year, not all of the 164 countries had their scores surveyed and taken.
 This results in some countries having missing values (`NaN`) in certain years.
@@ -676,19 +675,13 @@ show(happ)
 ```
 :::
 
-::: {.content-visible when-format="pdf"}
-```{python}
-happ.info()
-```
-:::
-
 :::
 
 ### Basic Selection
 
-In dataframes, row selection can be done with integers in with the slice
-operator. In practice, this is not used, because we typically wish to select a
-set of rows based on a condition.
+In dataframes, row selection can *technically* be done with integers with the
+slice operator. In practice, this is not used, because we typically wish to
+select a set of rows based on a condition.
 
 ```{python}
 #| scrolled: true
@@ -698,16 +691,18 @@ print(happ[10:12])
 To select columns, you may use a list of column names.
 
 ```{python}
-happ[['GDP', 'Freedom']] # note the difference with happ['GDP']
-# happ.GDP.head()
+happ[['GDP', 'Freedom']].head()
+# note the difference with happ['GDP']
 ```
 
+::: {.callout-warning}
 Remember that we are not working with numpy arrays, so this will *not* work:
 
 ```{python}
 #| eval: false
 happ[0:10, 2:4]
 ```
+:::
 
 ### Indexing and Selecting Data
 
@@ -738,20 +733,19 @@ page bookmarked.
 
 ```{python}
 print(happ.loc[2:5])
-
-# happ.loc[[2,3,4,5]]
 ```
 
 Notice below how the slice operator is inclusive when we use `.loc`, but not
-inclusive when we use `.iloc`.
+inclusive when we use `.iloc`. Consider the following output, using `.loc`.
 
 ```{python}
 happ.loc[2:10:4, "GDP":"Generosity":2]
 ```
 
+In order to obtain the same output with `.iloc`, we have to use this instead:
+
 ```{python}
-#| scrolled: true
-happ.iloc[2:11:4, 3:8:2] # Same as above, but with .iloc
+happ.iloc[2:11:4, 3:8:2] 
 ```
 
 ### Filtering Data
@@ -772,6 +766,8 @@ happiest = happ[happ['Happiness.Score'] > 6.95]
 
 happiest.Country.unique()
 ```
+
+<br/> 
 
 Notice that there isn't a single Asian or African country in the happiest 10% of
 countries!
@@ -802,7 +798,6 @@ one remains unchanged, unless you include the `inplace=True` argument.
 
 ```{python}
 new_df = happ.dropna()
-
 # pd.isna(happ)
 ```
 
