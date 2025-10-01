@@ -653,7 +653,7 @@ files, and Excel files.
 
 ::: {#exm-pd-happ-1 style="background-color: #D5D1D164; padding: 20px"}
 
-### Happiness Dataset
+### Happiness dataset
 \index{Happiness!Read dataset}
 
 The CSV file read in here contains the happiness scores of 164 countries from
@@ -755,7 +755,7 @@ the data with a boolean array.
 
 ::: {#exm-pd-happ-2 style="background-color: #D5D1D164; padding: 20px"}
 
-### Happiest Countries
+### Happiest countries
 \index{Happiness!Happiest countries}
 
 Suppose we retrieve the happiest countries; those with a score more than 6.95.
@@ -772,14 +772,14 @@ happiest.Country.unique()
 Notice that there isn't a single Asian or African country in the happiest 10% of
 countries!
 
-:::
-
 When filtering, we can also combine Boolean indices.
 
 ```{python}
 # Top 3 happiest countries in 2015
 print(happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)])
 ```
+
+:::
 
 
 ### Missing Values
