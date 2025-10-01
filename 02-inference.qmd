@@ -286,7 +286,7 @@ Normal's.
 
 ```{python}
 #| fig-align: center
-f, axs = plt.subplots(1, 2), figsize=(8,4))
+f, axs = plt.subplots(1, 2, figsize=(8,4))
 tmp = plt.subplot(121)
 sm.qqplot(x, line="q", ax=tmp)
 tmp.set_title('Females')
