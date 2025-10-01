@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.52">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -319,11 +319,21 @@ window.Quarto = {
 H_0: &amp; \mu_A = \mu_B \\
 H_1: &amp; \mu_A \ne \mu_B
 \end{eqnarray}\]</span></p>
-<p><span class="math inline">\(H_0\)</span> is usually a statement that indicates “no difference”, and <span class="math inline">\(H_1\)</span> is the complement of <span class="math inline">\(H_0\)</span>, or a subset of it.</p>
+<p><span class="math inline">\(H_0\)</span> is usually a statement that indicates “no difference”, and <span class="math inline">\(H_1\)</span> is the complement of <span class="math inline">\(H_0\)</span>, or a subset of the complement.</p>
 <p>At this stage, it is also crucial to state the significance level of the test. The significance level corresponds to the Type I error of the test - the probability of rejecting <span class="math inline">\(H_0\)</span> when in fact it was true. This level is usually denoted as <span class="math inline">\(\alpha\)</span>, and is usually taken to be 5%, but there is no reason to adopt this blindly. Where possible, the significance level should be chosen to be appropriate for the problem at hand.</p>
-<blockquote class="blockquote">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Think of the choice of 5% as corresponding to accepting an error at a rate of 1 in 20 - that’s how it was originally decided upon by <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">R A Fisher</a>.</p>
-</blockquote>
+</div>
+</div>
 </section>
 <section id="step-3-compute-the-test-statistic" class="level4">
 <h4 class="anchored" data-anchor-id="step-3-compute-the-test-statistic">Step 3: Compute the test statistic</h4>
@@ -340,11 +350,10 @@ H_1: &amp; \mu_A \ne \mu_B
 </section>
 <section id="confidence-intervals" class="level3">
 <h3 class="anchored" data-anchor-id="confidence-intervals">Confidence Intervals</h3>
-<p>Confidence intervals are an alternative method of inference for population parameters. Instead of yielding a binary reject/do-not-reject result, they return an<br>
-interval that contains the plausible values for the population parameter. Many confidence intervals are derived by inverting hypothesis tests, and almost all confidence intervals are of the form</p>
-<blockquote class="blockquote">
-<p>Sample estimate <span class="math inline">\(\pm\)</span> margin of error</p>
-</blockquote>
+<p>Confidence intervals are an alternative method of inference for population parameters. Instead of yielding a binary reject/do-not-reject result, they return an interval that contains the plausible values for the population parameter. Many confidence intervals are derived by inverting hypothesis tests, and almost all confidence intervals are of the form</p>
+<p><span class="math display">\[
+\text{Sample estimate}\;\pm\;\text{margin of error}
+\]</span></p>
 <p>For instance, if we observe <span class="math inline">\(x_1, \ldots, x_n\)</span> from a Normal distribution, and wish to estimate the mean of the distribution, the 95% confidence interval based on the the <span class="math inline">\(t\)</span> distribution is</p>
 <p><span class="math display">\[\begin{equation*}
 \bar{x} \pm t_{0.025, n-1} \times \frac{s}{\sqrt{n}}
@@ -355,7 +364,7 @@ interval that contains the plausible values for the population parameter. Many c
 <li><span class="math inline">\(s\)</span> is the sample standard deviation, and</li>
 <li><span class="math inline">\(t_{0.025, n-1}\)</span> is the 0.025-quantile from the <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-1\)</span> degrees of freedom.</li>
 </ul>
-<p>The formulas for many confidence intervals rely on asymptotic Normality of the estimator. However, this is an assumption that can be overcome with the technique of bootstrapping. If time permits, we shall touch on this in a later topic of our course. Bootstrapping can also be used to sidestep the distributional assumptions in hypothesis tests, but I still much prefer confidence intervals to tests because they yield an interval; they provide much more information than a binary outcome.</p>
+<p>The formulas for many confidence intervals rely on asymptotic Normality of the estimator. However, I still much prefer confidence intervals to hypothesis tests because they yield an interval; they provide much more information than a binary outcome.</p>
 </section>
 </section>
 <section id="comparing-means" class="level2" data-number="2.2">
@@ -370,7 +379,6 @@ interval that contains the plausible values for the population parameter. Many c
 </ul>
 <section id="formal-set-up" class="level4">
 <h4 class="anchored" data-anchor-id="formal-set-up">Formal Set-up</h4>
-<p>Formally speaking, this is how the independent 2-sample t-test works:</p>
 <p>Suppose that <span class="math inline">\(X_1,X_2,\ldots,X_{n_1}\)</span> are independent observations from group 1, and <span class="math inline">\(Y_1, \ldots Y_{n_2}\)</span> are independent observations from group 2. It is assumed that</p>
 <p><span class="math display">\[\begin{eqnarray}
 X_i &amp;\sim&amp; N(\mu_1,\, \sigma^2),\; i=1,\ldots,n_1 \\
@@ -394,8 +402,8 @@ s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
 <p><span class="math display">\[\begin{equation*}
 (\bar{X} - \bar{Y}) \pm t_{n_1 + n_2 -2, 1 - \alpha/2} \times s_p\sqrt{1/n_1 + 1/n_2}
 \end{equation*}\]</span></p>
-<p>For more details on the test, refer to the links in the references section <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>.</p>
-<div id="843089d5" class="cell" data-execution_count="1">
+<p>For more details on the test, refer to the links in the references <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>.</p>
+<div id="7ca58489" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -410,13 +418,13 @@ s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
 <span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> itables <span class="im">import</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="exm-abalone-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.1 (Example: Abalone Measurements)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.1 (Abalone measurements t-test)</strong></span> </p>
 <p>The dataset on abalone measurements from the <a href="https://archive.ics.uci.edu/dataset/1/abalone">UCI machine learning repository</a> contains measurements of physical characteristics, along with the gender status. We derive a sample of 50 measurements of male and female abalone records for use here. Our goal is to study if there is a significant difference between the viscera weight between males and females. The derived dataset can be found on Canvas.</p>
-<div id="dac8627d" class="cell" data-execution_count="2">
+<div id="e6c5d6ae" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>abl <span class="op">=</span> pd.read_csv(<span class="st">"data/abalone_sub.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>show(abl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<table id="itables_436b0498_251b_4ce3_8188_1ec49a9b53f0" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<table id="itables_abd6d675_822b_4a4c_ad74_20899c445830" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
 <thead>
     <tr style="text-align: right;">
       
@@ -490,7 +498,7 @@ Loading ITables v2.3.0 from the internet...
 <script type="module">
     import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
 
-    document.querySelectorAll("#itables_436b0498_251b_4ce3_8188_1ec49a9b53f0:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_abd6d675_822b_4a4c_ad74_20899c445830:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -507,21 +515,25 @@ Loading ITables v2.3.0 from the internet...
 </script>
 </div>
 </div>
-<div id="cf54ffb6" class="cell" data-execution_count="3">
+<div id="b4a4ea9d" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>x <span class="op">=</span> abl.viscera[abl.gender <span class="op">==</span> <span class="st">"F"</span>]</span>
 <span id="cb3-2"><a href="#cb3-2"></a>y <span class="op">=</span> abl.viscera[abl.gender <span class="op">==</span> <span class="st">"M"</span>]</span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a>t_out <span class="op">=</span> stats.ttest_ind(y, x)</span>
 <span id="cb3-5"><a href="#cb3-5"></a>ci_95 <span class="op">=</span> t_out.confidence_interval()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="6085a894" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">print</span>(<span class="ss">f"The $p$-value for the test is </span><span class="sc">{</span>t_out<span class="sc">.</span>pvalue<span class="sc">:.3f}</span><span class="ss">."</span>)<span class="co">#</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">print</span>(<span class="ss">f"The actual value of the test statistic is </span><span class="sc">{</span>t_out<span class="sc">.</span>statistic<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="bu">print</span>(<span class="ss">f"The upper and lower limits of the CI are (</span><span class="sc">{</span>ci_95[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ci_95[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">)."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fd7c1efd" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="ss">    The $p$-value for the test is </span><span class="sc">{</span>t_out<span class="sc">.</span>pvalue<span class="sc">:.3f}</span><span class="ss">. </span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="ss">    The actual value of the test statistic is </span><span class="sc">{</span>t_out<span class="sc">.</span>statistic<span class="sc">:.3f}</span><span class="ss">. </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="ss">    The upper and lower limits of the CI are (</span><span class="sc">{</span>ci_95[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ci_95[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">).</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="ss">    """</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The $p$-value for the test is 0.365.
-The actual value of the test statistic is 0.910.
-The upper and lower limits of the CI are (-0.023, 0.063).</code></pre>
+<pre><code>
+    The $p$-value for the test is 0.365. 
+    The actual value of the test statistic is 0.910. 
+    The upper and lower limits of the CI are (-0.023, 0.063).
+    </code></pre>
 </div>
 </div>
 </div>
@@ -533,15 +545,15 @@ The upper and lower limits of the CI are (-0.023, 0.063).</code></pre>
 </figure>
 </div>
 <div id="exm-abalone-1a" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.2 (Example: Abalone Measurements)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.2 (Abalone measurements histograms)</strong></span> </p>
 <p>Now we turn back to the histograms for the abalone data. Indeed, they do indicate some deviation from Normality - the female group is a little skewed to the right, while the male group appears to have a sharper peak than a Normal.</p>
-<div id="55ccebd6" class="cell" data-execution_count="5">
+<div id="6d247cb1" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>sns.displot(abl, x<span class="op">=</span><span class="st">'viscera'</span>, col<span class="op">=</span><span class="st">'gender'</span>, kind<span class="op">=</span><span class="st">'hist'</span>, stat<span class="op">=</span><span class="st">'density'</span>, </span>
 <span id="cb6-2"><a href="#cb6-2"></a>            binwidth<span class="op">=</span><span class="fl">0.1</span>, height<span class="op">=</span><span class="dv">4</span>, aspect<span class="op">=</span><span class="fl">1.2</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-6-output-1.png" width="912" height="374" class="figure-img"></p>
+<p><img src="02-inference_files/figure-html/cell-6-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="912" height="374"></p>
 </figure>
 </div>
 </div>
@@ -573,10 +585,10 @@ The upper and lower limits of the CI are (-0.023, 0.063).</code></pre>
 </div>
 </div>
 <div id="exm-abalone-1b" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.3 (Example: Abalone Measurements)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.3 (Abalone measurements QQ-plots)</strong></span> </p>
 <p>If we compare the qq-plots from the data (below) with the reference (above), we can infer that for females, the left tail is thinner than a Normal - it abruptly cuts off. For males, both the left and the right tail are fatter than a Normal’s.</p>
-<div id="24f36cc9" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>f, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
+<div id="554ba699" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>f, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span>
 <span id="cb7-2"><a href="#cb7-2"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">121</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>sm.qqplot(x, line<span class="op">=</span><span class="st">"q"</span>, ax<span class="op">=</span>tmp)</span>
 <span id="cb7-4"><a href="#cb7-4"></a>tmp.set_title(<span class="st">'Females'</span>)</span>
@@ -584,17 +596,18 @@ The upper and lower limits of the CI are (-0.023, 0.063).</code></pre>
 <span id="cb7-6"><a href="#cb7-6"></a>sm.qqplot(y, line<span class="op">=</span><span class="st">"q"</span>, ax<span class="op">=</span>tmp)</span>
 <span id="cb7-7"><a href="#cb7-7"></a>tmp.set_title(<span class="st">'Males'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-7-output-1.png" width="812" height="376" class="figure-img"></p>
+<p><img src="02-inference_files/figure-html/cell-7-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="663" height="376"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<p>If you are keen on learning about particular hypothesis tests for Normality, take a look at the references <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>.</p>
+<p><br></p>
+<p>There are also numerous hypothesis tests for Normality. If you are keen on learning about them, take a look at the references <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>.</p>
 <p>We also need to assess if the variances are equal. While there are many hypothesis tests specifically for assessing if variances are equal (e.g.&nbsp;Levene, Bartlett), in our class, I advocate a simple rule of thumb. If the larger s.d is more than twice the smaller one, than we should not use the equal variance form of the test. This rule of thumb is widely used in practice (see the references <a href="#sec-02-ref" class="quarto-xref"><span>Section 2.7</span></a>).</p>
-<div id="c09f06e3" class="cell" data-execution_count="7">
+<div id="57c9334c" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>abl.groupby(<span class="st">'gender'</span>).describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <div>
@@ -666,7 +679,7 @@ The upper and lower limits of the CI are (-0.023, 0.063).</code></pre>
 <h2 data-number="2.3" class="anchored" data-anchor-id="paired-sample-tests"><span class="header-section-number">2.3</span> Paired Sample Tests</h2>
 <p>The data in a paired sample test also arises from two groups, but the two groups are not independent. A very common scenario that gives rise to this test is when the same subject receives both treatments. His/her measurement under each treatment gives rise to a measurement in each group. However, the measurements are no longer independent.</p>
 <div id="exm-reaction-time" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.4 (Example: Reaction time of drivers)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.4 (Reaction time of drivers)</strong></span> </p>
 <p>Consider a study on 32 drivers sampled from a driving school. Each driver is put in a simulation of a driving situation, where a target flashes red and green at random periods. Whenever the driver sees red, he/she has to press a brake button.</p>
 <p>For each driver, the study is carried out twice - at one of the repetitions, the individual carries on a phone conversation while at the other, the driver listens to the radio. Each measurement falls under one of two groups - “phone” or “radio”, but the measurements for driver <span class="math inline">\(i\)</span> are clearly related.</p>
 <p><em>Some people might just have a slower/faster baseline reaction time!</em></p>
@@ -699,25 +712,24 @@ s^2 = \frac{\sum_{i=1}^n (D_i - \bar{D})^2}{(n - 1)}
 <div id="exm-hr-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 2.5 (Example: Heart Rate Before/After Treadmill)</strong></span> </p>
 <p>The following dataset comes from a textbook. In a self-recorded experiment, an individual recorded his heart rate before using a treadmill (baseline) and 5 minutes after use, for 12 days in 2006.</p>
-<div id="8b2f9df2" class="cell" data-execution_count="8">
+<div id="4dd85992" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>hr_df <span class="op">=</span> pd.read_csv(<span class="st">"data/health_promo_hr.csv"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#hr_df.head()</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>p_test_out <span class="op">=</span> stats.ttest_rel(hr_df.baseline, hr_df.after5)</span>
-<span id="cb9-4"><a href="#cb9-4"></a></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="bu">print</span>(<span class="ss">f"The $p$-value for the test is </span><span class="sc">{</span>p_test_out<span class="sc">.</span>pvalue<span class="sc">:.2g}</span><span class="ss">."</span>)</span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="ss">The difference in means is </span><span class="sc">{</span>hr_df<span class="sc">.</span>baseline<span class="sc">.</span>mean() <span class="op">-</span> hr_df<span class="sc">.</span>after5<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">.</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="ss">       """</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a href="#cb9-2"></a>p_test_out <span class="op">=</span> stats.ttest_rel(hr_df.baseline, hr_df.after5)</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="ss">  The $p$-value for the test is </span><span class="sc">{</span>p_test_out<span class="sc">.</span>pvalue<span class="sc">:.2g}</span><span class="ss">. </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="ss">  The difference in means is </span><span class="sc">{</span>hr_df<span class="sc">.</span>baseline<span class="sc">.</span>mean() <span class="op">-</span> hr_df<span class="sc">.</span>after5<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">. </span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="ss">  """</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The $p$-value for the test is 2.2e-10.
-
-The difference in means is -15.229.
-       </code></pre>
+<pre><code>
+  The $p$-value for the test is 2.2e-10. 
+  The difference in means is -15.229. 
+  </code></pre>
 </div>
 </div>
-<p>While we do not include them here, it is imperative to also make the checks for Normality. If you were to make them, you would realise that the sample size is rather small. Even so, it is difficult to make the case for Normality here.</p>
+<p>While we do not include them here, it is imperative to also make the checks for Normality. If you were to make them, you would realise that the sample size is rather small. It is difficult to make the case for Normality here.</p>
 <p>Here is a plot that is particularly useful in paired sample studies:</p>
-<div id="3787edbd" class="cell" data-execution_count="9">
+<div id="fe384978" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>ax1 <span class="op">=</span> hr_df.plot(x<span class="op">=</span><span class="st">'baseline'</span>, y<span class="op">=</span><span class="st">'after5'</span>,kind<span class="op">=</span><span class="st">'scatter'</span>, marker<span class="op">=</span><span class="st">'o'</span>, </span>
 <span id="cb11-2"><a href="#cb11-2"></a>                 edgecolor<span class="op">=</span><span class="st">'blue'</span>, color<span class="op">=</span><span class="st">'none'</span>)</span>
 <span id="cb11-3"><a href="#cb11-3"></a>group_means <span class="op">=</span> hr_df.loc[:, [<span class="st">'baseline'</span>, <span class="st">'after5'</span>]].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
@@ -730,11 +742,14 @@ The difference in means is -15.229.
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-10-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="606" height="449"></p>
+<p><img src="02-inference_files/figure-html/cell-10-output-1.png" width="606" height="449" class="figure-img"></p>
+<figcaption>Agreement plot</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p><br></p>
+<p>In an agreement plot, we check to see if the scatter of points is close to the diagonal. If it is, we have evidence of little difference between the means. The largest circle in the plot corresponds to the mean readings, before and after the treadmill run.</p>
 </div>
 </section>
 </section>
@@ -743,24 +758,24 @@ The difference in means is -15.229.
 <p>In this section, we introduce the <em>one-way analysis of variance</em> (ANOVA), which generalises the <span class="math inline">\(t\)</span>-test methodology to more than 2 groups. Hypothesis tests in the ANOVA framework require the assumption of Normality.</p>
 <p>While the <span class="math inline">\(F\)</span>-test in ANOVA provides a determination of whether or not the group means are different, in practice, we would always want to follow up with specific comparisons between groups as well.</p>
 <div id="exm-antibiotics-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.6 (Example: Heifers)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.6 (Heifers dataset)</strong></span> </p>
 <p>The following example was taken from <a href="https://biostatistics.dk/isdals/">Introduction to Statistical Data Analysis for Life Sciences</a>.</p>
 <p>An experiment with dung from heifers was carried out in order to explore the influence of antibiotics on the decomposition of dung organic material. As part of the experiment, 36 heifers were randomly assigned into six groups. Note that a heifer is a young, female cow that has not had her first calf yet.</p>
 <p>Antibiotics of different types were added to the feed for heifers in five of the groups. The remaining group served as a control group. For each heifer, a bag of dung was dug into the soil, and after 8 weeks the amount of organic material was measured for each bag.</p>
 <p>Here is a boxplot of the data from each group, along with summary statistics in a table below.</p>
-<div id="b8b3017f" class="cell" data-execution_count="10">
+<div id="f92a3a4c" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>heifers <span class="op">=</span> pd.read_csv(<span class="st">'data/antibio.csv'</span>)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>sns.boxplot(heifers, x<span class="op">=</span><span class="st">'type'</span>, y<span class="op">=</span><span class="st">'org'</span>,)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-11-output-1.png" width="589" height="429" class="figure-img"></p>
+<p><img src="02-inference_files/figure-html/cell-11-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="589" height="429"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Compared to the control group, it does appear that the median organic weight of the dung from the other heifer groups is higher. The following table displays the mean, standard deviation, and count from each group:</p>
-<div id="85b2a0f3" class="cell" data-execution_count="11">
+<div id="a3600ab8" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>heifers.groupby(<span class="st">'type'</span>).describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <div>
@@ -953,9 +968,9 @@ Y_{ij} - \overline{Y_i}
 <li>The variance within each group is the same. In ANOVA, the <span class="math inline">\(MS_W\)</span> is a pooled estimate (across the groups) that is used; in order for this to be valid, the variance within each group should be identical. As in the 2-sample situation, we shall avoid separate hypotheses tests and proceed with the rule-of-thumb that if the ratio of the largest to smallest standard deviation is less than 2, we can proceed with the analysis.</li>
 </ol>
 <div id="exm-antibiotics-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.7 (Example: Heifers (Cont’d))</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.7 (Heifers ANOVA F-test)</strong></span> </p>
 <p>Let us now apply the F-test to the heifers dataset.</p>
-<div id="976aba70" class="cell" data-execution_count="12">
+<div id="ce628bb2" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>heifer_lm <span class="op">=</span> ols(<span class="st">'org ~ type'</span>, data<span class="op">=</span>heifers).fit()</span>
 <span id="cb14-2"><a href="#cb14-2"></a>anova_tab <span class="op">=</span> sm.stats.anova_lm(heifer_lm, <span class="bu">type</span><span class="op">=</span><span class="dv">3</span>,)</span>
 <span id="cb14-3"><a href="#cb14-3"></a>anova_tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -999,7 +1014,7 @@ Y_{ij} - \overline{Y_i}
 </div>
 <p>At the 5% significance level, we reject the null hypothesis to conclude that the group means are significantly different from one another. This answers the first question we set out to.</p>
 <p>To extract the estimated parameters, we can use the following code:</p>
-<div id="8d4ab6a7" class="cell" data-execution_count="13">
+<div id="b4c23e32" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>heifer_lm.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
@@ -1025,13 +1040,13 @@ Y_{ij} - \overline{Y_i}
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Tue, 30 Sep 2025</td>
+<td>Wed, 01 Oct 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>8.95e-05</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>23:30:15</td>
+<td>15:06:31</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>26.655</td>
 </tr>
@@ -1169,16 +1184,16 @@ Y_{ij} - \overline{Y_i}
 2.895 + 0 = 2.895
 \]</span></p>
 <p>To check the assumptions, we can use the following code:</p>
-<div id="167187fa" class="cell" data-execution_count="14">
+<div id="a9f5d170" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>f, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
 <span id="cb16-2"><a href="#cb16-2"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">121</span>)</span>
 <span id="cb16-3"><a href="#cb16-3"></a>heifer_lm.resid.hist()<span class="op">;</span></span>
 <span id="cb16-4"><a href="#cb16-4"></a>tmp <span class="op">=</span> plt.subplot(<span class="dv">122</span>)</span>
 <span id="cb16-5"><a href="#cb16-5"></a>sm.qqplot(heifer_lm.resid, line<span class="op">=</span><span class="st">"q"</span>, ax<span class="op">=</span>tmp)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-15-output-1.png" width="781" height="356" class="figure-img"></p>
+<p><img src="02-inference_files/figure-html/cell-15-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="781" height="356"></p>
 </figure>
 </div>
 </div>
@@ -1211,14 +1226,18 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you notice from the summary statistics output for each group, the rule-of-thumb regarding standard deviations has not been satisfied. The ratio of largest to smallest standard deviations is slightly more than 2. Hence <em>we should not continue with ANOVA</em>; the pooled estimate of the variance may not be valid.</p>
-<p>However, we shall proceed with this dataset just to demonstrate the next few techniques, instead of introducing a new dataset.</p>
+<p>
+If you notice from the summary statistics output for each group, the rule-of-thumb regarding standard deviations has not been satisfied. The ratio of largest to smallest standard deviations is slightly more than 2. Hence <em>we should not continue with ANOVA</em>; the pooled estimate of the variance may not be valid.
+</p>
+<p>
+However, we shall proceed with this dataset just to demonstrate the next few techniques, instead of introducing a new dataset.
+</p>
 </div>
 </div>
 <div id="exm-antibiotics-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.8 (Example: Enrofloxacin vs.&nbsp;Control)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.8 (Enrofloxacin vs.&nbsp;Control)</strong></span> </p>
 <p>Let us attempt to answer question (2), that we had set out earlier.</p>
-<div id="5ab6adb0" class="cell" data-execution_count="15">
+<div id="9d1cfff3" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>est1  <span class="op">=</span> heifer_lm.params.iloc[<span class="dv">2</span>] <span class="op">-</span> heifer_lm.params.iloc[<span class="dv">1</span>]</span>
 <span id="cb17-2"><a href="#cb17-2"></a>MSW <span class="op">=</span> heifer_lm.mse_resid</span>
 <span id="cb17-3"><a href="#cb17-3"></a>df <span class="op">=</span> heifer_lm.df_resid</span>
@@ -1257,9 +1276,9 @@ t_{n-k, \alpha/2}  \times
 \]</span></li>
 </ol>
 <div id="exm-antibiotics-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.9 (Example: Enrofloxacin vs.&nbsp;Control)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.9 (Heifers: Comparing collections of groups)</strong></span> </p>
 <p>As we mentioned earliers, let sub-group 1 consist of Ivermectin and Fenbendazole. Here is how we can compute a confidence interval for the difference between this sub-group, and Enrofloxacin.</p>
-<div id="da629a36" class="cell" data-execution_count="16">
+<div id="0313a347" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>c1 <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>])</span>
 <span id="cb19-2"><a href="#cb19-2"></a>n_vals <span class="op">=</span> np.array([<span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">6</span>,])</span>
 <span id="cb19-3"><a href="#cb19-3"></a>L <span class="op">=</span> np.<span class="bu">sum</span>(c1 <span class="op">*</span> heifer_lm.params.iloc[<span class="dv">2</span>:<span class="dv">5</span>])</span>
@@ -1290,19 +1309,18 @@ t_{n-k, \alpha/2}  \times
 <h4 class="anchored" data-anchor-id="tukeyhsd">TukeyHSD</h4>
 <p>This procedure is known as Tukey’s Honestly Significant Difference. It is designed to construct confidence intervals for <strong>all</strong> pairwise comparisons. For the same <span class="math inline">\(\alpha\)</span>-level, Tukey’s HSD method provides shorter confidence intervals than a Bonferroni correction for all pairwise comparisons.</p>
 <div id="exm-antibiotics-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.10 (Example: Multiple Comparisons)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.10 (Multiple comparisons)</strong></span> </p>
 <p>Let us apply Tukey’s procedure to the heifers dataset.</p>
-<div id="bca429f1" class="cell" data-execution_count="17">
+<div id="e2e2f0a1" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>cp <span class="op">=</span> mc.MultiComparison(heifers.org, heifers.<span class="bu">type</span>)</span>
 <span id="cb21-2"><a href="#cb21-2"></a>tk <span class="op">=</span> cp.tukeyhsd()</span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#print(tk)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="1f51c661" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>tk.plot_simultaneous()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#print(tk)</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a></span>
+<span id="cb21-5"><a href="#cb21-5"></a>tk.plot_simultaneous()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-19-output-1.png" width="838" height="505" class="figure-img"></p>
+<p><img src="02-inference_files/figure-html/cell-18-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="838" height="505"></p>
 </figure>
 </div>
 </div>
@@ -1320,25 +1338,25 @@ t_{n-k, \alpha/2}  \times
 </ul>
 <p>In this topic, we shall discuss techniques for identifying the presence, and for measuring the strength, of the association between two categorical variables.</p>
 <div id="exm-chest-pain-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.11 (Example: Chest Pain and Gender)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.11 (Chest pain and gender)</strong></span> </p>
 <p>Suppose that 1073 NUH patients who were at high risk for cardiovascular disease (CVD) were randomly sampled. They were then queried on two things:</p>
 <ol type="1">
 <li>Had they experienced the onset of severe chest pain in the preceding 6 months? (yes/no)</li>
 <li>What was their gender? (male/female)</li>
 </ol>
 <p>The data would probably be summarised and presented in this format, which is known as a <em>contingency table</em>.</p>
-<div id="fecf3a3c" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>chest_array <span class="op">=</span> np.array([[<span class="dv">46</span>, <span class="dv">474</span>], [<span class="dv">37</span>, <span class="dv">516</span>]])</span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#print(chest_array)</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a></span>
-<span id="cb23-4"><a href="#cb23-4"></a>sns.heatmap(chest_array, annot<span class="op">=</span><span class="va">True</span>, square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">''</span>, </span>
-<span id="cb23-5"><a href="#cb23-5"></a>            xticklabels<span class="op">=</span>[<span class="st">'pain'</span>, <span class="st">'no pain'</span>],</span>
-<span id="cb23-6"><a href="#cb23-6"></a>            yticklabels<span class="op">=</span>[<span class="st">'Male'</span>, <span class="st">'Female'</span>], </span>
-<span id="cb23-7"><a href="#cb23-7"></a>            cmap<span class="op">=</span><span class="st">'Reds'</span>, cbar<span class="op">=</span><span class="va">False</span>, )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="51da502b" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>chest_array <span class="op">=</span> np.array([[<span class="dv">46</span>, <span class="dv">474</span>], [<span class="dv">37</span>, <span class="dv">516</span>]])</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#print(chest_array)</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a>sns.heatmap(chest_array, annot<span class="op">=</span><span class="va">True</span>, square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">''</span>, </span>
+<span id="cb22-5"><a href="#cb22-5"></a>            xticklabels<span class="op">=</span>[<span class="st">'pain'</span>, <span class="st">'no pain'</span>],</span>
+<span id="cb22-6"><a href="#cb22-6"></a>            yticklabels<span class="op">=</span>[<span class="st">'Male'</span>, <span class="st">'Female'</span>], </span>
+<span id="cb22-7"><a href="#cb22-7"></a>            cmap<span class="op">=</span><span class="st">'Reds'</span>, cbar<span class="op">=</span><span class="va">False</span>, )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-20-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="411" height="411"></p>
+<p><img src="02-inference_files/figure-html/cell-19-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="411" height="411"></p>
 </figure>
 </div>
 </div>
@@ -1369,17 +1387,20 @@ H_1 &amp;:&amp; \text{The two variables are not indepdendent.}
 \end{eqnarray*}\]</span></p>
 <p>Under the null hypothesis, we can estimate the joint distribution from the observed marginal counts. Based on this estimated joint distribution, we then compute <em>expected</em> counts (which may not be integers) for each cell. The test statistic essentially compares the deviation of <em>observed</em> cell counts from the expected cell counts.</p>
 <div id="exm-chest-pain-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.12 (Example: Chest Pain and Gender Expected Counts)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.12 (Chest pain and gender expected counts)</strong></span> </p>
 <p>Continuing from the chest pain example, we can compute the estimated marginals using row and column proportions</p>
-<div id="f7d8e6c1" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>col_prop,row_prop <span class="op">=</span> sm.stats.Table(chest_array).marginal_probabilities</span>
-<span id="cb24-2"><a href="#cb24-2"></a></span>
-<span id="cb24-3"><a href="#cb24-3"></a><span class="bu">print</span>(<span class="ss">f"The proportion of males in the sample was </span><span class="sc">{</span>col_prop[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="bu">print</span>(<span class="st">"The proportion of all patients who experienced chest pain "</span> <span class="op">+</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a>      <span class="ss">f"was </span><span class="sc">{</span>row_prop[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="afb12918" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>col_prop,row_prop <span class="op">=</span> sm.stats.Table(chest_array).marginal_probabilities</span>
+<span id="cb23-2"><a href="#cb23-2"></a></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="ss">  The proportion of males in the sample was </span><span class="sc">{</span>col_prop[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">.</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="ss">  The proportion of all patients who experienced chest pain was </span><span class="sc">{</span>row_prop[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">.</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="ss">  """</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The proportion of males in the sample was 0.485.
-The proportion of all patients who experienced chest pain was 0.077.</code></pre>
+<pre><code>
+  The proportion of males in the sample was 0.485.
+  The proportion of all patients who experienced chest pain was 0.077.
+  </code></pre>
 </div>
 </div>
 <p>If we let <span class="math inline">\(X\)</span> represent gender and <span class="math inline">\(Y\)</span> represent chest pain, then we can estimate that:</p>
@@ -1403,23 +1424,25 @@ The proportion of all patients who experienced chest pain was 0.077.</code></pre
 \]</span></p>
 <p>The sum is taken over every cell in the table. Hence in a <span class="math inline">\(2\times2\)</span> table, as we have here, there would be 4 terms in the summation.</p>
 <div id="exm-chest-pain-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.13 (Example: Chest Pain and Gender <span class="math inline">\(\chi^2\)</span> Test)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.13 (Chest pain and gender <span class="math inline">\(\chi^2\)</span> test)</strong></span> </p>
 <p>Let us see how we can apply and interpret the <span class="math inline">\(\chi^2\)</span>-test for the data in the chest pain example.</p>
-<div id="0066f99a" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>chisq_output <span class="op">=</span> stats.chi2_contingency(chest_array, correction<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb26-2"><a href="#cb26-2"></a></span>
-<span id="cb26-3"><a href="#cb26-3"></a><span class="bu">print</span>(<span class="ss">f"The p-value is </span><span class="sc">{</span>chisq_output<span class="sc">.</span>pvalue<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
-<span id="cb26-4"><a href="#cb26-4"></a><span class="bu">print</span>(<span class="ss">f"The test-statistic value is </span><span class="sc">{</span>chisq_output<span class="sc">.</span>statistic<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3fd1f907" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>chisq_output <span class="op">=</span> stats.chi2_contingency(chest_array, correction<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb25-2"><a href="#cb25-2"></a></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="ss">  The p-value is </span><span class="sc">{</span>chisq_output<span class="sc">.</span>pvalue<span class="sc">:.3f}</span><span class="ss">.</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="ss">  The test-statistic value is </span><span class="sc">{</span>chisq_output<span class="sc">.</span>statistic<span class="sc">:.3f}</span><span class="ss">."""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The p-value is 0.187.
-The test-statistic value is 1.744.</code></pre>
+<pre><code>
+  The p-value is 0.187.
+  The test-statistic value is 1.744.</code></pre>
 </div>
 </div>
 <p>Since the <span class="math inline">\(p\)</span>-value is 0.1817, we would not reject the null hypothesis at significance level 5%. We do not have sufficient evidence to conclude that the variables are not independent.</p>
 <p>To extract the expected cell counts, we can use the following code:</p>
-<div id="fb68a86d" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>chisq_output.expected_freq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div id="030a5bde" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>chisq_output.expected_freq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>array([[ 40.22367195, 479.77632805],
        [ 42.77632805, 510.22367195]])</code></pre>
 </div>
@@ -1443,11 +1466,16 @@ Note
 <p>However, I advocate using <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html">Fisher’s exact test</a>, which is also a test of independence, but measures deviations under slightly different assumptions. The test uses the exact distribution of the test statistic (not an approximation) so it will apply to small datasets as well.</p>
 </div>
 </div>
-<div id="9ec89901" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>stats.fisher_exact(chest_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div id="exm-chest-pain-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 2.14 (Chest pain and gender Fisher Exact test)</strong></span> </p>
+<p>Here is how we can apply Fisher’s exact test to the same dataset.</p>
+<div id="70251e55" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>stats.fisher_exact(chest_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>SignificanceResult(statistic=1.3534040369483407, pvalue=0.2088776906675503)</code></pre>
 </div>
+</div>
+<p>As we can see from the p-value, the result is similar to the <span class="math inline">\(\chi^2\)</span>-test.</p>
 </div>
 </section>
 <section id="measures-of-association" class="level3">
@@ -1495,13 +1523,13 @@ Note
 \]</span></li>
 </ul>
 <div id="exm-chest-pain-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.14 (Example: Chest Pain and Gender Odds Ratio)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.15 (Chest pain and gender odds ratio)</strong></span> </p>
 <p>Let us compute the confidence interval for the odds ratio in the chest pain and gender example from earlier.</p>
-<div id="7af6196b" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>chest_tab2 <span class="op">=</span> sm.stats.Table2x2(chest_array)</span>
-<span id="cb32-2"><a href="#cb32-2"></a></span>
-<span id="cb32-3"><a href="#cb32-3"></a>chest_tab2.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div id="c1d2445c" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>chest_tab2 <span class="op">=</span> sm.stats.Table2x2(chest_array)</span>
+<span id="cb31-2"><a href="#cb31-2"></a></span>
+<span id="cb31-3"><a href="#cb31-3"></a>chest_tab2.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
 <table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <tbody>
 <tr class="odd">
@@ -1578,23 +1606,23 @@ Note
 </ol>
 <p>For both measures, values close to 0 indicate a very weak trend, while values close to 1 (or -1) indicate a strong positive (negative) association.</p>
 <div id="exm-job-income-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 2.15 (Example: Job Satisfaction by Income)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 2.16 (Job satisfaction by income)</strong></span> </p>
 <p>Consider the following table, obtained from <span class="citation" data-cites="agresti2012categorical">Agresti (<a href="references.html#ref-agresti2012categorical" role="doc-biblioref">2012</a>)</span>. The original data come from a nationwide survey conducted in the US in 1996.</p>
-<div id="ec76ba53" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>us_svy_tab <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">6</span>], </span>
-<span id="cb33-2"><a href="#cb33-2"></a>                      [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">7</span>],</span>
-<span id="cb33-3"><a href="#cb33-3"></a>                      [<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">14</span>, <span class="dv">12</span>],</span>
-<span id="cb33-4"><a href="#cb33-4"></a>                      [<span class="dv">0</span>, <span class="dv">1</span>,  <span class="dv">9</span>, <span class="dv">11</span>]])</span>
-<span id="cb33-5"><a href="#cb33-5"></a>col_names <span class="op">=</span> [<span class="st">'V. Diss'</span>, <span class="st">'L. Diss'</span>, <span class="st">'M. Sat'</span>, <span class="st">'V. Sat'</span>]</span>
-<span id="cb33-6"><a href="#cb33-6"></a>row_names <span class="op">=</span> [<span class="st">'&lt;15K'</span>, <span class="st">'15-25K'</span>, <span class="st">'25-40K'</span>, <span class="st">'&gt;40K'</span>]</span>
-<span id="cb33-7"><a href="#cb33-7"></a>sns.heatmap(us_svy_tab, annot<span class="op">=</span><span class="va">True</span>, square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">''</span>, </span>
-<span id="cb33-8"><a href="#cb33-8"></a>            xticklabels<span class="op">=</span>col_names,</span>
-<span id="cb33-9"><a href="#cb33-9"></a>            yticklabels<span class="op">=</span>row_names, </span>
-<span id="cb33-10"><a href="#cb33-10"></a>            cmap<span class="op">=</span><span class="st">'Reds'</span>, cbar<span class="op">=</span><span class="va">False</span>, )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="38b5d1cf" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>us_svy_tab <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">6</span>], </span>
+<span id="cb32-2"><a href="#cb32-2"></a>                      [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">7</span>],</span>
+<span id="cb32-3"><a href="#cb32-3"></a>                      [<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">14</span>, <span class="dv">12</span>],</span>
+<span id="cb32-4"><a href="#cb32-4"></a>                      [<span class="dv">0</span>, <span class="dv">1</span>,  <span class="dv">9</span>, <span class="dv">11</span>]])</span>
+<span id="cb32-5"><a href="#cb32-5"></a>col_names <span class="op">=</span> [<span class="st">'V. Diss'</span>, <span class="st">'L. Diss'</span>, <span class="st">'M. Sat'</span>, <span class="st">'V. Sat'</span>]</span>
+<span id="cb32-6"><a href="#cb32-6"></a>row_names <span class="op">=</span> [<span class="st">'&lt;15K'</span>, <span class="st">'15-25K'</span>, <span class="st">'25-40K'</span>, <span class="st">'&gt;40K'</span>]</span>
+<span id="cb32-7"><a href="#cb32-7"></a>sns.heatmap(us_svy_tab, annot<span class="op">=</span><span class="va">True</span>, square<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">''</span>, </span>
+<span id="cb32-8"><a href="#cb32-8"></a>            xticklabels<span class="op">=</span>col_names,</span>
+<span id="cb32-9"><a href="#cb32-9"></a>            yticklabels<span class="op">=</span>row_names, </span>
+<span id="cb32-10"><a href="#cb32-10"></a>            cmap<span class="op">=</span><span class="st">'Reds'</span>, cbar<span class="op">=</span><span class="va">False</span>, )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-inference_files/figure-html/cell-26-output-1.png" width="411" height="411" class="figure-img"></p>
+<p><img src="02-inference_files/figure-html/cell-25-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="411" height="411"></p>
 </figure>
 </div>
 </div>
@@ -1604,18 +1632,18 @@ Note
 <p>If individual A has higher income than individual B, is individual A more likely to be satisfied in his/her job?</p>
 </blockquote>
 <p><span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\tau_b\)</span> are measures that quantify this association. For the function in <code>scipy.stats</code> that computes this association, we need the data in “long format”. Hence we unroll it manually before summoning the method.</p>
-<div id="26f5b6a9" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>dim1 <span class="op">=</span> us_svy_tab.shape</span>
-<span id="cb34-2"><a href="#cb34-2"></a>x <span class="op">=</span> []<span class="op">;</span> y<span class="op">=</span>[]</span>
-<span id="cb34-3"><a href="#cb34-3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, dim1[<span class="dv">0</span>]):</span>
-<span id="cb34-4"><a href="#cb34-4"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, dim1[<span class="dv">1</span>]):</span>
-<span id="cb34-5"><a href="#cb34-5"></a>        <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, us_svy_tab[i,j]):</span>
-<span id="cb34-6"><a href="#cb34-6"></a>            x.append(i)</span>
-<span id="cb34-7"><a href="#cb34-7"></a>            y.append(j)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="50f7fd4b" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>dim1 <span class="op">=</span> us_svy_tab.shape</span>
+<span id="cb33-2"><a href="#cb33-2"></a>x <span class="op">=</span> []<span class="op">;</span> y<span class="op">=</span>[]</span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, dim1[<span class="dv">0</span>]):</span>
+<span id="cb33-4"><a href="#cb33-4"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, dim1[<span class="dv">1</span>]):</span>
+<span id="cb33-5"><a href="#cb33-5"></a>        <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, us_svy_tab[i,j]):</span>
+<span id="cb33-6"><a href="#cb33-6"></a>            x.append(i)</span>
+<span id="cb33-7"><a href="#cb33-7"></a>            y.append(j)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="79af7de7" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>stats.kendalltau(x, y, variant<span class="op">=</span><span class="st">'b'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div id="44f5d0e4" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>stats.kendalltau(x, y, variant<span class="op">=</span><span class="st">'b'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>SignificanceResult(statistic=0.15235215134659688, pvalue=0.0860294855671433)</code></pre>
 </div>
 </div>
