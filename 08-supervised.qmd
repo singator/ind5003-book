@@ -3,7 +3,7 @@ title: Supervised Learning
 jupyter: python3
 ---
 
-## Introduction
+## Introduction {#sec-08-top}
 
 In supervised learning, our goal is to develop a model that can predict a
 quantity of interest from a set of features. In this process,
@@ -293,7 +293,7 @@ print(hf.head())
 :::
 
 
-### Decision Tree
+### Decision Tree {#sec-08-dec-tree}
 
 To begin our journey into supervised learning, we shall fit a decision tree to
 this dataset. A decision tree consists of a hierarchal set of rules, that when
@@ -517,7 +517,7 @@ returns a visible bump in the probability of death. `serum_creatinine` is
 associated with a similar increase, but at low levels. The final plot, at the
 lower right, darker reds indicate higher probability of death.
 
-### Random Forest
+### Random Forest {#sec-08-forest}
 
 A random forest model is an example of an ensemble model. It aims to fix the
 weakness of decision trees by introducing a little noise in the fitting

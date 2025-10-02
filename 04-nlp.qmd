@@ -254,7 +254,7 @@ pp.pprint(all_strings_tokenized[233])
 preprocessed_corpus = [[wn.lemmatize(w) for w in dd ] for dd in all_strings_tokenized]
 ```
 
-## Representation of Text
+## Representation of Text {#sec-04-numeric-rep-text}
 
 Tokenisation of the corpus is merely the first step in processing natural
 language. All mathematical algorithms work on numerical representations of the
@@ -477,7 +477,7 @@ print(word_vectors.doesnt_match("breakfast cereal dinner lunch".split()))
 #similarity = word_vectors.similarity('woman', 'man')
 ```
 
-## Visualisation with t-SNE
+## Visualisation with t-SNE {#sec-04-t-SNE}
 
 When compared with sparse embeddings, dense embeddings are compact. However, a
 more important difference is that dense vectors represent the semantic meaning
