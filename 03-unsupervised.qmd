@@ -574,7 +574,7 @@ be anomalies.
 
 ::: {#exm-taiwan-isol-1 style="background-color: #D5D1D164; padding: 20px"}
 
-### Example: Isolation Forest with Taiwan Dataset
+### Isolation forest with taiwan dataset
 \index{Taiwan Data!Isolation forest}
 
 Let us apply this technique to the Taiwan real estate dataset from the
