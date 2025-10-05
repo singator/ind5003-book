@@ -842,7 +842,7 @@ fig.show()
 
 :::
 
-### t-SNE
+### t-SNE {#sec-03-t-SNE}
 
 t-SNE is an fast, iterative algorithm for *visualising* high-dimensional data.
 

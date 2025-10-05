@@ -9,35 +9,42 @@ execute:
 
 In our world, Natural Language Processing (NLP) is used in several scenarios. For example, 
 
-  * phones and handheld computers support predictive text and handwriting recognition; 
-  * web search engines give access to information locked up in unstructured text; 
-  * machine translation allows us to understand texts written in languages that we do not know; 
-  * text analysis enables us to detect sentiment in tweets and blogs.
+* mobile phones and personal computers support predictive text.
+* web search engines give access to information locked up in unstructured text; 
+* machine translation allows us to understand texts written in languages that we do not know; 
+* text analysis enables us to detect sentiment in tweets and blogs.
 
-But as we begin to explore Natural Language, we realise that it is an extremely
-difficult subject. Here are some specific points to note:
+But as we begin to explore NLP, we realise that it is an extremely difficult
+subject. Here are some examples to note:
 
-1. Some words mean different things in different contexts, but us humans know which meaning is being used.
-   * He **served** the **dish**.
-3. In the following two sentences, the word "by" has different meanings:
-   * The lost children were found by the lake.
-   * The lost children were found by the search party.
-3. In the following cases, we (humans) can resolve what "they" is referring to,
-   but it is not easy to generate a simple rule that a computer can follow.
-   * The thieves stole the paintings. They were subsequently recovered.
-   * The thieves stole the paintings. They were subsequently arrested.
-4. How can we get a computer to understand the following tweet?:
-   * "Wow. Great job st@rbuck's. Best cup of coffee ever."
+1.  Some words mean different things in different contexts, but as humans, we
+    know which meaning is being used.
+    * He **served** the **dish**.
+3.  In the following two sentences, the word "by" has different meanings:
+    * The lost children were found by the lake.
+    * The lost children were found by the search party.
+3.  In the following cases, we (humans) can resolve what "they" is referring to,
+    but it is not easy to generate a simple rule that a computer can follow.
+    * The thieves stole the paintings. They were subsequently recovered.
+    * The thieves stole the paintings. They were subsequently arrested.
+4.  How can we get a computer to understand that the following tweet carries a 
+    negative sentiment?
+    * "Wow. Great job st@rbuck's. Best cup of coffee ever."
+    
+::: {.callout-note}
 
-  
+Can you catch all three jokes in the movie clip below? 🤣
+
+{{< video https://youtu.be/NfN_gcjGoJo  aspect-ratio="4x3" align="center">}}
+
+:::
+
 
 ```{python}
 import numpy as np
 import pandas as pd
 
 from itables import show
-from IPython.display import YouTubeVideo, display, HTML
-import ipywidgets as widgets
 import pprint
 
 import gensim
@@ -53,20 +60,10 @@ from transformers import pipeline
 
 import pyLDAvis
 import pyLDAvis.gensim_models as gensimvis
+
 import matplotlib.pyplot as plt
 import plotly.express as px
-```
-
-::: {.callout-note}
-
-Can you catch all three jokes in the movie clip below? 🤣
-
-:::
-
-```{python}
-#| fig-align: center
-video = YouTubeVideo("NfN_gcjGoJo", width=640, height=480)
-display(video)
+import seaborn as sns
 ```
 
 ## Definitions
@@ -109,18 +106,17 @@ Here are some of the use-cases that we shall discuss:
     or prioritisation of resources. This approach requires one to decide on the
     number of topics. It typically also requires some study of the topics in order
     to interpret and verify them.
-2. *Information Retrieval*: This is also an unsupervised approach. If the new
-    document can be considered a "query", then this can be used to retrieve and
-    prioritise documents that are relevant to the query.
-3. *Sentiment Analysis*: Using a lexicon of words and their tagged sentiments,
-    we can assess whether the sentiment in a document is mostly positive or
-    negative.
+2. *Information Retrieval*: This is also an unsupervised approach. Suppose we have 
+    a collection of documents. A new document, considered a "query", can be used to 
+    retrieve documents from the collection that are relevant to the query.
+3. *Sentiment Analysis*: This technique is used to assess whether the sentiment
+    in a document is mostly positive or negative.
 
 ## Text Pre-processing
 
 ::: {#exm-wine-reviews-1 style="background-color: #D5D1D164; padding: 20px"}
 
-### Example: Wine Reviews Dataset
+### Wine reviews dataset
 \index{Wine Reviews!Description}
 
 A dataset containing wine reviews is accessible from
@@ -132,16 +128,20 @@ rng = np.random.default_rng(5001)
 
 wine_reviews = pd.read_csv("data/winemag-data-130k-v2.csv", index_col=0)
 wine_reviews.drop_duplicates(inplace=True)
-
-pp = pprint.PrettyPrinter(indent=4, compact=True,)
-for x in rng.choice(wine_reviews.description, size=5):
-    pprint.pp(x)
 ```
 
-The "descriptions" column contains the review for a particular wine by a user,
+The `description` column contains the review for a particular wine by a user,
 whose name and twitter handle are provided. Also included is information such
-as the price, originating county, region of the wine, and so on. In our
-activity, we are going to apply NLP techniques to the wine reviews.
+as the price, originating county, region of the wine, and so on. In this chapter,
+we are going to apply NLP techniques to the wine reviews.
+
+Here is a sample of some of reviews in the dataset.
+
+```{python}
+pp = pprint.PrettyPrinter(indent=4, compact=True,)
+for x in rng.choice(wine_reviews.description, size=5):
+    pp.pprint(x)
+```
 
 :::
 
@@ -152,9 +152,8 @@ to analysing a document is to break it up into pieces. This process is known as
 **tokenizing**. When tokenizing a document, we can do it at several levels of
 resolution: at the sentence, line, word or even punctuation level.
 
-Tokenizing can easily done using the `.split()` within built-in python. But
-after that, we need to further pre-process the tokens.
-
+Tokenizing can easily done using the `.split()` method, which is built into
+python. But after that, we need to further pre-process the tokens.
 
 The `gensim` package includes a module for pre-processing text strings. Here is
 a list of some of the functions there:
@@ -177,7 +176,7 @@ application. At times, it is only done in order to speed up the training of a
 model. However, it is possible to change the entire meaning of a sentence by
 removing stop-words.
 
-For us, we are going to apply this list of filters to each review:
+For us, we are going to apply this list of filters to each wine review:
 
 1. `strip_punctuation()`,
 2. `strip_multiple_whitespaces()`,
@@ -200,26 +199,42 @@ However, it differs from stemming in that the final word must be a proper
 English language word. For this purpose, the algorithm has to be supplied with
 a lexicon or dictionary, along with the text to be lemmatized.
 
-Here is an example that demonstrates the differences.
+::: {#exm-stem-lemmatise style="background-color: #D5D1D164; padding: 20px"}
+
+### Stemming versus lemmatizing
+
+Here is an example that demonstrates the differences between stemming and 
+lemmatizing. Consider the following simple sentence.
 
 ```{python}
-porter = PorterStemmer()
-wn = WordNetLemmatizer()
-
 demo_sentence = 'Cats and ponies have a meeting'.split()
 demo_sentence
 ```
 
-```{python}
-#import nltk
-#nltk.download('wordnet')
+This is the outcome of stemming the words in this sentence:
 
+```{python}
+porter = PorterStemmer()
 [porter.stem(x) for x in demo_sentence]
 ```
 
+If you have not previously done so, you will need to download the Wordnet
+lemmatizer.
+
 ```{python}
+#| eval: false
+import nltk
+nltk.download('wordnet')
+```
+
+Here is the output of lemmatizing the words instead:
+
+```{python}
+wn = WordNetLemmatizer()
 [wn.lemmatize(x) for x in demo_sentence]
 ```
+
+:::
 
 Now let us go ahead and perform the pre-processing on the wine reviews.
 
@@ -228,27 +243,32 @@ CUSTOM_FILTER = [lambda x: x.lower(), strip_punctuation,
                  strip_multiple_whitespaces, strip_numeric, 
                  remove_stopwords, strip_short]
 #CUSTOM_FILTER[1]
+```
+
+The object `CUSTOM_FILTER` is a collection of functions that will be applied 
+to each wine review.
+
+```{python}
 all_review_strings = wine_reviews.description.values
-#all_review_strings[:3]
 all_strings_tokenized = [preprocess_string(x, CUSTOM_FILTER) for x in all_review_strings]
 ```
 
-Here is an example of the pre-processed review:
-
-```{python}
-pp.pprint(all_strings_tokenized[1])
-```
-
 At this point in time, what we have is a list of lists. Each sub-list contains
-the tokens for a particular wine_review. For instance, the original review for
-row 234 was:
+the tokens for a particular wine_review. For instance, the original review in 
+row 234 is:
 
 ```{python}
 pp.pprint(wine_reviews.description.values[233])
+```
+
+The corresponding processed output is:
+
+```{python}
 pp.pprint(all_strings_tokenized[233])
 ```
 
-`gensim` does not have a lemmatizer, so we use the nltk lemmatizer on each token.
+`gensim` does not have a lemmatizer, so we use the Wordnet lemmatizer on each
+token.
 
 ```{python}
 preprocessed_corpus = [[wn.lemmatize(w) for w in dd ] for dd in all_strings_tokenized]
@@ -258,18 +278,24 @@ preprocessed_corpus = [[wn.lemmatize(w) for w in dd ] for dd in all_strings_toke
 
 Tokenisation of the corpus is merely the first step in processing natural
 language. All mathematical algorithms work on numerical representations of the
-data. Hence the next step is to convert the text into numeric representations.
-In natural language, there are two common ways of representing text:
+data, so the next step is to convert the text into numeric representations. In
+natural language, there are two common ways of representing text:
 
-1. Sparse vectors, using tf-idf or PPMI, or
-2. Dense embeddings, which could result from word2vec, GLoVe, or from neural models.
+1.  Sparse vectors, using tf-idf or PPMI, or
+2.  Dense embeddings, which could result from word2vec, GLoVe, or from neural
+    language models.
 
 ### Sparse embeddings with Tf-idf
 
 In this section, we demonstrate how we can use Tf-idf (Term frequency-Inverse
-document frequency) to create vector representations of documents. Consider the
-following set of three simple text documents. Each document is a single
-sentence.
+document frequency) to create vector representations of documents. 
+
+::: {#exm-tfidf-01 style="background-color: #D5D1D164; padding: 20px"}
+
+### Term frequencies
+
+Consider the following set of three simple text documents. Each document is a
+single sentence.
 
 ```{python}
 raw_docs =[
@@ -294,12 +320,16 @@ print(pd.DataFrame(X1.toarray(),
 ```
 
 The counts indicate the number of times each feature (or words) were present in
-the document. As you might observe, longer documents tend to contain larger
-counts (see document 3, which has many more 1's and even a couple of 2's. Thus,
-instead of dealing with counts, we shall convert each row into a vector of
-length 1. Words that appear in all documents will be weighted down by this
-transformation, since these do not help to distinguish the document from
-others. This transformation is known as the TF-IDF transformation.
+the document. 
+
+:::
+
+As you might observe, longer documents tend to contain larger counts (see
+document 3, which has many more 1's and even a couple of 2's. Thus, instead of
+dealing with counts, we shall convert each row into a vector of length 1. Words
+that appear in all documents will be weighted down by this transformation, since
+these do not help to distinguish the document from others. This transformation
+is known as the TF-IDF transformation.
 
 Instead of the raw counts, we define:
 
@@ -314,6 +344,10 @@ w'_{i,j} = tf_{i,j} \times \left[ \log \left( \frac{1 + N}{1 + df_{i}} \right) +
 
 Then the final $w_{i,j}$ for term $i$ in document $j$ is the normalised version
 of $w'_{i,j}$ across the terms that document. 
+
+::: {#exm-tfidf-02 style="background-color: #D5D1D164; padding: 20px"}
+
+### Tf-idf computation
 
 Consider the word "sentences", in document id 02 (the third document).
 
@@ -335,9 +369,7 @@ print(pd.DataFrame(X2.A,
   columns=list(vectorizer2.get_feature_names_out())).iloc[:, :10].round(3))
 ```
 
-The final step normalises the weights across each document, so now the weight
-for sentences in document 00 is higher than the weight in document 02 since
-document 00 is shorter.
+The final step normalises the weights within each document. 
 
 ```{python}
 vectorizer3 = TfidfVectorizer(stop_words='english')
@@ -346,6 +378,8 @@ X3 = vectorizer3.fit_transform(raw_docs)
 print(pd.DataFrame(X3.A, 
   columns=list(vectorizer3.get_feature_names_out())).iloc[:, :10].round(3))
 ```
+
+:::
 
 The above matrix is known as a **document-term matrix**, since the columns are
 defined by terms, and each row is a document. At this point, we can use each
@@ -460,48 +494,67 @@ solve, while on the right, we have visualisations of GLoVe.
 ![GloVE](figs/glove-001.jpg){width=70%}
 :::
 
-Here's how we can use `gensim` code to conduct the analogy task.
+::: {#exm-glove-01 style="background-color: #D5D1D164; padding: 20px"}
+
+
+### Glove dense embeddings
+
+Here's how we can use `gensim` code to conduct the analogy task. First, we load
+400,000 GLoVe vectors, each representing a different word. Each vector is of
+length 100.
 
 ```{python}
-# load pre-trained word-vectors from gensim-data
-word_vectors = api.load("glove-wiki-gigaword-100")  
+word_vectors = api.load("glove-wiki-gigaword-100")
+```
 
+The `word_vectors` object is similar to a dictionary. For instance,
+`word_vectors['woman']` will return the vector corresponding to "woman".
+
+The following code will run the analogy task. It returns the answer to:
+
+> Man is to king as woman is to ______ .
+
+```{python}
 # Check the "most similar words", using the default "cosine similarity" measure.
 result = word_vectors.most_similar(positive=['woman', 'king'], negative=['man'])
 most_similar_key, similarity = result[0]  # look at the first match
 print(f"{most_similar_key}: {similarity:.4f}")
 ```
 
+The object also contains methods to identify which word in a group is most 
+dissimilar to the rest. The following code identifies "cereal" as the odd word out.
+
 ```{python}
 print(word_vectors.doesnt_match("breakfast cereal dinner lunch".split()))
-#similarity = word_vectors.similarity('woman', 'man')
 ```
+
+:::
 
 ## Visualisation with t-SNE {#sec-04-t-SNE}
 
 When compared with sparse embeddings, dense embeddings are compact. However, a
-more important difference is that dense vectors represent the semantic meaning
-of the words. This means that vectors that are close to each other are similar
+more important difference is that dense vectors contain the semantic meaning
+of words. This means that vectors that are close to each other are similar
 in meaning. Let us use t-SNE to visualise the GloVe embeddings.
 
-There are a total of 400,000 vectors in the embedding. Even with t-SNE that
-will be difficult to make sense of. Hence for now, we sample a set of 100 to
-visualise them. 
+There are a total of 400,000 vectors in the embedding. Even with t-SNE that will
+be difficult to make sense of. Hence for now, we simply visualise the first 100
+most common words.
+
+The following code extracts the first 100 word vectors and applies the t-SNE 
+transformation to them. Please refer to @sec-03-t-SNE for more details.
 
 ```{python}
-#| scrolled: true
-rng1 = np.random.default_rng(1111)
-
 nn = 1000
-id = rng1.choice(len(word_vectors), size=(nn,), replace=False)
 
 X = np.zeros((nn, 100))
 for ii in np.arange(nn):
-    #X[ii,] = glove_vectors.get_vector(id[ii])
     X[ii,] = word_vectors.get_vector(ii)
 labels = pd.Series([word_vectors.index_to_key[x] for x in np.arange(nn)])
 
-tsne1 = manifold.TSNE(n_components=2, init="random", perplexity=10, metric='cosine', verbose=0, max_iter=5000, random_state=222)
+tsne1 = manifold.TSNE(n_components=2, init="random", perplexity=10, 
+                      metric='cosine', verbose=0, max_iter=5000, 
+                      random_state=222)
 X_transformed2 = tsne1.fit_transform(X)
 ```
 
@@ -509,8 +562,6 @@ You should get the same plot as us since we have set the same seed at the start
 of the cell, and when we initialise the transformer. Explore the resulting plot
 - notice how months of the year appear close together at the bottom left.
 Around the left as well, the calendar years appear as a group.
-
-(The figure below only appears in the html version of the text)
 
 ::: {.content-visible when-format="html"}
 
@@ -523,6 +574,18 @@ fig.update_traces(textposition='top center')
 fig.show()
 ```
 
+:::
+
+::: {.content-visible when-format="pdf"}
+
+Please refer to the online version of the text for an interactive plot, with 
+text labels.
+
+```{python}
+#| fig-align: center
+plt.figure(figsize=(8, 4))
+sns.scatterplot(data=df2, x="x", y="y")
+```
 :::
 
 ::: {.callout-note}
@@ -583,7 +646,7 @@ could be parallelised!
 
 ![@jm3](figs/j_m_fig_10_18_training_transformer_lm.png){width=70%}
 
-Here are some examples where transformers excel:
+Here are some more examples where transformers excel:
 
 > The keys to the cabinet *are* on the table.
 > 
@@ -636,7 +699,7 @@ classifier(["I love this course!", "I absolutely detest this course."])
 
 ::: {#exm-wine-reviews-3 style="background-color: #D5D1D164; padding: 20px"}
 
-### Example: Wine Reviews Dataset
+### Wine reviews sentiments
 \index{Wine Reviews!Sentiment Analysis}
 
 The number of reviews we have is close to 120,000. Hence, computing the
@@ -647,24 +710,13 @@ variety of wine.
 The following snippet samples 20 reviews from each wine type.
 
 ```{python}
-tmp_df = pd.DataFrame(columns= wine_reviews.columns)
-# w = widgets.IntProgress(
-#     value=0,
-#     min=0,
-#     max=len(wine_reviews.variety.unique()),
-#     description='Progress: ',
-#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''
-#     style={'bar_color': 'lightblue'},
-#     orientation='horizontal'
-# )
-# display(w)
+tmp_df = wine_reviews.head(0).copy()
 
 for x,vv in wine_reviews.groupby(wine_reviews.variety):
     grp_len = vv.shape[0]
     if(grp_len >= 20):
         vv = vv.sample(n=20, random_state=99)
     tmp_df = pd.concat([tmp_df, vv], ignore_index=True)
-    # w.value += 1
     
 review_list = list(tmp_df.description)
 ```
@@ -674,25 +726,16 @@ The next snippet computes the sentiment scores for those sampled reviews.
 ```{python}
 tmp_df['score'] = 0.00
 tmp_df['label'] = ''
-# w = widgets.IntProgress(
-#     value=0,
-#     min=0,
-#     max=tmp_df.shape[0],
-#     description='Progress: ',
-#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''
-#     style={'bar_color': 'lightblue'},
-#     orientation='horizontal'
-# )
-# display(w)
 for i,rr in enumerate(review_list):
     tmp = classifier(rr)[0]
     tmp_df.loc[i, 'score'] = tmp['score']
     tmp_df.loc[i, 'label'] = tmp['label']
-    #w.value = i
 ```
 
+This next snippet tabulates the sentiment classifications for the wine types.
+
 ```{python}
-sent_counts = pd.crosstab(tmp_df.variety, tmp_df.label,margins=True)
+sent_counts = pd.crosstab(tmp_df.variety, tmp_df.label, margins=True)
 sent_counts['proportion'] = sent_counts.POSITIVE/sent_counts.All
 ```
 
@@ -708,7 +751,6 @@ sent_counts.head()
 ```
 :::
 
-
 These are the reviews for one of the varieties that had a proportion of positive
 reviews close to 50%.
 
@@ -716,6 +758,13 @@ reviews close to 50%.
 for x in wine_reviews[wine_reviews.variety == 'Tempranillo Blanco'].description.values:
     pp.pprint(x) 
 ```
+
+The corresponding labels from the classifer are :
+
+```{python}
+tmp_df[tmp_df.variety == 'Tempranillo Blanco'][['description', 'label']]
+```
+
 
 :::
 
@@ -737,7 +786,7 @@ search engine.
 
 ::: {#exm-wine-reviews-2 style="background-color: #D5D1D164; padding: 20px"}
 
-### Example: Wine Reviews Dataset
+### Wine reviews information retrieval
 \index{Wine Reviews!Information retrieval}
 
 A simple way to perform IR is to use cosine similarity to compute how close the
@@ -769,7 +818,6 @@ itself is there! Let's retrieve and print all the reviews similar to the first
 one.
 
 ```{python}
-#np.argsort(-sims)[:10]
 for x in np.argsort(-sims)[:5]:
     pp.pprint(all_review_strings[x]) 
 ```
@@ -786,8 +834,7 @@ Now we print the top 5 most similar reviews to our query.
 
 ```{python}
 q1_results = np.argsort(-sims)[:10]
-#q1_results
-#pp.pprint(wine_reviews.description.values[q1_results])
+
 for x in q1_results[:5]:
     pp.pprint(all_review_strings[x]) 
 ```
