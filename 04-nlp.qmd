@@ -881,7 +881,7 @@ What name would you give each topic?
 
 We can also find out which *topics* a particular document is distributed over.
 For instance, the output below shows that words in document 0 are predominantly
-drawn from topics 2 and 5.
+drawn from topic 3.
 
 ```{python}
 lda1.get_document_topics(bow_corpus[0])
