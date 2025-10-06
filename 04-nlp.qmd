@@ -856,13 +856,18 @@ generative process for the documents:
 2. For each topic, there is a probability mass function for the distribution of
    words in that topic. 
 
-At the end of LDA topic modeling, we will be able to tell, for a particular
-(new or old) document: the weight combination of the topics for that document.
-For each topic, we would be able to tell the terms that are salient.
+At the end of LDA topic modeling, we will be able to tell, for a particular (new
+or old) document: the weight combination of the topics for that document. For
+each topic, we would be able to tell the terms that are salient. LDA only gives
+us the probabilistic weights - we have to interpret them ourselves.
 
-LDA only gives us the probabilistic weights - we have to interpret them
-ourselves. Suppose we decide to split the corpus into 10 topics. Let us
-investigate what these topics consist of.
+::: {#exm-wine-reviews-lda style="background-color: #D5D1D164; padding: 20px"}
+
+### Wine reviews topic modeling
+\index{Wine Reviews!Topic modeling}
+
+Suppose we decide to split the corpus into 10 topics. Let us investigate what
+these topics consist of.
 
 ```{python}
 lda1 = gensim.models.LdaModel(corpus= bow_corpus, num_topics=10, 
@@ -874,10 +879,6 @@ pp.pprint(lda1.show_topics())
 
 The output provides the most common terms that define each topic (remember:
 each topic is defined as a *probability distribution over the vocabulary*). 
-
-::: {.callout-note}
-What name would you give each topic?
-:::
 
 We can also find out which *topics* a particular document is distributed over.
 For instance, the output below shows that words in document 0 are predominantly
@@ -891,14 +892,53 @@ lda1.get_document_topics(bow_corpus[0])
 pp.pprint(all_review_strings[0])
 ```
 
-A delightful [visualisation](04-nlp_ldavis.html) from pyLDAvis allows us to understand the "distance"
-between topics, and the frequent words from each topic easily.
+:::
+
+A delightful visualisation from `pyLDAvis` allows us to
+understand the "distance" between topics, and the frequent words from each topic
+easily. To generate the visualisation in your notebook, execute the following 
+command.
 
 ```{python}
 #| eval: false
 pyLDAvis.display(reviews_vis_data)
 ```
 
+The online version of our textbook contains the interactive version.
+
+::: {.content-visible when-format="html"}
+
+* [Interactive visualisation](04-nlp_ldavis.html)
+
+:::
+
+::: {.content-visible when-format="pdf"}
+Here is a static version for the pdf textbook:
+
+![LDA visualisation](figs/ldavis_random_state_41.png){align="center"}
+:::
+
+A few things to note:
+
+1. The numbering of topics in the text version of the topics does not match the 
+   numbers within the circles of the visualisation. For easy mapping, we have the
+   following mapping of text topics to visual circles:
+   * 0 -> 7, 1 -> 1, 2 -> 6, 3 -> 4, 4 -> 3, 
+     5 -> 8, 6 -> 9, 7 -> 2, 8 -> 5, 9 -> 10
+2. The circles in the visualisation represent the topics. The distance between
+   circles is the distance between the topic distributions, projected onto $R^2$ 
+   using MDS. From the visual, we can see that topics 6 and 3 are very similar, 
+   and so too are topics 4 and 5, and topics 1 and 8. It may be worth re-running
+   the algorithm with a smaller number of topics.
+3. If you inspect the text version of topics, you will notice many words repeated
+   across topics, e.g. fruits, flavors, wine and palate. These should be removed
+   before re-running the algorithm. Doing so would result in more distinct topics.
+4. In terms of interpretation, checking against the topic distribution, it
+   appears topics 4, 5, and 9 from the visual relate to acidic white wines with a
+   citrus/fruit taste. Topics 1, 8, 2 and 7 correspond to strong tasting red wines.
+   Topics 3 and 6 describe aromatic wines.
+   taste
+   
 ## Interpretation of Neural Models
 
 Neural models have achieved impressive performance on a number of
@@ -916,24 +956,35 @@ predictions, this could give us intuition on why the model is failing, and
 guide us to ways to fix it. Here is an example where it was possible to
 pinpoint why a model yielded incorrect sentiment prediction.
 
-![@han2020explaining](figs/explaining_black_box_predictions.png){width=70%}
+![@han2020explaining](figs/explaining_black_box_predictions.png){#fig-black-box width=70%}
+
+In the example shown in @fig-black-box, the statement "A sometimes tedious film"
+has been wrongly classified as having a "positive" sentiment. To understand why
+this happened, training instances are removed one at a time; those that result
+in the greatest change in the prediction are deemed to be influential points.
+These are shown on the right side of the diagram. The presence of multiple 
+ambivalent statements that were labelled as "positive" makes it easier to 
+understand why the mistake happened.
 
 Another approach is to identify which parts of the test sentence itself were
 important to the eventual prediction. Imagine perturbing the test sentence in
 some ways, and studying how the prediction changed. In one study of a
-Question-Answering model, the question was modified by dropping the least
-important word, until the question was answered incorrectly. In this case, the
-study revealed something pathological about the model:
+Question-Answering model (see @fig-infl-test-cases), the question was modified
+by dropping the least important word, until the question was answered
+incorrectly. This gives us an indication of which words were vital for the
+question to be answered correctly. In this case, the study revealed something
+pathological about the model. A one-word question seemed to still provide the 
+correct answer from this passage!
 
-![@sun2021interpreting](figs/pathologies_03.png){width=80%}
+![@sun2021interpreting](figs/pathologies_03.png){width=80% #fig-infl-test-cases}
 
 For transformers in particular, a great deal of study has focused on the
 weights that the attention layers pick up. By relating these to linguistic
 information, researchers try to infer the precise language-related information
 that models retain. For instance, it has been found that BERT learns parts of
-speech. It is also able to identify the dependencies between words.
+speech. It is also able to identify the dependencies between words (see @fig-bert-dep).
 
-![@clark2019does](figs/what_does_bert_clark_preposition.png){width=40%}
+![@clark2019does](figs/what_does_bert_clark_preposition.png){width=80% #fig-bert-dep}
 
 ## References
 
