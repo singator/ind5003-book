@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.5.52">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -308,14 +308,14 @@ window.Quarto = {
 <h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
 <p>In our world, Natural Language Processing (NLP) is used in several scenarios. For example,</p>
 <ul>
-<li>phones and handheld computers support predictive text and handwriting recognition;</li>
+<li>mobile phones and personal computers support predictive text.</li>
 <li>web search engines give access to information locked up in unstructured text;</li>
 <li>machine translation allows us to understand texts written in languages that we do not know;</li>
 <li>text analysis enables us to detect sentiment in tweets and blogs.</li>
 </ul>
-<p>But as we begin to explore Natural Language, we realise that it is an extremely difficult subject. Here are some specific points to note:</p>
+<p>But as we begin to explore NLP, we realise that it is an extremely difficult subject. Here are some examples to note:</p>
 <ol type="1">
-<li>Some words mean different things in different contexts, but us humans know which meaning is being used.
+<li>Some words mean different things in different contexts, but as humans, we know which meaning is being used.
 <ul>
 <li>He <strong>served</strong> the <strong>dish</strong>.</li>
 </ul></li>
@@ -329,36 +329,11 @@ window.Quarto = {
 <li>The thieves stole the paintings. They were subsequently recovered.</li>
 <li>The thieves stole the paintings. They were subsequently arrested.</li>
 </ul></li>
-<li>How can we get a computer to understand the following tweet?:
+<li>How can we get a computer to understand that the following tweet carries a negative sentiment?
 <ul>
 <li>“Wow. Great job st@rbuck’s. Best cup of coffee ever.”</li>
 </ul></li>
 </ol>
-<div id="49dd7d59" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> itables <span class="im">import</span> show</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="im">import</span> pprint</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> gensim</span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="im">from</span> gensim.parsing.preprocessing <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="im">import</span> gensim.downloader <span class="im">as</span> api</span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> nltk.stem <span class="im">import</span> PorterStemmer, WordNetLemmatizer</span>
-<span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer, TfidfVectorizer</span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> sklearn <span class="im">import</span> manifold</span>
-<span id="cb1-17"><a href="#cb1-17"></a></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
-<span id="cb1-19"><a href="#cb1-19"></a></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="im">import</span> pyLDAvis</span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="im">import</span> pyLDAvis.gensim_models <span class="im">as</span> gensimvis</span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-23"><a href="#cb1-23"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -370,16 +345,33 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>Can you catch all three jokes in the movie clip below? 🤣</p>
+<div class="quarto-video ratio ratio-4x3"><iframe data-external="1" src="https://www.youtube.com/embed/NfN_gcjGoJo" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 </div>
 </div>
-<div id="9f46e034" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>video <span class="op">=</span> YouTubeVideo(<span class="st">"NfN_gcjGoJo"</span>, width<span class="op">=</span><span class="dv">640</span>, height<span class="op">=</span><span class="dv">480</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>display(video)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-
-        <iframe width="640" height="480" src="https://www.youtube.com/embed/NfN_gcjGoJo" frameborder="0" allowfullscreen=""></iframe>
-        
-</div>
+<div id="a8be5f1b" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> itables <span class="im">import</span> show</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">import</span> pprint</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">import</span> gensim</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> gensim.parsing.preprocessing <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> gensim.downloader <span class="im">as</span> api</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="im">from</span> nltk.stem <span class="im">import</span> PorterStemmer, WordNetLemmatizer</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer, TfidfVectorizer</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="im">from</span> sklearn <span class="im">import</span> manifold</span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="cb1-17"><a href="#cb1-17"></a></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="im">import</span> pyLDAvis</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="im">import</span> pyLDAvis.gensim_models <span class="im">as</span> gensimvis</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="definitions" class="level2" data-number="4.2">
@@ -409,24 +401,27 @@ Note
 <p>Here are some of the use-cases that we shall discuss:</p>
 <ol type="1">
 <li><em>Topic Modeling</em>: This is an unsupervised technique that allows us to identify the salient topics of a new document automatically. This could be useful in a customer feedback setting, because it would allow quick allocation or prioritisation of resources. This approach requires one to decide on the number of topics. It typically also requires some study of the topics in order to interpret and verify them.</li>
-<li><em>Information Retrieval</em>: This is also an unsupervised approach. If the new document can be considered a “query”, then this can be used to retrieve and prioritise documents that are relevant to the query.</li>
-<li><em>Sentiment Analysis</em>: Using a lexicon of words and their tagged sentiments, we can assess whether the sentiment in a document is mostly positive or negative.</li>
+<li><em>Information Retrieval</em>: This is also an unsupervised approach. Suppose we have a collection of documents. A new document, considered a “query”, can be used to retrieve documents from the collection that are relevant to the query.</li>
+<li><em>Sentiment Analysis</em>: This technique is used to assess whether the sentiment in a document is mostly positive or negative.</li>
 </ol>
 </section>
 <section id="text-pre-processing" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="text-pre-processing"><span class="header-section-number">4.4</span> Text Pre-processing</h2>
 <div id="exm-wine-reviews-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 4.1 (Example: Wine Reviews Dataset)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 4.1 (Wine reviews dataset)</strong></span> </p>
 <p>A dataset containing wine reviews is accessible from <a href="https://www.kaggle.com/zynicide/wine-reviews">Kaggle</a>. We shall work with one of the csv files. It contains 130,000 rows, although some are duplicates.</p>
-<div id="f358740d" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">5001</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a>wine_reviews <span class="op">=</span> pd.read_csv(<span class="st">"data/winemag-data-130k-v2.csv"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>wine_reviews.drop_duplicates(inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>, compact<span class="op">=</span><span class="va">True</span>,)</span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="cf">for</span> x <span class="kw">in</span> rng.choice(wine_reviews.description, size<span class="op">=</span><span class="dv">5</span>):</span>
-<span id="cb5-8"><a href="#cb5-8"></a>    pprint.pp(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="528e91b8" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">5001</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>wine_reviews <span class="op">=</span> pd.read_csv(<span class="st">"data/winemag-data-130k-v2.csv"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>wine_reviews.drop_duplicates(inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>description</code> column contains the review for a particular wine by a user, whose name and twitter handle are provided. Also included is information such as the price, originating county, region of the wine, and so on. In this chapter, we are going to apply NLP techniques to the wine reviews.</p>
+<p>Here is a sample of some of reviews in the dataset.</p>
+<div id="98bb67bb" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>, compact<span class="op">=</span><span class="va">True</span>,)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="cf">for</span> x <span class="kw">in</span> rng.choice(wine_reviews.description, size<span class="op">=</span><span class="dv">5</span>):</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    pp.pprint(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>('Bell pepper and sharp red fruit aromas provide a shaky start, which is '
  'followed by cranberry, tart cherry and other pointed flavors. The feel is '
@@ -452,12 +447,11 @@ Note
  'fruits and nutmeg.')</code></pre>
 </div>
 </div>
-<p>The “descriptions” column contains the review for a particular wine by a user, whose name and twitter handle are provided. Also included is information such as the price, originating county, region of the wine, and so on. In our activity, we are going to apply NLP techniques to the wine reviews.</p>
 </div>
 <section id="pre-processing-text-with-gensim" class="level3">
 <h3 class="anchored" data-anchor-id="pre-processing-text-with-gensim">Pre-processing Text with Gensim</h3>
 <p>Text documents consist of sentences of varying lengths. Usually, the first step to analysing a document is to break it up into pieces. This process is known as <strong>tokenizing</strong>. When tokenizing a document, we can do it at several levels of resolution: at the sentence, line, word or even punctuation level.</p>
-<p>Tokenizing can easily done using the <code>.split()</code> within built-in python. But after that, we need to further pre-process the tokens.</p>
+<p>Tokenizing can easily done using the <code>.split()</code> method, which is built into python. But after that, we need to further pre-process the tokens.</p>
 <p>The <code>gensim</code> package includes a module for pre-processing text strings. Here is a list of some of the functions there:</p>
 <ul>
 <li><code>strip_multiple_whitespaces</code></li>
@@ -468,7 +462,7 @@ Note
 </ul>
 <p>Since what we are about to do in the initial part of our activity is based on frequency counts of tokens, apart from some of the above steps, we are also going to remove common “filler” words that could end up skewing the eventual probability distributions of counts. These filler words are known as stop words. They were identified by linguists, and they vary from model to model, from Python package to package, and of course, from language to language.</p>
 <p>Whether stop-word removal is meaningful or not also depends on your particular application. At times, it is only done in order to speed up the training of a model. However, it is possible to change the entire meaning of a sentence by removing stop-words.</p>
-<p>For us, we are going to apply this list of filters to each review:</p>
+<p>For us, we are going to apply this list of filters to each wine review:</p>
 <ol type="1">
 <li><code>strip_punctuation()</code>,</li>
 <li><code>strip_multiple_whitespaces()</code>,</li>
@@ -480,100 +474,105 @@ Note
 <p><strong>Lemmatizing</strong> a word is to reduce it to its root word. You will come across <strong>stemming</strong> whenever you read about lemmatizing. In both cases, we wish to reduce a word to its root word so that we do not have to deal with multiple variations of a token, such as ate, eating, and eats.</p>
 <p>When we stem a word, the prefix and/or suffix will be removed according to a set of rules. Since it is primarily rule-based, the resulting word may not be an actual English word.</p>
 <p>Like stemming, lemmatizing also aims to reduce a word to its root form. However, it differs from stemming in that the final word must be a proper English language word. For this purpose, the algorithm has to be supplied with a lexicon or dictionary, along with the text to be lemmatized.</p>
-<p>Here is an example that demonstrates the differences.</p>
-<div id="3641d34e" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>porter <span class="op">=</span> PorterStemmer()</span>
-<span id="cb7-2"><a href="#cb7-2"></a>wn <span class="op">=</span> WordNetLemmatizer()</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a>demo_sentence <span class="op">=</span> <span class="st">'Cats and ponies have a meeting'</span>.split()</span>
-<span id="cb7-5"><a href="#cb7-5"></a>demo_sentence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="exm-stem-lemmatise" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.2 (Stemming versus lemmatizing)</strong></span> Here is an example that demonstrates the differences between stemming and lemmatizing. Consider the following simple sentence.</p>
+<div id="c4496189" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>demo_sentence <span class="op">=</span> <span class="st">'Cats and ponies have a meeting'</span>.split()</span>
+<span id="cb7-2"><a href="#cb7-2"></a>demo_sentence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>['Cats', 'and', 'ponies', 'have', 'a', 'meeting']</code></pre>
 </div>
 </div>
-<div id="f2627ed2" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#import nltk</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#nltk.download('wordnet')</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a>[porter.stem(x) <span class="cf">for</span> x <span class="kw">in</span> demo_sentence]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is the outcome of stemming the words in this sentence:</p>
+<div id="de31a403" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>porter <span class="op">=</span> PorterStemmer()</span>
+<span id="cb9-2"><a href="#cb9-2"></a>[porter.stem(x) <span class="cf">for</span> x <span class="kw">in</span> demo_sentence]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>['cat', 'and', 'poni', 'have', 'a', 'meet']</code></pre>
 </div>
 </div>
-<div id="69ac3949" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>[wn.lemmatize(x) <span class="cf">for</span> x <span class="kw">in</span> demo_sentence]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you have not previously done so, you will need to download the Wordnet lemmatizer.</p>
+<div id="aef33ac9" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="im">import</span> nltk</span>
+<span id="cb11-2"><a href="#cb11-2"></a>nltk.download(<span class="st">'wordnet'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is the output of lemmatizing the words instead:</p>
+<div id="cec81b87" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>wn <span class="op">=</span> WordNetLemmatizer()</span>
+<span id="cb12-2"><a href="#cb12-2"></a>[wn.lemmatize(x) <span class="cf">for</span> x <span class="kw">in</span> demo_sentence]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>['Cats', 'and', 'pony', 'have', 'a', 'meeting']</code></pre>
 </div>
 </div>
+</div>
 <p>Now let us go ahead and perform the pre-processing on the wine reviews.</p>
-<div id="e14e26a3" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>CUSTOM_FILTER <span class="op">=</span> [<span class="kw">lambda</span> x: x.lower(), strip_punctuation, </span>
-<span id="cb13-2"><a href="#cb13-2"></a>                 strip_multiple_whitespaces, strip_numeric, </span>
-<span id="cb13-3"><a href="#cb13-3"></a>                 remove_stopwords, strip_short]</span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#CUSTOM_FILTER[1]</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>all_review_strings <span class="op">=</span> wine_reviews.description.values</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#all_review_strings[:3]</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a>all_strings_tokenized <span class="op">=</span> [preprocess_string(x, CUSTOM_FILTER) <span class="cf">for</span> x <span class="kw">in</span> all_review_strings]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="bdf7ec1f" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>CUSTOM_FILTER <span class="op">=</span> [<span class="kw">lambda</span> x: x.lower(), strip_punctuation, </span>
+<span id="cb14-2"><a href="#cb14-2"></a>                 strip_multiple_whitespaces, strip_numeric, </span>
+<span id="cb14-3"><a href="#cb14-3"></a>                 remove_stopwords, strip_short]</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#CUSTOM_FILTER[1]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here is an example of the pre-processed review:</p>
-<div id="e9e7bb36" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>pp.pprint(all_strings_tokenized[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[   'ripe', 'fruity', 'wine', 'smooth', 'structured', 'firm', 'tannins',
-    'filled', 'juicy', 'red', 'berry', 'fruits', 'freshened', 'acidity',
-    'drinkable', 'certainly', 'better']</code></pre>
+<p>The object <code>CUSTOM_FILTER</code> is a collection of functions that will be applied to each wine review.</p>
+<div id="520d824b" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>all_review_strings <span class="op">=</span> wine_reviews.description.values</span>
+<span id="cb15-2"><a href="#cb15-2"></a>all_strings_tokenized <span class="op">=</span> [preprocess_string(x, CUSTOM_FILTER) <span class="cf">for</span> x <span class="kw">in</span> all_review_strings]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>At this point in time, what we have is a list of lists. Each sub-list contains the tokens for a particular wine_review. For instance, the original review for row 234 was:</p>
-<div id="04e0ee75" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>pp.pprint(wine_reviews.description.values[<span class="dv">233</span>])</span>
-<span id="cb16-2"><a href="#cb16-2"></a>pp.pprint(all_strings_tokenized[<span class="dv">233</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>At this point in time, what we have is a list of lists. Each sub-list contains the tokens for a particular wine_review. For instance, the original review in row 234 is:</p>
+<div id="7ef22f87" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>pp.pprint(wine_reviews.description.values[<span class="dv">233</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>('There is an odd, piercing edge to the aromas, a mix of acetic acid and '
  "pungent herb, with a hint of diesel. Somehow it's not off-putting, just "
  'atypical. The light, tart fruit is a mix of rhubarb and cranberry, very '
  'earthy and tasting of dirt and bark in the finish. This could be quite '
- 'pleasant with a hearty, rustic dish such as beef Bourgogne.')
-[   'odd', 'piercing', 'edge', 'aromas', 'mix', 'acetic', 'acid', 'pungent',
+ 'pleasant with a hearty, rustic dish such as beef Bourgogne.')</code></pre>
+</div>
+</div>
+<p>The corresponding processed output is:</p>
+<div id="dd5096ba" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>pp.pprint(all_strings_tokenized[<span class="dv">233</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[   'odd', 'piercing', 'edge', 'aromas', 'mix', 'acetic', 'acid', 'pungent',
     'herb', 'hint', 'diesel', 'putting', 'atypical', 'light', 'tart', 'fruit',
     'mix', 'rhubarb', 'cranberry', 'earthy', 'tasting', 'dirt', 'bark',
     'finish', 'pleasant', 'hearty', 'rustic', 'dish', 'beef', 'bourgogne']</code></pre>
 </div>
 </div>
-<p><code>gensim</code> does not have a lemmatizer, so we use the nltk lemmatizer on each token.</p>
-<div id="8aa1f041" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>preprocessed_corpus <span class="op">=</span> [[wn.lemmatize(w) <span class="cf">for</span> w <span class="kw">in</span> dd ] <span class="cf">for</span> dd <span class="kw">in</span> all_strings_tokenized]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>gensim</code> does not have a lemmatizer, so we use the Wordnet lemmatizer on each token.</p>
+<div id="fccc1226" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>preprocessed_corpus <span class="op">=</span> [[wn.lemmatize(w) <span class="cf">for</span> w <span class="kw">in</span> dd ] <span class="cf">for</span> dd <span class="kw">in</span> all_strings_tokenized]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="sec-04-numeric-rep-text" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="sec-04-numeric-rep-text"><span class="header-section-number">4.5</span> Representation of Text</h2>
-<p>Tokenisation of the corpus is merely the first step in processing natural language. All mathematical algorithms work on numerical representations of the data. Hence the next step is to convert the text into numeric representations. In natural language, there are two common ways of representing text:</p>
+<p>Tokenisation of the corpus is merely the first step in processing natural language. All mathematical algorithms work on numerical representations of the data, so the next step is to convert the text into numeric representations. In natural language, there are two common ways of representing text:</p>
 <ol type="1">
 <li>Sparse vectors, using tf-idf or PPMI, or</li>
-<li>Dense embeddings, which could result from word2vec, GLoVe, or from neural models.</li>
+<li>Dense embeddings, which could result from word2vec, GLoVe, or from neural language models.</li>
 </ol>
 <section id="sparse-embeddings-with-tf-idf" class="level3">
 <h3 class="anchored" data-anchor-id="sparse-embeddings-with-tf-idf">Sparse embeddings with Tf-idf</h3>
-<p>In this section, we demonstrate how we can use Tf-idf (Term frequency-Inverse document frequency) to create vector representations of documents. Consider the following set of three simple text documents. Each document is a single sentence.</p>
-<div id="2351c0a6" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>raw_docs <span class="op">=</span>[</span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="st">"Here are some very simple basic sentences."</span>, </span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="st">"They won’t be very interesting , I’m afraid. "</span>,  </span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="st">"""</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="st">  The point of these basic examples is to learn how basic text  </span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="st">  counting works on *very simple* data, so that we are not afraid when  </span></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="st">  it comes to larger text documents. The sentences are here just to provide words.</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a><span class="st">  """</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this section, we demonstrate how we can use Tf-idf (Term frequency-Inverse document frequency) to create vector representations of documents.</p>
+<div id="exm-tfidf-01" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.3 (Term frequencies)</strong></span> Consider the following set of three simple text documents. Each document is a single sentence.</p>
+<div id="319156ff" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>raw_docs <span class="op">=</span>[</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="st">"Here are some very simple basic sentences."</span>, </span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="st">"They won’t be very interesting , I’m afraid. "</span>,  </span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="st">"""</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="st">  The point of these basic examples is to learn how basic text  </span></span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="st">  counting works on *very simple* data, so that we are not afraid when  </span></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="st">  it comes to larger text documents. The sentences are here just to provide words.</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="st">  """</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As the name tf-idf suggests, our first step should be to compute the frequency of each term (token) within each document.</p>
-<div id="8f873e6d" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>vectorizer1 <span class="op">=</span> CountVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>, min_df<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb20-2"><a href="#cb20-2"></a>X1 <span class="op">=</span> vectorizer1.fit_transform(raw_docs)</span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="bu">print</span>(pd.DataFrame(X1.toarray(), </span>
-<span id="cb20-5"><a href="#cb20-5"></a>  columns<span class="op">=</span>vectorizer1.get_feature_names_out()).iloc[:, :<span class="dv">10</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="60b01bfb" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>vectorizer1 <span class="op">=</span> CountVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>, min_df<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a>X1 <span class="op">=</span> vectorizer1.fit_transform(raw_docs)</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="bu">print</span>(pd.DataFrame(X1.toarray(), </span>
+<span id="cb22-5"><a href="#cb22-5"></a>  columns<span class="op">=</span>vectorizer1.get_feature_names_out()).iloc[:, :<span class="dv">10</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   afraid  basic  comes  counting  data  documents  examples  interesting  \
 0       0      1      0         0     0          0         0            0   
@@ -586,7 +585,9 @@ Note
 2     1       1  </code></pre>
 </div>
 </div>
-<p>The counts indicate the number of times each feature (or words) were present in the document. As you might observe, longer documents tend to contain larger counts (see document 3, which has many more 1’s and even a couple of 2’s. Thus, instead of dealing with counts, we shall convert each row into a vector of length 1. Words that appear in all documents will be weighted down by this transformation, since these do not help to distinguish the document from others. This transformation is known as the TF-IDF transformation.</p>
+<p>The counts indicate the number of times each feature (or words) were present in the document.</p>
+</div>
+<p>As you might observe, longer documents tend to contain larger counts (see document 3, which has many more 1’s and even a couple of 2’s. Thus, instead of dealing with counts, we shall convert each row into a vector of length 1. Words that appear in all documents will be weighted down by this transformation, since these do not help to distinguish the document from others. This transformation is known as the TF-IDF transformation.</p>
 <p>Instead of the raw counts, we define:</p>
 <ul>
 <li><span class="math inline">\(N\)</span> to be the number of documents (<span class="math inline">\(N=3\)</span> in the little example above).</li>
@@ -598,7 +599,8 @@ Note
 w'_{i,j} = tf_{i,j} \times \left[ \log \left( \frac{1 + N}{1 + df_{i}} \right) + 1 \right]
 \end{equation}\]</span></p>
 <p>Then the final <span class="math inline">\(w_{i,j}\)</span> for term <span class="math inline">\(i\)</span> in document <span class="math inline">\(j\)</span> is the normalised version of <span class="math inline">\(w'_{i,j}\)</span> across the terms that document.</p>
-<p>Consider the word “sentences”, in document id 02 (the third document).</p>
+<div id="exm-tfidf-02" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.4 (Tf-idf computation)</strong></span> Consider the word “sentences”, in document id 02 (the third document).</p>
 <ul>
 <li><span class="math inline">\(N = 3\)</span></li>
 <li><span class="math inline">\(tf_{i,j} = 1\)</span></li>
@@ -608,12 +610,12 @@ w'_{i,j} = tf_{i,j} \times \left[ \log \left( \frac{1 + N}{1 + df_{i}} \right) +
 <p><span class="math display">\[\begin{equation}
 w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 \end{equation}\]</span></p>
-<div id="431ec43e" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>vectorizer2 <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>, norm<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb22-2"><a href="#cb22-2"></a>X2 <span class="op">=</span> vectorizer2.fit_transform(raw_docs)</span>
-<span id="cb22-3"><a href="#cb22-3"></a></span>
-<span id="cb22-4"><a href="#cb22-4"></a><span class="bu">print</span>(pd.DataFrame(X2.A, </span>
-<span id="cb22-5"><a href="#cb22-5"></a>  columns<span class="op">=</span><span class="bu">list</span>(vectorizer2.get_feature_names_out())).iloc[:, :<span class="dv">10</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="449c235a" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>vectorizer2 <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>, norm<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>X2 <span class="op">=</span> vectorizer2.fit_transform(raw_docs)</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="bu">print</span>(pd.DataFrame(X2.A, </span>
+<span id="cb24-5"><a href="#cb24-5"></a>  columns<span class="op">=</span><span class="bu">list</span>(vectorizer2.get_feature_names_out())).iloc[:, :<span class="dv">10</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   afraid  basic  comes  counting   data  documents  examples  interesting  \
 0   0.000  1.288  0.000     0.000  0.000      0.000     0.000        0.000   
@@ -626,13 +628,13 @@ w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 2  1.693   1.693  </code></pre>
 </div>
 </div>
-<p>The final step normalises the weights across each document, so now the weight for sentences in document 00 is higher than the weight in document 02 since document 00 is shorter.</p>
-<div id="3d918674" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>vectorizer3 <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>)</span>
-<span id="cb24-2"><a href="#cb24-2"></a>X3 <span class="op">=</span> vectorizer3.fit_transform(raw_docs)</span>
-<span id="cb24-3"><a href="#cb24-3"></a></span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="bu">print</span>(pd.DataFrame(X3.A, </span>
-<span id="cb24-5"><a href="#cb24-5"></a>  columns<span class="op">=</span><span class="bu">list</span>(vectorizer3.get_feature_names_out())).iloc[:, :<span class="dv">10</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The final step normalises the weights within each document.</p>
+<div id="e9bae8d7" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>vectorizer3 <span class="op">=</span> TfidfVectorizer(stop_words<span class="op">=</span><span class="st">'english'</span>)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>X3 <span class="op">=</span> vectorizer3.fit_transform(raw_docs)</span>
+<span id="cb26-3"><a href="#cb26-3"></a></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="bu">print</span>(pd.DataFrame(X3.A, </span>
+<span id="cb26-5"><a href="#cb26-5"></a>  columns<span class="op">=</span><span class="bu">list</span>(vectorizer3.get_feature_names_out())).iloc[:, :<span class="dv">10</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   afraid  basic  comes  counting   data  documents  examples  interesting  \
 0   0.000  0.577  0.000     0.000  0.000      0.000     0.000        0.000   
@@ -643,6 +645,7 @@ w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 0  0.000   0.000  
 1  0.000   0.000  
 2  0.223   0.223  </code></pre>
+</div>
 </div>
 </div>
 <p>The above matrix is known as a <strong>document-term matrix</strong>, since the columns are defined by terms, and each row is a document. At this point, we can use each <strong>row</strong> as a vector representation of each document. If necessary, for this corpus, we could even represent each term using its corresponding <strong>column</strong>.</p>
@@ -737,55 +740,60 @@ w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 </div>
 </div>
 </div>
-<p>Here’s how we can use <code>gensim</code> code to conduct the analogy task.</p>
-<div id="de8cbae1" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># load pre-trained word-vectors from gensim-data</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>word_vectors <span class="op">=</span> api.load(<span class="st">"glove-wiki-gigaword-100"</span>)  </span>
-<span id="cb26-3"><a href="#cb26-3"></a></span>
-<span id="cb26-4"><a href="#cb26-4"></a><span class="co"># Check the "most similar words", using the default "cosine similarity" measure.</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a>result <span class="op">=</span> word_vectors.most_similar(positive<span class="op">=</span>[<span class="st">'woman'</span>, <span class="st">'king'</span>], negative<span class="op">=</span>[<span class="st">'man'</span>])</span>
-<span id="cb26-6"><a href="#cb26-6"></a>most_similar_key, similarity <span class="op">=</span> result[<span class="dv">0</span>]  <span class="co"># look at the first match</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>most_similar_key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>similarity<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="exm-glove-01" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.5 (Glove dense embeddings)</strong></span> Here’s how we can use <code>gensim</code> code to conduct the analogy task. First, we load 400,000 GLoVe vectors, each representing a different word. Each vector is of length 100.</p>
+<div id="4398f36d" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>word_vectors <span class="op">=</span> api.load(<span class="st">"glove-wiki-gigaword-100"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>word_vectors</code> object is similar to a dictionary. For instance, <code>word_vectors['woman']</code> will return the vector corresponding to “woman”.</p>
+<p>The following code will run the analogy task. It returns the answer to:</p>
+<blockquote class="blockquote">
+<p>Man is to king as woman is to ______ .</p>
+</blockquote>
+<div id="4614ecb2" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Check the "most similar words", using the default "cosine similarity" measure.</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>result <span class="op">=</span> word_vectors.most_similar(positive<span class="op">=</span>[<span class="st">'woman'</span>, <span class="st">'king'</span>], negative<span class="op">=</span>[<span class="st">'man'</span>])</span>
+<span id="cb29-3"><a href="#cb29-3"></a>most_similar_key, similarity <span class="op">=</span> result[<span class="dv">0</span>]  <span class="co"># look at the first match</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>most_similar_key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>similarity<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>queen: 0.7699</code></pre>
 </div>
 </div>
-<div id="6d8b996b" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="bu">print</span>(word_vectors.doesnt_match(<span class="st">"breakfast cereal dinner lunch"</span>.split()))</span>
-<span id="cb28-2"><a href="#cb28-2"></a><span class="co">#similarity = word_vectors.similarity('woman', 'man')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The object also contains methods to identify which word in a group is most dissimilar to the rest. The following code identifies “cereal” as the odd word out.</p>
+<div id="9a493ec9" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="bu">print</span>(word_vectors.doesnt_match(<span class="st">"breakfast cereal dinner lunch"</span>.split()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>cereal</code></pre>
+</div>
 </div>
 </div>
 </section>
 </section>
 <section id="sec-04-t-SNE" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="sec-04-t-SNE"><span class="header-section-number">4.6</span> Visualisation with t-SNE</h2>
-<p>When compared with sparse embeddings, dense embeddings are compact. However, a more important difference is that dense vectors represent the semantic meaning of the words. This means that vectors that are close to each other are similar in meaning. Let us use t-SNE to visualise the GloVe embeddings.</p>
-<p>There are a total of 400,000 vectors in the embedding. Even with t-SNE that will be difficult to make sense of. Hence for now, we sample a set of 100 to visualise them.</p>
-<div id="4711e422" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>rng1 <span class="op">=</span> np.random.default_rng(<span class="dv">1111</span>)</span>
-<span id="cb30-2"><a href="#cb30-2"></a></span>
-<span id="cb30-3"><a href="#cb30-3"></a>nn <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="bu">id</span> <span class="op">=</span> rng1.choice(<span class="bu">len</span>(word_vectors), size<span class="op">=</span>(nn,), replace<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb30-5"><a href="#cb30-5"></a></span>
-<span id="cb30-6"><a href="#cb30-6"></a>X <span class="op">=</span> np.zeros((nn, <span class="dv">100</span>))</span>
-<span id="cb30-7"><a href="#cb30-7"></a><span class="cf">for</span> ii <span class="kw">in</span> np.arange(nn):</span>
-<span id="cb30-8"><a href="#cb30-8"></a>    <span class="co">#X[ii,] = glove_vectors.get_vector(id[ii])</span></span>
-<span id="cb30-9"><a href="#cb30-9"></a>    X[ii,] <span class="op">=</span> word_vectors.get_vector(ii)</span>
-<span id="cb30-10"><a href="#cb30-10"></a>labels <span class="op">=</span> pd.Series([word_vectors.index_to_key[x] <span class="cf">for</span> x <span class="kw">in</span> np.arange(nn)])</span>
-<span id="cb30-11"><a href="#cb30-11"></a></span>
-<span id="cb30-12"><a href="#cb30-12"></a>tsne1 <span class="op">=</span> manifold.TSNE(n_components<span class="op">=</span><span class="dv">2</span>, init<span class="op">=</span><span class="st">"random"</span>, perplexity<span class="op">=</span><span class="dv">10</span>, metric<span class="op">=</span><span class="st">'cosine'</span>, verbose<span class="op">=</span><span class="dv">0</span>, max_iter<span class="op">=</span><span class="dv">5000</span>, random_state<span class="op">=</span><span class="dv">222</span>)</span>
-<span id="cb30-13"><a href="#cb30-13"></a>X_transformed2 <span class="op">=</span> tsne1.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When compared with sparse embeddings, dense embeddings are compact. However, a more important difference is that dense vectors contain the semantic meaning of words. This means that vectors that are close to each other are similar in meaning. Let us use t-SNE to visualise the GloVe embeddings.</p>
+<p>There are a total of 400,000 vectors in the embedding. Even with t-SNE that will be difficult to make sense of. Hence for now, we simply visualise the first 100 most common words.</p>
+<p>The following code extracts the first 100 word vectors and applies the t-SNE transformation to them. Please refer to <a href="03-unsupervised.html#sec-03-t-SNE" class="quarto-xref"><span>Section 3.5.2</span></a> for more details.</p>
+<div id="68a16694" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>nn <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a>X <span class="op">=</span> np.zeros((nn, <span class="dv">100</span>))</span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="cf">for</span> ii <span class="kw">in</span> np.arange(nn):</span>
+<span id="cb33-5"><a href="#cb33-5"></a>    X[ii,] <span class="op">=</span> word_vectors.get_vector(ii)</span>
+<span id="cb33-6"><a href="#cb33-6"></a>labels <span class="op">=</span> pd.Series([word_vectors.index_to_key[x] <span class="cf">for</span> x <span class="kw">in</span> np.arange(nn)])</span>
+<span id="cb33-7"><a href="#cb33-7"></a></span>
+<span id="cb33-8"><a href="#cb33-8"></a>tsne1 <span class="op">=</span> manifold.TSNE(n_components<span class="op">=</span><span class="dv">2</span>, init<span class="op">=</span><span class="st">"random"</span>, perplexity<span class="op">=</span><span class="dv">10</span>, </span>
+<span id="cb33-9"><a href="#cb33-9"></a>                      metric<span class="op">=</span><span class="st">'cosine'</span>, verbose<span class="op">=</span><span class="dv">0</span>, max_iter<span class="op">=</span><span class="dv">5000</span>, </span>
+<span id="cb33-10"><a href="#cb33-10"></a>                      random_state<span class="op">=</span><span class="dv">222</span>)</span>
+<span id="cb33-11"><a href="#cb33-11"></a>X_transformed2 <span class="op">=</span> tsne1.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You should get the same plot as us since we have set the same seed at the start of the cell, and when we initialise the transformer. Explore the resulting plot - notice how months of the year appear close together at the bottom left. Around the left as well, the calendar years appear as a group.</p>
-<p>(The figure below only appears in the html version of the text)</p>
-<div id="93afdd87" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>df2 <span class="op">=</span> pd.DataFrame(X_transformed2, columns<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
-<span id="cb31-2"><a href="#cb31-2"></a>df2[<span class="st">'labels'</span>] <span class="op">=</span> labels</span>
-<span id="cb31-3"><a href="#cb31-3"></a>fig <span class="op">=</span> px.scatter(df2, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, text<span class="op">=</span><span class="st">'labels'</span>, width<span class="op">=</span><span class="dv">1024</span>, height<span class="op">=</span><span class="dv">960</span>)</span>
-<span id="cb31-4"><a href="#cb31-4"></a>fig.update_traces(textposition<span class="op">=</span><span class="st">'top center'</span>)</span>
-<span id="cb31-5"><a href="#cb31-5"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4e242c3e" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>df2 <span class="op">=</span> pd.DataFrame(X_transformed2, columns<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
+<span id="cb34-2"><a href="#cb34-2"></a>df2[<span class="st">'labels'</span>] <span class="op">=</span> labels</span>
+<span id="cb34-3"><a href="#cb34-3"></a>fig <span class="op">=</span> px.scatter(df2, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, text<span class="op">=</span><span class="st">'labels'</span>, width<span class="op">=</span><span class="dv">1024</span>, height<span class="op">=</span><span class="dv">960</span>)</span>
+<span id="cb34-4"><a href="#cb34-4"></a>fig.update_traces(textposition<span class="op">=</span><span class="st">'top center'</span>)</span>
+<span id="cb34-5"><a href="#cb34-5"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
         <script type="text/javascript">
         window.PlotlyConfig = {MathJaxConfig: 'local'};
@@ -796,9 +804,9 @@ w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 </div>
 <div class="cell-output cell-output-display">
 <div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="6576f89d-9a63-496a-9501-909a1b1ab6a3" class="plotly-graph-div" style="height:960px; width:1024px;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("6576f89d-9a63-496a-9501-909a1b1ab6a3")) {                    Plotly.newPlot(                        "6576f89d-9a63-496a-9501-909a1b1ab6a3",                        [{"hovertemplate":"x=%{x}\u003cbr\u003ey=%{y}\u003cbr\u003elabels=%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":"#636efa","symbol":"circle"},"mode":"markers+text","name":"","orientation":"v","showlegend":false,"text":["the",",",".","of","to","and","in","a","\"","'s","for","-","that","on","is","was","said","with","he","as","it","by","at","(",")","from","his","''","``","an","be","has","are","have","but","were","not","this","who","they","had","i","which","will","their",":","or","its","one","after","new","been","also","we","would","two","more","'","first","about","up","when","year","there","all","--","out","she","other","people","n't","her","percent","than","over","into","last","some","government","time","$","you","years","if","no","world","can","three","do",";","president","only","state","million","could","us","most","_","against","u.s.","so","them","what","him","united","during","before","may","since","many","while","where","states","because","now","city","made","like","between","did","just","national","day","country","under","such","second","then","company","group","any","through","china","four","being","down","war","back","off","south","american","minister","police","well","including","team","international","week","officials","still","both","even","high","part","told","those","end","former","these","make","billion","work","our","home","school","party","house","old","later","get","another","tuesday","news","long","five","called","1","wednesday","military","way","used","much","next","monday","thursday","friday","game","here","?","should","take","very","my","north","security","season","york","how","public","early","according","several","court","say","around","foreign","10","until","set","political","says","market","however","family","life","same","general","\u2013","left","good","top","university","going","number","major","known","points","won","six","month","dollars","bank","2","iraq","use","members","each","area","found","official","sunday","place","go","based","among","third","times","took","right","days","local","economic","countries","see","best","report","killed","held","business","west","does","own","%","came","law","months","women","'re","power","think","service","children","bush","show","\u002f","help","chief","saturday","system","john","support","series","play","office","following","me","meeting","expected","late","washington","games","european","league","reported","final","added","without","british","white","history","man","men","became","want","march","case","few","run","money","began","open","name","trade","center","3","israel","oil","too","al","film","win","led","east","central","20","air","come","chinese","town","leader","army","line","never","little","played","prime","death","companies","least","put","forces","past","de","half","june","saying","know","federal","french","peace","earlier","capital","force","great","union","near","released","small","department","every","health","japan","head","ago","night","big","cup","election","region","director","talks","program","far","today","statement","july","although","district","again","born","development","leaders","council","close","record","along","county","france","went","point","must","spokesman","your","member","plan","financial","april","recent","campaign","become","troops","whether","lost","music","15","got","israeli","30","need","4","lead","already","russia","though","might","free","hit","rights","11","information","away","12","5","others","control","within","large","economy","press","agency","water","died","career","making","...","deal","attack","side","seven","better","less","september","once","clinton","main","due","committee","building","conference","club","january","decision","stock","america","given","give","often","announced","television","industry","order","young","'ve","palestinian","age","start","administration","russian","prices","round","december","nations","'m","human","india","defense","asked","total","october","players","bill","important","southern","move","fire","population","rose","november","include","further","nuclear","street","taken","media","different","issue","received","secretary","return","college","working","community","eight","groups","despite","level","largest","whose","attacks","germany","august","change","church","nation","german","station","london","weeks","having","18","research","black","services","story","6","europe","sales","policy","visit","northern","lot","across","per","current","board","football","ministry","workers","vote","book","fell","seen","role","students","shares","iran","process","agreement","quarter","full","match","started","growth","yet","moved","possible","western","special","100","plans","interest","behind","strong","england","named","food","period","real","authorities","car","term","rate","race","nearly","korea","enough","site","opposition","keep","25","call","future","taking","island","2008","2006","road","outside","really","century","democratic","almost","single","share","leading","trying","find","album","senior","minutes","together","congress","index","australia","results","hard","hours","land","action","higher","field","cut","coach","elections","san","issues","executive","february","production","areas","river","face","using","japanese","province","park","price","commission","california","father","son","education","7","village","energy","shot","short","africa","key","red","association","average","pay","exchange","eu","something","gave","likely","player","george","2007","victory","8","low","things","2010","pakistan","14","post","social","continue","ever","look","chairman","job","2000","soldiers","able","parliament","front","himself","problems","private","lower","list","built","13","efforts","dollar","miles","included","radio","live","form","david","african","increase","reports","sent","fourth","always","king","50","tax","taiwan","britain","16","playing","title","middle","meet","global","wife","2009","position","located","clear","ahead","2004","2005","iraqi","english","result","release","violence","goal","project","closed","border","body","soon","crisis","division","&amp;","served","tour","hospital","kong","test","hong","u.n.","inc.","technology","believe","organization","published","weapons","agreed","why","nine","summer","wanted","republican","act","recently","texas","course","problem","senate","medical","un","done","reached","star","continued","investors","living","care","signed","17","art","provide","worked","presidential","gold","obama","morning","dead","opened","'ll","event","previous","cost","instead","canada","band","teams","daily","2001","available","drug","coming","2003","investment","\u2019s","michael","civil","woman","training","appeared","9","involved","indian","similar","situation","24","los","running","fighting","mark","40","trial","hold","australian","thought","!","study","fall","mother","met","relations","anti","2002","song","popular","base","tv","ground","markets","ii","newspaper","staff","saw","hand","hope","operations","pressure","americans","eastern","st.","legal","asia","budget","returned","considered","love","wrote","stop","fight","currently","charges","try","aid","ended","management","brought","cases","decided","failed","network","works","gas","turned","fact","vice","ca","mexico","trading","especially","reporters","afghanistan","common","looking","space","rates","manager","loss","2011","justice","thousands","james","rather","fund","thing","republic","opening","accused","winning","scored","championship","example","getting","biggest","performance","sports","1998","let","allowed","schools","means","turn","leave","no.","robert","personal","stocks","showed","light","arrested","person","either","offer","majority","battle","19","class","evidence","makes","society","products","regional","needed","stage","am","doing","families","construction","various","1996","sold","independent","kind","airport","paul","judge","internet","movement","room","followed","original","angeles","italy","`","data","comes","parties","nothing","sea","bring","2012","annual","officer","beijing","present","remain","nato","1999","22","remains","allow","florida","computer","21","contract","coast","created","demand","operation","events","islamic","beat","analysts","interview","helped","child","probably","spent","asian","effort","cooperation","shows","calls","investigation","lives","video","yen","runs","tried","bad","described","1994","toward","written","throughout","established","mission","associated","buy","growing","green","forward","competition","poor","latest","banks","question","1997","prison","feel","attention"],"x":{"dtype":"f4","bdata":"xpIPQaYihkHzvH9BWS4SQbf3qsGvuYtBiq9CQSpjKUEQ2yrCqUuevp5KZkF1nd3BghLWvZE\u002fP0HC3CzAJ7EowS0zB8Jnx6lBzbOwwJHteUFzZJQ\u002fO46iQShOtkF0AjRCyK4zQv89NEGJUsPA5sQkwqDKK8LDyjVBAl+pwZVBl8BxrjXBZO83wf17AMGhy0HBd82rwTu\u002fEUAJ8JPAz6NMwbbJIMEXHxLC7vabPspGvsGZeiFApdAnQgFInEDU0M4\u002fd2UCQXaq2MF62DdCtLIuwRXse8CGQQrCdW+4wSdCaUFDpHpB9CvpwdBRq8BR749B9pZ\u002fQC3FwsHOQxvCC4l3P5y8jUEP\u002ft3B7n4bQJb+nMDuNKFBQ5esQYMZC8LNX5\u002fAohuEQgu0gEF2O7BBn1aLQJkwEsJ3SpNBqIhiwFtS28GUjo1CQRwXwr\u002flEcImyyjBqN4SPRr2QkKnnM3B79B6QU+nDcIBECtCCoWIwWoY5kBSSi1AKxWLQiwQwMH7VBNC2+uaQSU72MEidvdARh8WQgCbOMG9qYBBRJfnwY1oB8EmQyNChjT0wbO3z8HH27XBxSIMwkf4n0EEkpBBW\u002f+CQcwkIkLOgxLBWcG6wNJ9akKs4D7Bhlxxwcz7vEFbwRDCnyCNwSZbiEDLsiLCAnU9Qqt4IkH9zsdBsc+ywGXtuMHdxFdCMg0yQUNRsr\u002fcpI9Agux5QiqkdEEB6CvBpKeMQHz8aEGyh3I\u002fGua6P6u3kEKBhBhCt5ypwV76N8GYAIhB0wnYQezKhMIiQDhC80MWwrIkU8HhUdPAU\u002fGTQVr1IME0VFtCNDcBQW+HC8IIOpRBlqMOwrrVicG1JZFBZWquwQTdikJpQ5dBCCk0wvIJiUFNFRZCUo3mQD8FwcBAy2HARSSnwaJw3sHEPx5BiDkTwiToG8KnZbhBWhWHQbsH60DAV0dC\u002fFQUwpxMoEECiInBJUQPQl29LMGZgBbCWToYwrWOEcKZIRfCpfN7wpUbPj9nayHCkRHKwf7HqsENk0zBdWQtwu\u002f6kEIdSZJBDxCBwtpWO0ITreHBx1byQX6Q7cFMk8XBdUKqQTKulcDkgvXBJRp5QlQer8GwzHhC32XIwd7pisDCMPlBw5IMwnlHfUIM4+PATiiCwNcIScGfE7FAaIGWwVRiU0L61GG\u002fbw+jwZVh7kGruBpCv5P3wfhGv0FvpfZB7aQHQU8UZEFAKXjCadqDQWx2FcIGgIxC3lRtQrKlSELlgMRBOx8RQmp1\u002fUBMRABBH8Z5QhJvT8EFw7zB7DsdwnzMtcD8AvfBSX9RQgBvrkEl4r\u002fA8hzkwRPhlsHayRHAAbUiwvpB50GHh1hCxHYuQtkwxcF3UFbCj2wFwmOjWkCU6ITB\u002fudZQqwgk0KCQ7TBv\u002fgEQAo8g0KXdqHBLvcKQFBkGsJItMRAPFUKwrSF9EEByQDC3lkMQkVZ8sAAVAbAULE8wjQVL0IPQEFB8sShwVraGsLFuQJCkZr+wVQDXEFizi5BJ0V1wm2\u002f2sCs4OrBGXwfwnwTu8HB5cnBzlzxwa5eGkLqGH3C8\u002fI6QlH+gcK5qwvCnFlfwsNmBsKzTtq9ma0wQqI0tEGbWEvCAiSGwKRozkAS62xB5xINwsoJscLsG8\u002fAvgaaQdAY\u002fUDsQkRCSK\u002f1wUwNVsIBAhNB071jQrICQ0JZ\u002fExCOTquQTLhg0LqbUbBS9esQV0URsKb43DC0K\u002f\u002fQTX7k0J4fIxCNyx+QrOgrkFfW\u002fTBYKl3QmLzb0LnV9dA5NynQW2ZtEAZNBnCJKdawZQSccKGbKfBd47VP5lNWkIYVYZBNNK3wFpmrkFrnZA\u002flcA+QpyW8cDQdLPCA3r9wecJAcIv+8E\u002fkOk5QiKnmMGJXQ7C4ORkQuKKrUE2mnzBWH\u002frQM6Xc0I+DqjCQUgBQsbiw8BIQdhAJ4AGQs7fbUIu1JbBD\u002foQwmoEJ8L+0oPBefh0wps9oUAJ44dCvaKqwTMpo8H0Ei5CqwrqwPa8RD88jvbBPHSxwtBj38Cq43BC9Ue7wTryKD0gzzBCHyYAQReIC8GXGNFAI5E1wu9xg0L5JHBCRs44QgmepcHb\u002f19BZTPMwR1k\u002fsGxvy7CiZXyQJGFZMFlCVZCDnezwqGQBMIRV74\u002f8BxpQSors0Ere9DAh7JUwbXSn8JB9n1CZz\u002fWwQbhqEGa34BCAkzSwbPxTkJfjIvAS57lwCP+UkIFbuTA+oPGwclmjkCmBDk\u002fEMZEQLwTdEKAyiBCsWaCP3v\u002feEKQ+VFCzvmmQcrt+EESOrtAh18BQrbjWEIhCxvCdoC0wUjmg0KzjQdAObZQwgxzTME7NRvC\u002fVaXwWmZV0Hhx3tAUxyOQeHEosH15WZBdz24wuQThMGkbbK\u002frYnkQRiQFsFgQBDBe8FIQvvlusGjT4DC74a4wnbBS8EZtYVCfyNDQlMnjUCfg6LB6VktPjNthcG5VjbCoZ1cQgtFn8GHhcvA0SAMwgGhqUFswXHBZ2oQwk5YRMAaEFJC1At0QmEjX8LQtLPC7S8tQuZpEMJpzUhAg5sJQmZdlUGtZwfC35SBQlvftcK9t3\u002fCg7i7v3mXykFuSYpC6WqNwY9XcUEXGYJCvDWLQuNltsIJjdBBwQuewFSj5EF\u002fLWVCMWF7weiiIsLYaYFBFDxGwHMMZcHnCpXBvLcHwihOGELD9I1Bw1AIQp82g0FVqTBBruZEwbI9XkLklwRCdiRwwFBUT0FtH0JCLo62wsVoxL+iTBZCfhc\u002fQn24QkLKNlpC9qo+Qq8KHsL0rhnB2FmFQi8BIUIDXa9BYQENQt\u002fRZMJFB1NCyBBBQpbsc0J4LOy\u002fGjzKwSXSiEIiitXBOICCQiSef0Kdh5JACokqwRz4gsJi1bbB1MDDQXaCy0D622fCMO2LQjCHB8FKC25Bg2kTQkC0hUIv7dVBYEaSQRMCksF0iQ7Bw0oxQPWNZcLej\u002ffB8adaQknxy8AlPZTBu4sawE84jUItXS5AaIB+QhAtbcGaSmpCy7t0QIw4UMEenyJCciMHQXrOc0Is5PvBiD+SwTeEScGxzcdAZpCMQM3bYkJmb4fCTvSDQS2ZckIPEb7BuixxQlal0kBfBu3A9OmCQlOV0sHhahXAwvGNwT9cjELuAbPCVZm1wvKPgkJ\u002f6m5CUaf6wYab38HRpTxAjLh\u002fQbt7X8AO+IRCKCL3QW\u002f4E8L3x9nBeNOiwpPvkMGajwPB1UGuQeedhT3GrolC20gmQs8JBcEC7GnBfP8owqemgEIdII9AfEljQlcIlkH8+r\u002fA8zuIwtR\u002fu0D2qEdCqFkYwMELosEGbbXCnkN0QhV6e0L3RIhCVjPnwNx5DULkkWtC1FCFQsKTgUKq2nZCb+gYwQyzT0Jsm5a\u002frNvEvhkaCkJyxVdCz0VzQlPxgEJDT6vBrdW3QZ9KVkJjyNxBK4G0QYWSEEETNH1CaO86Qq5Zh0LX5TdCK\u002f3nwfdQgcG898XBjKd7woeX9cHXWrPCov5vwjTnVEIO4V1C12jjwRedsMIL4gZCn358QmeiAsFe2ABC7TPdwfEDHsLxArjB3VyawZocbkEBYr3CQFyvQb6\u002fz8FVEvNA8B2HQNuKEMFhgC1CyoP1QUnlZULGocxBgHNLQlUqekLut0xBPhyOQs0rdkKfS9VBndkxwnk7OcIpWAtBN+sEwsruWEIaUl1CsYYIwjLGqMEoMtvArnQAwtx57z\u002fLMIFCeGsyQrsDfkJl4zBCIe9\u002fQvrWc8IMm3fCZhKXQvjjtMFoAFdC+rAGwFjcsMKAczLA2QJ5QkkbpMB+VRzCAC24wnjFtcK8yLtBv5gzQrXfBMEekajC4QRJQS94q8CN\u002fTBCmDdcQn7ThkL4qZXBnqi5wWDcOkI+h4jCytFcQt8Qa0H0No3CqwcLQjudgkLaSmXCHMCBQgw75UFo3VpC37EuQmqv8sHIAyBB1P5owjhc6EHC9oXB8GH2wewljUH1\u002fCbC4LYMwjrZ4z9bvA5As8DewAF\u002fU0IzJpXBQEYvQu7DAD6j\u002fwlC+GzqQaDRAsJQnMDBnHxfwl8i8sHY2oBCpVQlwRMDBELI\u002fJXBfCKAQr4RrEE64SVCzuqLQRmdbUDXI4DCJfC1v4e5IsJAKTZAlWtcQt\u002fEF8KLmIrCmfgwws0wOUJdJBdAlvMnQi+7osLutIPCQRYXwsi1u8LUzR9C17aPwG5FFsIiS7nCzTtQQgcJqr6ryQfCtO6SQKwZgsAbceZB9pyjwfWaWULxagDB+VEMQg5zYEEtaTRCeLGFQm5FQkKBne1AEEdMQW39DMKIYIBCF5nVwLKfisE4zStCGYn8wb9PJsIhDh9CtNMXwnp6O8CaUb3BuWsWQtFTFkHYibrCBkehwthdkUFWCJ5B8e43wq5fkEGoE39C2MlmQG\u002fdF8LJXLXBdi+7wav6vMCRB\u002fnB+P3bQWHZWMF8+pxBGXiLQhOwGEKSbR1AVkpSQntkLUL9zprBkm1KQedtJ8LYkGzCa90Xwq\u002fVQUE4DnzAaNMNwWxLD8K5xmlBvmADwgMtV0Kv65bByKmxwBfHXcF+phdBa+w3wqa0oUEL84JCiu6LwYu\u002fmMCaJY\u002fBRXMTwubLRkIA2YVCsIivQeQMEMKMzMZBL+A6Qenjs8FyFT1CTahlQt66isKSrD7BWl2uwg6cLMAe+r9B5U8AwsnSzz9u0kpCTD\u002fvwYjCVEIUaVfCIw4gwY10dcJYk7HAqEZ3wsmyJEHLn93BQBwDQoshU8JvKIPCuD++wkx+GMJ3\u002fonBlUYQQrqiQT+6tajBlj0HwrFdW0KZYPvBXmAgQJSbg0Ixsx3Cn0CzQernJcHJa7ZAkjJmQNoTNEKoKeRApg1PQUvQfkJyqxpCOegHwQ8BucGPdwRCQltyQu4tikL2XM7BhdJUwud1FMLz5QXC9yAQwakHRUKL+LRBVRPBwngsQUJFgbFBqi3cweqNXUINZgTCKuOEwCFHJkIahkdB8R2uwB7e78FRZeJATqtCQqfGP0KWKS\u002fCIPYgQrufssFXpwlBEXXqwSeNjUKupkRBcyCuwgxBH8LHbqvBc1p8QlWslUDEAw\u002fB0oXXQUdTvsIIn4JCQkADwXnpjcFydFJCFq0rQswcgkKll5\u002fBoO6NQuP8m0HRw25CYNTaQSboisL7nVlBTphowlCAgUIy+g\u002fCA7MyQZhR2sBpX9fBUDsSwgebVEKhnUFBqD4YQkwmPcJQ49HBrZj5wHDuPsGIRj3CgwCPQq1dC0HeyhXCTj25wRgCyEBaLcHCUgKHwXdkbsJMrIJCfFChQRg51EEKuR7CBQY8Ql8tTkL5dbpBQV+LwU1ah8KjxbdB4wwFwr+qb0IToZXA8bnAwmAPCsEdWgLCPaAkwQ=="},"xaxis":"x","y":{"dtype":"f4","bdata":"46Ehwfq0EcH1fPXAVXANwXDYccGOyCPBTHfwwEZJk8GJszLCQ0BJQOeAO8GAYWTCcHEtwZY7HsGA3RLBiswYQFN+SEK8Qx3BQbIEQT7WSsEoK0DBtJ7\u002fwA\u002fnccA4UG7CkS9swhQ718CkSzFB8NIowqsLK8K\u002fKojB5DsgwYmmf8C6mMvAFQaewChhz8HHUlrAC48vwbgeS8ECG7NAASCtwPhOLcDBWA\u002fCr0UUwQAoP8HL3odAprhnwpm05cEQ6xJAQYeTwdmwIkF9oQpCfAjav2B7gMBvlQbCws0wwbamb8LWGwfCgZtfwhLnWsLzewPCHcglwoDzBUEgnD9B9Vuuwe9zxcEA0F\u002fCUCklwqqvFUGXzdTBAKy4wVH\u002f\u002fsGqgTFBarfYwd82CsKxxRnB+w0Wwt6EakFjIfTB7ptgQpUrw0DyTw\u002fCBwUHwtzSOEEAO8vBlQewwQXHTkKPuy\u002fBp0ZuwuAA98HJxWfCclGEQuv5kcEhCVpCTKoMwmfkH8EPuVFCRpKTwdUAXcII\u002fxNCVndSQlpz58FytbnB4wQFwoWTKkG7D1BCTbtTQTQgHkGkdf3APWBEQaoI38FX5AnBHyGcwCGvTkJO0snBwgb\u002fwNJr20GnH2PBaSYcwp\u002fqEcH5fMnBChTswZljXEKIA4tBG01BQkw1TMGdLOXB3uVewic\u002fEUF6AbTA8PZ1Qg4crMHVNxPCgO1zQu9mdMI0p8W+g\u002f8nwhExMEJN2SDCGHMqwufv3EF5kVdCKidbQuOORULDjEvB6F7xwYemG0HzcVFCwZ6GQeViSkLurP\u002fAyw9UwU2n6MFGlujBJ\u002f8qwbWqOEKTEMjB4+I2QI3Ci0IZ7tXBUsWPwXSPCcI2mkFBtbX\u002fwTonN8D9q61BNliIQvg3dUI0i61BnBUrQThOwsFR9JDBinmpQe5AKUKkETnCfOttwlN44b8F2X\u002fCWcu5QZdxM0K7FNPBiE2kwFePAMLqbCJASMipQfsNskFVE7JBqJuyQFv0Y8ByDSPCEfpOwUXTisGcQePB3jgFwgpI1kG7XztCnGatQNQAC0JciQTClTwHQddlgkFm3UNC7cvqwacaNkJzb+rBtU1\u002fQU7uU0IMYUvCAoI4QaX7LMLY3a5BQMtIQtuHkMHzALTB4hZ6Qc2elUEY5HXBlxZ8Qov1bsLsqR\u002fCMUkMwmw5VcGmfaBBbr6\u002fwUB5CMIlUYDBNSYgv1MNP8JsIAfB0cxywtnqekE8AwjCj9JFwUc\u002fesIKHVNCJomNwFxReEKxqabBENDAQam9l7+Tg0lC\u002fKuzQTpKZMHp\u002f7fBh9aRwIVA18HTwmHCjWWuQAPT5j8SPxXCWfF9QQ4Y9EBgJ4zBAF5LQgU6MMJEsKZAbpoTQnjN2kEN5SHBTp8Ewaor1kH9F+DBM7CbQGjS4sHhYEtAzkAyQgt9YEHkk0RBwV8WwiwNvr7NqAvCzR\u002fgQOY6lEF3pZBCkywLQhNVcsLyZ5tBIOSIQp9Cu0F+ZNa+SJqkQtscw0H8qXbCcZveQIhpb0KVbitBt9YNwl0uFUL4ObLAp2WFQRcrR0K+851AgbxXQgZFNEGDshNCEj2VwPpkT0KQ2MHBdYN2QkXGy0FPRCNBGfyiQQmqQUEMk0hAFo3qwdOMTcJMCS1COQHqwdPpWsJx+UbBiah7vihp2MAv\u002flQ+61iCwW7iqEGBY37CIkVtQgEZ+j+3YfDBnIZZQjp\u002fDUIlSAvBKZhdwWUH3UHEZv5Bgb9IwqyUJEKgJa\u002fB9Ax3Qjpl20EVBIVCDEM2QnQjTsKSRcjBf2IGwhMJ+kBiZl1CRU7FQdVk0MBUGRHCuQArwp9SM0JiwhfChyUmQo\u002fwacLjaVDCs2U5QvvZBcKUS1hC391yQryKD0Ksf5FBZMbeQexnLEKF4ArCdsJrQsJZpEE+jUbB4vvMwZkAakISD6nBP2aAQZFIb0IUOpJCHphPQQsRn0F9LhvCiLJJwPu5kEKZ2PRBlTqFQly9DkKtS4FBXp\u002f5wYjLfsCfnTpChbtTwjobu8GidPhBhicmQeQrnkFUYmNBwLCAQtI7iEJ95iXCtz4GQbpEhEHMtP1BRW9tQsOeCkD8kzzCDYhawbl8R0JbyQLC6YJ1Qr964UEKM1HBWXNXwicO+UG335FCfQ8FQGymN0L6tw1CILZbwn3FgMFG7U7CcEzLwd7Ca0Jad0XCY5OAwcSIecLRgmbCC6CzwBPhckKvzMXBAsYPwRoUCsK7+DDCCys+Qt38W8LH\u002fihAkF8lwregVMKX\u002fX7Csrm\u002fwRhquL6vokTByKDKweZBlcG6kTBCKX1FQh7iikAiNMlBNdMSQdjFa8E5byXC\u002frwAQm\u002f7FEJWuUbCtYhxwnpxCsKHCQnCvWxTwkT2zUBzuY9CGT+JwZLnpcECrIVCY6x4Qf9AEkIgakJBg+lNwnEcBkL1gKfBjSNIQuNEg8FtzY3B8O3uwSd13kE\u002fCh5CvDz4wLrVZsEXmaVB03AOwirhaEItcjzC1327P0RAZEJJT3VCpwulwVzRssCqq0rCSCVNQmc9FsJNXEFCIXB4QpZqMEIlOTdCrN8uwi\u002fuTsJ2+wxB546JQo0+gsE0cehB4RuhwUYAEUJe5evBaW29weWlScJ4D\u002fDBDbufwVrtWUKPwGlBW2aLv47sKEI4gtvBMwUMQvVqSEAm+nlCfUYvwbJWpkGNPElBgqbVQWm+d8JTv3hCvkiuwZ1r88FypJPBFBGZQKsnF0L13mtC80hYwuoUa8ElA+pBkCNCQoQpcULZELlBx3gEQgSFcEF2DAO94wlTwq8rWUH6ncxB+H7oQMhZEEIloXbCZlhVQg6QkMFEdWVC72UWQkX\u002f5UEvSxTC0Id4QUkJGsIrAhXBUDKHQqPWQkFVWE1ChW64wYJfkkI\u002fwRNCZ67AwfLI5cFc\u002fmLBFBS1QRintMEYR1lCHhsRQYXRAULZ32HCg0iYwRxjXcD9B6c+OTeiwbaB2sEixClBeO2gwdd07UE5sofB8Rg1whFa4EEmxMXBFbI5wokoucFxwXJCHpyJP\u002f+bisDEJmVBLfwcwge1SELgGjvCK2AEwTljxsEQurrA\u002fDYYwu6Za0JwIJ3Bg6i8QSAaiULN3CvCDoxKwkbB0EHnXpbB5PU1vl8AvEF2MWPA3KaEwF25lUGWpJ9BaCcXwl+Ni0FxA4xCaZYZwvQ3WcJV2L7BaPhpwe8tkcFNYKrBaEdvwd7Ai0JOBnPCyB9HwcxShkLks6nBNM1wQhoylcE66\u002fPBMm+DQUgIwkFG9xlCVBHgwb6eCUJqoDXC3xk1Qcz7j0LrxRlCsM4LQrdKhkLZhVPCRGXwwGDUxUGDiYpB2GkfwnQ9i8AS6nFC+MftQQtxpEEUR6bBjASHQu7EHEL1s4xBfFyKQZ7kp0Fb9X3CVrveQXrqAkAf+Po9JTg6wgjQS0KVlYLBPf\u002fWQWE5aEK14hfCmSZRwYbKmMGI81lCzs4hwgeKJ0AJpufA3qEJQZXRpEIrJqLAbdYXwc3HesJ7nOTBUNIWwlCLMcABhXZCrHNZwnfSbkLtsKtBpfJJwZDJwsHRmjLC5kqFQtLFOUESzXDATkI7Qtjem8EUM49CgfFBwlgvKEH0Xr3B8JgFQROy4MGBtAfC60F5QYAmXcKZprdBh2P9wR7IlkHAVfjBPr0eQjaBAkKFZNDBOgqoQs6uSkIwja3Bj+MRQoVdj0AE3l\u002fCY2IUwi9sikEimjbCQLhGwTaUcUIpZG5CWwZXwhMq\u002f0ALIbfAvIHgQTXRHUIJJXrBRzWEQQnOjsCWsQ\u002fCWcuvQUuY4MFGwo4\u002fe7aUwBxDs8DDs1RCBwt9Qiq8ocG\u002fM0LB+\u002fQeQv7sfcLHanRBBnZAQdOX2UE2ZZRCF9g4QYssrsFq8\u002fpAPSsswFLrjkBY97DAVFliQULhckLVcv+\u002f9sF0QteTO0JaYWvAzsuzQBvH78EcRm5CBMMYQmxtWEKBqP9BaLUEwsJ8dsJzj0lBXsbcwQXZi0Jk9StCJiQ6wBmMHEK3CtnBNo+7wSfoiELHYXBBmx08QvnuLcIKMQdAitfSQK1u3r\u002ffDYDBpp6RQZIGgEEaffRB4QhdwoZZSUFMiGHAd1NUQR5AkUJsgA7BebaRQvIepUGBudlBGnhJQWisA8L8fo\u002fAWboSQdk2XMF82+DBI29qQsRWgMEAexFBwnggQqlO2cAxLUrA7kgkQnhLQb05oc3ASBpFweLBjkBW1aVCjS42QpCDmkHOrg1Cyh5MQU8aecIebhs\u002figR7QtQt2sEq87XBweNXwlAAGUKZcljCu2soQr1fpUKbSTrCPoczQhcUMsE+2nZCM5T+wY52HcJoJlxBwi7Uv4xeikHhCh1CSh4jQsPKFUKf1ajA6o9uwciojMHashlCk9IbQpQPDkLDA43ByUOOQQA2I0JBcYxC3f\u002fKQNOcIMJ+tqHBgcoYQprgosFpD7DBv6bxQQXB7UF\u002fozVCJGdTQslhRsHdWB1BWgO8v+3xDMJzvRdCnq2DwVlKKkIliuDAuYA2QhClkMFpI7FBDwEWQbGjK8EeqZtAEl4oQnddA0I\u002feLdBhHYkQm+eQ0GUDClAYhG7QCCjx8HzxYRCZNj6wWnvM0LG2JXBdrKKwTbUOEIsO09Ct+jZwXFlM8Lo45tBixLHwWCtPkHXtF3CXCSOwLz9OEIrOsPBP1KmQttf4cGR7UXBdm4XwpN7bELgy5XAH4E4Qne+\u002fcCDFn\u002fCvYlrwMMF1MFEFszBmcSPwV10iECGKmRBOYG3wNRQ68HH3XjBSXWuQdtj2MGR0afBaaU5wRcWgsKlJahC5wTQQL+8psGW7AJC\u002fR8fQjz\u002fQEL9xLTBxZ3hwVXTnMDxrZRCvp8uQjfRYcJdvLxB4RIfQq5x6MGgm9VBrRGkwNUHCULYSInB00RLwBjDGcKZRivCcnKGQTIEckH6uO7BAXrOwLT8pMBPoJBAM+ogwmCuwUHur6NCdPg3QpQzmkC3SYBCq2B5QlevI0H3amzBIBAWQvqWZ0JuQyfCGfYNQO1u8MHy+YdCmjUkwmrQrEESd5FBWC5HwG8+KEHXFYtC+CV4Qt6IT8E4OCHB7tY5QlOa4sBAOFzCETwiwVj7dcEFoBlCIHmkQFIeYcIRrPpBgVK6QQMwOUC00aTB1Y4aQiQEfMBYt3xCLrQMwXIlbsHyJjJCQQKiQTxDlEHnEgTB4e0cQXprVUJOFLdBADskQjLfDELZ+NJB+JosQqfDlEFu+hhCA6L2wZhrXsKMopbBGmATwvRkF8B9\u002f\u002f3AilvIwbwkFEKIAmJBRhdtQKc6JEKfOTVCdL2lwOV3r8HoO9VBVhOswSoBE8DmEJTB\u002f87+QVnrScET8gtCmiGqwDtJQELSBx3CbAcGwg=="},"yaxis":"y","type":"scatter","textposition":"top center"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"x"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"y"}},"legend":{"tracegroupgap":0},"height":960,"width":1024},                        {"responsive": true}                    ).then(function(){
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="4396f017-7a7c-47d6-b6a6-1d24de28e969" class="plotly-graph-div" style="height:960px; width:1024px;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("4396f017-7a7c-47d6-b6a6-1d24de28e969")) {                    Plotly.newPlot(                        "4396f017-7a7c-47d6-b6a6-1d24de28e969",                        [{"hovertemplate":"x=%{x}\u003cbr\u003ey=%{y}\u003cbr\u003elabels=%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":"#636efa","symbol":"circle"},"mode":"markers+text","name":"","orientation":"v","showlegend":false,"text":["the",",",".","of","to","and","in","a","\"","'s","for","-","that","on","is","was","said","with","he","as","it","by","at","(",")","from","his","''","``","an","be","has","are","have","but","were","not","this","who","they","had","i","which","will","their",":","or","its","one","after","new","been","also","we","would","two","more","'","first","about","up","when","year","there","all","--","out","she","other","people","n't","her","percent","than","over","into","last","some","government","time","$","you","years","if","no","world","can","three","do",";","president","only","state","million","could","us","most","_","against","u.s.","so","them","what","him","united","during","before","may","since","many","while","where","states","because","now","city","made","like","between","did","just","national","day","country","under","such","second","then","company","group","any","through","china","four","being","down","war","back","off","south","american","minister","police","well","including","team","international","week","officials","still","both","even","high","part","told","those","end","former","these","make","billion","work","our","home","school","party","house","old","later","get","another","tuesday","news","long","five","called","1","wednesday","military","way","used","much","next","monday","thursday","friday","game","here","?","should","take","very","my","north","security","season","york","how","public","early","according","several","court","say","around","foreign","10","until","set","political","says","market","however","family","life","same","general","\u2013","left","good","top","university","going","number","major","known","points","won","six","month","dollars","bank","2","iraq","use","members","each","area","found","official","sunday","place","go","based","among","third","times","took","right","days","local","economic","countries","see","best","report","killed","held","business","west","does","own","%","came","law","months","women","'re","power","think","service","children","bush","show","\u002f","help","chief","saturday","system","john","support","series","play","office","following","me","meeting","expected","late","washington","games","european","league","reported","final","added","without","british","white","history","man","men","became","want","march","case","few","run","money","began","open","name","trade","center","3","israel","oil","too","al","film","win","led","east","central","20","air","come","chinese","town","leader","army","line","never","little","played","prime","death","companies","least","put","forces","past","de","half","june","saying","know","federal","french","peace","earlier","capital","force","great","union","near","released","small","department","every","health","japan","head","ago","night","big","cup","election","region","director","talks","program","far","today","statement","july","although","district","again","born","development","leaders","council","close","record","along","county","france","went","point","must","spokesman","your","member","plan","financial","april","recent","campaign","become","troops","whether","lost","music","15","got","israeli","30","need","4","lead","already","russia","though","might","free","hit","rights","11","information","away","12","5","others","control","within","large","economy","press","agency","water","died","career","making","...","deal","attack","side","seven","better","less","september","once","clinton","main","due","committee","building","conference","club","january","decision","stock","america","given","give","often","announced","television","industry","order","young","'ve","palestinian","age","start","administration","russian","prices","round","december","nations","'m","human","india","defense","asked","total","october","players","bill","important","southern","move","fire","population","rose","november","include","further","nuclear","street","taken","media","different","issue","received","secretary","return","college","working","community","eight","groups","despite","level","largest","whose","attacks","germany","august","change","church","nation","german","station","london","weeks","having","18","research","black","services","story","6","europe","sales","policy","visit","northern","lot","across","per","current","board","football","ministry","workers","vote","book","fell","seen","role","students","shares","iran","process","agreement","quarter","full","match","started","growth","yet","moved","possible","western","special","100","plans","interest","behind","strong","england","named","food","period","real","authorities","car","term","rate","race","nearly","korea","enough","site","opposition","keep","25","call","future","taking","island","2008","2006","road","outside","really","century","democratic","almost","single","share","leading","trying","find","album","senior","minutes","together","congress","index","australia","results","hard","hours","land","action","higher","field","cut","coach","elections","san","issues","executive","february","production","areas","river","face","using","japanese","province","park","price","commission","california","father","son","education","7","village","energy","shot","short","africa","key","red","association","average","pay","exchange","eu","something","gave","likely","player","george","2007","victory","8","low","things","2010","pakistan","14","post","social","continue","ever","look","chairman","job","2000","soldiers","able","parliament","front","himself","problems","private","lower","list","built","13","efforts","dollar","miles","included","radio","live","form","david","african","increase","reports","sent","fourth","always","king","50","tax","taiwan","britain","16","playing","title","middle","meet","global","wife","2009","position","located","clear","ahead","2004","2005","iraqi","english","result","release","violence","goal","project","closed","border","body","soon","crisis","division","&amp;","served","tour","hospital","kong","test","hong","u.n.","inc.","technology","believe","organization","published","weapons","agreed","why","nine","summer","wanted","republican","act","recently","texas","course","problem","senate","medical","un","done","reached","star","continued","investors","living","care","signed","17","art","provide","worked","presidential","gold","obama","morning","dead","opened","'ll","event","previous","cost","instead","canada","band","teams","daily","2001","available","drug","coming","2003","investment","\u2019s","michael","civil","woman","training","appeared","9","involved","indian","similar","situation","24","los","running","fighting","mark","40","trial","hold","australian","thought","!","study","fall","mother","met","relations","anti","2002","song","popular","base","tv","ground","markets","ii","newspaper","staff","saw","hand","hope","operations","pressure","americans","eastern","st.","legal","asia","budget","returned","considered","love","wrote","stop","fight","currently","charges","try","aid","ended","management","brought","cases","decided","failed","network","works","gas","turned","fact","vice","ca","mexico","trading","especially","reporters","afghanistan","common","looking","space","rates","manager","loss","2011","justice","thousands","james","rather","fund","thing","republic","opening","accused","winning","scored","championship","example","getting","biggest","performance","sports","1998","let","allowed","schools","means","turn","leave","no.","robert","personal","stocks","showed","light","arrested","person","either","offer","majority","battle","19","class","evidence","makes","society","products","regional","needed","stage","am","doing","families","construction","various","1996","sold","independent","kind","airport","paul","judge","internet","movement","room","followed","original","angeles","italy","`","data","comes","parties","nothing","sea","bring","2012","annual","officer","beijing","present","remain","nato","1999","22","remains","allow","florida","computer","21","contract","coast","created","demand","operation","events","islamic","beat","analysts","interview","helped","child","probably","spent","asian","effort","cooperation","shows","calls","investigation","lives","video","yen","runs","tried","bad","described","1994","toward","written","throughout","established","mission","associated","buy","growing","green","forward","competition","poor","latest","banks","question","1997","prison","feel","attention"],"x":{"dtype":"f4","bdata":"xpIPQaYihkHzvH9BWS4SQbf3qsGvuYtBiq9CQSpjKUEQ2yrCqUuevp5KZkF1nd3BghLWvZE\u002fP0HC3CzAJ7EowS0zB8Jnx6lBzbOwwJHteUFzZJQ\u002fO46iQShOtkF0AjRCyK4zQv89NEGJUsPA5sQkwqDKK8LDyjVBAl+pwZVBl8BxrjXBZO83wf17AMGhy0HBd82rwTu\u002fEUAJ8JPAz6NMwbbJIMEXHxLC7vabPspGvsGZeiFApdAnQgFInEDU0M4\u002fd2UCQXaq2MF62DdCtLIuwRXse8CGQQrCdW+4wSdCaUFDpHpB9CvpwdBRq8BR749B9pZ\u002fQC3FwsHOQxvCC4l3P5y8jUEP\u002ft3B7n4bQJb+nMDuNKFBQ5esQYMZC8LNX5\u002fAohuEQgu0gEF2O7BBn1aLQJkwEsJ3SpNBqIhiwFtS28GUjo1CQRwXwr\u002flEcImyyjBqN4SPRr2QkKnnM3B79B6QU+nDcIBECtCCoWIwWoY5kBSSi1AKxWLQiwQwMH7VBNC2+uaQSU72MEidvdARh8WQgCbOMG9qYBBRJfnwY1oB8EmQyNChjT0wbO3z8HH27XBxSIMwkf4n0EEkpBBW\u002f+CQcwkIkLOgxLBWcG6wNJ9akKs4D7Bhlxxwcz7vEFbwRDCnyCNwSZbiEDLsiLCAnU9Qqt4IkH9zsdBsc+ywGXtuMHdxFdCMg0yQUNRsr\u002fcpI9Agux5QiqkdEEB6CvBpKeMQHz8aEGyh3I\u002fGua6P6u3kEKBhBhCt5ypwV76N8GYAIhB0wnYQezKhMIiQDhC80MWwrIkU8HhUdPAU\u002fGTQVr1IME0VFtCNDcBQW+HC8IIOpRBlqMOwrrVicG1JZFBZWquwQTdikJpQ5dBCCk0wvIJiUFNFRZCUo3mQD8FwcBAy2HARSSnwaJw3sHEPx5BiDkTwiToG8KnZbhBWhWHQbsH60DAV0dC\u002fFQUwpxMoEECiInBJUQPQl29LMGZgBbCWToYwrWOEcKZIRfCpfN7wpUbPj9nayHCkRHKwf7HqsENk0zBdWQtwu\u002f6kEIdSZJBDxCBwtpWO0ITreHBx1byQX6Q7cFMk8XBdUKqQTKulcDkgvXBJRp5QlQer8GwzHhC32XIwd7pisDCMPlBw5IMwnlHfUIM4+PATiiCwNcIScGfE7FAaIGWwVRiU0L61GG\u002fbw+jwZVh7kGruBpCv5P3wfhGv0FvpfZB7aQHQU8UZEFAKXjCadqDQWx2FcIGgIxC3lRtQrKlSELlgMRBOx8RQmp1\u002fUBMRABBH8Z5QhJvT8EFw7zB7DsdwnzMtcD8AvfBSX9RQgBvrkEl4r\u002fA8hzkwRPhlsHayRHAAbUiwvpB50GHh1hCxHYuQtkwxcF3UFbCj2wFwmOjWkCU6ITB\u002fudZQqwgk0KCQ7TBv\u002fgEQAo8g0KXdqHBLvcKQFBkGsJItMRAPFUKwrSF9EEByQDC3lkMQkVZ8sAAVAbAULE8wjQVL0IPQEFB8sShwVraGsLFuQJCkZr+wVQDXEFizi5BJ0V1wm2\u002f2sCs4OrBGXwfwnwTu8HB5cnBzlzxwa5eGkLqGH3C8\u002fI6QlH+gcK5qwvCnFlfwsNmBsKzTtq9ma0wQqI0tEGbWEvCAiSGwKRozkAS62xB5xINwsoJscLsG8\u002fAvgaaQdAY\u002fUDsQkRCSK\u002f1wUwNVsIBAhNB071jQrICQ0JZ\u002fExCOTquQTLhg0LqbUbBS9esQV0URsKb43DC0K\u002f\u002fQTX7k0J4fIxCNyx+QrOgrkFfW\u002fTBYKl3QmLzb0LnV9dA5NynQW2ZtEAZNBnCJKdawZQSccKGbKfBd47VP5lNWkIYVYZBNNK3wFpmrkFrnZA\u002flcA+QpyW8cDQdLPCA3r9wecJAcIv+8E\u002fkOk5QiKnmMGJXQ7C4ORkQuKKrUE2mnzBWH\u002frQM6Xc0I+DqjCQUgBQsbiw8BIQdhAJ4AGQs7fbUIu1JbBD\u002foQwmoEJ8L+0oPBefh0wps9oUAJ44dCvaKqwTMpo8H0Ei5CqwrqwPa8RD88jvbBPHSxwtBj38Cq43BC9Ue7wTryKD0gzzBCHyYAQReIC8GXGNFAI5E1wu9xg0L5JHBCRs44QgmepcHb\u002f19BZTPMwR1k\u002fsGxvy7CiZXyQJGFZMFlCVZCDnezwqGQBMIRV74\u002f8BxpQSors0Ere9DAh7JUwbXSn8JB9n1CZz\u002fWwQbhqEGa34BCAkzSwbPxTkJfjIvAS57lwCP+UkIFbuTA+oPGwclmjkCmBDk\u002fEMZEQLwTdEKAyiBCsWaCP3v\u002feEKQ+VFCzvmmQcrt+EESOrtAh18BQrbjWEIhCxvCdoC0wUjmg0KzjQdAObZQwgxzTME7NRvC\u002fVaXwWmZV0Hhx3tAUxyOQeHEosH15WZBdz24wuQThMGkbbK\u002frYnkQRiQFsFgQBDBe8FIQvvlusGjT4DC74a4wnbBS8EZtYVCfyNDQlMnjUCfg6LB6VktPjNthcG5VjbCoZ1cQgtFn8GHhcvA0SAMwgGhqUFswXHBZ2oQwk5YRMAaEFJC1At0QmEjX8LQtLPC7S8tQuZpEMJpzUhAg5sJQmZdlUGtZwfC35SBQlvftcK9t3\u002fCg7i7v3mXykFuSYpC6WqNwY9XcUEXGYJCvDWLQuNltsIJjdBBwQuewFSj5EF\u002fLWVCMWF7weiiIsLYaYFBFDxGwHMMZcHnCpXBvLcHwihOGELD9I1Bw1AIQp82g0FVqTBBruZEwbI9XkLklwRCdiRwwFBUT0FtH0JCLo62wsVoxL+iTBZCfhc\u002fQn24QkLKNlpC9qo+Qq8KHsL0rhnB2FmFQi8BIUIDXa9BYQENQt\u002fRZMJFB1NCyBBBQpbsc0J4LOy\u002fGjzKwSXSiEIiitXBOICCQiSef0Kdh5JACokqwRz4gsJi1bbB1MDDQXaCy0D622fCMO2LQjCHB8FKC25Bg2kTQkC0hUIv7dVBYEaSQRMCksF0iQ7Bw0oxQPWNZcLej\u002ffB8adaQknxy8AlPZTBu4sawE84jUItXS5AaIB+QhAtbcGaSmpCy7t0QIw4UMEenyJCciMHQXrOc0Is5PvBiD+SwTeEScGxzcdAZpCMQM3bYkJmb4fCTvSDQS2ZckIPEb7BuixxQlal0kBfBu3A9OmCQlOV0sHhahXAwvGNwT9cjELuAbPCVZm1wvKPgkJ\u002f6m5CUaf6wYab38HRpTxAjLh\u002fQbt7X8AO+IRCKCL3QW\u002f4E8L3x9nBeNOiwpPvkMGajwPB1UGuQeedhT3GrolC20gmQs8JBcEC7GnBfP8owqemgEIdII9AfEljQlcIlkH8+r\u002fA8zuIwtR\u002fu0D2qEdCqFkYwMELosEGbbXCnkN0QhV6e0L3RIhCVjPnwNx5DULkkWtC1FCFQsKTgUKq2nZCb+gYwQyzT0Jsm5a\u002frNvEvhkaCkJyxVdCz0VzQlPxgEJDT6vBrdW3QZ9KVkJjyNxBK4G0QYWSEEETNH1CaO86Qq5Zh0LX5TdCK\u002f3nwfdQgcG898XBjKd7woeX9cHXWrPCov5vwjTnVEIO4V1C12jjwRedsMIL4gZCn358QmeiAsFe2ABC7TPdwfEDHsLxArjB3VyawZocbkEBYr3CQFyvQb6\u002fz8FVEvNA8B2HQNuKEMFhgC1CyoP1QUnlZULGocxBgHNLQlUqekLut0xBPhyOQs0rdkKfS9VBndkxwnk7OcIpWAtBN+sEwsruWEIaUl1CsYYIwjLGqMEoMtvArnQAwtx57z\u002fLMIFCeGsyQrsDfkJl4zBCIe9\u002fQvrWc8IMm3fCZhKXQvjjtMFoAFdC+rAGwFjcsMKAczLA2QJ5QkkbpMB+VRzCAC24wnjFtcK8yLtBv5gzQrXfBMEekajC4QRJQS94q8CN\u002fTBCmDdcQn7ThkL4qZXBnqi5wWDcOkI+h4jCytFcQt8Qa0H0No3CqwcLQjudgkLaSmXCHMCBQgw75UFo3VpC37EuQmqv8sHIAyBB1P5owjhc6EHC9oXB8GH2wewljUH1\u002fCbC4LYMwjrZ4z9bvA5As8DewAF\u002fU0IzJpXBQEYvQu7DAD6j\u002fwlC+GzqQaDRAsJQnMDBnHxfwl8i8sHY2oBCpVQlwRMDBELI\u002fJXBfCKAQr4RrEE64SVCzuqLQRmdbUDXI4DCJfC1v4e5IsJAKTZAlWtcQt\u002fEF8KLmIrCmfgwws0wOUJdJBdAlvMnQi+7osLutIPCQRYXwsi1u8LUzR9C17aPwG5FFsIiS7nCzTtQQgcJqr6ryQfCtO6SQKwZgsAbceZB9pyjwfWaWULxagDB+VEMQg5zYEEtaTRCeLGFQm5FQkKBne1AEEdMQW39DMKIYIBCF5nVwLKfisE4zStCGYn8wb9PJsIhDh9CtNMXwnp6O8CaUb3BuWsWQtFTFkHYibrCBkehwthdkUFWCJ5B8e43wq5fkEGoE39C2MlmQG\u002fdF8LJXLXBdi+7wav6vMCRB\u002fnB+P3bQWHZWMF8+pxBGXiLQhOwGEKSbR1AVkpSQntkLUL9zprBkm1KQedtJ8LYkGzCa90Xwq\u002fVQUE4DnzAaNMNwWxLD8K5xmlBvmADwgMtV0Kv65bByKmxwBfHXcF+phdBa+w3wqa0oUEL84JCiu6LwYu\u002fmMCaJY\u002fBRXMTwubLRkIA2YVCsIivQeQMEMKMzMZBL+A6Qenjs8FyFT1CTahlQt66isKSrD7BWl2uwg6cLMAe+r9B5U8AwsnSzz9u0kpCTD\u002fvwYjCVEIUaVfCIw4gwY10dcJYk7HAqEZ3wsmyJEHLn93BQBwDQoshU8JvKIPCuD++wkx+GMJ3\u002fonBlUYQQrqiQT+6tajBlj0HwrFdW0KZYPvBXmAgQJSbg0Ixsx3Cn0CzQernJcHJa7ZAkjJmQNoTNEKoKeRApg1PQUvQfkJyqxpCOegHwQ8BucGPdwRCQltyQu4tikL2XM7BhdJUwud1FMLz5QXC9yAQwakHRUKL+LRBVRPBwngsQUJFgbFBqi3cweqNXUINZgTCKuOEwCFHJkIahkdB8R2uwB7e78FRZeJATqtCQqfGP0KWKS\u002fCIPYgQrufssFXpwlBEXXqwSeNjUKupkRBcyCuwgxBH8LHbqvBc1p8QlWslUDEAw\u002fB0oXXQUdTvsIIn4JCQkADwXnpjcFydFJCFq0rQswcgkKll5\u002fBoO6NQuP8m0HRw25CYNTaQSboisL7nVlBTphowlCAgUIy+g\u002fCA7MyQZhR2sBpX9fBUDsSwgebVEKhnUFBqD4YQkwmPcJQ49HBrZj5wHDuPsGIRj3CgwCPQq1dC0HeyhXCTj25wRgCyEBaLcHCUgKHwXdkbsJMrIJCfFChQRg51EEKuR7CBQY8Ql8tTkL5dbpBQV+LwU1ah8KjxbdB4wwFwr+qb0IToZXA8bnAwmAPCsEdWgLCPaAkwQ=="},"xaxis":"x","y":{"dtype":"f4","bdata":"46Ehwfq0EcH1fPXAVXANwXDYccGOyCPBTHfwwEZJk8GJszLCQ0BJQOeAO8GAYWTCcHEtwZY7HsGA3RLBiswYQFN+SEK8Qx3BQbIEQT7WSsEoK0DBtJ7\u002fwA\u002fnccA4UG7CkS9swhQ718CkSzFB8NIowqsLK8K\u002fKojB5DsgwYmmf8C6mMvAFQaewChhz8HHUlrAC48vwbgeS8ECG7NAASCtwPhOLcDBWA\u002fCr0UUwQAoP8HL3odAprhnwpm05cEQ6xJAQYeTwdmwIkF9oQpCfAjav2B7gMBvlQbCws0wwbamb8LWGwfCgZtfwhLnWsLzewPCHcglwoDzBUEgnD9B9Vuuwe9zxcEA0F\u002fCUCklwqqvFUGXzdTBAKy4wVH\u002f\u002fsGqgTFBarfYwd82CsKxxRnB+w0Wwt6EakFjIfTB7ptgQpUrw0DyTw\u002fCBwUHwtzSOEEAO8vBlQewwQXHTkKPuy\u002fBp0ZuwuAA98HJxWfCclGEQuv5kcEhCVpCTKoMwmfkH8EPuVFCRpKTwdUAXcII\u002fxNCVndSQlpz58FytbnB4wQFwoWTKkG7D1BCTbtTQTQgHkGkdf3APWBEQaoI38FX5AnBHyGcwCGvTkJO0snBwgb\u002fwNJr20GnH2PBaSYcwp\u002fqEcH5fMnBChTswZljXEKIA4tBG01BQkw1TMGdLOXB3uVewic\u002fEUF6AbTA8PZ1Qg4crMHVNxPCgO1zQu9mdMI0p8W+g\u002f8nwhExMEJN2SDCGHMqwufv3EF5kVdCKidbQuOORULDjEvB6F7xwYemG0HzcVFCwZ6GQeViSkLurP\u002fAyw9UwU2n6MFGlujBJ\u002f8qwbWqOEKTEMjB4+I2QI3Ci0IZ7tXBUsWPwXSPCcI2mkFBtbX\u002fwTonN8D9q61BNliIQvg3dUI0i61BnBUrQThOwsFR9JDBinmpQe5AKUKkETnCfOttwlN44b8F2X\u002fCWcu5QZdxM0K7FNPBiE2kwFePAMLqbCJASMipQfsNskFVE7JBqJuyQFv0Y8ByDSPCEfpOwUXTisGcQePB3jgFwgpI1kG7XztCnGatQNQAC0JciQTClTwHQddlgkFm3UNC7cvqwacaNkJzb+rBtU1\u002fQU7uU0IMYUvCAoI4QaX7LMLY3a5BQMtIQtuHkMHzALTB4hZ6Qc2elUEY5HXBlxZ8Qov1bsLsqR\u002fCMUkMwmw5VcGmfaBBbr6\u002fwUB5CMIlUYDBNSYgv1MNP8JsIAfB0cxywtnqekE8AwjCj9JFwUc\u002fesIKHVNCJomNwFxReEKxqabBENDAQam9l7+Tg0lC\u002fKuzQTpKZMHp\u002f7fBh9aRwIVA18HTwmHCjWWuQAPT5j8SPxXCWfF9QQ4Y9EBgJ4zBAF5LQgU6MMJEsKZAbpoTQnjN2kEN5SHBTp8Ewaor1kH9F+DBM7CbQGjS4sHhYEtAzkAyQgt9YEHkk0RBwV8WwiwNvr7NqAvCzR\u002fgQOY6lEF3pZBCkywLQhNVcsLyZ5tBIOSIQp9Cu0F+ZNa+SJqkQtscw0H8qXbCcZveQIhpb0KVbitBt9YNwl0uFUL4ObLAp2WFQRcrR0K+851AgbxXQgZFNEGDshNCEj2VwPpkT0KQ2MHBdYN2QkXGy0FPRCNBGfyiQQmqQUEMk0hAFo3qwdOMTcJMCS1COQHqwdPpWsJx+UbBiah7vihp2MAv\u002flQ+61iCwW7iqEGBY37CIkVtQgEZ+j+3YfDBnIZZQjp\u002fDUIlSAvBKZhdwWUH3UHEZv5Bgb9IwqyUJEKgJa\u002fB9Ax3Qjpl20EVBIVCDEM2QnQjTsKSRcjBf2IGwhMJ+kBiZl1CRU7FQdVk0MBUGRHCuQArwp9SM0JiwhfChyUmQo\u002fwacLjaVDCs2U5QvvZBcKUS1hC391yQryKD0Ksf5FBZMbeQexnLEKF4ArCdsJrQsJZpEE+jUbB4vvMwZkAakISD6nBP2aAQZFIb0IUOpJCHphPQQsRn0F9LhvCiLJJwPu5kEKZ2PRBlTqFQly9DkKtS4FBXp\u002f5wYjLfsCfnTpChbtTwjobu8GidPhBhicmQeQrnkFUYmNBwLCAQtI7iEJ95iXCtz4GQbpEhEHMtP1BRW9tQsOeCkD8kzzCDYhawbl8R0JbyQLC6YJ1Qr964UEKM1HBWXNXwicO+UG335FCfQ8FQGymN0L6tw1CILZbwn3FgMFG7U7CcEzLwd7Ca0Jad0XCY5OAwcSIecLRgmbCC6CzwBPhckKvzMXBAsYPwRoUCsK7+DDCCys+Qt38W8LH\u002fihAkF8lwregVMKX\u002fX7Csrm\u002fwRhquL6vokTByKDKweZBlcG6kTBCKX1FQh7iikAiNMlBNdMSQdjFa8E5byXC\u002frwAQm\u002f7FEJWuUbCtYhxwnpxCsKHCQnCvWxTwkT2zUBzuY9CGT+JwZLnpcECrIVCY6x4Qf9AEkIgakJBg+lNwnEcBkL1gKfBjSNIQuNEg8FtzY3B8O3uwSd13kE\u002fCh5CvDz4wLrVZsEXmaVB03AOwirhaEItcjzC1327P0RAZEJJT3VCpwulwVzRssCqq0rCSCVNQmc9FsJNXEFCIXB4QpZqMEIlOTdCrN8uwi\u002fuTsJ2+wxB546JQo0+gsE0cehB4RuhwUYAEUJe5evBaW29weWlScJ4D\u002fDBDbufwVrtWUKPwGlBW2aLv47sKEI4gtvBMwUMQvVqSEAm+nlCfUYvwbJWpkGNPElBgqbVQWm+d8JTv3hCvkiuwZ1r88FypJPBFBGZQKsnF0L13mtC80hYwuoUa8ElA+pBkCNCQoQpcULZELlBx3gEQgSFcEF2DAO94wlTwq8rWUH6ncxB+H7oQMhZEEIloXbCZlhVQg6QkMFEdWVC72UWQkX\u002f5UEvSxTC0Id4QUkJGsIrAhXBUDKHQqPWQkFVWE1ChW64wYJfkkI\u002fwRNCZ67AwfLI5cFc\u002fmLBFBS1QRintMEYR1lCHhsRQYXRAULZ32HCg0iYwRxjXcD9B6c+OTeiwbaB2sEixClBeO2gwdd07UE5sofB8Rg1whFa4EEmxMXBFbI5wokoucFxwXJCHpyJP\u002f+bisDEJmVBLfwcwge1SELgGjvCK2AEwTljxsEQurrA\u002fDYYwu6Za0JwIJ3Bg6i8QSAaiULN3CvCDoxKwkbB0EHnXpbB5PU1vl8AvEF2MWPA3KaEwF25lUGWpJ9BaCcXwl+Ni0FxA4xCaZYZwvQ3WcJV2L7BaPhpwe8tkcFNYKrBaEdvwd7Ai0JOBnPCyB9HwcxShkLks6nBNM1wQhoylcE66\u002fPBMm+DQUgIwkFG9xlCVBHgwb6eCUJqoDXC3xk1Qcz7j0LrxRlCsM4LQrdKhkLZhVPCRGXwwGDUxUGDiYpB2GkfwnQ9i8AS6nFC+MftQQtxpEEUR6bBjASHQu7EHEL1s4xBfFyKQZ7kp0Fb9X3CVrveQXrqAkAf+Po9JTg6wgjQS0KVlYLBPf\u002fWQWE5aEK14hfCmSZRwYbKmMGI81lCzs4hwgeKJ0AJpufA3qEJQZXRpEIrJqLAbdYXwc3HesJ7nOTBUNIWwlCLMcABhXZCrHNZwnfSbkLtsKtBpfJJwZDJwsHRmjLC5kqFQtLFOUESzXDATkI7Qtjem8EUM49CgfFBwlgvKEH0Xr3B8JgFQROy4MGBtAfC60F5QYAmXcKZprdBh2P9wR7IlkHAVfjBPr0eQjaBAkKFZNDBOgqoQs6uSkIwja3Bj+MRQoVdj0AE3l\u002fCY2IUwi9sikEimjbCQLhGwTaUcUIpZG5CWwZXwhMq\u002f0ALIbfAvIHgQTXRHUIJJXrBRzWEQQnOjsCWsQ\u002fCWcuvQUuY4MFGwo4\u002fe7aUwBxDs8DDs1RCBwt9Qiq8ocG\u002fM0LB+\u002fQeQv7sfcLHanRBBnZAQdOX2UE2ZZRCF9g4QYssrsFq8\u002fpAPSsswFLrjkBY97DAVFliQULhckLVcv+\u002f9sF0QteTO0JaYWvAzsuzQBvH78EcRm5CBMMYQmxtWEKBqP9BaLUEwsJ8dsJzj0lBXsbcwQXZi0Jk9StCJiQ6wBmMHEK3CtnBNo+7wSfoiELHYXBBmx08QvnuLcIKMQdAitfSQK1u3r\u002ffDYDBpp6RQZIGgEEaffRB4QhdwoZZSUFMiGHAd1NUQR5AkUJsgA7BebaRQvIepUGBudlBGnhJQWisA8L8fo\u002fAWboSQdk2XMF82+DBI29qQsRWgMEAexFBwnggQqlO2cAxLUrA7kgkQnhLQb05oc3ASBpFweLBjkBW1aVCjS42QpCDmkHOrg1Cyh5MQU8aecIebhs\u002figR7QtQt2sEq87XBweNXwlAAGUKZcljCu2soQr1fpUKbSTrCPoczQhcUMsE+2nZCM5T+wY52HcJoJlxBwi7Uv4xeikHhCh1CSh4jQsPKFUKf1ajA6o9uwciojMHashlCk9IbQpQPDkLDA43ByUOOQQA2I0JBcYxC3f\u002fKQNOcIMJ+tqHBgcoYQprgosFpD7DBv6bxQQXB7UF\u002fozVCJGdTQslhRsHdWB1BWgO8v+3xDMJzvRdCnq2DwVlKKkIliuDAuYA2QhClkMFpI7FBDwEWQbGjK8EeqZtAEl4oQnddA0I\u002feLdBhHYkQm+eQ0GUDClAYhG7QCCjx8HzxYRCZNj6wWnvM0LG2JXBdrKKwTbUOEIsO09Ct+jZwXFlM8Lo45tBixLHwWCtPkHXtF3CXCSOwLz9OEIrOsPBP1KmQttf4cGR7UXBdm4XwpN7bELgy5XAH4E4Qne+\u002fcCDFn\u002fCvYlrwMMF1MFEFszBmcSPwV10iECGKmRBOYG3wNRQ68HH3XjBSXWuQdtj2MGR0afBaaU5wRcWgsKlJahC5wTQQL+8psGW7AJC\u002fR8fQjz\u002fQEL9xLTBxZ3hwVXTnMDxrZRCvp8uQjfRYcJdvLxB4RIfQq5x6MGgm9VBrRGkwNUHCULYSInB00RLwBjDGcKZRivCcnKGQTIEckH6uO7BAXrOwLT8pMBPoJBAM+ogwmCuwUHur6NCdPg3QpQzmkC3SYBCq2B5QlevI0H3amzBIBAWQvqWZ0JuQyfCGfYNQO1u8MHy+YdCmjUkwmrQrEESd5FBWC5HwG8+KEHXFYtC+CV4Qt6IT8E4OCHB7tY5QlOa4sBAOFzCETwiwVj7dcEFoBlCIHmkQFIeYcIRrPpBgVK6QQMwOUC00aTB1Y4aQiQEfMBYt3xCLrQMwXIlbsHyJjJCQQKiQTxDlEHnEgTB4e0cQXprVUJOFLdBADskQjLfDELZ+NJB+JosQqfDlEFu+hhCA6L2wZhrXsKMopbBGmATwvRkF8B9\u002f\u002f3AilvIwbwkFEKIAmJBRhdtQKc6JEKfOTVCdL2lwOV3r8HoO9VBVhOswSoBE8DmEJTB\u002f87+QVnrScET8gtCmiGqwDtJQELSBx3CbAcGwg=="},"yaxis":"y","type":"scatter","textposition":"top center"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"x"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"y"}},"legend":{"tracegroupgap":0},"height":960,"width":1024},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('6576f89d-9a63-496a-9501-909a1b1ab6a3');
+var gd = document.getElementById('4396f017-7a7c-47d6-b6a6-1d24de28e969');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -883,7 +891,7 @@ Note
 <figcaption><span class="citation" data-cites="jm3">Jurafsky and Martin (<a href="references.html#ref-jm3" role="doc-biblioref">2025</a>)</span></figcaption>
 </figure>
 </div>
-<p>Here are some examples where transformers excel:</p>
+<p>Here are some more examples where transformers excel:</p>
 <blockquote class="blockquote">
 <p>The keys to the cabinet <em>are</em> on the table.</p>
 <p>The chicken crossed the road because <em>it</em> wanted to get to the other side.</p>
@@ -914,79 +922,52 @@ Note
 <section id="sentiment-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="sentiment-analysis">Sentiment Analysis</h3>
 <p>In this subsection, we shall utilise one of their sentiment analysis models on the wine reviews dataset. This is a transformer-based neural language model (BERT) that has been fine-tuned with data labelled with sentiments. All we have to do is feed in the sentence, and we will obtain a confidence score, and a sentiment label.</p>
-<div id="05ae3d13" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>, </span>
-<span id="cb32-2"><a href="#cb32-2"></a>  model<span class="op">=</span><span class="st">"distilbert/distilbert-base-uncased-finetuned-sst-2-english"</span>)</span>
-<span id="cb32-3"><a href="#cb32-3"></a>  </span>
-<span id="cb32-4"><a href="#cb32-4"></a>classifier([<span class="st">"I love this course!"</span>, <span class="st">"I absolutely detest this course."</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="dee7cbec" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>, </span>
+<span id="cb35-2"><a href="#cb35-2"></a>  model<span class="op">=</span><span class="st">"distilbert/distilbert-base-uncased-finetuned-sst-2-english"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>  </span>
+<span id="cb35-4"><a href="#cb35-4"></a>classifier([<span class="st">"I love this course!"</span>, <span class="st">"I absolutely detest this course."</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Device set to use cpu</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>[{'label': 'POSITIVE', 'score': 0.9998835325241089},
  {'label': 'NEGATIVE', 'score': 0.9973570704460144}]</code></pre>
 </div>
 </div>
 <div id="exm-wine-reviews-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 4.2 (Example: Wine Reviews Dataset)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 4.6 (Wine reviews sentiments)</strong></span> </p>
 <p>The number of reviews we have is close to 120,000. Hence, computing the sentiments for each and every one will take a long time. Instead, we shall compute the sentiments for a sample (of size 20, where possible) from each variety of wine.</p>
 <p>The following snippet samples 20 reviews from each wine type.</p>
-<div id="7d7b2800" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>tmp_df <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span> wine_reviews.columns)</span>
-<span id="cb35-2"><a href="#cb35-2"></a><span class="co"># w = widgets.IntProgress(</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a><span class="co">#     value=0,</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#     min=0,</span></span>
-<span id="cb35-5"><a href="#cb35-5"></a><span class="co">#     max=len(wine_reviews.variety.unique()),</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a><span class="co">#     description='Progress: ',</span></span>
-<span id="cb35-7"><a href="#cb35-7"></a><span class="co">#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''</span></span>
-<span id="cb35-8"><a href="#cb35-8"></a><span class="co">#     style={'bar_color': 'lightblue'},</span></span>
-<span id="cb35-9"><a href="#cb35-9"></a><span class="co">#     orientation='horizontal'</span></span>
-<span id="cb35-10"><a href="#cb35-10"></a><span class="co"># )</span></span>
-<span id="cb35-11"><a href="#cb35-11"></a><span class="co"># display(w)</span></span>
-<span id="cb35-12"><a href="#cb35-12"></a></span>
-<span id="cb35-13"><a href="#cb35-13"></a><span class="cf">for</span> x,vv <span class="kw">in</span> wine_reviews.groupby(wine_reviews.variety):</span>
-<span id="cb35-14"><a href="#cb35-14"></a>    grp_len <span class="op">=</span> vv.shape[<span class="dv">0</span>]</span>
-<span id="cb35-15"><a href="#cb35-15"></a>    <span class="cf">if</span>(grp_len <span class="op">&gt;=</span> <span class="dv">20</span>):</span>
-<span id="cb35-16"><a href="#cb35-16"></a>        vv <span class="op">=</span> vv.sample(n<span class="op">=</span><span class="dv">20</span>, random_state<span class="op">=</span><span class="dv">99</span>)</span>
-<span id="cb35-17"><a href="#cb35-17"></a>    tmp_df <span class="op">=</span> pd.concat([tmp_df, vv], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb35-18"><a href="#cb35-18"></a>    <span class="co"># w.value += 1</span></span>
-<span id="cb35-19"><a href="#cb35-19"></a>    </span>
-<span id="cb35-20"><a href="#cb35-20"></a>review_list <span class="op">=</span> <span class="bu">list</span>(tmp_df.description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\stavg\AppData\Local\Temp\ipykernel_27304\2593812303.py:17: FutureWarning:
-
-The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
-</code></pre>
-</div>
+<div id="0679f873" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>tmp_df <span class="op">=</span> wine_reviews.head(<span class="dv">0</span>).copy()</span>
+<span id="cb38-2"><a href="#cb38-2"></a></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="cf">for</span> x,vv <span class="kw">in</span> wine_reviews.groupby(wine_reviews.variety):</span>
+<span id="cb38-4"><a href="#cb38-4"></a>    grp_len <span class="op">=</span> vv.shape[<span class="dv">0</span>]</span>
+<span id="cb38-5"><a href="#cb38-5"></a>    <span class="cf">if</span>(grp_len <span class="op">&gt;=</span> <span class="dv">20</span>):</span>
+<span id="cb38-6"><a href="#cb38-6"></a>        vv <span class="op">=</span> vv.sample(n<span class="op">=</span><span class="dv">20</span>, random_state<span class="op">=</span><span class="dv">99</span>)</span>
+<span id="cb38-7"><a href="#cb38-7"></a>    tmp_df <span class="op">=</span> pd.concat([tmp_df, vv], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb38-8"><a href="#cb38-8"></a>    </span>
+<span id="cb38-9"><a href="#cb38-9"></a>review_list <span class="op">=</span> <span class="bu">list</span>(tmp_df.description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The next snippet computes the sentiment scores for those sampled reviews.</p>
-<div id="86083518" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>tmp_df[<span class="st">'score'</span>] <span class="op">=</span> <span class="fl">0.00</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a>tmp_df[<span class="st">'label'</span>] <span class="op">=</span> <span class="st">''</span></span>
-<span id="cb37-3"><a href="#cb37-3"></a><span class="co"># w = widgets.IntProgress(</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="co">#     value=0,</span></span>
-<span id="cb37-5"><a href="#cb37-5"></a><span class="co">#     min=0,</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a><span class="co">#     max=tmp_df.shape[0],</span></span>
-<span id="cb37-7"><a href="#cb37-7"></a><span class="co">#     description='Progress: ',</span></span>
-<span id="cb37-8"><a href="#cb37-8"></a><span class="co">#     bar_style='', # 'success', 'info', 'warning', 'danger' or ''</span></span>
-<span id="cb37-9"><a href="#cb37-9"></a><span class="co">#     style={'bar_color': 'lightblue'},</span></span>
-<span id="cb37-10"><a href="#cb37-10"></a><span class="co">#     orientation='horizontal'</span></span>
-<span id="cb37-11"><a href="#cb37-11"></a><span class="co"># )</span></span>
-<span id="cb37-12"><a href="#cb37-12"></a><span class="co"># display(w)</span></span>
-<span id="cb37-13"><a href="#cb37-13"></a><span class="cf">for</span> i,rr <span class="kw">in</span> <span class="bu">enumerate</span>(review_list):</span>
-<span id="cb37-14"><a href="#cb37-14"></a>    tmp <span class="op">=</span> classifier(rr)[<span class="dv">0</span>]</span>
-<span id="cb37-15"><a href="#cb37-15"></a>    tmp_df.loc[i, <span class="st">'score'</span>] <span class="op">=</span> tmp[<span class="st">'score'</span>]</span>
-<span id="cb37-16"><a href="#cb37-16"></a>    tmp_df.loc[i, <span class="st">'label'</span>] <span class="op">=</span> tmp[<span class="st">'label'</span>]</span>
-<span id="cb37-17"><a href="#cb37-17"></a>    <span class="co">#w.value = i</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0aa7e58a" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>tmp_df[<span class="st">'score'</span>] <span class="op">=</span> <span class="fl">0.00</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>tmp_df[<span class="st">'label'</span>] <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="cf">for</span> i,rr <span class="kw">in</span> <span class="bu">enumerate</span>(review_list):</span>
+<span id="cb39-4"><a href="#cb39-4"></a>    tmp <span class="op">=</span> classifier(rr)[<span class="dv">0</span>]</span>
+<span id="cb39-5"><a href="#cb39-5"></a>    tmp_df.loc[i, <span class="st">'score'</span>] <span class="op">=</span> tmp[<span class="st">'score'</span>]</span>
+<span id="cb39-6"><a href="#cb39-6"></a>    tmp_df.loc[i, <span class="st">'label'</span>] <span class="op">=</span> tmp[<span class="st">'label'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="5ed6a0ec" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>sent_counts <span class="op">=</span> pd.crosstab(tmp_df.variety, tmp_df.label,margins<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb38-2"><a href="#cb38-2"></a>sent_counts[<span class="st">'proportion'</span>] <span class="op">=</span> sent_counts.POSITIVE<span class="op">/</span>sent_counts.All</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This next snippet tabulates the sentiment classifications for the wine types.</p>
+<div id="866ac6eb" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>sent_counts <span class="op">=</span> pd.crosstab(tmp_df.variety, tmp_df.label, margins<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb40-2"><a href="#cb40-2"></a>sent_counts[<span class="st">'proportion'</span>] <span class="op">=</span> sent_counts.POSITIVE<span class="op">/</span>sent_counts.All</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1f05bc9d" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>show(sent_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="f195f5bd" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>show(sent_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<table id="itables_2683eed1_fb7f_406d_a282_f58389f89827" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<table id="itables_09b30734_90c9_4edf_a429_1514b2778d73" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
 <thead>
     <tr style="text-align: right;">
       <th>label</th>
@@ -1069,7 +1050,7 @@ Loading ITables v2.3.0 from the internet...
 <script type="module">
     import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
 
-    document.querySelectorAll("#itables_2683eed1_fb7f_406d_a282_f58389f89827:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_09b30734_90c9_4edf_a429_1514b2778d73:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1087,9 +1068,9 @@ Loading ITables v2.3.0 from the internet...
 </div>
 </div>
 <p>These are the reviews for one of the varieties that had a proportion of positive reviews close to 50%.</p>
-<div id="4ae416b7" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="cf">for</span> x <span class="kw">in</span> wine_reviews[wine_reviews.variety <span class="op">==</span> <span class="st">'Tempranillo Blanco'</span>].description.values:</span>
-<span id="cb40-2"><a href="#cb40-2"></a>    pp.pprint(x) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9264befe" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="cf">for</span> x <span class="kw">in</span> wine_reviews[wine_reviews.variety <span class="op">==</span> <span class="st">'Tempranillo Blanco'</span>].description.values:</span>
+<span id="cb42-2"><a href="#cb42-2"></a>    pp.pprint(x) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>("Gold in color and lightly oxidized on the nose, and it's still young. Smells "
  'heavy and creamy, like hay. Feels flat, with pickled flavors and mealy apple '
@@ -1124,6 +1105,73 @@ Loading ITables v2.3.0 from the internet...
  'controlled bitterness.')</code></pre>
 </div>
 </div>
+<p>The corresponding labels from the classifer are :</p>
+<div id="277e9096" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>tmp_df[tmp_df.variety <span class="op">==</span> <span class="st">'Tempranillo Blanco'</span>][[<span class="st">'description'</span>, <span class="st">'label'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">description</th>
+<th data-quarto-table-cell-role="th">label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5476</td>
+<td>Gold in color and lightly oxidized on the nose...</td>
+<td>NEGATIVE</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5477</td>
+<td>Oily, stalky, bready aromas are a bit tired. T...</td>
+<td>POSITIVE</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5478</td>
+<td>Maderized in color, this wine has a yeasty, cr...</td>
+<td>POSITIVE</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5479</td>
+<td>Waxy peach aromas seem slightly oxidized. It's...</td>
+<td>NEGATIVE</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5480</td>
+<td>Forget the high price on this Tempranillo Blan...</td>
+<td>NEGATIVE</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5481</td>
+<td>A maderized color is apropos for the wine's fu...</td>
+<td>POSITIVE</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5482</td>
+<td>Green grassy aromas are modest and watery. Thi...</td>
+<td>POSITIVE</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5483</td>
+<td>Rough, stalky, yeasty aromas are all over the ...</td>
+<td>NEGATIVE</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5484</td>
+<td>Green aromas of herbs and tomatillo are harsh,...</td>
+<td>NEGATIVE</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1156,28 +1204,27 @@ Note
 </div>
 </div>
 <div id="exm-wine-reviews-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 4.3 (Example: Wine Reviews Dataset)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 4.7 (Wine reviews information retrieval)</strong></span> </p>
 <p>A simple way to perform IR is to use cosine similarity to compute how close the given query vector is to the individual documents in the corpus.</p>
 <p>The next snippet initialises a model for retrieving similar documents.</p>
-<div id="30723785" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>dct <span class="op">=</span> gensim.corpora.Dictionary(all_strings_tokenized)</span>
-<span id="cb42-2"><a href="#cb42-2"></a>bow_corpus <span class="op">=</span> [dct.doc2bow(text) <span class="cf">for</span> text <span class="kw">in</span> all_strings_tokenized]</span>
-<span id="cb42-3"><a href="#cb42-3"></a>tfidf <span class="op">=</span> gensim.models.TfidfModel(dictionary<span class="op">=</span>dct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="76f6c138" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>dct <span class="op">=</span> gensim.corpora.Dictionary(all_strings_tokenized)</span>
+<span id="cb45-2"><a href="#cb45-2"></a>bow_corpus <span class="op">=</span> [dct.doc2bow(text) <span class="cf">for</span> text <span class="kw">in</span> all_strings_tokenized]</span>
+<span id="cb45-3"><a href="#cb45-3"></a>tfidf <span class="op">=</span> gensim.models.TfidfModel(dictionary<span class="op">=</span>dct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>NLP corpora are typically very large. Before we can find matching documents, we build a similarity index, so that matches are returned quicker. We try something simple at first:</p>
 <blockquote class="blockquote">
 <p>Which documents/reviews are similar to the first one?</p>
 </blockquote>
-<div id="fdad2078" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>index <span class="op">=</span> gensim.similarities.Similarity(<span class="va">None</span>, </span>
-<span id="cb43-2"><a href="#cb43-2"></a>  corpus<span class="op">=</span>tfidf[bow_corpus], num_features<span class="op">=</span><span class="bu">len</span>(dct))</span>
-<span id="cb43-3"><a href="#cb43-3"></a>sims <span class="op">=</span> index[tfidf[bow_corpus[<span class="dv">0</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="95e5a982" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>index <span class="op">=</span> gensim.similarities.Similarity(<span class="va">None</span>, </span>
+<span id="cb46-2"><a href="#cb46-2"></a>  corpus<span class="op">=</span>tfidf[bow_corpus], num_features<span class="op">=</span><span class="bu">len</span>(dct))</span>
+<span id="cb46-3"><a href="#cb46-3"></a>sims <span class="op">=</span> index[tfidf[bow_corpus[<span class="dv">0</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>These are the most similar reviews to <em>review id 0</em>. Of course, the first review itself is there! Let’s retrieve and print all the reviews similar to the first one.</p>
-<div id="328203d4" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="co">#np.argsort(-sims)[:10]</span></span>
-<span id="cb44-2"><a href="#cb44-2"></a><span class="cf">for</span> x <span class="kw">in</span> np.argsort(<span class="op">-</span>sims)[:<span class="dv">5</span>]:</span>
-<span id="cb44-3"><a href="#cb44-3"></a>    pp.pprint(all_review_strings[x]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="971c0e6a" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a><span class="cf">for</span> x <span class="kw">in</span> np.argsort(<span class="op">-</span>sims)[:<span class="dv">5</span>]:</span>
+<span id="cb47-2"><a href="#cb47-2"></a>    pp.pprint(all_review_strings[x]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>('Aromas include tropical fruit, broom, brimstone and dried herb. The palate '
  "isn't overly expressive, offering unripened apple, citrus and dried sage "
@@ -1196,17 +1243,16 @@ Note
 </div>
 </div>
 <p>Now we try a new query of our own: “acidic chardonnay”. First we preprocess it, like we did the original documents.</p>
-<div id="1c797ea4" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>q1 <span class="op">=</span> [wn.lemmatize(x) <span class="cf">for</span> x <span class="kw">in</span> preprocess_string(<span class="st">'acidic white chardonnay'</span>, CUSTOM_FILTER)]</span>
-<span id="cb46-2"><a href="#cb46-2"></a>sims <span class="op">=</span> index[tfidf[dct.doc2bow(q1)]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ebeab4c0" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1"></a>q1 <span class="op">=</span> [wn.lemmatize(x) <span class="cf">for</span> x <span class="kw">in</span> preprocess_string(<span class="st">'acidic white chardonnay'</span>, CUSTOM_FILTER)]</span>
+<span id="cb49-2"><a href="#cb49-2"></a>sims <span class="op">=</span> index[tfidf[dct.doc2bow(q1)]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we print the top 5 most similar reviews to our query.</p>
-<div id="4de9265c" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a>q1_results <span class="op">=</span> np.argsort(<span class="op">-</span>sims)[:<span class="dv">10</span>]</span>
-<span id="cb47-2"><a href="#cb47-2"></a><span class="co">#q1_results</span></span>
-<span id="cb47-3"><a href="#cb47-3"></a><span class="co">#pp.pprint(wine_reviews.description.values[q1_results])</span></span>
-<span id="cb47-4"><a href="#cb47-4"></a><span class="cf">for</span> x <span class="kw">in</span> q1_results[:<span class="dv">5</span>]:</span>
-<span id="cb47-5"><a href="#cb47-5"></a>    pp.pprint(all_review_strings[x]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ac605946" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a>q1_results <span class="op">=</span> np.argsort(<span class="op">-</span>sims)[:<span class="dv">5</span>]</span>
+<span id="cb50-2"><a href="#cb50-2"></a></span>
+<span id="cb50-3"><a href="#cb50-3"></a><span class="cf">for</span> x <span class="kw">in</span> q1_results:</span>
+<span id="cb50-4"><a href="#cb50-4"></a>    pp.pprint(all_review_strings[x]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>('A standard Chardonnay, dry and nicely acidic, with citrus, pear, vanilla, '
  'lees and oak flavors.')
@@ -1243,52 +1289,53 @@ Note
 </ol>
 <p>At the end of LDA topic modeling, we will be able to tell, for a particular (new or old) document: the weight combination of the topics for that document. For each topic, we would be able to tell the terms that are salient.</p>
 <p>LDA only gives us the probabilistic weights - we have to interpret them ourselves. Suppose we decide to split the corpus into 10 topics. Let us investigate what these topics consist of.</p>
-<div id="d141d1cc" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1"></a>lda1 <span class="op">=</span> gensim.models.LdaModel(corpus<span class="op">=</span> bow_corpus, num_topics<span class="op">=</span><span class="dv">10</span>, id2word<span class="op">=</span>dct)</span>
-<span id="cb49-2"><a href="#cb49-2"></a>reviews_vis_data <span class="op">=</span> gensimvis.prepare(lda1, bow_corpus, dct)</span>
-<span id="cb49-3"><a href="#cb49-3"></a></span>
-<span id="cb49-4"><a href="#cb49-4"></a>pp.pprint(lda1.show_topics())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="6b4830e0" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a>lda1 <span class="op">=</span> gensim.models.LdaModel(corpus<span class="op">=</span> bow_corpus, num_topics<span class="op">=</span><span class="dv">10</span>, </span>
+<span id="cb52-2"><a href="#cb52-2"></a>                              id2word<span class="op">=</span>dct, random_state<span class="op">=</span><span class="dv">41</span>)</span>
+<span id="cb52-3"><a href="#cb52-3"></a>reviews_vis_data <span class="op">=</span> gensimvis.prepare(lda1, bow_corpus, dct)</span>
+<span id="cb52-4"><a href="#cb52-4"></a></span>
+<span id="cb52-5"><a href="#cb52-5"></a>pp.pprint(lda1.show_topics())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[   (   0,
-        '0.030*"wine" + 0.023*"aromas" + 0.019*"sweet" + 0.015*"honey" + '
-        '0.015*"fruit" + 0.012*"almond" + 0.011*"dried" + 0.011*"mouth" + '
-        '0.010*"apricot" + 0.010*"toasted"'),
+        '0.024*"pinot" + 0.024*"flavors" + 0.021*"dry" + 0.020*"cherries" + '
+        '0.020*"years" + 0.018*"wine" + 0.017*"noir" + 0.015*"tannins" + '
+        '0.013*"cabernet" + 0.012*"blackberries"'),
     (   1,
-        '0.031*"palate" + 0.024*"apple" + 0.023*"finish" + 0.022*"flavors" + '
-        '0.019*"citrus" + 0.019*"acidity" + 0.019*"aromas" + 0.019*"white" + '
-        '0.018*"lemon" + 0.016*"fresh"'),
+        '0.082*"wine" + 0.033*"drink" + 0.033*"acidity" + 0.026*"ripe" + '
+        '0.024*"fruits" + 0.024*"fruit" + 0.020*"tannins" + 0.017*"rich" + '
+        '0.014*"character" + 0.014*"flavors"'),
     (   2,
-        '0.032*"cherry" + 0.031*"black" + 0.029*"palate" + 0.025*"aromas" + '
-        '0.025*"tannins" + 0.017*"red" + 0.016*"spice" + 0.013*"pepper" + '
-        '0.012*"offers" + 0.011*"nose"'),
+        '0.051*"flavors" + 0.043*"finish" + 0.041*"aromas" + 0.029*"berry" + '
+        '0.025*"plum" + 0.022*"palate" + 0.016*"herbal" + 0.014*"feels" + '
+        '0.012*"notes" + 0.012*"oak"'),
     (   3,
-        '0.045*"flavors" + 0.023*"wine" + 0.019*"sweet" + 0.018*"pinot" + '
-        '0.017*"oak" + 0.017*"dry" + 0.015*"cherry" + 0.014*"good" + '
-        '0.013*"like" + 0.011*"rich"'),
+        '0.032*"aromas" + 0.023*"fruit" + 0.023*"white" + 0.022*"palate" + '
+        '0.019*"apple" + 0.018*"citrus" + 0.016*"acidity" + 0.016*"wine" + '
+        '0.015*"flavors" + 0.015*"peach"'),
     (   4,
-        '0.046*"flavors" + 0.036*"finish" + 0.033*"aromas" + 0.020*"fruit" + '
-        '0.020*"berry" + 0.019*"plum" + 0.019*"palate" + 0.014*"notes" + '
-        '0.012*"cherry" + 0.012*"oak"'),
+        '0.031*"cherry" + 0.031*"tannins" + 0.029*"black" + 0.027*"aromas" + '
+        '0.027*"palate" + 0.018*"spice" + 0.018*"cabernet" + 0.017*"red" + '
+        '0.014*"berry" + 0.012*"offers"'),
     (   5,
-        '0.028*"vineyard" + 0.026*"fruit" + 0.024*"wine" + 0.010*"estate" + '
-        '0.009*"vintage" + 0.008*"finish" + 0.008*"winery" + 0.007*"complex" + '
-        '0.007*"single" + 0.007*"valley"'),
+        '0.049*"flavors" + 0.036*"wine" + 0.029*"cherry" + 0.029*"sweet" + '
+        '0.026*"soft" + 0.017*"like" + 0.016*"easy" + 0.016*"raspberry" + '
+        '0.014*"simple" + 0.014*"ripe"'),
     (   6,
-        '0.025*"bodied" + 0.018*"wine" + 0.018*"medium" + 0.016*"grenache" + '
-        '0.016*"blend" + 0.015*"light" + 0.014*"fruit" + 0.014*"finish" + '
-        '0.013*"texture" + 0.013*"color"'),
+        '0.034*"flavors" + 0.025*"sweet" + 0.020*"vanilla" + 0.018*"acidity" + '
+        '0.016*"wine" + 0.014*"chardonnay" + 0.014*"finish" + 0.013*"rich" + '
+        '0.013*"honey" + 0.012*"pineapple"'),
     (   7,
-        '0.064*"wine" + 0.041*"tannins" + 0.026*"fruit" + 0.025*"black" + '
-        '0.021*"drink" + 0.021*"ripe" + 0.020*"rich" + 0.017*"years" + '
-        '0.016*"firm" + 0.015*"structure"'),
+        '0.033*"fruit" + 0.033*"wine" + 0.017*"flavors" + 0.015*"oak" + '
+        '0.015*"finish" + 0.012*"black" + 0.011*"cherry" + 0.011*"dark" + '
+        '0.011*"bodied" + 0.009*"notes"'),
     (   8,
-        '0.076*"wine" + 0.042*"acidity" + 0.032*"drink" + 0.023*"ripe" + '
-        '0.020*"crisp" + 0.019*"fruits" + 0.019*"flavors" + 0.018*"fruity" + '
-        '0.017*"character" + 0.017*"texture"'),
+        '0.024*"palate" + 0.022*"lemon" + 0.019*"finish" + 0.018*"flavors" + '
+        '0.018*"fresh" + 0.017*"apple" + 0.016*"dry" + 0.016*"lime" + '
+        '0.015*"notes" + 0.015*"acidity"'),
     (   9,
-        '0.081*"cabernet" + 0.064*"sauvignon" + 0.062*"blend" + 0.043*"merlot" '
-        '+ 0.026*"oak" + 0.025*"franc" + 0.019*"syrah" + 0.017*"french" + '
-        '0.017*"fruit" + 0.016*"petit"')]</code></pre>
+        '0.035*"nose" + 0.024*"palate" + 0.018*"bottling" + 0.017*"black" + '
+        '0.016*"dried" + 0.012*"fruit" + 0.012*"flavors" + 0.012*"cranberry" + '
+        '0.011*"red" + 0.011*"shows"')]</code></pre>
 </div>
 </div>
 <p>The output provides the most common terms that define each topic (remember: each topic is defined as a <em>probability distribution over the vocabulary</em>).</p>
@@ -1306,23 +1353,23 @@ Note
 </div>
 </div>
 <p>We can also find out which <em>topics</em> a particular document is distributed over. For instance, the output below shows that words in document 0 are predominantly drawn from topics 2 and 5.</p>
-<div id="fa01cbdb" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a>lda1.get_document_topics(bow_corpus[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
-<pre><code>[(0, 0.24855468), (1, 0.47126156), (2, 0.24683908)]</code></pre>
+<div id="4d3cf026" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a>lda1.get_document_topics(bow_corpus[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>[(3, 0.9571274)]</code></pre>
 </div>
 </div>
-<div id="b235f31b" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a>pp.pprint(all_review_strings[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="db9a1986" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1"></a>pp.pprint(all_review_strings[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>('Aromas include tropical fruit, broom, brimstone and dried herb. The palate '
  "isn't overly expressive, offering unripened apple, citrus and dried sage "
  'alongside brisk acidity.')</code></pre>
 </div>
 </div>
-<p>A delightful visualisation from pyLDAvis allows us to understand the “distance” between topics, and the frequent words from each topic easily.</p>
-<div id="d9847a06" class="cell" data-execution_count="34">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1"></a>pyLDAvis.display(reviews_vis_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A delightful <a href="04-nlp_ldavis.html">visualisation</a> from pyLDAvis allows us to understand the “distance” between topics, and the frequent words from each topic easily.</p>
+<div id="76436ba5" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1"></a>pyLDAvis.display(reviews_vis_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
