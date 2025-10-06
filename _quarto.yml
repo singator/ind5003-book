@@ -56,6 +56,3 @@ format:
     theme: Yeti
 
 jupyter: python3
-
-execute:
-  cache: true

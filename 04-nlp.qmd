@@ -833,9 +833,9 @@ sims = index[tfidf[dct.doc2bow(q1)]]
 Now we print the top 5 most similar reviews to our query.
 
 ```{python}
-q1_results = np.argsort(-sims)[:10]
+q1_results = np.argsort(-sims)[:5]
 
-for x in q1_results[:5]:
+for x in q1_results:
     pp.pprint(all_review_strings[x]) 
 ```
 
@@ -865,7 +865,8 @@ ourselves. Suppose we decide to split the corpus into 10 topics. Let us
 investigate what these topics consist of.
 
 ```{python}
-lda1 = gensim.models.LdaModel(corpus= bow_corpus, num_topics=10, id2word=dct)
+lda1 = gensim.models.LdaModel(corpus= bow_corpus, num_topics=10, 
+                              id2word=dct, random_state=41)
 reviews_vis_data = gensimvis.prepare(lda1, bow_corpus, dct)
 
 pp.pprint(lda1.show_topics())
@@ -890,7 +891,7 @@ lda1.get_document_topics(bow_corpus[0])
 pp.pprint(all_review_strings[0])
 ```
 
-A delightful visualisation from pyLDAvis allows us to understand the "distance"
+A delightful [visualisation](04-nlp_ldavis.html) from pyLDAvis allows us to understand the "distance"
 between topics, and the frequent words from each topic easily.
 
 ```{python}
