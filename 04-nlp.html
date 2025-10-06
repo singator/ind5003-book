@@ -1287,8 +1287,10 @@ Note
 <li>There is a set of <span class="math inline">\(K\)</span> topics that the documents come from. Each document contains words from several topics. There is a probability mass function on the topics for each document.</li>
 <li>For each topic, there is a probability mass function for the distribution of words in that topic.</li>
 </ol>
-<p>At the end of LDA topic modeling, we will be able to tell, for a particular (new or old) document: the weight combination of the topics for that document. For each topic, we would be able to tell the terms that are salient.</p>
-<p>LDA only gives us the probabilistic weights - we have to interpret them ourselves. Suppose we decide to split the corpus into 10 topics. Let us investigate what these topics consist of.</p>
+<p>At the end of LDA topic modeling, we will be able to tell, for a particular (new or old) document: the weight combination of the topics for that document. For each topic, we would be able to tell the terms that are salient. LDA only gives us the probabilistic weights - we have to interpret them ourselves.</p>
+<div id="exm-wine-reviews-lda" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 4.8 (Wine reviews topic modeling)</strong></span> </p>
+<p>Suppose we decide to split the corpus into 10 topics. Let us investigate what these topics consist of.</p>
 <div id="6b4830e0" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a>lda1 <span class="op">=</span> gensim.models.LdaModel(corpus<span class="op">=</span> bow_corpus, num_topics<span class="op">=</span><span class="dv">10</span>, </span>
 <span id="cb52-2"><a href="#cb52-2"></a>                              id2word<span class="op">=</span>dct, random_state<span class="op">=</span><span class="dv">41</span>)</span>
@@ -1339,20 +1341,7 @@ Note
 </div>
 </div>
 <p>The output provides the most common terms that define each topic (remember: each topic is defined as a <em>probability distribution over the vocabulary</em>).</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What name would you give each topic?</p>
-</div>
-</div>
-<p>We can also find out which <em>topics</em> a particular document is distributed over. For instance, the output below shows that words in document 0 are predominantly drawn from topics 2 and 5.</p>
+<p>We can also find out which <em>topics</em> a particular document is distributed over. For instance, the output below shows that words in document 0 are predominantly drawn from topic 3.</p>
 <div id="4d3cf026" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a>lda1.get_document_topics(bow_corpus[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
@@ -1367,34 +1356,62 @@ Note
  'alongside brisk acidity.')</code></pre>
 </div>
 </div>
-<p>A delightful <a href="04-nlp_ldavis.html">visualisation</a> from pyLDAvis allows us to understand the “distance” between topics, and the frequent words from each topic easily.</p>
+</div>
+<p>A delightful visualisation from <code>pyLDAvis</code> allows us to understand the “distance” between topics, and the frequent words from each topic easily. To generate the visualisation in your notebook, execute the following command.</p>
 <div id="76436ba5" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1"></a>pyLDAvis.display(reviews_vis_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The online version of our textbook contains the interactive version.</p>
+<ul>
+<li><a href="04-nlp_ldavis.html">Interactive visualisation</a></li>
+</ul>
+<p>A few things to note:</p>
+<ol type="1">
+<li>The numbering of topics in the text version of the topics does not match the numbers within the circles of the visualisation. For easy mapping, we have the following mapping of text topics to visual circles:
+<ul>
+<li>0 -&gt; 7, 1 -&gt; 1, 2 -&gt; 6, 3 -&gt; 4, 4 -&gt; 3, 5 -&gt; 8, 6 -&gt; 9, 7 -&gt; 2, 8 -&gt; 5, 9 -&gt; 10</li>
+</ul></li>
+<li>The circles in the visualisation represent the topics. The distance between circles is the distance between the topic distributions, projected onto <span class="math inline">\(R^2\)</span> using MDS. From the visual, we can see that topics 6 and 3 are very similar, and so too are topics 4 and 5, and topics 1 and 8. It may be worth re-running the algorithm with a smaller number of topics.</li>
+<li>If you inspect the text version of topics, you will notice many words repeated across topics, e.g.&nbsp;fruits, flavors, wine and palate. These should be removed before re-running the algorithm. Doing so would result in more distinct topics.</li>
+<li>In terms of interpretation, checking against the topic distribution, it appears topics 4, 5, and 9 from the visual relate to acidic white wines with a citrus/fruit taste. Topics 1, 8, 2 and 7 correspond to strong tasting red wines. Topics 3 and 6 describe aromatic wines. taste</li>
+</ol>
 </section>
 </section>
 <section id="interpretation-of-neural-models" class="level2" data-number="4.9">
 <h2 data-number="4.9" class="anchored" data-anchor-id="interpretation-of-neural-models"><span class="header-section-number">4.9</span> Interpretation of Neural Models</h2>
 <p>Neural models have achieved impressive performance on a number of language-related tasks. However, one criticism of them is that they are “black-box” models; we do not fully grasp how they work. This can lead to a mistrust of such models, with good reason. If we do not fully know how these models work, we would not know when they are might fail, or we might not know the reason when they do fail (or make an incorrect prediction). For this reason, a huge amount of research effort is currently directed towards understanding and interpreting neural models.</p>
 <p>One approach is to identify which examples in the training set were most influential for predictions regarding particular test instances. For incorrect predictions, this could give us intuition on why the model is failing, and guide us to ways to fix it. Here is an example where it was possible to pinpoint why a model yielded incorrect sentiment prediction.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/explaining_black_box_predictions.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption><span class="citation" data-cites="han2020explaining">Han, Wallace, and Tsvetkov (<a href="references.html#ref-han2020explaining" role="doc-biblioref">2020</a>)</span></figcaption>
+<div id="fig-black-box" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-black-box-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/explaining_black_box_predictions.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-black-box-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: <span class="citation" data-cites="han2020explaining">Han, Wallace, and Tsvetkov (<a href="references.html#ref-han2020explaining" role="doc-biblioref">2020</a>)</span>
+</figcaption>
 </figure>
 </div>
-<p>Another approach is to identify which parts of the test sentence itself were important to the eventual prediction. Imagine perturbing the test sentence in some ways, and studying how the prediction changed. In one study of a Question-Answering model, the question was modified by dropping the least important word, until the question was answered incorrectly. In this case, the study revealed something pathological about the model:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/pathologies_03.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption><span class="citation" data-cites="sun2021interpreting">Sun et al. (<a href="references.html#ref-sun2021interpreting" role="doc-biblioref">2021</a>)</span></figcaption>
+<p>In the example shown in <a href="#fig-black-box" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>, the statement “A sometimes tedious film” has been wrongly classified as having a “positive” sentiment. To understand why this happened, training instances are removed one at a time; those that result in the greatest change in the prediction are deemed to be influential points. These are shown on the right side of the diagram. The presence of multiple ambivalent statements that were labelled as “positive” makes it easier to understand why the mistake happened.</p>
+<p>Another approach is to identify which parts of the test sentence itself were important to the eventual prediction. Imagine perturbing the test sentence in some ways, and studying how the prediction changed. In one study of a Question-Answering model (see <a href="#fig-infl-test-cases" class="quarto-xref">Figure&nbsp;<span>4.2</span></a>), the question was modified by dropping the least important word, until the question was answered incorrectly. This gives us an indication of which words were vital for the question to be answered correctly. In this case, the study revealed something pathological about the model. A one-word question seemed to still provide the correct answer from this passage!</p>
+<div id="fig-infl-test-cases" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-infl-test-cases-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/pathologies_03.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-infl-test-cases-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: <span class="citation" data-cites="sun2021interpreting">Sun et al. (<a href="references.html#ref-sun2021interpreting" role="doc-biblioref">2021</a>)</span>
+</figcaption>
 </figure>
 </div>
-<p>For transformers in particular, a great deal of study has focused on the weights that the attention layers pick up. By relating these to linguistic information, researchers try to infer the precise language-related information that models retain. For instance, it has been found that BERT learns parts of speech. It is also able to identify the dependencies between words.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/what_does_bert_clark_preposition.png" class="img-fluid figure-img" style="width:40.0%"></p>
-<figcaption><span class="citation" data-cites="clark2019does">Clark et al. (<a href="references.html#ref-clark2019does" role="doc-biblioref">2019</a>)</span></figcaption>
+<p>For transformers in particular, a great deal of study has focused on the weights that the attention layers pick up. By relating these to linguistic information, researchers try to infer the precise language-related information that models retain. For instance, it has been found that BERT learns parts of speech. It is also able to identify the dependencies between words (see <a href="#fig-bert-dep" class="quarto-xref">Figure&nbsp;<span>4.3</span></a>).</p>
+<div id="fig-bert-dep" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bert-dep-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/what_does_bert_clark_preposition.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-dep-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.3: <span class="citation" data-cites="clark2019does">Clark et al. (<a href="references.html#ref-clark2019does" role="doc-biblioref">2019</a>)</span>
+</figcaption>
 </figure>
 </div>
 </section>
