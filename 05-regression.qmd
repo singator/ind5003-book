@@ -32,13 +32,13 @@ Regression models are used for two primary purposes:
 In this topic, we shall focus on the estimation aim, since prediction models
 require a paradigm of their own, and are best learnt alongside a larger suite
 of models e.g. decision trees, support vector machines, etc. We shall cover
-prediction in the topic of supervised learning.
+prediction in the topic of supervised learning @sec-08-top.
 
 ```{python}
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
+import seaborn as sns
 
 import folium
 import geopandas
@@ -51,7 +51,7 @@ from scipy import stats
 ```
 
 ::: {#exm-taiwan-reg-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Taiwan Real Estate
+### Taiwan real estate
 \index{Taiwan Data!Description}
 
 For this tutorial, we shall work with a data set from the 
@@ -73,12 +73,22 @@ Here is a brief description of the columns in the dataset:
 
 ```{python}
 re2 = pd.read_csv("data/taiwan_dataset.csv")
-re2.head()
+print(re2.head())
 ```
 
-The following interactive map is available on the HTML version.
+::: {.content-visible when-format="pdf"}
+Here is a scatter plot of the points in the dataset.
+
+```{python}
+#| fig-align: center
+ax = sns.scatterplot(data=re2, x='X', y='Y', hue='price', size='price')
+ax.set_title("Taiwan real estate data");
+```
+:::
+
 
 ::: {.content-visible when-format="html"}
+The following interactive map is available on the HTML version.
 ```{python}
 m = folium.Map(location=(45.5236, -122.6750))
 df1 = geopandas.read_file('data/taiwan_dataset.csv')
@@ -98,7 +108,7 @@ Let us first explore the dataset with Python. How do this plots aid in your
 understanding of the dataset?
 
 ```{python}
-plt.figure(figsize=(15,4));
+plt.figure(figsize=(10,4));
 ax=plt.subplot(131)
 re2.plot(x='dist_MRT', y='price', kind='scatter', ax=ax, title='distance to MRT')
 
@@ -280,7 +290,7 @@ including more variables in the model will increase $R^2$. This is undesirable; 
 is preferable to have a parsimonious model that explains the response variable well.
 
 ::: {#exm-taiwan-reg-2 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Price vs. House Age
+### Price vs. house age
 \index{Taiwan Data!Simple linear, price vs. house}
 
 As a first model, we fit price ($Y$) against house age ($X_1$). From the plot
@@ -314,11 +324,13 @@ A simple interpretation of the model is as follows:
 
 :::
 
+::: {.callout-warning}
 Note that this interpretation has to be taken very cautiously, especially when there are
 other explanatory variables in the model.
+:::
 
 ::: {#exm-taiwan-reg-3 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Price vs. House Age Estimated Line
+### Price vs. house age estimated line
 \index{Taiwan Data!Price vs. house, estimated line}
 
 In linear regression, we almost always wish to use the model to understand what
@@ -341,20 +353,6 @@ is how we can do so for the model that we have just fit.
 ```{python}
 #| fig-align: center
 
-new_df = sm.add_constant(pd.DataFrame({'house_age' : np.linspace(0, 45, 100)}))
-predictions_out = lm_house_age_1.get_prediction(new_df)
-
-ax = re2.plot(x='house_age', y='price', kind='scatter', alpha=0.5 )
-ax.set_title('Price vs. age');
-ax.plot(new_df.house_age, predictions_out.conf_int()[:, 0].reshape(-1), 
-        color='blue', linestyle='dashed');
-ax.plot(new_df.house_age, predictions_out.conf_int()[:, 1].reshape(-1), 
-        color='blue', linestyle='dashed');
-ax.plot(new_df.house_age, predictions_out.predicted, color='blue');
-```
-
-```{python}
-#| fig-align: center
 new_df = sm.add_constant(pd.DataFrame({'house_age' : np.linspace(0, 45, 100)}))
 predictions_out = lm_house_age_1.get_prediction(new_df)
 
@@ -496,7 +494,7 @@ However, note that these $t$-tests are partial because it should be interpreted
 as a test of the contribution of $\beta_j$, *given that all other terms are already in the model*.
 
 ::: {#exm-taiwan-reg-4 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Price vs. House Age and Distance to MRT
+### Price vs. house age and distance to MRT
 \index{Taiwan Data!Price vs. house and distance}
 
 For our first example on multiple linear regression, let us regress price ($Y$)
@@ -520,7 +518,7 @@ different from 0. Moreover, the adjusted $R^2$ is now a more respectable 0.49.
 <br/>
 
 ::: {#exm-taiwan-reg-5 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Broken Line Regression
+### Broken line regression
 \index{Taiwan Data!Broken line regression}
 
 Although multiple linear regression is usually carried out with distinct
@@ -643,7 +641,7 @@ columns that are linearly dependent if we include an intercept term in the
 model.
 
 ::: {#exm-taiwan-reg-6 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Price vs. Num Stores and Distance to MRT
+### Price vs. num stores and distance to MRT
 \index{Taiwan Data!Number of stores, categorical}
 
 For this example, let us work with a reduced model in order to understand how
@@ -706,8 +704,11 @@ $X_3$. Recall that in the previous section, only the intercept term was
 different.
 
 ::: {#exm-taiwan-reg-7 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Interaction between Num of Stores and Distance to MRT
+### Interaction between num of stores and distance to MRT
 \index{Taiwan Data!Interaction term}
+
+In an earlier model, we fitted the number of stores and distance to MRT to the
+model. Here, we include an interaction term.
 
 ```{python}
 lm_cat_2 = ols('price ~ dist_MRT * num_stores_cat', re2).fit()
@@ -774,7 +775,7 @@ typically yield the same information. Hence we shall stick to standardised resid
 for our course.
 
 ::: {#exm-taiwan-reg-8 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Normality Check for `lm_age_mrt_1`
+### Normality check for `lm_age_mrt_1`
 \index{Taiwan Data!Normality check}
 
 One of the first checks for Normality is to create a histogram. If the
@@ -783,6 +784,7 @@ bell-shaped distribution.
 
 ```{python}
 #| fig-align: center
+plt.figure(figsize=(4,3))
 r_s = pd.Series(lm_age_mrt_1.resid_pearson)
 r_s.hist();
 ```
@@ -801,7 +803,8 @@ or thinner than the tails of the Normal.
 
 ```{python}
 #| fig-align: center
-sm.qqplot(r_s[r_s < 6], line="q");
+fig = sm.qqplot(r_s[r_s < 6], line="q")
+fig.set_size_inches(4,3);
 ```
 
 :::
@@ -925,7 +928,7 @@ print(infl_df.head())
 ## Transformation
 
 ::: {#exm-taiwan-reg-11 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Log-transformation
+### Log-transformation
 \index{Taiwan Data!Log transformation}
 
 As we observed in the residual plots, the distance-to-MRT variable displays a
