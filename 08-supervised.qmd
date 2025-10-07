@@ -783,7 +783,7 @@ exp.as_pyplot_figure();
 ```
 
 ```{python}
-exp.show_in_notebook(show_table=True)
+# exp.show_in_notebook(show_table=True)
 ```
 
 Here is how we can interpret the plots above. In terms of importance to the
