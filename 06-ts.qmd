@@ -550,7 +550,7 @@ can iterate through a large number of them and pick the best according to a
 well-established criteria (AIC).
 
 ::: {#exm-aus-elec-4 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Auto ARIMA on Aus Electricity
+### Auto ARIMA on Aus electricity
 \index{Australian QEC!Auto ARIMA}
 
 Let us try out the ARIMA auto-fitting algorithm on the qau electricity usage
@@ -569,8 +569,19 @@ print(f"The RMSE is approximately {ts.rmse(test2.values, snaive_f.values):.3f}."
 Let us see if the automatically fitted ARIMA models can do better than this.
 
 ```{python}
-#| include: false
-#| echo: true
+#| echo: false
+import warnings
+warnings.filterwarnings(
+    "ignore",
+    message=r".*'force_all_finite' was renamed to 'ensure_all_finite'.*",
+    category=FutureWarning,
+)
+arima_m1 = pm.auto_arima(train2.values, seasonal=True, m=4, test='adf', 
+                         trace=False, suppress_warnings=True)
+```
+
+```{python}
+#| eval: false
 arima_m1 = pm.auto_arima(train2.values, seasonal=True, m=4, test='adf', 
                          trace=False, suppress_warnings=True)
 ```
@@ -578,10 +589,9 @@ arima_m1 = pm.auto_arima(train2.values, seasonal=True, m=4, test='adf',
 Here is the summary of the final chosen model.
 
 ```{python}
-#arima_m1 = pm.auto_arima(train2.values, seasonal=True, m=4, test='adf', 
-#                         trace=False, suppress_warnings=True)
-arima_m1.summary()
+print(arima_m1.summary())
 ```
+
 :::
 
 Once we have found the best-fitting model, we do what we do with any other
