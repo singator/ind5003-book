@@ -345,7 +345,15 @@ additive decomposition.
 
 As in all forecasting methods, it is useful to obtain a baseline forecast
 before proceeding to more sophisticated techniques. Baseline forecasts are
-usually obtained from simple, intuitive methods. Here are some such methods:
+usually obtained from simple, intuitive methods.
+
+::: {.callout-note}
+Take note in the sections that follow, the notation $\hat{y}_{T+h|T}$ refers to 
+the forecasted value of the time series at time $T+h$, given observations until
+and including time $T$.
+:::
+
+Here are some baseline methods:
 
 A. The simple mean forecast:  
 \begin{equation}
@@ -359,17 +367,27 @@ B. The naive forecast:
 
 C. The seasonal naive forecast.
 
+Suppose that the season contains $d$ periods (for instance, in monthly data,
+$d=12$). Then the seasonal naive forecast utilises the most recent observed
+period for the forecast:
+
+\begin{equation}
+\hat{y}_{T+h | T} = y_{T-d+h}
+\end{equation}
+
+
 ::: {#exm-housing-4 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Benchmark Forecasts Housing Sales
+### Benchmark forecasts housing sales
 \index{Housing Sales!Benchmark Forecasts}
 
 Suppose we apply some of the above forecasts to the housing sales dataset. We
-withhold the most recent 2 years of data and foreacst those. Here is a plot
+withhold the most recent 2 years of data and forecast those. Here is a plot
 depicting the forecasts, and the true values.
 
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Benchmark forecasts"
 
 # Set aside the last two years as the test set.
 #hsales = hsales.drop(columns=['year', 'month'])
@@ -412,12 +430,19 @@ C. Mean Absolute Scaled Error
 \end{equation}
 
 The RMSE and MAE are scale dependent errors. It is difficult to compare the
-errors across, or to aggregate errors across different time series with it. Due
-to the square in the formula, the RMSE is quite sensitive to outliers. The MAE
-is more robust to outliers. The MASE is a scaled error - it allows us to
-compare the forecasting performance *across* time series. The other two metrics
-depend on the scale of the time series and hence do not allow us to make such
-comparisons.
+errors across series, or to aggregate errors across different time series with
+it. Due to the square in the formula, the RMSE is quite sensitive to outliers.
+The MAE is more robust to outliers. 
+
+The MASE is a scaled error - it allows us to compare the forecasting performance
+*across* time series. The other two metrics depend on the scale of the time
+series and hence do not allow us to make such comparisons.
+
+::: {#exm-housing-4a style="background-color: #D5D1D164; padding: 20px"}
+### Benchmark forecast errors
+\index{Housing Sales!Benchmark forecast errors}
+
+Let us assess the forecasts made in the previous example, using RMSE and MAE.
 
 ```{python}
 for x in [ts.rmse, ts.mae]:
@@ -426,18 +451,20 @@ for x in [ts.rmse, ts.mae]:
     print('---')
 ```
 
-The MASE for the seasonal naive forecast is as follows.
+In our simple example, the seasonal naive model outperforms the simple mean
+forecast according to all the metrics but in general, things are not always this
+clear-cut.
+
+:::
+
+For reference, the MASE for the seasonal naive forecast is as follows.
 
 ```{python}
 ts.mase(test_set.hsales.values,  snaive_forecast.values, train_set.values, 
         seasonality=12)
 ```
 
-In our simple example, the seasonal naive model outperforms the simple mean
-forecast according to all the metrics but in general, things are not always this
-clear-cut.
-
-## ARIMA Models
+### ARIMA Models
 
 Now let us turn to a huge class of models that have been utilised in time series
 forecasting since the 1960's. They are known as ARIMA models. ARIMA stands for
@@ -455,7 +482,7 @@ How can we tell if a process is stationary or not? The following time series is
 not stationary. Why?
 
 ::: {#exm-dow-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Dow Jones Index
+### Dow Jones index
 \index{Dow Jones!Differencing}
 
 Consider the following time series of the Dow Jones index.
@@ -463,10 +490,12 @@ Consider the following time series of the Dow Jones index.
 ```{python}
 #| fig-align: center
 dj = pd.read_csv('data/dj.csv')
-dj.plot(legend=False, title='Dow Jones Index', figsize=(15,4));
+dj.plot(legend=False, title='Dow Jones Index', figsize=(12,4));
 ```
 
+It is nonstationary because the mean (level) of the time series is not constant.
 However, the following differenced version of the same series is:
+
 \begin{equation}
 \Delta y_t = y_t - y_{t-1}
 \end{equation}
@@ -474,8 +503,9 @@ However, the following differenced version of the same series is:
 ```{python}
 #| fig-align: center
 ddj = diff(dj)
-ddj.plot(legend=False, title='Differenced Dow Jones', figsize=(15,4));
+ddj.plot(legend=False, title='Differenced Dow Jones', figsize=(12,4));
 ```
+
 :::
 
 ARIMA models revolve around the idea that if we have a non-stationary series,
@@ -483,11 +513,15 @@ we can transform it into a stationary one with a suitable number of
 differencing. A more general way of studying if a series is stationary is to
 plot it's AutoCorrelation Function (ACF). The ARIMA method directly models the
 ACF. That is why it is so important for this class of models. The ACF of a
-stationary process should "die down" quickly. Here is the ACF of the Dow Jones
-data, before and after differencing.
+stationary process should "die down" quickly. @fig-acf-diff shows the ACF of the
+Dow Jones data, before and after differencing.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "ACF, before and after differencing"
+#| label: fig-acf-diff
+ 
+plt.figure(figsize=(8, 6))
 plt.subplot(211)
 plt.stem(acf(dj, fft=False))
 plt.title("Non-differenced")
