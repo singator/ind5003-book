@@ -277,6 +277,8 @@ window.Quarto = {
   <li><a href="#sec-04-t-SNE" id="toc-sec-04-t-SNE" class="nav-link" data-scroll-target="#sec-04-t-SNE"><span class="header-section-number">4.6</span> Visualisation with t-SNE</a></li>
   <li><a href="#neural-language-models" id="toc-neural-language-models" class="nav-link" data-scroll-target="#neural-language-models"><span class="header-section-number">4.7</span> Neural Language Models</a></li>
   <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications"><span class="header-section-number">4.8</span> Applications</a></li>
+  <li><a href="#interpretation-of-neural-models" id="toc-interpretation-of-neural-models" class="nav-link" data-scroll-target="#interpretation-of-neural-models"><span class="header-section-number">4.9</span> Interpretation of Neural Models</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4.10</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -1279,7 +1281,7 @@ Note
 </div>
 </section>
 <section id="topic-modeling" class="level3">
-<h3 class="anchored">Topic Modeling</h3>
+<h3 class="anchored" data-anchor-id="topic-modeling">Topic Modeling</h3>
 <p>The LDA (Latent Dirichlet Allocation) model assumes the following intuitive generative process for the documents:</p>
 <ol type="1">
 <li>There is a set of <span class="math inline">\(K\)</span> topics that the documents come from. Each document contains words from several topics. There is a probability mass function on the topics for each document.</li>
@@ -1287,10 +1289,8 @@ Note
 </ol>
 <p>At the end of LDA topic modeling, we will be able to tell, for a particular (new or old) document: the weight combination of the topics for that document. For each topic, we would be able to tell the terms that are salient. LDA only gives us the probabilistic weights - we have to interpret them ourselves.</p>
 <div id="exm-wine-reviews-lda" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 4.9 (Wine reviews topic modeling)</strong></span> </p>
-<p>Suppose we decide to split the corpus into 10 topics. Let us investigate what these topics consist of.</p>
-<div id="exm-wine-reviews-lda" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 4.8 (Wine reviews topic modeling)</strong></span> </p>
+<p>Suppose we decide to split the corpus into 10 topics. Let us investigate what these topics consist of.</p>
 <div id="a110ddcc" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a>lda1 <span class="op">=</span> gensim.models.LdaModel(corpus<span class="op">=</span> bow_corpus, num_topics<span class="op">=</span><span class="dv">10</span>, </span>
 <span id="cb52-2"><a href="#cb52-2"></a>                              id2word<span class="op">=</span>dct, random_state<span class="op">=</span><span class="dv">41</span>)</span>
@@ -1375,6 +1375,8 @@ Note
 <li>If you inspect the text version of topics, you will notice many words repeated across topics, e.g.&nbsp;fruits, flavors, wine and palate. These should be removed before re-running the algorithm. Doing so would result in more distinct topics.</li>
 <li>In terms of interpretation, checking against the topic distribution, it appears topics 4, 5, and 9 from the visual relate to acidic white wines with a citrus/fruit taste. Topics 1, 8, 2 and 7 correspond to strong tasting red wines. Topics 3 and 6 describe aromatic wines. taste</li>
 </ol>
+</section>
+</section>
 <section id="interpretation-of-neural-models" class="level2" data-number="4.9">
 <h2 data-number="4.9" class="anchored" data-anchor-id="interpretation-of-neural-models"><span class="header-section-number">4.9</span> Interpretation of Neural Models</h2>
 <p>Neural models have achieved impressive performance on a number of language-related tasks. However, one criticism of them is that they are “black-box” models; we do not fully grasp how they work. This can lead to a mistrust of such models, with good reason. If we do not fully know how these models work, we would not know when they are might fail, or we might not know the reason when they do fail (or make an incorrect prediction). For this reason, a huge amount of research effort is currently directed towards understanding and interpreting neural models.</p>
@@ -1433,9 +1435,6 @@ Figure&nbsp;4.3: <span class="citation" data-cites="clark2019does">Clark et al. 
 </ol>
 
 
-</section>
-</section>
-</div>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-clark2019does" class="csl-entry" role="listitem">
 Clark, Kevin, Urvashi Khandelwal, Omer Levy, and Christopher D Manning. 2019. <span>“What Does Bert Look at? An Analysis of Bert’s Attention.”</span> <em>arXiv Preprint arXiv:1906.04341</em>.

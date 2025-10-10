@@ -406,7 +406,7 @@ x_{n,1} &amp; x_{n,2} &amp; \ldots &amp; x_{n,d}
 y_1 &amp; y_2 &amp; \ldots &amp; y_n
 \end{bmatrix}^T
 \]</span></p>
-<div id="aa821bb3" class="cell" data-execution_count="1">
+<div id="6258be5d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -530,7 +530,7 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <li><code>time</code>: follow-up period (days)</li>
 <li><code>DEATH_EVENT</code>: if the patient died during the follow-up period (boolean). This is the categorical outcome that we wish to predict.</li>
 </ul>
-<div id="03ac6e73" class="cell" data-execution_count="2">
+<div id="653e1c66" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hf <span class="op">=</span> pd.read_csv(<span class="st">"data/heart+failure+clinical+records/"</span><span class="op">+</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>                 <span class="st">"heart_failure_clinical_records_dataset.csv"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="bu">print</span>(hf.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,19 +562,19 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <h3 class="anchored" data-anchor-id="sec-08-dec-tree">Decision Tree</h3>
 <p>To begin our journey into supervised learning, we shall fit a decision tree to this dataset. A decision tree consists of a hierarchal set of rules, that when followed, will return a prediction for an individual observation. Each is a (typically binary) split of one of the features in the observation. One of the main advantages of decision tree classifiers is that they are easy to interpret. However, some disadvantages are that: They tend to overfit to a dataset, and they have high variability. This latter point means that a small change in the training data <em>could</em> lead to vastly different predictions. Although in this example we focus on classification, a decision tree can also be used for regression.</p>
 <p>In this first example, we shall only split the data into a test and training set. We shall fit the tree using the training set, and then apply the model to the test set.</p>
-<div id="7fbc1b2c" class="cell" data-execution_count="3">
+<div id="14a94895" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>y <span class="op">=</span> hf.DEATH_EVENT</span>
 <span id="cb4-2"><a href="#cb4-2"></a>X <span class="op">=</span> hf.iloc[:, <span class="dv">0</span>:<span class="dv">12</span>]</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a>clf <span class="op">=</span> tree.DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>max_depth</code> of a decision is the maximum number of splits down each branch of a tree. If it is not specified, it is possible that the splits continue until the terminal nodes are homogeneous. This could result in overfitting of the tree to this particular dataset.</p>
-<div id="5118301d" class="cell" data-execution_count="4">
+<div id="dec72cfb" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>X_train,X_test,y_train,y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, </span>
 <span id="cb5-2"><a href="#cb5-2"></a>                                                 random_state<span class="op">=</span><span class="dv">41</span>, stratify<span class="op">=</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>train_test_split</code> divides the data into a training and test set. When doing so, the function will attempt to ensure that the proportion of classes in both the training and test sets are roughly equal to the proportion in the overall dataset.</p>
-<div id="eb1128dc" class="cell" data-execution_count="5">
+<div id="b63bdef3" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the overall data is </span><span class="sc">{</span>y<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the training data is </span><span class="sc">{</span>y_train<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the test data is </span><span class="sc">{</span>y_test<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -584,7 +584,7 @@ The proportion of 1's in the training data is 0.321.
 The proportion of 1's in the test data is 0.320.</code></pre>
 </div>
 </div>
-<div id="4abeccfc" class="cell" data-execution_count="6">
+<div id="fae35f9b" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>clf.fit(X_train, y_train,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <style>#sk-container-id-1 {
@@ -1187,13 +1187,13 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 <p>Notice that when we call the <code>.fit()</code> method, there is no output object returned; it is just that the parameters in the <code>clf</code> object are updated.</p>
-<div id="f19dbd74" class="cell" data-execution_count="7">
+<div id="69ff7cec" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>clf.predict_proba(X_train.sample(random_state<span class="op">=</span><span class="dv">3005</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>array([[0.66666667, 0.33333333]])</code></pre>
 </div>
 </div>
-<div id="e1ff03cd" class="cell" data-execution_count="8">
+<div id="eadfdf72" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>plt.figure(figsize <span class="op">=</span>(<span class="dv">18</span>, <span class="dv">6</span>))</span>
 <span id="cb11-2"><a href="#cb11-2"></a>tree.plot_tree(clf,feature_names<span class="op">=</span>X.columns, filled<span class="op">=</span><span class="va">True</span>, max_depth<span class="op">=</span><span class="dv">2</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1218,7 +1218,7 @@ p_0(1 - p_0)
 <div id="exm-heart-failure-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.2 (Example: Heart Failure Classification Scores)</strong></span> </p>
 <p>Performance of classification algorithms are usually presented in the form of a <em>confusion matrix</em>. First we display the results for the training set.</p>
-<div id="e526d168" class="cell" data-execution_count="9">
+<div id="6c602e28" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>y_pred_train <span class="op">=</span> clf.predict(X_train)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, </span>
 <span id="cb12-3"><a href="#cb12-3"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
@@ -1249,7 +1249,7 @@ The f1-score (for cat. 1) is 0.882
 </div>
 </div>
 <p>Next, we display the results for the test set.</p>
-<div id="9e5cd72d" class="cell" data-execution_count="10">
+<div id="b463c853" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>y_pred_test <span class="op">=</span> clf.predict(X_test)</span>
 <span id="cb14-2"><a href="#cb14-2"></a>ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test, </span>
 <span id="cb14-3"><a href="#cb14-3"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
@@ -1265,10 +1265,10 @@ The f1-score (for cat. 1) is 0.882
 <pre><code>
 ##: For test set:
 ----
-The accuracy (for cat. 1) is 0.747
-The precision (for cat. 1) is 0.619
-The recall (for cat. 1) is 0.542
-The f1-score (for cat. 1) is 0.578
+The accuracy (for cat. 1) is 0.760
+The precision (for cat. 1) is 0.636
+The recall (for cat. 1) is 0.583
+The f1-score (for cat. 1) is 0.609
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1297,7 +1297,7 @@ The f1-score (for cat. 1) is 0.578
 <p>There are certain caveats with using the above measures. One is that these measures are indicative of how important a feature is to a particular model, not to predictive value. Hence an unimportant feature for a poor model (in terms of accuracy) could in fact be an important feature for a good model! Second, in the permutation approach, the importance of a variable may not show up if certain features are highly correlated (dropping one of them may have no effect because the other feature is still present in the model).</p>
 <section id="permutation-based" class="level4">
 <h4 class="anchored" data-anchor-id="permutation-based">Permutation Based</h4>
-<div id="22ae6247" class="cell" data-execution_count="11">
+<div id="f10d9ce4" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>result <span class="op">=</span> permutation_importance(</span>
 <span id="cb16-2"><a href="#cb16-2"></a>    clf, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">30</span>, random_state<span class="op">=</span><span class="dv">42</span>,</span>
 <span id="cb16-3"><a href="#cb16-3"></a>    <span class="co"># clf, X_test, y_test, n_repeats=10, random_state=42, n_jobs=2</span></span>
@@ -1326,7 +1326,7 @@ The f1-score (for cat. 1) is 0.578
 </section>
 <section id="partial-dependence-plots" class="level4">
 <h4 class="anchored" data-anchor-id="partial-dependence-plots">Partial Dependence Plots</h4>
-<div id="fd06fea6" class="cell" data-execution_count="12">
+<div id="cd2e0772" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">3</span>, nrows<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>features_info <span class="op">=</span> {</span>
 <span id="cb17-3"><a href="#cb17-3"></a>    <span class="st">"features"</span>: [<span class="st">"age"</span>, <span class="st">"creatinine_phosphokinase"</span>, <span class="st">"platelets"</span>, </span>
@@ -1372,7 +1372,7 @@ The column 8 contains integer data. Partial dependence plots are not supported f
 <li>Use the fitted model to predict on block <span class="math inline">\(i\)</span>, thus obtaining one estimate of generalised error.</li>
 </ol>
 <p>The process yields <span class="math inline">\(k\)</span> estimates of error - one for each block that was set aside. This can be used to compare between hyperparamter settings. In this case below, we try to identify the optimal <code>max_depth</code> parameter for the trees. Too large a depth would overfit to the data, and we wish to avoid that.</p>
-<div id="e1473993" class="cell" data-execution_count="13">
+<div id="8875e0b8" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="co">#list(p_range)</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a>cv_search <span class="op">=</span> GridSearchCV(RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, random_state<span class="op">=</span><span class="dv">21</span>), </span>
@@ -2079,7 +2079,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 <p>After calling the <code>.fit()</code> method, the optimal parameters are available for persual:</p>
-<div id="95cadc78" class="cell" data-execution_count="14">
+<div id="2ba41f53" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>cv_search.best_estimator_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <style>#sk-container-id-3 {
@@ -2712,7 +2712,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 <p>It is also possible, at this point, to extract the training and test scores for each cross-validation set, and to then plot the validation curve.</p>
-<div id="43aa4aeb" class="cell" data-execution_count="15">
+<div id="d1956e0f" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>train_means <span class="op">=</span> cv_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
 <span id="cb22-2"><a href="#cb22-2"></a>train_sd <span class="op">=</span> cv_search.cv_results_[<span class="st">'std_train_score'</span>]</span>
 <span id="cb22-3"><a href="#cb22-3"></a></span>
@@ -2744,7 +2744,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </ul>
 <div id="exm-heart-failure-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.3 (Example: Heart Failure Classification Scores II)</strong></span> </p>
-<div id="b96d9068" class="cell" data-execution_count="16">
+<div id="1a1b1dfa" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, max_depth<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">40</span>)</span>
 <span id="cb23-2"><a href="#cb23-2"></a>rf.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
@@ -3377,7 +3377,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </script>
 </div>
 </div>
-<div id="fcc21610" class="cell" data-execution_count="17">
+<div id="c5142ee8" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>y_pred_train <span class="op">=</span> rf.predict(X_train)</span>
 <span id="cb24-2"><a href="#cb24-2"></a><span class="bu">print</span>(<span class="ss">f"""##: For training set:</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a><span class="ss">----</span></span>
@@ -3396,7 +3396,7 @@ The f1-score (for cat. 1) is 0.864
 </code></pre>
 </div>
 </div>
-<div id="64229f76" class="cell" data-execution_count="18">
+<div id="14037d79" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>y_pred_test <span class="op">=</span> rf.predict(X_test)</span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="bu">print</span>(<span class="ss">f"""##: For test set:</span></span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="ss">----")</span></span>
@@ -3423,7 +3423,7 @@ The f1-score (for cat. 1) is 0.711
 <h2 data-number="8.7" class="anchored" data-anchor-id="regression"><span class="header-section-number">8.7</span> Regression</h2>
 <p>Just to demonstrate the use of random forests for regression, we return to the Taiwan Data. In our scoring, instead of using RMSE or MAE, we shall use the <span class="math inline">\(R^2\)</span>.</p>
 <p>First, we read the Taiwan data into Python and transform each column to have mean 0 and sd 1.</p>
-<div id="343f282c" class="cell" data-execution_count="19">
+<div id="2715ca9e" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>re2 <span class="op">=</span> pd.read_csv(<span class="st">"data/taiwan_dataset.csv"</span>)</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a>X_re <span class="op">=</span> re2.loc[:, [<span class="st">'trans_date'</span>, <span class="st">'house_age'</span>, <span class="st">'dist_MRT'</span>, </span>
@@ -3439,7 +3439,7 @@ The f1-score (for cat. 1) is 0.711
 <section id="random-forest-regressor" class="level3">
 <h3 class="anchored" data-anchor-id="random-forest-regressor">Random Forest Regressor</h3>
 <p>Next, we set up a grid search to set up a random forest regressor.</p>
-<div id="bbf75470" class="cell" data-execution_count="20">
+<div id="16601886" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
 <span id="cb29-2"><a href="#cb29-2"></a>rf_search <span class="op">=</span> GridSearchCV(RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">43</span>), </span>
 <span id="cb29-3"><a href="#cb29-3"></a>                         {<span class="st">'max_depth'</span>: p_range}, </span>
@@ -4075,7 +4075,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 <p>Here is the validation curve, that will allow us to decide on the optimal number of trees.</p>
-<div id="9dbe0a10" class="cell" data-execution_count="21">
+<div id="a8b30c37" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>train_means <span class="op">=</span> rf_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
 <span id="cb31-2"><a href="#cb31-2"></a>train_sd <span class="op">=</span> rf_search.cv_results_[<span class="st">'std_train_score'</span>]</span>
 <span id="cb31-3"><a href="#cb31-3"></a></span>
@@ -4103,7 +4103,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <div id="exm-taiwan-data-14" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.4 (Example: Taiwan Data Regression)</strong></span> </p>
 <p>We shall fit a model with 10 trees, and max_depth 2, and assess the test error.</p>
-<div id="827c8a9e" class="cell" data-execution_count="22">
+<div id="53059f46" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>rf1 <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, max_depth <span class="op">=</span> <span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">89</span>)</span>
 <span id="cb32-2"><a href="#cb32-2"></a>rf1.fit(Xre_train, yre_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
@@ -4731,10 +4731,10 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </script>
 </div>
 </div>
-<div id="c28ac68d" class="cell" data-execution_count="23">
+<div id="2084d5a1" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>yrf_pred <span class="op">=</span> rf1.predict(Xre_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="6baca081" class="cell" data-execution_count="24">
+<div id="17835f2b" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>r2_score(yre_test, yrf_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>0.5487486857968205</code></pre>
@@ -4765,7 +4765,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <div id="exm-taiwan-data-15" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.5 (Example: Taiwan Data LIME)</strong></span> </p>
 <p>Now we return to our dataset on real estate transations and attempt to understand the prediction made for a particular instance:</p>
-<div id="cfe622ed" class="cell" data-execution_count="25">
+<div id="931fd736" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>re_scaler.inverse_transform(Xre_test[<span class="dv">4</span>, :].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)).<span class="bu">round</span>()</span>
 <span id="cb36-2"><a href="#cb36-2"></a><span class="co">#X_re.mean(axis=0).round(3)</span></span>
 <span id="cb36-3"><a href="#cb36-3"></a><span class="co">#Xre_test[4, :].round(4)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -4774,20 +4774,20 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 <p>First we instantiate an explainer object, and then provide it with the instance we wish to explain.</p>
-<div id="e1572d64" class="cell" data-execution_count="26">
+<div id="d96ada72" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>explainer <span class="op">=</span> lime_tabular.LimeTabularExplainer(</span>
 <span id="cb38-2"><a href="#cb38-2"></a>    training_data<span class="op">=</span>np.array(Xre_train),</span>
 <span id="cb38-3"><a href="#cb38-3"></a>    feature_names<span class="op">=</span>X_re.columns,</span>
 <span id="cb38-4"><a href="#cb38-4"></a>    mode<span class="op">=</span><span class="st">'regression'</span>,</span>
 <span id="cb38-5"><a href="#cb38-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9382035d" class="cell" data-execution_count="27">
+<div id="3281d193" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>exp <span class="op">=</span> explainer.explain_instance(</span>
 <span id="cb39-2"><a href="#cb39-2"></a>    data_row<span class="op">=</span>Xre_test[<span class="dv">4</span>, :], </span>
 <span id="cb39-3"><a href="#cb39-3"></a>    predict_fn<span class="op">=</span>rf1.predict,</span>
 <span id="cb39-4"><a href="#cb39-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="96003fa8" class="cell" data-execution_count="28">
+<div id="46c9e25d" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>exp.as_pyplot_figure()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -4797,25 +4797,25 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 </div>
-<div id="67d109b1" class="cell" data-execution_count="29">
+<div id="1bc58a69" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># exp.show_in_notebook(show_table=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is how we can interpret the plots above. In terms of importance to the prediction <em>of this particular instance</em>, <code>dist_MRT</code> is the highest. The local model that has been fit has been constrained to make as close a prediction as possible to the original model. However, it may fall short. In this case, the original predicted value was 29.58. However, the value predicted by the local approximation was:</p>
-<div id="51fe3ade" class="cell" data-execution_count="30">
+<div id="265cf8ba" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="bu">print</span>(<span class="ss">f"The value predicted by the local approximation was: </span><span class="sc">{</span>exp<span class="sc">.</span>local_pred[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The value predicted by the local approximation was: 34.414</code></pre>
+<pre><code>The value predicted by the local approximation was: 34.509</code></pre>
 </div>
 </div>
 <p>The numbers in the bar chart essentially decompose this prediction from the local model:</p>
-<div id="315aa8e5" class="cell" data-execution_count="31">
+<div id="090fc181" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>s <span class="op">=</span> <span class="fl">0.0</span></span>
 <span id="cb44-2"><a href="#cb44-2"></a><span class="cf">for</span> x,y <span class="kw">in</span> exp.local_exp[<span class="dv">1</span>]:</span>
 <span id="cb44-3"><a href="#cb44-3"></a>    s <span class="op">+=</span> y</span>
 <span id="cb44-4"><a href="#cb44-4"></a></span>
 <span id="cb44-5"><a href="#cb44-5"></a>s <span class="op">+</span> exp.intercept[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="31">
-<pre><code>34.41441751836634</code></pre>
+<pre><code>34.50929966035514</code></pre>
 </div>
 </div>
 <p>This means that, from the values, we can see that the <code>dist_MRT</code>, which was close to the average distance, had a negative impact on the price. The longitude had a positive impact on the price.</p>
@@ -4824,7 +4824,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <section id="ice-plots" class="level3">
 <h3 class="anchored" data-anchor-id="ice-plots">ICE plots</h3>
 <p>ICE plots are conditional versions of PDP. Instead of <em>averaging</em> over all instances in the training set, a single line is generated for each instance corresponding to features other than the one under study. This allows us to inspect if the relationship between the response and the feature is consistent across the data.</p>
-<div id="eb9de0f3" class="cell" data-execution_count="32">
+<div id="733bb07f" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, nrows<span class="op">=</span><span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb46-2"><a href="#cb46-2"></a>features_info <span class="op">=</span> {</span>
 <span id="cb46-3"><a href="#cb46-3"></a>    <span class="st">"features"</span>: [<span class="dv">1</span>,<span class="dv">2</span>], <span class="co"># no names in the array; 1 and 2 correspond to house_age and dist_MRT</span></span>
