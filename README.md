@@ -4,6 +4,10 @@ The rendered HTML version of the textbook can be viewed at:
 
 <https://singator.github.io/ind5003-book>
 
+To access the pdf version, you can follow the links on this page:
+
+<https://blog.nus.edu.sg/stavg/textbooks/>
+
 ## Setup instructions
 
 In order to render the pdf and html versions on your own, you will need to:

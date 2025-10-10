@@ -196,13 +196,15 @@ associated with one another. We typically plot several lags at once to observe
 this relationship.
 
 ::: {#exm-housing-3 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Lag plots of Housing Sales Data
+### Lag plots of housing sales data
 \index{Housing Sales!Lag Plots}
+
+Here is a matrix of lag plots for the housing sales data.
 
 ```{python}
 #| fig-align: center
 f, aa = plt.subplots(nrows=3,ncols=4, sharex=True, sharey=True)
-f.set_figheight(10)
+f.set_figheight(9)
 f.set_figwidth(12)
 
 y = hsales.hsales.values
@@ -226,11 +228,11 @@ the time series readings into:
 * a seasonal component, and
 * a remainder component.
 
-If we can forecast these components individually, we can combine them to
-provide forecasts for the original series. There are two basic methods of
-decomposition into the above components: an additive one, and a multiplicative
-one. In the additive decomposition, we assume that they contribute in an
-additive manner to $y_t$:
+If we can forecast these components individually, we can combine them to provide
+forecasts for the original series (see @sec-06-fc-decomp). There are two basic
+methods of decomposition into the above components: an additive one, and a
+multiplicative one. In the additive decomposition, we assume that the components
+contribute in an additive manner to $y_t$:
 
 \begin{equation}
 y_t = S_t + T_t + R_t
@@ -257,32 +259,52 @@ Let us denote this estimate as $\hat{S}_t$.
 $\hat{R}_t = y_t - \hat{T}_t - \hat{S}_t$.
 
 ::: {#exm-housing-3 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Additive Decomposition, Housing Sales
+### Additive decomposition, housing sales
 \index{Housing Sales!Additive Decomposition}
 
 Here is the naive additive decomposition of the housing sales data.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Additive decomposition"
+#| label: fig-add-decomp-hsales
 hsales_add = seasonal_decompose(hsales.loc[:, 'hsales'], 
                                 model='additive', extrapolate_trend='freq')
-hsales_add.plot();
+ax = hsales_add.plot()
+ax.set_figheight(6)
 ```
 
 :::
 
+When we inspect a decomposition, there are certain elements that we watch out
+for. One of them is to compare the range of the $y$-axis for the three
+components. In @fig-add-decomp-hsales, we observe that the rough spread of the
+trend component (second row) is about 40. On the other hand, the spread of the
+seasonal component (third row) is roughly 20. This suggests that the seasonal
+component is a significant driver of the overall variation of the process.
+
+The fact that the seasonal pattern does not change over time is an artifact of the 
+decomposition; it is not always a true reflection of the true pattern. 
+
+Finally, as always, we hope to see the residuals to be centred around 0, with 
+little or no trend, and a constant variability over time.
+
 ::: {#exm-aus-elec-2 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Multiplicative Decomposition, Aus Electricity Data
+### Multiplicative decomposition, Aus electricity data
 \index{Australian QEC!Multiplicative Decomposition}
 
-Here is the *multiplicative decomposition for the Australian electric data.
+Here is the *multiplicative decomposition* for the Australian electric data.
 
 ```{python}
 #| fig-align: center
 qau_mult = seasonal_decompose(qau.loc[:, 'kWh'], model='multiplicative',
                               extrapolate_trend='freq')
-qau_mult.plot();
+ax = qau_mult.plot();
+ax.set_figheight(6)
 ```
+
+Take note that in multiplicative decompositions, the residuals are centred around 
+1, not zero.
 
 :::
 
@@ -293,19 +315,27 @@ As you may have noticed, there are some issues with the classical seasonal decom
 * it is not robust to outliers.
 
 ::: {#exm-aus-elec-3 style="background-color: #D5D1D164; padding: 20px"}
-### Example: STL decomposition, Aus Electricity
+### STL decomposition, Aus electricity
 \index{Australian QEC!STL Decomposition}
 
 Newer algorithms such as STL decomposition, X11 and others attempt to address
 these issues. They use locally weighted regression models to obtain the trend.
 These algorithms iterate over the time series several times, so as to ensure
-that outliers are not affecting the outcome.
+that outliers are not affecting the outcome. For full details on STL (Seasonal
+Trend decomposition with Loess), please refer to the original paper @cleveland1990stl.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "STL decomposition, electricity data"
+#| label: fig-stl-decomp
 qau_stl = STL(qau.kWh).fit()
-qau_stl.plot();
+ax = qau_stl.plot();
+ax.set_figheight(6)
 ```
+
+Notice in @fig-stl-decomp how the seasonal pattern varies over time. One
+disadvantage of the STL decomposition, however, is that it can only return an
+additive decomposition.
 
 :::
 
@@ -761,7 +791,7 @@ theta_forecasts = pd.DataFrame(
 theta_forecasts.tail(360).plot(figsize=(12,4));
 ```
 
-## Forecasting with Seasonal Decomposition
+## Forecasting with Seasonal Decomposition {#sec-06-fc-decomp}
 
 Continuing with the tourism data, we demonstrate how we can utilise a seasonal
 decomposition (not theta decomposition) model to make forecasts. Recall that a
