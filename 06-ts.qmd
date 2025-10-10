@@ -32,7 +32,10 @@ from statsmodels.tsa.forecasting.theta import ThetaModel
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.statespace import exponential_smoothing
 
-from statsmodels.tsa.api import ExponentialSmoothing, SimpleExpSmoothing, Holt, STLForecast
+from statsmodels.tsa.api import ( 
+  ExponentialSmoothing, SimpleExpSmoothing, Holt, STLForecast
+) 
+
 import pmdarima as pm
 
 from scipy.cluster import hierarchy
@@ -45,10 +48,17 @@ import seaborn as sns
 ```
 
 ::: {#exm-housing-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Basic Plots of Housing Data
+### Basic plots of housing Data
 \index{Housing Sales!Basic Plots}
 
+This dataset comes from an R package
+[`fma`](https://www.rdocumentation.org/packages/fma/versions/2.5/topics/hsales).
+It contains counts of monthly sales of new one-family houses sold in the USA
+since 1973.
+
 ```{python}
+#| fig-align: center
+
 hsales = pd.read_csv('data/hsales.csv', parse_dates=[0])
 hsales.set_index('date', inplace=True)
 hsales.index.freq = 'MS'
@@ -70,7 +80,6 @@ neighbour imputation).
 
 ```{python}
 hsales.resample('14D').interpolate().head()
-#hsales.head()
 ```
 
 ::: {.callout-note}
@@ -82,15 +91,18 @@ within the resample method.
 :::
 
 ::: {#exm-housing-2 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Season Plots of Housing Data
+### Season plots of housing data
 \index{Housing Sales!Season Plot}
 
-A season plot allows us to visualise what happens within a season. In this
-case, each line in the graph below traces the behaviour of the series from the
+A season plot allows us to visualise what happens within a season. In this case,
+each line in the graph below traces the behaviour of the series from the
 beginning of the season till the end (from Jan to Dec).
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Season plot of housing sales"
+#| label: fig-season-sales
+
 hsales.loc[:, 'year'] = hsales.index.year
 hsales.loc[:, 'month'] = hsales.index.month
 
@@ -98,7 +110,7 @@ yrs = np.sort(hsales.year.unique())
 color_ids = np.linspace(0, 1, num=len(yrs))
 colors_to_use = plt.cm.YlOrRd(color_ids)
 
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(10, 7))
 
 for i,yr in enumerate(yrs):
     df_tmp = hsales.loc[hsales.year == yr, :]
@@ -110,9 +122,20 @@ plt.xticks(np.arange(1, 13), calendar.month_abbr[1:13]);
 ```
 :::
 
+In general, from @fig-season-sales, it looks like there is a peak around Feb to
+March, after which sales descend until the next January. Using a colour map with
+colours that we can "order" allows us to identify a trend **across** seasons. In
+this case, there isn't one, but if you take a look at @fig-season-qauselec, you
+will see a clear association between the colour of line and level of each series
+within a year.
+
 ::: {#exm-aus-elec-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Basic Time Plot, Australian Quarterly Electricity Production
-\index{Australian QEC!Basic Plots}
+### Australian quarterly electricity production
+\index{Australian QEC!Basic Plots} 
+
+This dataset is from another R package: [`fpp2`](https://www.rdocumentation.org/packages/fpp2/versions/2.5/topics/qauselec).
+It records quarterly electric production in Australia (in billion kWh) from 1965 
+till now.
 
 ```{python}
 #| fig-align: center
@@ -120,40 +143,33 @@ qau = pd.read_csv('data/qauselec.csv', parse_dates=[0])
 qau.set_index('date', inplace=True)
 qau.index.freq = 'QS'
 
-qau.plot(figsize=(8,5), title='Electrcity Production by Quarter', legend=False)
+qau.plot(figsize=(8,4), title='Electrcity Production by Quarter', legend=False)
 plt.xlabel('Qtr-Year'); plt.ylabel('Billion kWh');
 ```
 
 There is a strong increasing trend. There is strong seasonality, and there is
 no evidence of cyclic behaviour.
 
-In general, it looks like there is a peak around Feb to March, after which
-sales descend until the next January. Using a colour map with colours that we
-can remember would allow us to identify a trend **across** seasons. In this
-case, there isn't one, but if you re-do this plot for the Electricity series,
-you would see a clear association between the colour of line and level of each
-series within a year.
-
 ```{python}
+#| fig-align: center
+#| fig-cap: "Season plot, electric production"
+#| label: fig-season-qauselec
+
 qau2 = qau.copy()
 
 qau2.loc[:, 'year'] = qau2.index.year
 qau2.loc[:, 'qtr'] = qau2.index.quarter
-```
-
-```{python}
-#| fig-align: center
 yrs = np.sort(qau2.year.unique())
 color_ids = np.linspace(0, 1, num=len(yrs))
 colors_to_use = plt.cm.YlOrRd(color_ids)
 
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(10, 6))
 
 for i,yr in enumerate(yrs):
     df_tmp = qau2.loc[qau2.year == yr, :]
     plt.plot(df_tmp.qtr, df_tmp.kWh, color=colors_to_use[i]);
     plt.text(4.1, df_tmp.kWh.iloc[-1], str(yr), color=colors_to_use[i])
-plt.title('Season Plot: House Sales')
+plt.title('Season Plot: Electricity Production')
 plt.xlim(0, 5)
 plt.xticks(np.arange(1, 5), ['Q1', 'Q2', 'Q3', 'Q4']);
 ```

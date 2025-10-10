@@ -869,11 +869,6 @@ us the probabilistic weights - we have to interpret them ourselves.
 Suppose we decide to split the corpus into 10 topics. Let us investigate what
 these topics consist of.
 
-::: {#exm-wine-reviews-lda style="background-color: #D5D1D164; padding: 20px"}
-
-### Wine reviews topic modeling
-\index{Wine Reviews!Topic modeling}
-
 ```{python}
 lda1 = gensim.models.LdaModel(corpus= bow_corpus, num_topics=10, 
                               id2word=dct, random_state=41)
