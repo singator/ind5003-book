@@ -775,7 +775,9 @@ However the most common one is where $x_\theta$ corresponds to a straight line
 OLS fit, and $x_{1 - \theta}$ corresponds to a version of the time series with
 its curvature amplified.
 
-### International Tourism Arrivals to Singapore
+::: {#exm-tourism-1 style="background-color: #D5D1D164; padding: 20px"}
+### International tourism arrivals to Singapore
+\index{Singapore tourist numbers!Basic plot}
 
 The Singapore Department of Statistics shares information on tourist arrivals
 to Singapore at the monthly level. Here is a time series plot of arrivals from
@@ -800,10 +802,20 @@ fig = sea2.plot(figsize=(12,4));
 fig.set_title('Monthly Arrivals from SEA Countries before COVID-19');
 ```
 
+The data was obtained from the 
+[Department of Statistics](https://www.singstat.gov.sg/). Take note that we are
+only going to focus on pre-COVID data.
+
+:::
+
+<br>
+
+To fit the theta model for this dataset, we use the following code:
+
 ```{python}
 theta_mod = ThetaModel(sea2)
 theta_mod_fit = theta_mod.fit()
-theta_mod_fit.summary()
+print(theta_mod_fit.summary())
 ```
 
 Here is what the two components from the model look like, in comparison to the
@@ -814,11 +826,18 @@ seasonally adjusted series (based on a multiplicative decomposition).
 The calculations in the next cell are based on formulas for the theta
 decomposition that we won't get into. They are just for illustration of how the
 decomposition is in terms of long and short term trends, rather than the
-cross-sectional decompositions we have been dealing with so far.
+cross-sectional decompositions we have been dealing with so far. The orange dashed 
+line in @fig-theta-decomp denotes the long-term trend that the model has identified,
+while the green dashed line denotes the short-term trend. The blue solid line is the 
+seasonally adjusted time series.
 
 :::
 
 ```{python}
+#| fig-align: center
+#| fig-cap: "Theta decomposition"
+#| label: fig-theta-decomp
+#| 
 # carry out mutliplicative decomposition in order to obtain seasonally adjusted series
 sea2_mult = seasonal_decompose(sea2, model='multiplicative', extrapolate_trend='freq')
 
@@ -833,10 +852,6 @@ a2 = -1*a0
 b2 = -1*theta_mod_fit.params['b0']
 yvals2 = a2 + b2*(xvals - 1) + 2*(sea2_mult.resid + sea2_mult.trend)
 yvals2 = pd.Series(data=yvals2, index=sea2.index)
-```
-
-```{python}
-#| fig-align: center
 fig = (sea2_mult.resid + sea2_mult.trend).plot(label='Seasonally adjusted', 
                                                legend=True, figsize=(12,4));
 yvals1.plot(legend=True, label='Long-term trend', style="--")
@@ -844,23 +859,21 @@ yvals2.plot(legend=True, label='Short-term trend', style="--");
 fig.set_title("Theta decomposition");
 ```
 
-Finally, we visualise the forecasts from this theta decomposition model.
+Finally, we visualise the forecasts from this theta decomposition model. We only 
+plot the final 360 observations for the visualisation.
 
 ```{python}
+#| fig-align: center
 theta_forecasts = pd.DataFrame(
     {
         "original": sea2,
         "theta forecast": theta_mod_fit.forecast(24)
     }
 )
-```
-
-```{python}
-#| fig-align: center
 theta_forecasts.tail(360).plot(figsize=(12,4));
 ```
 
-## Forecasting with Seasonal Decomposition {#sec-06-fc-decomp}
+### Forecasting with Seasonal Decomposition {#sec-06-fc-decomp}
 
 Continuing with the tourism data, we demonstrate how we can utilise a seasonal
 decomposition (not theta decomposition) model to make forecasts. Recall that a
@@ -871,22 +884,23 @@ use either ARIMA or ETS to predict the seasonally adjusted component, and then
 to use a seasonal naive model to predict the seasonal component. These two
 forecasts will then be combined to create the final forecast.
 
-```{python}
-stlf = STLForecast(sea2, ARIMA, model_kwargs={"order": (3, 1, 2)})
-res = stlf.fit( )
-```
+::: {#exm-tourism-2 style="background-color: #D5D1D164; padding: 20px"}
+### Tourism forecasts with decomposition
+\index{Singapore tourist numbers!Forecast with decomposition}
+
+Here is the code that will use and STL model to decompose the series, and fit a
+pre-chosen ARIMA(3,1,2) model to the seasonally adjusted series.
 
 ```{python}
+#| fig-align: center
+stlf = STLForecast(sea2, ARIMA, model_kwargs={"order": (3, 1, 2)})
+res = stlf.fit( )
 forecasts2 = pd.DataFrame(
     {
         "original": sea2,
         "dcmp forecast": res.forecast(24)
     }
 )
-```
-
-```{python}
-#| fig-align: center
 forecasts2.tail(360).plot(figsize=(12,4));
 ```
 
@@ -895,7 +909,7 @@ forecasts2.tail(360).plot(figsize=(12,4));
 ### Time Series Clustering
 
 ::: {#exm-us-emp-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Time Series Clustering, US Employment Data
+### Time series clustering, US employment data
 \index{US Employment!Clustering}
 
 The [Forecasting: Principles and Practice](https://otexts.com/fpp3/) contains
@@ -903,12 +917,9 @@ time series data on employment in various sectors in the US. There are 148
 unique series in the dataset.
 
 ```{python}
-us_employment = pd.read_csv("data/us_employment.csv", parse_dates=[0], date_format="%Y %b")
-
+us_employment = pd.read_csv("data/us_employment.csv", parse_dates=[0], 
+                            date_format="%Y %b")
 series_ids = us_employment.Series_ID.unique()
-print(f"There are {len(series_ids)} unique series in the dataset.")
-#us_employment.Month.set_index
-
 us_employment.sample(n=8)
 ```
 
@@ -930,27 +941,26 @@ us2 = us_full.pivot(index='Series_ID', columns='Month', values="Employed")
 us2_array = us2.to_numpy()
 ```
 
-Now we can begin the clustering procedure.
-
-```{python}
-# This already converts the correlation into a distance (see the help page)
-out = pdist(us2_array, metric='correlation')
-#corr_mat = np.corrcoef(X, rowvar=False)
-#dist_mat = (1 - corr_mat)/2
-```
+Now we can begin the clustering procedure. The first line in the code below generates
+a 148 x 148 distance matrix.
 
 ```{python}
 #| fig-align: center
+out = pdist(us2_array, metric='correlation')
 lm1 = hierarchy.linkage(out, method='average', optimal_ordering=True)
 
 plt.figure(figsize=(12,5))
 hierarchy.dendrogram(lm1, p=3, truncate_mode='level',color_threshold=True);
 ```
 
-We reorder the columns and rows in the matrix so that similar time series appear next to one another.
+We reorder the columns and rows in the matrix so that similar time series appear
+next to one another.
 
 ```{python}
 #| fig-align: center
+#| label: "Heatmap of correlation matrix"
+#| fig-cap: fig-heatmap-correl
+ 
 X_ord = us2_array[hierarchy.leaves_list(lm1)]
 corr_mat_ord = np.corrcoef(X_ord)
 #corr_mat_ord.shape
