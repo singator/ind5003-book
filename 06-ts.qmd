@@ -592,6 +592,16 @@ Here is the summary of the final chosen model.
 print(arima_m1.summary())
 ```
 
+The output indicates that a seasonal ARIMA model has been found to be the best 
+one. The column `coef` contains estimates of the parameters in the model. The 
+section below contains information on statistical tests 
+
+- for Normality on the residuals (Ljung-Box and Jarque-Bera), and
+- for constant variance.
+
+In addition to tests, we should always create plots to assess the validity of 
+residuals.
+
 :::
 
 Once we have found the best-fitting model, we do what we do with any other
@@ -639,7 +649,7 @@ plt.plot(test2, 'g--', label='True')
 plt.legend();
 ```
 
-## ETS 
+### ETS 
 
 ETS models are a new class of models, that define a time series process
 according to a set of state space equations:
