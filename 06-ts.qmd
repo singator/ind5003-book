@@ -958,41 +958,40 @@ next to one another.
 
 ```{python}
 #| fig-align: center
-#| label: "Heatmap of correlation matrix"
-#| fig-cap: fig-heatmap-correl
+#| label: fig-heatmap-correl
+#| fig-cap: "Heatmap of correlation matrix"
  
 X_ord = us2_array[hierarchy.leaves_list(lm1)]
 corr_mat_ord = np.corrcoef(X_ord)
-#corr_mat_ord.shape
 plt.figure(figsize=(15, 15))
 sns.heatmap(corr_mat_ord, vmin=-1, vmax=1, cmap='coolwarm_r', center=0);
-#, annot=True, cmap='coolwarm', center=0)
 ```
 
 :::
 
-In the next few plots, we pick out series that are close to one another in blue
-segments of the matrix above to inspect how similar they are, and in what ways
-they are similar to one another.
+In the next few plots, we use the heatmap in @fig-heatmap-correl to pick out
+series that are close to one another. Series in blue segments of the matrix are 
+highly correlated; here we inspect them to try to characterise the similarity.
+
+The series in @fig-sim-1 seem to have a dip around the period 2009 - 2011, while
+those in @fig-sim-2 have a cyclical pattern.
 
 ```{python}
+#| fig-align: center
+#| label: fig-sim-1
+#| fig-cap: Series from top left corner of heatmap
 us2_series = us2.index.to_list()
+ss = [us2_series[x] for x in [22, 24, 32, 33, 34]]
+us2.T.loc[:, ss].plot(figsize=(12,4));
+plt.legend(loc='upper right');
 ```
 
 ```{python}
-# Similar series set 1
-# ss = [us2_series[x] for x in [22, 24, 32, 33, 34]]
+#| fig-align: center
+#| label: fig-sim-2
+#| fig-cap: Series from bottom right corner of heatmap
 ss = [us2_series[x] for x in [143, 144, 145]]
 us2.T.loc[:, ss].plot(figsize=(12,4));
-
-# Similar series set 2
-#ss = us2_series[65:68]
-#us2.T.loc[:, ss].plot(logy=False, figsize=(12,4)); # try with and without log
-
-# Simular series set 3:
-
-#ss = [us2_series[x] for x in [92, 94, 96, 97, 98]]
-#us2.T.loc[:, ss].plot(logy=False, figsize=(12,4));
 ```
 
 ## Summary 
