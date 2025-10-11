@@ -904,6 +904,8 @@ forecasts2 = pd.DataFrame(
 forecasts2.tail(360).plot(figsize=(12,4));
 ```
 
+:::
+
 ## Miscellaneous Topics
 
 ### Time Series Clustering
