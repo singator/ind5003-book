@@ -14,7 +14,7 @@ representing Heads and $X=0$ representing Tails.
 
 Random variables come with a rule (or function) that prescribes the
 probabilities with which it takes on particular values. For instance, if we had
-a fair coin, then the rule would be that 
+a fair coin, then the rule would be that
 $$
 P(X=1) = P(X=0) = \frac{1}{2}
 $$
@@ -28,7 +28,6 @@ This rule tells us which events are more likely, and which are less likely.
 
 ```{python}
 from math import pi 
-from IPython.display import IFrame,Video
 
 import mesa
 
@@ -46,7 +45,7 @@ from scipy.stats import binom, bernoulli, norm, expon, uniform
 ```
 
 
-### Discrete vs. Continuous Random Variables.
+### Discrete Random Variables
 
 Discrete random variables take on only a countable number of values. Examples are:
 
@@ -65,6 +64,7 @@ coin.
 
 ```{python}
 #| fig-align: center
+plt.figure(figsize=(5,3))
 plt.bar([0,1], [1/3, 2/3], tick_label=['0', '1'], width=0.3);
 plt.xlim(-1,2); 
 plt.ylim(0,1); 
@@ -77,6 +77,7 @@ $Y$.
 
 ```{python}
 #| fig-align: center
+plt.figure(figsize=(5,3))
 probs = binom.pmf(np.arange(0, 11), n=10, p=2/3)
 plt.bar(np.arange(0, 11), probs);plt.ylim(0,1);
 plt.title('pmf of no. of coin tosses');
@@ -85,15 +86,19 @@ plt.title('pmf of no. of coin tosses');
 If we wish to find the probability of events, for instance, $P(Y \le 4)$, we
 sum up the heights of the bars.
 
+### Continuous Random Variables
+
 Continuous random variables are defined by what is known as a probability
 density function. Continuous random variables can take on an uncountable number
 of values, for instance, all real numbers in the interval $[0,1]$.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Continuous random variables"
+#| label: fig-cts-rv
 x = np.linspace(-3, 3, num=100)
 y = norm.pdf(x)
-plt.figure(figsize=(12,4), facecolor='0.9')
+plt.figure(figsize=(8,3), facecolor='0.9')
 plt.subplot(131)
 plt.plot(x,y)
 plt.ylim(0,1)
@@ -113,6 +118,9 @@ plt.ylim(0,1.1)
 plt.title('Uniform pdf');
 ```
 
+@fig-cts-rv shows three common continuous random variables: Normal, Exponential and 
+Uniform.
+
 ### Generating Random Variates
 
 With a computer, we can generate random variables from almost any distribution.
@@ -121,6 +129,8 @@ instance,
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Histogram of random variables"
+#| label: fig-cts-hist
 rng = default_rng(5003)
 
 yvals = np.zeros((3,300))
@@ -128,7 +138,7 @@ yvals[0,:] = rng.normal(size=300)
 yvals[1,:] = rng.exponential(size=300)
 yvals[2, :] = rng.uniform(size=300)
 pdfs = ['Normal', 'Exponential', 'Uniform']
-plt.figure(figsize=(12,4), facecolor='0.9')
+plt.figure(figsize=(8,3), facecolor='0.9')
 
 for i in np.arange(0,3):
     plt.subplot(1, 3, i+1)
@@ -137,7 +147,8 @@ for i in np.arange(0,3):
     plt.ylim(0, 1.05)
 ```
 
-Notice how the (normalised) histograms look a lot like the corresponding pdfs.
+Notice how, in @fig-cts-hist, the (normalised) histograms look a lot like the
+corresponding pdfs.
 
 ## General Principles in Simulation Studies
 
@@ -154,7 +165,7 @@ Through the estimation of $E(X)$, simulation studies allow us to:
 2. Study the emergent behaviour of complex situations.
 
 ::: {#exm-insurance-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Insurance Claims
+### Insurance claims
 \index{Insurance!Description}
 
 Before the financial year begins, an insurance company has to decide how much
@@ -177,11 +188,12 @@ we can use simulation to estimate this value.
 
 :::
 
-::: {#exm-sandwich-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Sandwich Shop Closing Time
-\index{Sandwich!Description}
-
+<br>
 Here is a slightly more sophisticated example.
+
+::: {#exm-sandwich-1 style="background-color: #D5D1D164; padding: 20px"}
+### Sandwich Shop Closing Time
+\index{Sandwich!Description}
 
 Suppose that you run a sandwich shop, which is open from 9am till 5pm. Your
 philosophy has always been to serve every customer who has entered before 5pm,
@@ -351,7 +363,7 @@ movies from the early 2000s. The following video was from an
 #| eval: false
 #IFrame(src='https://house-fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/6415844878001/e4f4a5c9-0393-4fe5-9986-d5c5b237070a/c276cef7-9eba-4498-a802-9f7867c41334/main.mp4?fastly_token=NjZlYjgxYzlfYWYzYzhmNDQ0ODhmM2Y4NmE1ODIzNzU1ZmE3ODhiNmM4NGZiNjAxNTc2YzZhYmI1NWNlMzYxNzliOGNjY2QxZF9odHRwczovL2hvdXNlLWZhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNjQxNTg0NDg3ODAwMS9lNGY0YTVjOS0wMzkzLTRmZTUtOTk4Ni1kNWM1YjIzNzA3MGEvYzI3NmNlZjctOWViYS00NDk4LWE4MDItOWY3ODY3YzQxMzM0L21haW4ubXA0', 
 #       width=960, height=480)
-Video("../data/lotr.mp4", width=960, height=480)
+#Video("../data/lotr.mp4", width=960, height=480)
 ```
 
 Today, ABM are used in scenarios where the overall behaviour of a system is to complicated to predict by modeling the stages of interaction. Examples of these scenarios are:
@@ -628,9 +640,9 @@ from Our World in Data on Gini coefficient values around the world, across time.
 
 ::: {.content-visible when-format="html"}
 ```{python}
-from IPython.display import IFrame
+#from IPython.display import IFrame
 
-IFrame(src='https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map', width=1024, height=600)
+#IFrame(src='https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map', width=1024, height=600)
 ```
 :::
 
