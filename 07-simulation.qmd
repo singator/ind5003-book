@@ -189,6 +189,7 @@ we can use simulation to estimate this value.
 :::
 
 <br>
+
 Here is a slightly more sophisticated example.
 
 ::: {#exm-sandwich-1 style="background-color: #D5D1D164; padding: 20px"}
@@ -335,14 +336,8 @@ We can create multiple circles using this template. Note the use of the keyword 
 
 ```{python}
 c1 = Circle(3.2)
-```
-
-```{python}
 c2 = Circle(4.0)
-c2.area()
-```
 
-```{python}
 print(f"""
 The radius of c1 is {c1.radius} and the radius of c2 is {c2.radius}.
 The area of c1 is {c1.area():.3f} and the area of c2 is {c2.area():.3f}.
@@ -356,17 +351,24 @@ with one another. One of the most common uses of an agent-based model is to
 understand how the behaviour of the system, as a whole, emerges from simple
 rules for the agents' and their interactions. A very famous example is from the
 simulation software used to create battle scenes in The Lord of The Rings
-movies from the early 2000s. The following video was from an 
+movies from the early 2000s. 
+
+::: {.content-visible when-format="html"}
+The following video was from an 
 [article on the MASSIVE software](https://www.cnet.com/culture/entertainment/features/how-lord-of-the-rings-used-ai-to-change-big-screen-battles-forever/).
 
-```{python}
-#| eval: false
-#IFrame(src='https://house-fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/6415844878001/e4f4a5c9-0393-4fe5-9986-d5c5b237070a/c276cef7-9eba-4498-a802-9f7867c41334/main.mp4?fastly_token=NjZlYjgxYzlfYWYzYzhmNDQ0ODhmM2Y4NmE1ODIzNzU1ZmE3ODhiNmM4NGZiNjAxNTc2YzZhYmI1NWNlMzYxNzliOGNjY2QxZF9odHRwczovL2hvdXNlLWZhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNjQxNTg0NDg3ODAwMS9lNGY0YTVjOS0wMzkzLTRmZTUtOTk4Ni1kNWM1YjIzNzA3MGEvYzI3NmNlZjctOWViYS00NDk4LWE4MDItOWY3ODY3YzQxMzM0L21haW4ubXA0', 
-#       width=960, height=480)
-#Video("../data/lotr.mp4", width=960, height=480)
-```
+{{< video data/lotr.mp4 aspect-ratio="4x3" align="center">}}
+:::
 
-Today, ABM are used in scenarios where the overall behaviour of a system is to complicated to predict by modeling the stages of interaction. Examples of these scenarios are:
+::: {.content-visible when-format="pdf"}
+Take a look at the video from an 
+[article on the MASSIVE software](https://www.cnet.com/culture/entertainment/features/how-lord-of-the-rings-used-ai-to-change-big-screen-battles-forever/).
+
+:::
+
+Today, ABM are used in scenarios where the overall behaviour of a system is to
+complicated to predict by modeling the stages of interaction. Examples of these
+scenarios are:
 
 1. COVID-19 modeling,
 2. Modeling of driver behaviour on roads for the purpose of understanding traffic,
@@ -400,7 +402,9 @@ agents and/or the model at each step of the scheduler. Both the agent and the
 model classes should define a `step()` method. In ABM, a *step* is the smallest
 unit of time. It is also sometimes referred to as a "tick".
 
-## Boltzmann Model Overview 
+::: {#exm-boltzmann-1 style="background-color: #D5D1D164; padding: 20px"}
+### Boltzmann model overview
+\index{Boltzmann Model!Overview}
 
 This is a simple model from social sciences, to demonstrate the use of mesa for
 agent-based modeling. In this agent-based economy, the assumptions are:
@@ -409,8 +413,10 @@ agent-based modeling. In this agent-based economy, the assumptions are:
 2. All agents begin with 1 unit of money.
 3. At every step of the model, an agent gives 1 unit of money (if they have it), to another, randomly chosen, agent.
 
-The reference for this paper is @dragulescu2002statistical. Before we begin the
-model, think about what you expect to see after some time.
+Before we begin the model, think about what you expect to see at the end of the 
+simulations. The reference for this paper is @dragulescu2002statistical.
+
+:::
 
 ## Agent and Model Classes (v1)
 
@@ -457,27 +463,30 @@ class MoneyModel(mesa.Model):
     def __init__(self, N):
         super().__init__()
         self.num_agents = N
-        # Create scheduler and assign it to the model
-        # self.schedule = mesa.time.RandomActivation(self)
-        # self.agents.shuffle_do("step")
 
         # Create agents
         for i in range(self.num_agents):
             a = MoneyAgent(self)
-            # Add the agent to the scheduler
-            #self.schedule.add(a)
 
     def step(self):
         """Advance the model by one step."""
-
-        # The model's step will go here for now this will call the step method of each agent and print the agent's unique_id
-        # self.schedule.step()
         self.agents.shuffle_do("step")
 ```
 
-The next cell creates a model with 10 agents, and runs the model for 100 steps. At the end of this run, we compute the proportion of customers with wealth 0. This is a simple initial metric that we define on the model. Once again, just as with the parameters of the model, the metrics we extract determine how well we can use the model. 
+::: {#exm-boltzmann-2 style="background-color: #D5D1D164; padding: 20px"}
+### Boltzmann model simple execution
+\index{Boltzmann Model!v1 simple execution}
 
-Remember that, to begin with, all agents had equal wealth. If this proportion is high, it indicates a severe imbalance in wealth distribution after 100 time steps.
+The next cell creates a model with 10 agents, and runs the model for 100 steps.
+At the end of this run, we compute the proportion of customers with wealth 0.
+This is a simple initial metric that we define on the model. Once again, just as
+with the parameters of the model, the metrics we extract determine how well we
+can use the model.
+
+Remember that, to begin with, all agents had equal wealth. If this proportion is
+high, it indicates a severe imbalance in wealth distribution after 100 time
+steps.
+
 
 ```{python}
 all_wealth = []
@@ -493,12 +502,12 @@ for i in range(100):
 # for agent in model.schedule.agents:
 for agent in model.agents:
     all_wealth.append(agent.wealth)
-```
-
-```{python}
+    
 prop = (np.array(all_wealth) == 0).mean()
 print(f"The proportion of agents with zero wealth is {prop:.3f}.")
 ```
+
+:::
 
 ### Data Collection
 
@@ -531,27 +540,27 @@ class MoneyModel(mesa.Model):
     def __init__(self, N):
         super().__init__()
         self.num_agents = N
-        # Create scheduler and assign it to the model
-        # self.schedule = mesa.time.RandomActivation(self)
 
         # Create agents
         for i in range(self.num_agents):
             a = MoneyAgent(self)
-            # Add the agent to the scheduler
-            # self.schedule.add(a)
 
-        # initialise the data collector, telling it to use the compute_zero_prop() function
+        # initialise the data collector, telling it to use the 
+        # compute_zero_prop() function
         # on the model.
         self.datacollector = mesa.DataCollector(
             model_reporters={"zero_prop": compute_zero_prop}
         )
 
     def step(self):
-        # self.schedule.step()
         self.agents.shuffle_do("step")
         # Collect data at every step
         self.datacollector.collect(self)
 ```
+
+::: {#exm-boltzmann-3 style="background-color: #D5D1D164; padding: 20px"}
+### Boltzmann model data collection
+\index{Boltzmann Model!v1 data collection}
 
 Once again, we reset the seed and re-run the model. We can then retrieve the
 zero-wealth proprortion at *every step of the model*.
@@ -562,10 +571,9 @@ model.reset_randomizer(seed=5003)
 
 for i in range(100):
     model.step()
-```
-
-```{python}
-model.datacollector.get_model_vars_dataframe()
+    
+df_output = model.datacollector.get_model_vars_dataframe()
+df_output.head()
 ```
 
 Take note that this is considered *a single simulation*. Any simulation model
@@ -574,16 +582,23 @@ measuring the average proportion of zeros after 100 time steps. To do so, we
 need to run several simulations, compute the zero-wealth proportion at each step
 and take the average.
 
+:::
+
 ## Multiple Iterations
 
 The mesa package has features to help us to run multiple simulations and then to
-collate the results. The primary method is `.batch_run()`. Now we shall run the
-model for 50 iterations. Remember that each iteration consists of a fresh set of
-100 time steps.
+collate the results. The primary method is `.batch_run()`. 
+
+::: {#exm-boltzmann-4 style="background-color: #D5D1D164; padding: 20px"}
+### Boltzmann model multiple iterations
+\index{Boltzmann Model!v1 multiple iterations}
+
+In this example, we shall run the model for *50 iterations*. Remember that each
+iteration consists of a fresh set of 100 time steps.
 
 ```{python}
+#| fig-align: center
 params = {"N": 10}
-#params = {"N": [10, 50, 100]}
 
 results = mesa.batch_run(
     MoneyModel,
@@ -591,26 +606,27 @@ results = mesa.batch_run(
     iterations=50,
     max_steps=100,
     number_processes=1,
-    data_collection_period=-1,
-    display_progress=True,
+    data_collection_period=-1
+    #display_progress=True,
 )
-```
-
-```{python}
-#| fig-align: center
 results_df = pd.DataFrame(results)
-
-results_df.zero_prop.hist(grid=False, bins=np.arange(0.10, 1.00, 0.05));
-# results_df.zero_prop.groupby(results_df.N).describe()
+results_df.zero_prop.hist(grid=False, 
+                          bins=np.arange(0.10, 1.00, 0.05),
+                          figsize=(4,3));
 ```
+
+We can see that the proportion of agents with zero income is considerably higher
+than the 0.0 that the population began with.
 
 ```{python}
-stats.ttest_1samp(results_df.zero_prop, 0.0).confidence_interval()
-#results_df.zero_prop.groupby(results_df.N).apply(lambda x: 
-#                                                 stats.ttest_1samp(x, 0.0).confidence_interval())
+ttest_out = stats.ttest_1samp(results_df.zero_prop, 0.0).confidence_interval()
+print(f"""
+The 95% CI for the mean proportion of agents with zero income is
+({ttest_out[0]:.3f}, {ttest_out[1]:.3f})
+       """)
 ```
 
-We can see that the proportion of agents with zero income is approximately 0.42. This is considerably higher than the 0.0 that the population began with.
+:::
 
 ## Agent and Model Classes (v2)
 
