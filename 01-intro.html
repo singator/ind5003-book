@@ -330,7 +330,7 @@ Important
 <li>output cells, and</li>
 <li>markdown cells.</li>
 </ul>
-<div id="fig-jupyter" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Jupyter Lab">
+<div id="fig-jupyter" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Jupyter Lab" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-jupyter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figs/jupyter_lab2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Jupyter Lab">
@@ -342,7 +342,7 @@ Figure&nbsp;1.1: Jupyter Lab
 </div>
 <p>In <a href="#fig-jupyter" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>, the red box labelled 1 is a markdown cell. It can be used to contain descriptions or summary of the code. The cells in the box labelled 2 are code cells. To run the codes from our notes, you can copy and paste the codes into a new cell, and then execute them with Ctrl-Enter.</p>
 <p>Try out this Easter egg that comes with any Python installation:</p>
-<div id="114f63e9" class="cell" data-execution_count="1">
+<div id="838891a8" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> this</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The Zen of Python, by Tim Peters
@@ -380,13 +380,13 @@ Namespaces are one honking great idea -- let's do more of those!</code></pre>
 </ul>
 <p>Very soon, we shall see that for data analysis, the more common objects we shall deal with are dataframes (from pandas) and arrays (from numpy). However, the latter two require add-on packages; the three object classes listed above are baked into Python.</p>
 <p>Here is how we create lists, tuples and dictionaries.</p>
-<div id="f402cba3" class="cell" data-execution_count="2">
+<div id="edb38b61" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>x_list <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
 <span id="cb3-2"><a href="#cb3-2"></a>x_tuple <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>x_dict <span class="op">=</span> {<span class="st">'a'</span>: <span class="dv">1</span>, <span class="st">'b'</span>: <span class="dv">2</span>, <span class="st">'c'</span>: <span class="dv">3</span>} <span class="co"># access with x_dict['a']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>By the way, this is what mean by (im)mutable. The following is OK, because “x” is a list, and hence mutable:</p>
-<div id="40ab60b8" class="cell" data-execution_count="3">
+<div id="e8d14709" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
 <span id="cb4-2"><a href="#cb4-2"></a>x[<span class="dv">3</span>] <span class="op">=</span> <span class="dv">17</span>     </span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="bu">print</span>(x)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -395,7 +395,7 @@ Namespaces are one honking great idea -- let's do more of those!</code></pre>
 </div>
 </div>
 <p>But the following code will return an error, because x_tuple is a tuple, and hence immutable.</p>
-<div id="ef031ced" class="cell" data-execution_count="4">
+<div id="8fbd19b1" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>x_tuple <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a>x_tuple[<span class="dv">3</span>] <span class="op">=</span> <span class="dv">17</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -404,7 +404,7 @@ Namespaces are one honking great idea -- let's do more of those!</code></pre>
 <h2 data-number="1.4" class="anchored" data-anchor-id="slice-operator-in-python"><span class="header-section-number">1.4</span> Slice Operator in Python</h2>
 <p>One important point to take note is that, Python begins indexing of objects starting with 0. Second, indexing is aided by the slicing operator ‘:’. It is used in Python to extract regular sequences from a list, tuple or string easily.</p>
 <p>In general, the syntax is <code>&lt;list-like object&gt;[a:b]</code>, where <code>a</code> and <code>b</code> are integers. Such a call would return the elements at indices <code>a</code>, <code>a+1</code> until <code>b-1</code>. Take note that the end point index is not included.</p>
-<div id="845d3837" class="cell" data-execution_count="5">
+<div id="e15575f0" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>char_list <span class="op">=</span> [<span class="st">'P'</span>, <span class="st">'y'</span>, <span class="st">'t'</span>, <span class="st">'h'</span>, <span class="st">'o'</span>, <span class="st">'n'</span>]</span>
 <span id="cb7-2"><a href="#cb7-2"></a>char_list[<span class="dv">0</span>]           <span class="co"># returns first element</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>char_list[<span class="op">-</span><span class="dv">1</span>]          <span class="co"># returns last element</span></span>
@@ -414,14 +414,14 @@ Namespaces are one honking great idea -- let's do more of those!</code></pre>
 </div>
 </div>
 <p>To obtain the length of a list-like object, we can use the inbuilt <code>len()</code> function.</p>
-<div id="c01242a7" class="cell" data-execution_count="6">
+<div id="80cfa84c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">len</span>(char_list)        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>6</code></pre>
 </div>
 </div>
 <p>This slice syntax is used in the additional packages we use as well, so it is good to know about it. <a href="#fig-py-slice" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> displays a pictorial representation of how positive and negative indexes work together.</p>
-<div id="fig-py-slice" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Python slice">
+<div id="fig-py-slice" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Python slice" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-py-slice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figs/python_slice.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%" alt="Python slice">
@@ -436,7 +436,7 @@ Figure&nbsp;1.2: Positive and negative indices
 <h2 data-number="1.5" class="anchored" data-anchor-id="loops-in-python"><span class="header-section-number">1.5</span> Loops in Python</h2>
 <p>It is extremely efficient to execute “for” loops in Python. Many objects in Python are <em>iterators</em>, which means they can be iterated over. Lists, tuples and dictionaries can all be iterated over very easily.</p>
 <p>Before getting down to examples, take note that Python does not use curly braces to denote code blocks. Instead, these are defined by the number of indentations in a line.</p>
-<div id="8e8a0de0" class="cell" data-execution_count="7">
+<div id="af59240d" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="cf">for</span> i <span class="kw">in</span> x[:<span class="dv">2</span>]:</span>
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="bu">print</span>(<span class="ss">f"The current element is </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -446,7 +446,7 @@ The current element is 3.</code></pre>
 </div>
 <p>Notice how we do not need to set up any running index; the object is just iterated over directly. The argument to the <code>print()</code> function is an f-string. It is the recommended way to create string literals that can vary according to arguments.</p>
 <p>Here is another example of iteration, this time using dictionaries which have key-value pairs. In this case, we iterate over the keys.</p>
-<div id="9fd130a3" class="cell" data-execution_count="8">
+<div id="1a2714c8" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>dict1 <span class="op">=</span> {<span class="st">'holmes'</span>: <span class="st">'male'</span>, <span class="st">'watson'</span>: <span class="st">'male'</span>, <span class="st">'mycroft'</span>: <span class="st">'male'</span>, </span>
 <span id="cb13-2"><a href="#cb13-2"></a>         <span class="st">'hudson'</span>: <span class="st">'female'</span>, <span class="st">'moriarty'</span>: <span class="st">'male'</span>, <span class="st">'adler'</span>: <span class="st">'female'</span>}</span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="co"># dict1['hudson']</span></span>
@@ -473,7 +473,7 @@ The gender of adler is female</code></pre>
 <li>converting to lower/upper-case.</li>
 </ul>
 <p>To join strings, we can use the ‘+’ operator, the <code>str.join()</code> method, or, if they are part of the same expression, we can just place them next to each other separated by whitespace.</p>
-<div id="5a846f4b" class="cell" data-execution_count="9">
+<div id="076ba9e2" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>x <span class="op">=</span> <span class="st">"Where shall "</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>y <span class="op">=</span> <span class="st">"we "</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="bu">print</span>(<span class="st">"Where shall "</span> <span class="st">"we "</span> <span class="st">"go today?"</span>)</span>
@@ -485,7 +485,7 @@ The gender of adler is female</code></pre>
 </div>
 </div>
 <p>To find simple patterns, we may turn to the <code>find</code>, <code>replace</code>, <code>startswith</code> and <code>endswith</code> methods.</p>
-<div id="c7a046a5" class="cell" data-execution_count="10">
+<div id="b2a54444" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>test_str <span class="op">=</span> <span class="st">"Where in the World is Carmen san Diego?"</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a>test_str.find(<span class="st">'Carmen'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -493,7 +493,7 @@ The gender of adler is female</code></pre>
 </div>
 </div>
 <p>The output from the above informs us that <code>Carmen</code> is located at position 22 in <code>test_str</code>.</p>
-<div id="aaca7f8f" class="cell" data-execution_count="11">
+<div id="1269e1a8" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>test_str.replace(<span class="st">'Carmen'</span>, <span class="st">'John'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>'Where in the World is John san Diego?'</code></pre>
@@ -501,11 +501,11 @@ The gender of adler is female</code></pre>
 </div>
 <p>For more complicated search operations over strings, we use a special mini-language known as regular expressions. These are used in several other languages such as R and Perl, so it is worth knowing about them if you have time. See <a href="#sec-01-ref" class="quarto-xref"><span>Section 1.11</span></a> for a good introduction.</p>
 <p>Remember that a string is immutable, just like a tuple, so this assignment will <em>not</em> work:</p>
-<div id="e19079b9" class="cell" data-execution_count="12">
+<div id="9c03a17f" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>test_str[<span class="dv">5</span>] <span class="op">=</span> <span class="st">'z'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>But like a tuple, we can also iterate over a string.</p>
-<div id="a4925c03" class="cell" data-execution_count="13">
+<div id="fcac6064" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>count <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a><span class="cf">for</span> x <span class="kw">in</span> test_str:</span>
 <span id="cb22-3"><a href="#cb22-3"></a>    <span class="cf">if</span> x.isupper():</span>
@@ -516,7 +516,7 @@ The gender of adler is female</code></pre>
 </div>
 </div>
 <p>The corresponding method to convert a string to lower case is:</p>
-<div id="66751046" class="cell" data-execution_count="14">
+<div id="54be8136" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>test_str.lower()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>'where in the world is carmen san diego?'</code></pre>
@@ -526,7 +526,7 @@ The gender of adler is female</code></pre>
 <section id="functions-modules-and-packages" class="level2" data-number="1.7">
 <h2 data-number="1.7" class="anchored" data-anchor-id="functions-modules-and-packages"><span class="header-section-number">1.7</span> Functions, Modules and Packages</h2>
 <p>Functions provide a way to package code that you can re-use several times. To define a function in Python, use the <code>def</code> keyword.</p>
-<div id="1db44735" class="cell" data-execution_count="15">
+<div id="c392e71f" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">def</span> test_function(x):</span>
 <span id="cb26-2"><a href="#cb26-2"></a>    <span class="bu">print</span>(<span class="st">'You typed'</span>, x)</span>
 <span id="cb26-3"><a href="#cb26-3"></a>    </span>
@@ -536,7 +536,7 @@ The gender of adler is female</code></pre>
 </div>
 </div>
 <p>A Python module is a file containing Python definitions (of functions and constants) and statements. Instead of re-typing functions every time, we can simply load the module. We would then have access to the updated functions. We access objects within the module using the “dot” notation. There are several modules that ship with the default Python installation. Here are a couple of ways of importing (and then using) constants from the math module.</p>
-<div id="1d9be781" class="cell" data-execution_count="16">
+<div id="d7391305" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="im">import</span> math</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a><span class="co"># compute e^2</span></span>
@@ -549,7 +549,7 @@ The gender of adler is female</code></pre>
 </div>
 </div>
 <p>Alternatively, we could import the constant <span class="math inline">\(\pi\)</span> so that we do not need to use the dot notation.</p>
-<div id="70585998" class="cell" data-execution_count="17">
+<div id="b41cf883" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="im">from</span> math <span class="im">import</span> pi</span>
 <span id="cb30-2"><a href="#cb30-2"></a>pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
@@ -574,7 +574,7 @@ Note
 <h2 data-number="1.8" class="anchored" data-anchor-id="object-oriented-programming"><span class="header-section-number">1.8</span> Object-Oriented Programming</h2>
 <p>Python has been developed as both a functional and object-oriented programming language. Much of the code we will soon use involves creation of an instance, and then accessing the attributes (data or methods) of that instance.</p>
 <p>Consider the following class Circle.</p>
-<div id="49277c93" class="cell" data-execution_count="18">
+<div id="b1febe5e" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">class</span> Circle:</span>
 <span id="cb32-2"><a href="#cb32-2"></a>    <span class="co">""" A simple class definition </span></span>
 <span id="cb32-3"><a href="#cb32-3"></a><span class="co">    </span></span>
@@ -590,7 +590,7 @@ Note
 <span id="cb32-13"><a href="#cb32-13"></a>        <span class="cf">return</span> pi<span class="op">*</span>(<span class="va">self</span>.radius<span class="op">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Having defined the class, we can <em>instantiate</em> it and use the methods it contains.</p>
-<div id="111fb255" class="cell" data-execution_count="19">
+<div id="f111d109" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>c1 <span class="op">=</span> Circle(<span class="fl">3.2</span>)</span>
 <span id="cb33-2"><a href="#cb33-2"></a>c2 <span class="op">=</span> Circle(<span class="fl">4.0</span>)</span>
 <span id="cb33-3"><a href="#cb33-3"></a>c2.area()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -599,7 +599,7 @@ Note
 </div>
 </div>
 <p>In this simple class, we can also set the value of the attribute of an instance, although this is not the recommended way.</p>
-<div id="4a0a5b2f" class="cell" data-execution_count="20">
+<div id="4ce99207" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>c1.radius <span class="op">=</span> <span class="dv">6</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>c1.area()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
@@ -609,7 +609,7 @@ Note
 </section>
 <section id="numpy" class="level2" data-number="1.9">
 <h2 data-number="1.9" class="anchored" data-anchor-id="numpy"><span class="header-section-number">1.9</span> Numpy</h2>
-<div id="3e7c2123" class="cell" data-execution_count="21">
+<div id="ab49ff66" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb37-2"><a href="#cb37-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb37-3"><a href="#cb37-3"></a><span class="im">from</span> itables <span class="im">import</span> show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -623,7 +623,7 @@ Note
 <li><code>shape</code>: a tuple describing the length of each dimension.</li>
 <li><code>size</code>: the total number of elements in the array. This is a product of the integers in the shape attribute.</li>
 </ul>
-<div id="c3937e67" class="cell" data-execution_count="22">
+<div id="3af3530b" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>arr <span class="op">=</span> np.array([(<span class="fl">1.5</span>, <span class="dv">2</span>, <span class="dv">3</span>), (<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)])</span>
 <span id="cb38-2"><a href="#cb38-2"></a></span>
 <span id="cb38-3"><a href="#cb38-3"></a><span class="co"># number of axes</span></span>
@@ -632,14 +632,14 @@ Note
 <pre><code>2</code></pre>
 </div>
 </div>
-<div id="0aefdeec" class="cell" data-execution_count="23">
+<div id="2c991797" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># the length of each axis</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>arr.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>(2, 3)</code></pre>
 </div>
 </div>
-<div id="32e51ba2" class="cell" data-execution_count="24">
+<div id="e41a2a09" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># number of elements in the array</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>arr.size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
@@ -649,7 +649,7 @@ Note
 <section id="array-creation" class="level3">
 <h3 class="anchored" data-anchor-id="array-creation">Array Creation</h3>
 <p>One way to create an array containing regular sequences is to use the <code>np.arange()</code> function. This creates a sequence of integers, with a specified separation.</p>
-<div id="b6fbac61" class="cell" data-execution_count="25">
+<div id="143ed31c" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>seq <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">3</span>)</span>
 <span id="cb44-2"><a href="#cb44-2"></a>seq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
@@ -657,7 +657,7 @@ Note
 </div>
 </div>
 <p>The shape of an <code>ndarray</code> is given by a tuple. Note that an array of shape (4,) is different from one with shape (4, 1). The former has only <strong>1 dimension</strong>, while the latter has <strong>2 dimensions</strong>.</p>
-<div id="9651004e" class="cell" data-execution_count="26">
+<div id="fbacf568" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># seq.shape</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a>col_vect <span class="op">=</span> seq.reshape(<span class="dv">4</span>,<span class="dv">1</span>)</span>
 <span id="cb46-3"><a href="#cb46-3"></a>col_vect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -669,7 +669,7 @@ Note
 </div>
 </div>
 <p>To create an array of regularly spaced <strong>real numbers</strong>, use <code>np.linspace()</code>.</p>
-<div id="f42259b7" class="cell" data-execution_count="27">
+<div id="a5776f7f" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a>arr_real <span class="op">=</span> np.linspace(start <span class="op">=</span> <span class="fl">0.2</span>, stop <span class="op">=</span> <span class="fl">3.3</span>, num <span class="op">=</span> <span class="dv">24</span>).reshape((<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span>
 <span id="cb48-2"><a href="#cb48-2"></a>arr_real</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
@@ -683,7 +683,7 @@ Note
 </div>
 </div>
 <p>Sometimes we need to create a placeholder array with the appropriate dimensions, and then fill it in later. This is preferable to growing an array by appending to it.</p>
-<div id="267d1997" class="cell" data-execution_count="28">
+<div id="62b1d43c" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a>np.zeros((<span class="dv">3</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>array([[0., 0., 0., 0., 0.],
@@ -693,7 +693,7 @@ Note
 </div>
 <p>Similarly, there is also an <code>np.ones()</code> function.</p>
 <p>Instead of specifying the dimensions of an array ourselves, we can create arrays of zeros or ones in the shape of other existing arrays. The following code creates an array of ones, of the same shape as <code>arr_real</code>.</p>
-<div id="5f039f73" class="cell" data-execution_count="29">
+<div id="213de83c" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a>np.ones_like(arr_real)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>array([[[1., 1., 1., 1.],
@@ -710,7 +710,7 @@ Note
 <h3 class="anchored" data-anchor-id="slice-operator-in-multiple-dimensions">Slice Operator in Multiple Dimensions</h3>
 <p>Multidimensional NumPy arrays can be accessed with comma separated slice notation. When fewer indices are provided than the number of axes, the missing indices are considered complete slices for the remaining dimensions.</p>
 <p>By the way, when printing, the <em>last</em> axis will be printed left-to-right, and the second last axis will be printed from top-to-bottom. The remaining axes will be printed with a line in between:</p>
-<div id="20a3d403" class="cell" data-execution_count="30">
+<div id="7ee2c138" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a>arr_real</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>array([[[0.2       , 0.33478261, 0.46956522, 0.60434783],
@@ -723,14 +723,14 @@ Note
 </div>
 </div>
 <p>Here are examples based on this array. Try to guess what each will return before you run it:</p>
-<div id="d91e3457" class="cell" data-execution_count="31">
+<div id="99082f21" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1"></a>arr_real[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</span>
 <span id="cb56-2"><a href="#cb56-2"></a>arr_real[<span class="dv">0</span>, <span class="dv">2</span>, ::<span class="op">-</span><span class="dv">1</span>]</span>
 <span id="cb56-3"><a href="#cb56-3"></a>arr_real[<span class="dv">1</span>, <span class="dv">0</span>:<span class="dv">3</span>:<span class="dv">2</span>]</span>
 <span id="cb56-4"><a href="#cb56-4"></a>arr_real[:,<span class="dv">2</span>,:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>An alternative to using integers in the selection index is to use Boolean indexing. This means that we use an array of <code>True</code> and <code>False</code> entries to determine which elements to return.</p>
-<div id="66835a5b" class="cell" data-execution_count="32">
+<div id="9e35d063" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1"></a>arr_real <span class="op">&gt;</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>array([[[False, False, False, False],
@@ -742,7 +742,7 @@ Note
         [False,  True,  True,  True]]])</code></pre>
 </div>
 </div>
-<div id="f1d64ace" class="cell" data-execution_count="33">
+<div id="495ed4e3" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1"></a>arr_real[arr_real <span class="op">&gt;</span> <span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>array([3.03043478, 3.16521739, 3.3       ])</code></pre>
@@ -752,7 +752,7 @@ Note
 <section id="basic-operations" class="level3">
 <h3 class="anchored" data-anchor-id="basic-operations">Basic Operations</h3>
 <p>The next few commands generate <span class="math inline">\(Unif(0,1)\)</span> random variates and store them in rectangular arrays. We shall see more about these particular functions in the chapter on Simulation (<a href="07-simulation.html#sec-07-top" class="quarto-xref"><span>Section 7.1</span></a>), but for now, take note that the number <code>1361</code> is known as a seed; it ensures the reproducibility of random numbers across sessions.</p>
-<div id="f23e6446" class="cell" data-execution_count="34">
+<div id="81335d54" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1"></a><span class="co"># Setting a seed allows for reproducibility of random number generation</span></span>
 <span id="cb61-2"><a href="#cb61-2"></a><span class="co"># across sessions.</span></span>
 <span id="cb61-3"><a href="#cb61-3"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1361</span>)</span>
@@ -766,7 +766,7 @@ Note
 </div>
 </div>
 <p>The <code>+</code> operator, applied to conformable arrays, performs element-wise addition.</p>
-<div id="62b36b71" class="cell" data-execution_count="35">
+<div id="0f5f7ac0" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1"></a>a <span class="op">+</span> b </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>array([[0.92582851, 0.90610288, 1.3360719 , 0.43528561, 1.30890054],
@@ -775,7 +775,7 @@ Note
 </div>
 </div>
 <p>Similarly, the <code>*</code> operator performs element-wise multiplication.</p>
-<div id="05004b3c" class="cell" data-execution_count="36">
+<div id="9d232450" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1"></a>a <span class="op">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="33">
 <pre><code>array([[0.2142348 , 0.20493714, 0.43966886, 0.0469805 , 0.36094949],
@@ -784,7 +784,7 @@ Note
 </div>
 </div>
 <p>For matrix multiplication, we have to transpose <code>b</code>.</p>
-<div id="a339a7fc" class="cell" data-execution_count="37">
+<div id="afc8308d" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1"></a>a.dot(b.T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>array([[1.26677078, 1.13630182, 1.19189672],
@@ -796,7 +796,7 @@ Note
 <section id="axis-wise-operations" class="level3">
 <h3 class="anchored" data-anchor-id="axis-wise-operations">Axis-wise Operations</h3>
 <p>Numpy and Pandas have several facilities for applying functions across array axes. It is important to be aware of how they work. For instance, this takes the mean across the 0th (first) axis. The resulting array has shape <code>(3,4)</code>.</p>
-<div id="eb19f4f7" class="cell" data-execution_count="38">
+<div id="617de4a3" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1"></a>arr_real.mean(axis <span class="op">=</span> <span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>array([[1.00869565, 1.14347826, 1.27826087, 1.41304348],
@@ -805,14 +805,14 @@ Note
 </div>
 </div>
 <p>The top-left element comes from the average of <code>arr_real[0,0,0]</code> and <code>arr_real[1,0,0]</code>. Similarly, the element to the right of it comes from the average of <code>arr_real[0,0,1]</code> and <code>arr_real[1,0,1]</code>:</p>
-<div id="f10cfe1f" class="cell" data-execution_count="39">
+<div id="8140f357" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1"></a>(arr_real[<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>] <span class="op">+</span> arr_real[<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>]) <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>1.143478260869565</code></pre>
 </div>
 </div>
 <p>Note that <code>arr_real[0]</code> is a 2D array, with shape (3, 4). Suppose we wish to compute the row means. This means we have to apply the operation by the column axis (axis = 1).</p>
-<div id="3f782eb0" class="cell" data-execution_count="40">
+<div id="26d72dc0" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1"></a>arr_real[<span class="dv">0</span>].mean(axis <span class="op">=</span> <span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>array([0.40217391, 0.94130435, 1.48043478])</code></pre>
@@ -858,7 +858,7 @@ Note
 </tbody>
 </table>
 <p>For instance, if we wanted to identify the row with the largest mean, we use <code>argmax()</code> on the resulting array.</p>
-<div id="8926e786" class="cell" data-execution_count="41">
+<div id="f2f21e5f" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1"></a>arr_real[<span class="dv">0</span>].mean(axis<span class="op">=</span><span class="dv">1</span>).argmax()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>2</code></pre>
@@ -874,7 +874,7 @@ Note
 <div id="exm-pd-series-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 1.1 (Creating Pandas Series)</strong></span> </p>
 <p>Consider the following data, from the football league in Spain.</p>
-<div id="3e37339c" class="cell" data-execution_count="42">
+<div id="461a2e2e" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1"></a>year <span class="op">=</span> pd.Series(<span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">2010</span>, <span class="dv">2013</span>) ) <span class="op">*</span> <span class="dv">3</span>)</span>
 <span id="cb77-2"><a href="#cb77-2"></a></span>
 <span id="cb77-3"><a href="#cb77-3"></a>team <span class="op">=</span> [<span class="st">"Barcelona"</span>, <span class="st">"RealMadrid"</span>, <span class="st">"Valencia"</span>] <span class="op">*</span> <span class="dv">3</span></span>
@@ -890,7 +890,7 @@ Note
 </div>
 </div>
 <p>To access particular values, we can use the slice operator.</p>
-<div id="e8a1131b" class="cell" data-execution_count="43">
+<div id="e911decc" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1"></a>wins[<span class="dv">0</span>:<span class="dv">6</span>:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>0    30
@@ -900,14 +900,14 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>To convert a Series object to an <code>ndarray</code>, we use the following method:</p>
-<div id="90a16be3" class="cell" data-execution_count="44">
+<div id="7a852e65" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1"></a>wins.to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>array([30, 28, 32, 29, 32, 26, 21, 17, 19])</code></pre>
 </div>
 </div>
 <p>If we specify an index, we can use it to access values in the Series.</p>
-<div id="6400462e" class="cell" data-execution_count="45">
+<div id="c6efb1c5" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1"></a>s <span class="op">=</span> pd.Series(rng.uniform(size<span class="op">=</span><span class="dv">5</span>), </span>
 <span id="cb82-2"><a href="#cb82-2"></a>             index<span class="op">=</span>[<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="st">'d'</span>, <span class="st">'e'</span>])</span>
 <span id="cb82-3"><a href="#cb82-3"></a><span class="co"># s</span></span>
@@ -922,7 +922,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 <p>Be careful when you combine the slice operator with label-based indexing. Unlike vanilla Python, Pandas includes <strong>both</strong> end-points!</p>
-<div id="6249b879" class="cell" data-execution_count="46">
+<div id="aa1dd6f5" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1"></a>s[<span class="st">'a'</span>:<span class="st">'d'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>a    0.974173
@@ -940,7 +940,7 @@ dtype: float64</code></pre>
 <div id="exm-pd-df-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 1.2 (Creating Pandas DataFrame from Series)</strong></span> </p>
 <p>We can create a DataFrame from the earlier series.</p>
-<div id="9ef938e4" class="cell" data-execution_count="47">
+<div id="b3cb5c3e" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1"></a>laliga <span class="op">=</span> pd.DataFrame({<span class="st">'Year'</span>: year,</span>
 <span id="cb86-2"><a href="#cb86-2"></a>              <span class="st">'Team'</span>: team,</span>
 <span id="cb86-3"><a href="#cb86-3"></a>              <span class="st">'Wins'</span>: wins,</span>
@@ -949,10 +949,10 @@ dtype: float64</code></pre>
 <span id="cb86-6"><a href="#cb86-6"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To inspect a DataFrame, we can use <code>info()</code>, <code>head()</code> and <code>tail()</code> methods.</p>
-<div id="fb59305c" class="cell" data-execution_count="48">
+<div id="a0dac2cf" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1"></a>show(laliga.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<table id="itables_2457a5db_413f_45f6_89ea_bcf0728867f8" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<table id="itables_5369095b_90c2_4084_9ac4_108aae48302d" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
 <thead>
     <tr style="text-align: right;">
       
@@ -1029,7 +1029,7 @@ Loading ITables v2.3.0 from the internet...
 <script type="module">
     import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
 
-    document.querySelectorAll("#itables_2457a5db_413f_45f6_89ea_bcf0728867f8:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_5369095b_90c2_4084_9ac4_108aae48302d:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1055,14 +1055,14 @@ Loading ITables v2.3.0 from the internet...
 <p><span class="theorem-title"><strong>Example 1.3 (Happiness dataset)</strong></span> </p>
 <p>The CSV file read in here contains the happiness scores of 164 countries from 2015 to 2017. Click <a href="https://worldhappiness.report/ed/2017/">here</a> for a full report on the dataset. The final score was based on many other factors (such as GDP per capita, family, freedom etc) which is included in the file as well.</p>
 <p>In each year, not all of the 164 countries had their scores surveyed and taken. This results in some countries having missing values (<code>NaN</code>) in certain years.</p>
-<div id="83e8bf01" class="cell" data-execution_count="50">
+<div id="2b50fdda" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1"></a>happ <span class="op">=</span> pd.read_csv(<span class="st">'data/happiness_report.csv'</span>, header<span class="op">=</span><span class="dv">0</span>, </span>
 <span id="cb88-2"><a href="#cb88-2"></a>                    na_values<span class="op">=</span><span class="st">'NA'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c60345be" class="cell" data-execution_count="51">
+<div id="49060b36" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1"></a>show(happ)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<table id="itables_2a43a3aa_6382_4d35_a767_63068fa272fe" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
+<table id="itables_d68759ae_554b_462f_9d5f_30bc7b42d280" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
 <thead>
     <tr style="text-align: right;">
       
@@ -1145,7 +1145,7 @@ Loading ITables v2.3.0 from the internet...
 <script type="module">
     import {DataTable, jQuery as $} from 'https://www.unpkg.com/dt_for_itables@2.2.0/dt_bundle.js';
 
-    document.querySelectorAll("#itables_2a43a3aa_6382_4d35_a767_63068fa272fe:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_d68759ae_554b_462f_9d5f_30bc7b42d280:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1167,7 +1167,7 @@ Loading ITables v2.3.0 from the internet...
 <section id="basic-selection" class="level3">
 <h3 class="anchored" data-anchor-id="basic-selection">Basic Selection</h3>
 <p>In dataframes, row selection can <em>technically</em> be done with integers with the slice operator. In practice, this is not used, because we typically wish to select a set of rows based on a condition.</p>
-<div id="836ac68a" class="cell" data-execution_count="52">
+<div id="e3bac60d" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1"></a><span class="bu">print</span>(happ[<span class="dv">10</span>:<span class="dv">12</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Country  Happiness.Rank  Happiness.Score      GDP   Family  \
@@ -1184,7 +1184,7 @@ Loading ITables v2.3.0 from the internet...
 </div>
 </div>
 <p>To select columns, you may use a list of column names.</p>
-<div id="ea242da7" class="cell" data-execution_count="53">
+<div id="74f69d1d" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1"></a>happ[[<span class="st">'GDP'</span>, <span class="st">'Freedom'</span>]].head()</span>
 <span id="cb92-2"><a href="#cb92-2"></a><span class="co"># note the difference with happ['GDP']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="50">
@@ -1242,7 +1242,7 @@ Warning
 </div>
 <div class="callout-body-container callout-body">
 <p>Remember that we are not working with numpy arrays, so this will <em>not</em> work:</p>
-<div id="554295d8" class="cell" data-execution_count="54">
+<div id="e0af619c" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1"></a>happ[<span class="dv">0</span>:<span class="dv">10</span>, <span class="dv">2</span>:<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
@@ -1266,7 +1266,7 @@ Warning
 </ul>
 <p>When selecting from a DataFrame with <code>.loc</code> or <code>.iloc</code>, we can provide a comma-separated index, just as with NumPy. It is good to keep this <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html">reference</a> page bookmarked.</p>
 <p><em>Take note that this next command will only work if the index is made up of integers!</em></p>
-<div id="3153b5d1" class="cell" data-execution_count="55">
+<div id="6f1c6588" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1"></a><span class="bu">print</span>(happ.loc[<span class="dv">2</span>:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Country  Happiness.Rank  Happiness.Score      GDP   Family  \
@@ -1289,7 +1289,7 @@ Warning
 </div>
 </div>
 <p>Notice below how the slice operator is inclusive when we use <code>.loc</code>, but not inclusive when we use <code>.iloc</code>. Consider the following output, using <code>.loc</code>.</p>
-<div id="1a440a5a" class="cell" data-execution_count="56">
+<div id="b297e09a" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1"></a>happ.loc[<span class="dv">2</span>:<span class="dv">10</span>:<span class="dv">4</span>, <span class="st">"GDP"</span>:<span class="st">"Generosity"</span>:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="52">
 <div>
@@ -1330,7 +1330,7 @@ Warning
 </div>
 </div>
 <p>In order to obtain the same output with <code>.iloc</code>, we have to use this instead:</p>
-<div id="007c6611" class="cell" data-execution_count="57">
+<div id="c1e869ec" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1"></a>happ.iloc[<span class="dv">2</span>:<span class="dv">11</span>:<span class="dv">4</span>, <span class="dv">3</span>:<span class="dv">8</span>:<span class="dv">2</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <div>
@@ -1377,7 +1377,7 @@ Warning
 <div id="exm-pd-happ-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 1.4 (Happiest countries)</strong></span> </p>
 <p>Suppose we retrieve the happiest countries; those with a score more than 6.95. Can you surmise why we use this value?</p>
-<div id="814b9de8" class="cell" data-execution_count="58">
+<div id="55f30390" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1"></a>happiest <span class="op">=</span> happ[happ[<span class="st">'Happiness.Score'</span>] <span class="op">&gt;</span> <span class="fl">6.95</span>]</span>
 <span id="cb98-2"><a href="#cb98-2"></a></span>
 <span id="cb98-3"><a href="#cb98-3"></a>happiest.Country.unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1391,7 +1391,7 @@ Warning
 <p><br></p>
 <p>Notice that there isn’t a single Asian or African country in the happiest 10% of countries!</p>
 <p>When filtering, we can also combine Boolean indices.</p>
-<div id="bda996f8" class="cell" data-execution_count="59">
+<div id="8341bb79" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1"></a><span class="co"># Top 3 happiest countries in 2015</span></span>
 <span id="cb100-2"><a href="#cb100-2"></a><span class="bu">print</span>(happ[(happ.Year <span class="op">==</span> <span class="dv">2015</span>) <span class="op">&amp;</span> (happ[<span class="st">'Happiness.Rank'</span>] <span class="op">&lt;=</span> <span class="dv">3</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1416,7 +1416,7 @@ Warning
 <section id="missing-values" class="level3">
 <h3 class="anchored" data-anchor-id="missing-values">Missing Values</h3>
 <p>The <code>.info()</code> method will yield information on missing values, column by column. We can see there are 21 rows with missing values.</p>
-<div id="e615dbc2" class="cell" data-execution_count="60">
+<div id="8c1da2b0" class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1"></a>happ.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1440,7 +1440,7 @@ memory usage: 42.4+ KB</code></pre>
 </div>
 </div>
 <p><em>Sometimes</em>, it is appropriate to drop rows with missing values. This can be done with the <code>.dropna</code> method. Remember that it returns a new dataframe. The original one remains unchanged, unless you include the <code>inplace=True</code> argument.</p>
-<div id="cb46b64e" class="cell" data-execution_count="61">
+<div id="f7976b8a" class="cell" data-execution_count="61">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1"></a>new_df <span class="op">=</span> happ.dropna()</span>
 <span id="cb104-2"><a href="#cb104-2"></a><span class="co"># pd.isna(happ)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
