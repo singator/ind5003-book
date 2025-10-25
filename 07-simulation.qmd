@@ -28,6 +28,7 @@ This rule tells us which events are more likely, and which are less likely.
 
 ```{python}
 from math import pi 
+import pprint
 
 import mesa
 
@@ -634,9 +635,9 @@ The 95% CI for the mean proportion of agents with zero income is
 
 The Gini coefficient is a common measure of the income inequality of a
 population. The Gini coefficient can be defined using a Lorenz curve for a
-population:
+population (see @fig-lorenz).
 
-![Lorenz curve](figs/Economics_Gini_coefficient2.svg.png){fig-align=center width=50%}
+![Lorenz curve](figs/Economics_Gini_coefficient2.svg.png){#fig-lorenz fig-align=center width=50%}
 
 The x- and y-axes both run from 0 to 100%. The x-axis depicts the cumulative
 proportion of a population (increasing from left to right), ranked by income.
@@ -651,18 +652,25 @@ $$
 
 The Gini coefficient is a measure between 0 and 1. A value of 0 indicates income
 equality, while a value of 1 indicates that only 1 member of the population
-earns all the income (extreme inequality). Here is an interactive visualisation
-from Our World in Data on Gini coefficient values around the world, across time.
+earns all the income (extreme inequality). 
+
+::: {.content-visible when-format="pdf"}
+The online version of our textbook contains an interactive visualisation, from
+[Our World In Data](https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map), 
+on how Gini coefficients around the world have evolved over time.
+::: 
 
 ::: {.content-visible when-format="html"}
-```{python}
-#from IPython.display import IFrame
+Here is an interactive visualisation from Our World in Data on Gini coefficient
+values around the world, across time.
 
-#IFrame(src='https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map', width=1024, height=600)
+```{=html}
+<iframe width="780" height="500" src="https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map" title="Our World in Data"></iframe>
 ```
+
 :::
 
-The [wikipedia page](https://en.wikipedia.org/wiki/Gini_coefficient) on Gini
+The [Wikipedia page](https://en.wikipedia.org/wiki/Gini_coefficient) on Gini
 coefficient contains a formula for computing Gini coefficient, given the income
 of all agents. After implementing it, we include it in the model class, along
 with our earlier metric.
@@ -690,14 +698,14 @@ class MoneyModel(mesa.Model):
             # Add the agent to the scheduler
             # self.schedule.add(a)
 
-        # initialise the data collector, telling it to use the gini() and compute_zero_prop() function
+        # initialise the data collector, telling it to use both the gini() 
+        # and compute_zero_prop() function
         # on the model.
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini, "zero_prop": compute_zero_prop}
         )
 
     def step(self):
-        # self.schedule.step()
         self.agents.shuffle_do("step")
         # Collect data at every step
         self.datacollector.collect(self)
@@ -706,9 +714,14 @@ class MoneyModel(mesa.Model):
 ### Data Collection
 
 Suppose we are interested to study how the Gini coefficient of our little
-population evolves over time. We shall use the `batch_run` to run 50 iterations,
-and then create a summary visualisation of the evolution of Gini coefficient for
-each iteration.
+population evolves over time. 
+
+::: {#exm-boltzmann-5 style="background-color: #D5D1D164; padding: 20px"}
+### Boltzmann model data collection 
+\index{Boltzmann Model!v2 Gini}
+
+We shall use the `batch_run` to run 50 iterations, and then create a summary
+visualisation of the evolution of Gini coefficient for each iteration.
 
 ```{python}
 params = {"N": 10}
@@ -719,8 +732,8 @@ results = mesa.batch_run(
     iterations=50,
     max_steps=100,
     number_processes=1,
-    data_collection_period=1,
-    display_progress=True,
+    data_collection_period=1
+    #display_progress=True,
 )
 ```
 
@@ -730,6 +743,8 @@ and plot them.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Evolution of Gini coefficient"
+#| label: fig-gini-coef
 results_df = pd.DataFrame(results)
 grp_by_step = results_df.Gini.groupby(results_df.Step).describe()
 #grp_by_step.head()
@@ -738,8 +753,10 @@ grp_by_step[['25%', '50%', '75%']].plot(style=['--', '-', '--'])
 plt.ylim([0, 1]);
 ```
 
-We can see that the Gini index quickly achieves one of the highest inequality
-values that we observe in the world, and remains there.
+We can see from @fig-gini-coef that the Gini index quickly achieves one of the
+highest inequality values that we observe in the world, and remains there.
+
+:::
 
 ## Agent and Model Classes (v3)
 
@@ -764,12 +781,10 @@ class MoneyModel(mesa.Model):
         super().__init__()
         self.num_agents = N
         self.grid = mesa.space.MultiGrid(width, height, True)
-        # self.schedule = mesa.time.RandomActivation(self)
 
         # Create agents
         for i in range(self.num_agents):
             a = MoneyAgent(self)
-            # self.schedule.add(a)
             # Add the agent to a random grid cell
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
@@ -784,12 +799,15 @@ class MoneyModel(mesa.Model):
     def step(self):
         self.datacollector.collect(self)
         self.agents.shuffle_do("step")
-        # self.schedule.step()
 ```
 
-Now we turn to the agent class. The new version defines methods to `move()` and to `give_money()`. Within the `move` method, we define that the agent could move to a neighbouring cell. With mesa, it is possible to define a couple of types of neighbourhoods: Moore and Von Neumann. In this case, we use the Moore neighbourghood.
+Now we turn to the agent class. The new version defines methods to `move()` and
+to `give_money()`. Within the `move` method, we define that the agent could move
+to a neighbouring cell. With mesa, it is possible to define a couple of types of
+neighbourhoods: Moore and Von Neumann. In this case, we use the Moore
+neighbourghood (see @fig-moore-nbhd).
 
-![](figs/Moore_neighborhood_with_cardinal_directions.png){fig-align=center width=30%}
+![](figs/Moore_neighborhood_with_cardinal_directions.png){#fig-moore-nbhd fig-align=center width=30%}
 
 In the `give_money` method, the logic proceeds as follows:
 
@@ -822,7 +840,8 @@ class MoneyAgent(mesa.Agent):
             other.wealth += 1
             self.wealth -= 1
                 
-    # First, the agent moves. Then, it might give money away to another agent in the neighbouring cell.
+    # First, the agent moves. Then, it might give money away to another agent 
+    # in a neighbouring cell.
     def step(self):
         self.move()
         if self.wealth > 0:
@@ -831,7 +850,8 @@ class MoneyAgent(mesa.Agent):
 
 ### Data Collection
 
-The next code cell runs a single iteration with 100 agents in a 10x10 grid.
+As an example of how the code works, the next code cell runs a *single* iteration
+with 100 agents in a 10x10 grid.
 
 ```{python}
 #| fig-align: center
@@ -840,10 +860,18 @@ for i in range(100):
     model.step()
 
 gini = model.datacollector.get_model_vars_dataframe()
+
 # Plot the Gini coefficient over time
 g = sns.lineplot(data=gini)
 g.set(title="Gini Coefficient over Time", ylabel="Gini Coefficient");
 ```
+
+::: {#exm-boltzmann-6 style="background-color: #D5D1D164; padding: 20px"}
+
+### Boltzmann model data collection 
+\index{Boltzmann Model!v3 spatial}
+
+Now we run the spatial model for 50 iterations.
 
 ```{python}
 params = {"width": 10, "height": 10, "N": range(5, 20, 5)}
@@ -854,8 +882,8 @@ results = mesa.batch_run(
     iterations=50,
     max_steps=100,
     number_processes=1,
-    data_collection_period=1,
-    display_progress=True,
+    data_collection_period=1#,
+    #display_progress=True,
 )
 ```
 
@@ -863,15 +891,14 @@ For a visualisation of the results, we shall compute the mean Gini coefficient
 at each time step, grouped by `N`.
 
 ```{python}
+#| fig-align: center
+#| fig-cap: "Evolution of Gini over time steps"
+#| label: fig-gini-over-time-steps
+
 results_df = pd.DataFrame(results)
 grp_by_step = results_df.Gini.groupby([results_df.Step, results_df.N]).describe()
 grp_by_step.reset_index(inplace=True)
 
-#grp_by_step.head()
-```
-
-```{python}
-#| fig-align: center
 grouped = grp_by_step.groupby('N')
 plt.figure(figsize=(10, 6))
 
@@ -884,58 +911,14 @@ plt.title('Gini vs Step by N (number of agents)');
 plt.legend();
 ```
 
-As we can see, the value at which the Gini coefficient converges to differs for
-varying `N`. For smaller `N`, the final Gini value seems to be lower. For all
-the settings, the convergence does appear to happen at approximately the same
-time step.
+As we can see from @fig-gini-over-time-steps, the value at which the Gini
+coefficient converges to differs for varying `N`. For smaller `N`, the final
+Gini value seems to be lower. For all the settings, the convergence does appear
+to happen at approximately the same time step.
 
-## Visualisations
+:::
 
-As with most ABM software, it is possible to visualise the steps. This is not to
-be used for conveying results to management; it is more for debugging, and for
-study for the purpose of understanding the behaviour and for generating
-hypothesis.
-
-```{python}
-def agent_portrayal(agent):
-    #return {
-    #    "color": "tab:blue",
-    #    "size": 50,
-    #}
-    size = 10
-    color = "tab:red"
-    if agent.wealth > 0:
-        size = 50
-        color = "tab:blue"
-    return {"size": size, "color": color}
-
-model_params = {
-    "N": {
-        "type": "SliderInt",
-        "value": 50,
-        "label": "Number of agents:",
-        "min": 10,
-        "max": 100,
-        "step": 1,
-    },
-    "width": 10,
-    "height": 10,
-}
-```
-
-```{python}
-#from mesa.experimental import JupyterViz
-
-#page = JupyterViz(
-#    MoneyModel,
-#    model_params,
-#    measures=["Gini"],
-#    name="Money Model",
-#    agent_portrayal=agent_portrayal,
-#)
-# This is required to render the visualization in the Jupyter notebook
-#page
-```
+### Boltzmann Model Final Comments
 
 Remember that simulations are a risk-free approach to trying out different
 scenarios. They are especially useful when it is difficult to guage what
@@ -949,7 +932,6 @@ you can try to understand the Boltzmann Wealth Distribution model better.
 * What if we want to know when Gini coefficient first crosses a threshold?
 * What if we want to use [Palma Ratio](ttps://en.wikipedia.org/wiki/Income_inequality_metrics#Palma_ratio) instead?
 
-
 ## Simpler Simulation Models
 
 In this section, we provide two examples of "simpler" simulation scenarios.
@@ -959,7 +941,10 @@ model language, and then to represent the scenario where we intend to perform a
 
 ### N-gram models
 
-Here is an example of how we can simulate from distributions to generate random (nonsensical) sentences that are "similar" to actual sentences from a text.
+Here is an example of how we can simulate from distributions to generate random
+(nonsensical) sentences that are "similar" to actual sentences from a text. If your 
+code returns an error, you may have to download the `genesis` text first (using
+the commented out code).
 
 ```{python}
 #nltk.download('genesis')
@@ -969,7 +954,8 @@ bg = nltk.bigrams(kjv)
 cfd = nltk.ConditionalFreqDist(bg)
 ```
 
-The object `cfd` contains information on the distribution of words that come after. For instance, these are the words that come after "she":
+The object `cfd` contains information on the distribution of words that come
+after. For instance, these are the words that come after "she":
 
 ```{python}
 cfd['she']
@@ -979,7 +965,8 @@ The object `kjv` contains all the words and punctuations from the King James
 Bible. Here are the first 20 words:
 
 ```{python}
-' '.join(kjv[:20])
+pp = pprint.PrettyPrinter(indent=4, compact=True,)
+pp.pprint(' '.join(kjv[:20]))
 ```
 
 Next, we extract all bigrams and create a dictionary of frequency distributions.
@@ -988,7 +975,7 @@ Each frequency distribution tabulates the occurences of the *next* word.
 Suppose we are interested in what words/tokens come after the word 'And' in the bible:
 
 ```{python}
-cfd['And'].keys()
+pp.pprint(cfd['And'].keys())
 ```
 
 Thus 'the' is the most likely word after 'And'. The second most likely pairing
@@ -1008,9 +995,7 @@ def generate_model(cfdist, word, num=15):
         pp = np.array(list(cfdist[word].values()))
         pp = pp / np.sum(pp)
         word = rng.choice(choices, size=1, p = pp)[0]
-```
-
-```{python}
+        
 generate_model(cfd, 'God', 10)
 ```
 
@@ -1025,21 +1010,40 @@ H_1 :& \mu \neq \mu_0
 Instead of using the $p$-value alone to assess the strength of evidence against the null hypothesis, an alternative method is to specify a significance level and then compare the $p$-value to it. 
 
 This returns the possible four outcomes of a test:
+
   * $H_0$ was true, but we rejected it (Type I error).
   * $H_0$ was true, and we did not reject it.
   * $H_0$ was false, and we rejected it.
   * $H_0$ was false, but we did not reject it (Type II error).
   
-We want the Type I and II errors to be small. 1 minus the Type II error is known as the power of a test. Typically, we have to specify a particular value of the parameter in order to compute the power of a test. We cannot simply leave it as $\mu \neq \mu_0$. These ideas can be used to compute a sample size for an experiment that we wish to conduct. Let's think about this for a minute.
+We want the Type I and II errors to be small. 1 minus the Type II error is known
+as the power of a test. Typically, we have to specify a particular value of the
+parameter in order to compute the power of a test. We cannot simply leave it as
+$\mu \neq \mu_0$. These ideas can be used to compute a sample size for an
+experiment that we wish to conduct. Let's think about this for a minute.
 
-Suppose we wish to perform some simple A/B testing: we have two groups, and we wish to be able to detect a difference. What sample size do I need?
+Suppose we wish to perform some simple A/B testing: we have two groups, and we
+wish to be able to detect a difference. What sample size do I need?
 
 The question is actually a little more complex than that. Let's think about what we need to consider:
-  * How does the true difference affect my sample size?
-  * How does the variability within each group affect my sample size?
-  * How does the significance level affect the sample size I need? Recall that the significance level determines my Type I error.
 
-Suppose now, that we fix the significance level to be 5%, with power of at least 0.9 and we are interested in detecting a difference between the means of the value of 1, when the standard deviation of observed values is 1.2. What sample size do I need?
+* How does the true difference affect my sample size?
+* How does the variability within each group affect my sample size?
+* How does the significance level affect the sample size I need? Recall that the significance level   
+  determines my Type I error.
+
+Suppose now, that we fix the significance level to be 5%, with power of at least
+0.9 and we are interested in detecting a difference between the means of the
+value of 1, when the standard deviation of observed values is 1.2. What sample
+size do I need?
+
+::: {#exm-power-1 style="background-color: #D5D1D164; padding: 20px"}
+
+### Power analysis with simulation
+\index{Power analysis!simulation}
+
+First, we write a function that will generate two groups of data, and then
+computes and returns the decision for a $t$-test.
 
 ```{python}
 def generate_one_sample(alpha, delta_m, sd1, n):
@@ -1053,22 +1057,29 @@ def generate_one_sample(alpha, delta_m, sd1, n):
         return 0
 ```
 
+Now we run multiple iterations of that function and plot a graph depicting how the 
+rejection probability varies with the sample size.
+
 ```{python}
+#| fig-align: center
+#| label: fig-power
+#| fig-cap: "Power analysis using simulation"
 n_vals = np.arange(5, 50, step=4)
 
 power_est = []
 for n_ in n_vals:
     x = [generate_one_sample(0.05, 1, 1.2, n_) for ii in np.arange(0, 2000)]
     power_est.append(np.mean(x))
-    print("Done with sample size " + str(n_))
-```
-
-```{python}
-#| fig-align: center
+    # print("Done with sample size " + str(n_))
+    
 ax = plt.plot(n_vals, power_est, 'go-')
 plt.hlines(0.9, n_vals[0], n_vals[-1], colors='b', linestyles='dotted')
 plt.title('Power Estimates');
 ```
+
+@fig-power shows that we probably need a sample size of approximately 35.
+
+:::
 
 ## Summary: Simulation-Based Modeling
 
