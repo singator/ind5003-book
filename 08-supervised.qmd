@@ -37,11 +37,10 @@ are faced with a **regression** problem.
 
 ## Supervised Learning Workflow
 
-The overall workflow in supervised learning is as follows:
+![Figure from sklearn documentation](figs/grid_search_workflow_sklearn.png){#fig-sklearn-workflow fig-align=center width=60%}
 
-![Figure from sklearn documentation](figs/grid_search_workflow_sklearn.png){fig-align=center width=60%}
-
-Here are the specific details:
+The overall workflow in supervised learning is as shown in
+@fig-sklearn-workflow. Here are the specific details:
 
 1. Split up a dataset into training and test datasets, typically along a 80/20 or 75/25 split. **Do not touch the test data again until the end.**
 2. Preprocess/clean the training data and store the parameters for later use on the test data.
@@ -137,8 +136,14 @@ from lime import lime_tabular
 
 from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, r2_score
-from sklearn.model_selection import cross_val_score, cross_validate, ShuffleSplit, learning_curve, validation_curve, GridSearchCV, train_test_split
+from sklearn.metrics import (
+  accuracy_score, f1_score, confusion_matrix, 
+  ConfusionMatrixDisplay, precision_score, recall_score, r2_score
+  )
+from sklearn.model_selection import (
+    cross_val_score, cross_validate, ShuffleSplit, 
+    learning_curve, validation_curve, GridSearchCV, train_test_split
+    )
 from sklearn.inspection import permutation_importance
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
@@ -174,6 +179,7 @@ that arises from cross-classification of predictions and the actual outcomes.
 
 
 In the confusion matrix, there are 4 possible cases:
+
 * True positives (TP)
     * Classifier predicts sample as positive and it really is so.
 * False positives (FP)
@@ -182,7 +188,6 @@ In the confusion matrix, there are 4 possible cases:
     * Classifier predicts sample as negative and it really is so.
 * False negatives (FN)
     * Classifier predicts sample as negative but in truth, it is positive. **Incorrect prediction**
-
 
 #### Precision and Recall
 
@@ -261,7 +266,7 @@ In this section, we demonstrate how we can use `scikit-learn` to perform supervi
 learning on a classification problem.
 
 ::: {#exm-heart-failure-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Heart Failure
+### Heart failure
 \index{Heart Failure!Description}
 
 This dataset, from the [UCI machine learning repository](https://archive.ics.uci.edu/dataset/519/heart+failure+clinical+records)
@@ -338,24 +343,42 @@ print(f"The proportion of 1's in the training data is {y_train.mean():.3f}.")
 print(f"The proportion of 1's in the test data is {y_test.mean():.3f}.")
 ```
 
+::: {#exm-heart-failure-2 style="background-color: #D5D1D164; padding: 20px"}
+### Heart failure decision tree
+\index{Heart Failure!Decision tree}
+
+All estimators in `sklearn` have a `.fit()` method. This routine will use the
+data to estimate the optimal parameters for the particular model, which in this
+case is a decision tree.
+
 ```{python}
 clf.fit(X_train, y_train,)
 ```
 
 Notice that when we call the `.fit()` method, there is no output object
-returned; it is just that the parameters in the `clf` object are updated.
+returned; it is just that the parameters in the `clf` object are updated. We can
+now use the trained model to make predictions. In this case, we attempt to
+predict `DEATH_EVENT` for a randomly selected row in the training data.
 
 ```{python}
 clf.predict_proba(X_train.sample(random_state=3005))
 ```
 
+:::
+
+We can visualise the fitted decision tree as follows. This is an important step
+in understanding and interpreting the fitted model.
+
 ```{python}
 #| fig-align: center
+#| fig-cap: "Heart failure decision tree"
+#| label: fig-heart-dt
+
 plt.figure(figsize =(18, 6))
 tree.plot_tree(clf,feature_names=X.columns, filled=True, max_depth=2);
 ```
 
-The figure above visualises the rules in the first two layers (depth 2) of the
+@fig-heart-dt visualises the rules in the first two layers (depth 2) of the
 tree. First off, notice that the tree is upside down, with the root on top; the
 terminal nodes (or boxes) at the bottom are referred to as the leaves. To
 understand the tree, consider using it to obtain a new prediction, with the
@@ -392,17 +415,22 @@ non-linearity of the splits. Both the initial split and the subsequent split on
 the left are on `time`. This indicates a non-linear relationship with time, and
 is not a property of classical models such as out-of-the-box linear regression.
 
-::: {#exm-heart-failure-2 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Heart Failure Classification Scores
-\index{Heart Failure!Decision Tree}
+::: {#exm-heart-failure-3 style="background-color: #D5D1D164; padding: 20px"}
+### Heart failure classification scores
+\index{Heart Failure!Decision tree classification scores}
 
 Performance of classification algorithms are usually presented in the form of a
-*confusion matrix*. First we display the results for the training set.
+*confusion matrix*. First we display the results for the training set in 
+@fig-confusion-training.
 
 ```{python}
 #| fig-align: center
+#| label: fig-confusion-training
+#| fig-cap: "Confusion matrix, training set"
+
 y_pred_train = clf.predict(X_train)
 ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, 
+                                        text_kw={'size': 'xx-large'},
                                         labels=clf.classes_, cmap='bone');
 print(f"""
 ##: For training set:
@@ -414,12 +442,16 @@ The f1-score (for cat. 1) is {f1_score(y_train, y_pred_train):.3f}
 """)
 ```
 
-Next, we display the results for the test set.
+Next, we display the results for the test set in @fig-confusion-test.
 
 ```{python}
 #| fig-align: center
+#| label: fig-confusion-test
+#| fig-cap: "Confusion matrix, test set"
+
 y_pred_test = clf.predict(X_test)
-ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test, 
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test,  
+                                        text_kw={'size': 'xx-large'},
                                         labels=clf.classes_, cmap='bone');
 print(f"""
 ##: For test set:
@@ -439,24 +471,32 @@ has been overfitting by the model; it is too tuned to the data in the training
 set. In supervised learning, we aim for a classifier that performs almost as
 well on the test data as it does on the training data. That would indicate that
 the model, with this particular hyperparameter configuration, will perform well
-on new data that has yet to be seen.
+on new data that has yet to be seen. 
+
+In this particular dataset, we may want to go back to the fitting step, and
+reduce the `max_depth`, or to impose a larger number of samples in the leaf
+nodes via `min_samples_leaf`.
 
 ### Variable importance
 
-As we shall discuss in a later section of this topic, it is important to be
-able to identify which features are important to the model. This allows
-non-technical folk in your team (who could be end-user domain experts, or upper
-management) to have faith in your models. If the features that are identified
-to be important align with what the domain experts know or intuit, that
-provides more buy-in for your analyses and recommendations.
+As we shall discuss in @sec-08-interpretability, it is important to be able to
+identify which features are important to the model. This allows non-technical
+folk in your team (who could be end-user domain experts, or upper management) to
+have faith in your models. If the features that are identified to be important
+align with what the domain experts know or intuit, that provides more buy-in for
+your analyses and recommendations.
 
 We shall demonstrate two types of feature importance:
 
-1. *Permutation based feature importance*. It works by permuting one of the features at a time, and measuring
-   the drop in accuracy on the test set. The intuition is that, if a variable is highly important, randomising it will cause a sharp drop in predictive value.
-2. *Partial dependence plots (PDP)*. A PDP can be generated for each feature in the model, or a pair of features. Each PDP is generated by:
+1. *Permutation based feature importance*. It works by permuting one of the
+   features at a time, and measuring the drop in accuracy on the test set. The
+   intuition is that, if a variable is highly important, randomising it will cause
+   a sharp drop in predictive value.
+2. *Partial dependence plots (PDP)*. A PDP can be generated for each feature in
+   the model, or a pair of features. Each PDP is generated by:
    1. Vary the feature over a range of values
-   2. For each feature value in that range, average the predictions over all values of *other* variables occuring in the training data.
+   2. For each feature value in that range, average the predictions over all
+      values of *other* variables occuring in the training data.
 
 There are certain caveats with using the above measures. One is that these
 measures are indicative of how important a feature is to a particular model,
@@ -466,14 +506,19 @@ Second, in the permutation approach, the importance of a variable may not show
 up if certain features are highly correlated (dropping one of them may have no
 effect because the other feature is still present in the model).
 
-#### Permutation Based 
+::: {#exm-heart-failure-4 style="background-color: #D5D1D164; padding: 20px"}
+### Heart failure permutation based
+\index{Heart Failure!Permutation based importance}
+
+Here is how we can use `sklearn` to obtain the importance of variables based on 
+permutating the values to break the relationship.
 
 ```{python}
-result = permutation_importance(
-    clf, X_test, y_test, n_repeats=30, random_state=42,
-    # clf, X_test, y_test, n_repeats=10, random_state=42, n_jobs=2
-
-)
+#| fig-align: center
+#| label: fig-var-impt-perm
+#| fig-cap: "Variable importance, permutation approach"
+result = permutation_importance(clf, X_test, y_test,  
+                                n_repeats=30, random_state=42)
 
 sorted_importances_idx = result.importances_mean.argsort()
 importances = pd.DataFrame(
@@ -487,13 +532,37 @@ ax.set_xlabel("Decrease in accuracy score")
 ax.figure.tight_layout()
 ```
 
-In the plot above, we can see that `time`, `ejection_fraction` and
-`serum_sodium` are the top 3 in terms of importance when assessing
-generalisability to test set.
+In @fig-var-impt-perm, we can see that `time` and `ejection_fraction` are the
+top 2 in terms of importance when assessing generalisability to test set.
 
-#### Partial Dependence Plots
+:::
+
+<br/>
+
+#### 
+::: {#exm-heart-failure-5 style="background-color: #D5D1D164; padding: 20px"}
+### Heart failure partial dependence 
+\index{Heart Failure!Partial dependence plots}
+
+In order to obtain PDP plots, the features need to be float-point, not integer.
+The following code snippets converts `creatinine_phosphokinase` and `serum_sodium`
+into floats.
 
 ```{python}
+X_train2 = X_train.copy()
+
+X_train2['creatinine_phosphokinase'] = X_train2['creatinine_phosphokinase'].astype(float)
+X_train2['serum_sodium'] = X_train2['serum_sodium'].astype(float)
+```
+
+Now we can create and display the PDP plots for 5 individual features, and one 
+double-feature.
+
+```{python}
+#| fig-align: center
+#| label: fig-var-impt-pdp
+#| fig-cap: "Variable importance, partial dependence"
+ 
 _, ax = plt.subplots(ncols=3, nrows=2, figsize=(12, 6), constrained_layout=True)
 features_info = {
     "features": ["age", "creatinine_phosphokinase", "platelets", 
@@ -503,7 +572,7 @@ features_info = {
 }
 display = PartialDependenceDisplay.from_estimator(
     clf,
-    X_train,
+    X_train2,
     **features_info,
     ax=ax,
     contour_kw = {'cmap': "Reds"}
@@ -511,11 +580,13 @@ display = PartialDependenceDisplay.from_estimator(
 ```
 
 PDP are meant to visualise the relationship that has been learned in the
-training set; hence it is not usually created with the test set. From the
-plots, we can interpret that when other variables are already in the model, age
-returns a visible bump in the probability of death. `serum_creatinine` is
-associated with a similar increase, but at low levels. The final plot, at the
+training set; hence it is not usually created with the test set. From @fig-var-impt-pdp,
+we can interpret that when other variables are already in the model, age returns
+a visible bump in the probability of death at around age 80. `serum_creatinine`
+is associated with a similar increase, but at low levels. The final plot, at the
 lower right, darker reds indicate higher probability of death.
+
+:::
 
 ### Random Forest {#sec-08-forest}
 
@@ -546,9 +617,16 @@ Cross-validation begins with a split of the training data into $k$ blocks
    generalised error.
 
 The process yields $k$ estimates of error - one for each block that was set
-aside. This can be used to compare between hyperparamter settings. In this case
-below, we try to identify the optimal `max_depth` parameter for the trees. Too
-large a depth would overfit to the data, and we wish to avoid that.
+aside. This can be used to compare between hyperparamter settings. 
+
+::: {#exm-heart-failure-6 style="background-color: #D5D1D164; padding: 20px"}
+### Heart failure grid search
+\index{Heart Failure!Grid search cross-validation}
+
+Earlier, in @exm-heart-failure-3, we noticed that our decision tree had been
+overfitting to the data. In this example, we try to identify the optimal
+`max_depth` parameter for the trees by testing models with different depths,
+ranging from 1 to 10, and identifying the one with the best generalised error.
 
 ```{python}
 p_range = range(1, 11, 1)
@@ -567,11 +645,16 @@ persual:
 cv_search.best_estimator_
 ```
 
+:::
+
 It is also possible, at this point, to extract the training and test scores for 
 each cross-validation set, and to then plot the validation curve.
 
 ```{python}
 #| fig-align: center
+#| label: fig-valid-curve
+#| fig-cap: "Validation curve, random forest"
+
 train_means = cv_search.cv_results_['mean_train_score']
 train_sd = cv_search.cv_results_['std_train_score']
 
@@ -589,12 +672,12 @@ plt.legend(loc='lower right');plt.ylabel('Accuracy');
 plt.xlabel('Complexity');plt.title('Validation Curve');
 ```
 
-From the above chart, we can see that as the max. depth increases, both the
+From @fig-valid-curve, we can see that as the max. depth increases, both the
 training and test errors increase sharply, and then plateau. It even appears
 that the test error appears to come down. As we discussed, it is normal for the
 test error to be lower than the training set. Observe that with too high a
 complexity, accuracy in the training set approaches 1. From the curve, a good
-choice for the `max_depth` parameter is 3:
+choice for the `max_depth` parameter is 3, because:
 
 * The test error for this value is close to the training error.
 * Any `max_depth` larger than this would lead to overfitting 
@@ -602,19 +685,25 @@ choice for the `max_depth` parameter is 3:
 * The convention is to take the smallest complexity that is not more than 1 
   standard error away from the best performing model.
 
-::: {#exm-heart-failure-3 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Heart Failure Classification Scores II
+::: {#exm-heart-failure-7 style="background-color: #D5D1D164; padding: 20px"}
+### Heart failure random forest classification scores
 \index{Heart Failure!Random Forest}
+
+In this example, we use the optimal `max_depth` to fit a random forest, and assess
+the test error.
 
 ```{python}
 rf = RandomForestClassifier(n_estimators=20, max_depth=3, random_state=40)
 rf.fit(X_train, y_train)
 ```
 
+The following code returns the error from the training error.
+
 ```{python}
 y_pred_train = rf.predict(X_train)
-print(f"""##: For training set:
-----
+print(f"""
+For training set:
+-----------------
 The precision (for cat. 1) is {precision_score(y_train, y_pred_train):.3f}
 The recall (for cat. 1) is {recall_score(y_train, y_pred_train):.3f}
 The accuracy (for cat. 1) is {accuracy_score(y_train, y_pred_train):.3f}
@@ -622,10 +711,13 @@ The f1-score (for cat. 1) is {f1_score(y_train, y_pred_train):.3f}
 """)
 ```
 
+Here is the test error.
+
 ```{python}
 y_pred_test = rf.predict(X_test)
-print(f"""##: For test set:
-----")
+print(f"""
+For test set:
+-------------
 The precision (for cat. 1) is {precision_score(y_test, y_pred_test):.3f}
 The recall (for cat. 1) is {recall_score(y_test, y_pred_test):.3f}
 The accuracy (for cat. 1) is {accuracy_score(y_test, y_pred_test):.3f}
@@ -641,11 +733,9 @@ test accuracy (from 0.760 to 0.827).
 ## Regression
 
 Just to demonstrate the use of random forests for regression, we return to the
-Taiwan Data. In our scoring, instead of using RMSE or MAE, we shall use the
-$R^2$.
-
-First, we read the Taiwan data into Python and transform each column to have 
-mean 0 and sd 1.
+Taiwan dataset. In our scoring, instead of using RMSE or MAE, we shall use the
+$R^2$. First, we read the Taiwan data into Python and transform each column to
+have mean 0 and sd 1.
 
 ```{python}
 re2 = pd.read_csv("data/taiwan_dataset.csv")
@@ -674,11 +764,13 @@ rf_search.fit(Xre_train, yre_train,)
 rf_search.best_estimator_
 ```
 
-Here is the validation curve, that will allow us to decide on the optimal number 
-of trees.
+Here is the validation curve, that will allow us to decide on the optimal maximum 
+depth, using 10 trees.
 
 ```{python}
 #| fig-align: center
+#| label: fig-taiwan-random-forest
+#| fig-cap: "Validation curve, random forest for Taiwan data"
 train_means = rf_search.cv_results_['mean_train_score']
 train_sd = rf_search.cv_results_['std_train_score']
 
@@ -698,27 +790,22 @@ plt.xlabel('Complexity');plt.title('Validation Curve');
 ```
 
 ::: {#exm-taiwan-data-14 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Taiwan Data Regression
-\index{Taiwan Data!Random Forest Regression}
+### Taiwan data random forest regression
+\index{Taiwan Data!Random forest regression}
 
-We shall fit a model with 10 trees, and max_depth 2, and assess the test error.
+Based on @fig-taiwan-random-forest, we shall fit a model with 10 trees and
+`max_depth` 2, and assess the $R^2$ on the test set.
 
 ```{python}
 rf1 = RandomForestRegressor(n_estimators=10, max_depth = 2, random_state=89)
 rf1.fit(Xre_train, yre_train)
-```
-
-```{python}
 yrf_pred = rf1.predict(Xre_test)
-```
-
-```{python}
 r2_score(yre_test, yrf_pred)
 ```
 
 :::
 
-## Interpretability of Models
+## Interpretability of Models {#sec-08-interpretability}
 
 ### LIME 
 
@@ -740,14 +827,14 @@ using the original model. To be precise, the steps are:
 3. Weight the new samples according to their proximity to the instance of interest.
 4. Train a weighted, interpretable model on the dataset with the variations.
 
-The following diagram visualises the process when making predictions
+@fig-lime-fit visualises the process when making predictions
 (light-blue vs. gray) using two features ($x_1$ and $x_2$). The instance of
 interest is the yellow point.
 
-![LIME](figs/lime-fitting-1.jpeg){fig-align=center width=60%}
+![LIME](figs/lime-fitting-1.jpeg){#fig-lime-fit fig-align=center width=60%}
 
 ::: {#exm-taiwan-data-15 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Taiwan Data LIME
+### Taiwan data LIME
 \index{Taiwan Data!LIME}
 
 Now we return to our dataset on real estate transations and attempt to
@@ -759,7 +846,7 @@ re_scaler.inverse_transform(Xre_test[4, :].reshape(1, -1)).round()
 #Xre_test[4, :].round(4)
 ```
 
-First we instantiate an explainer object, and then provide it with the instance 
+First we instantiate an explainer object, and then provide it with the instance
 we wish to explain.
 
 ```{python}
@@ -768,9 +855,6 @@ explainer = lime_tabular.LimeTabularExplainer(
     feature_names=X_re.columns,
     mode='regression',
 )
-```
-
-```{python}
 exp = explainer.explain_instance(
     data_row=Xre_test[4, :], 
     predict_fn=rf1.predict,
@@ -779,25 +863,29 @@ exp = explainer.explain_instance(
 
 ```{python}
 #| fig-align: center
+#| label: fig-taiwan-lime
+#| fig-cap: "LIME Explanation for Taiwan data instance"
 exp.as_pyplot_figure();
 ```
 
 ```{python}
+#| include: false
 # exp.show_in_notebook(show_table=True)
 ```
 
-Here is how we can interpret the plots above. In terms of importance to the
-prediction *of this particular instance*, `dist_MRT` is the highest. The local
-model that has been fit has been constrained to make as close a prediction as
-possible to the original model. However, it may fall short. In this case, the
-original predicted value was 29.58. However, the value predicted by the local
-approximation was:
+Here is how we can interpret the plot in @fig-taiwan-lime. In terms of
+importance to the prediction *of this particular instance*, `dist_MRT` is the
+highest. The local model that has been fit has been constrained to make as close
+a prediction as possible to the original model. However, it may fall short. In
+this case, the original predicted value was 29.58. However, the value predicted
+by the local approximation was:
 
 ```{python}
 print(f"The value predicted by the local approximation was: {exp.local_pred[0]:.3f}")
 ```
 
-The numbers in the bar chart essentially decompose this prediction from the local model:
+The numbers in the bar chart essentially decompose this prediction from the
+local model:
 
 ```{python}
 s = 0.0
@@ -808,8 +896,9 @@ s + exp.intercept[0]
 ```
 
 This means that, from the values, we can see that the `dist_MRT`, which was
-close to the average distance, had a negative impact on the price. The
-longitude had a positive impact on the price. 
+close to the average distance, had a negative impact on the price. So too did
+`house_age`. Meanwhile, longitude and latitude had a positive impact on the
+price.
 
 :::
 
