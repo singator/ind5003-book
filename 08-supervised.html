@@ -276,7 +276,7 @@ window.Quarto = {
   <li><a href="#measures-of-performance" id="toc-measures-of-performance" class="nav-link" data-scroll-target="#measures-of-performance"><span class="header-section-number">8.5</span> Measures of Performance</a></li>
   <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification"><span class="header-section-number">8.6</span> Classification</a></li>
   <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression"><span class="header-section-number">8.7</span> Regression</a></li>
-  <li><a href="#interpretability-of-models" id="toc-interpretability-of-models" class="nav-link" data-scroll-target="#interpretability-of-models"><span class="header-section-number">8.8</span> Interpretability of Models</a></li>
+  <li><a href="#sec-08-interpretability" id="toc-sec-08-interpretability" class="nav-link" data-scroll-target="#sec-08-interpretability"><span class="header-section-number">8.8</span> Interpretability of Models</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">8.9</span> Summary</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">8.10</span> References</a></li>
   </ul>
@@ -333,14 +333,17 @@ window.Quarto = {
 </section>
 <section id="supervised-learning-workflow" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="supervised-learning-workflow"><span class="header-section-number">8.3</span> Supervised Learning Workflow</h2>
-<p>The overall workflow in supervised learning is as follows:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/grid_search_workflow_sklearn.png" class="img-fluid figure-img" style="width:60.0%"></p>
-<figcaption>Figure from sklearn documentation</figcaption>
+<div id="fig-sklearn-workflow" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sklearn-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/grid_search_workflow_sklearn.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sklearn-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.1: Figure from sklearn documentation
+</figcaption>
 </figure>
 </div>
-<p>Here are the specific details:</p>
+<p>The overall workflow in supervised learning is as shown in <a href="#fig-sklearn-workflow" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>. Here are the specific details:</p>
 <ol type="1">
 <li>Split up a dataset into training and test datasets, typically along a 80/20 or 75/25 split. <strong>Do not touch the test data again until the end.</strong></li>
 <li>Preprocess/clean the training data and store the parameters for later use on the test data.
@@ -406,7 +409,7 @@ x_{n,1} &amp; x_{n,2} &amp; \ldots &amp; x_{n,d}
 y_1 &amp; y_2 &amp; \ldots &amp; y_n
 \end{bmatrix}^T
 \]</span></p>
-<div id="cf9f2c3d" class="cell" data-execution_count="1">
+<div id="6f9775b9" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -417,12 +420,18 @@ y_1 &amp; y_2 &amp; \ldots &amp; y_n
 <span id="cb1-8"><a href="#cb1-8"></a></span>
 <span id="cb1-9"><a href="#cb1-9"></a><span class="im">from</span> sklearn <span class="im">import</span> tree</span>
 <span id="cb1-10"><a href="#cb1-10"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier, RandomForestRegressor</span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, f1_score, confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, r2_score</span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, cross_validate, ShuffleSplit, learning_curve, validation_curve, GridSearchCV, train_test_split</span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> permutation_importance</span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsRegressor</span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> PartialDependenceDisplay, partial_dependence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> (</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  accuracy_score, f1_score, confusion_matrix, </span>
+<span id="cb1-13"><a href="#cb1-13"></a>  ConfusionMatrixDisplay, precision_score, recall_score, r2_score</span>
+<span id="cb1-14"><a href="#cb1-14"></a>  )</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> (</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    cross_val_score, cross_validate, ShuffleSplit, </span>
+<span id="cb1-17"><a href="#cb1-17"></a>    learning_curve, validation_curve, GridSearchCV, train_test_split</span>
+<span id="cb1-18"><a href="#cb1-18"></a>    )</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> permutation_importance</span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsRegressor</span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> PartialDependenceDisplay, partial_dependence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -462,7 +471,25 @@ y_1 &amp; y_2 &amp; \ldots &amp; y_n
 </tr>
 </tbody>
 </table>
-<p>In the confusion matrix, there are 4 possible cases: * True positives (TP) * Classifier predicts sample as positive and it really is so. * False positives (FP) * Classifier predicts sample as positive but in truth, it is negative. <strong>Incorrect prediction</strong> * True negatives (TN) * Classifier predicts sample as negative and it really is so. * False negatives (FN) * Classifier predicts sample as negative but in truth, it is positive. <strong>Incorrect prediction</strong></p>
+<p>In the confusion matrix, there are 4 possible cases:</p>
+<ul>
+<li>True positives (TP)
+<ul>
+<li>Classifier predicts sample as positive and it really is so.</li>
+</ul></li>
+<li>False positives (FP)
+<ul>
+<li>Classifier predicts sample as positive but in truth, it is negative. <strong>Incorrect prediction</strong></li>
+</ul></li>
+<li>True negatives (TN)
+<ul>
+<li>Classifier predicts sample as negative and it really is so.</li>
+</ul></li>
+<li>False negatives (FN)
+<ul>
+<li>Classifier predicts sample as negative but in truth, it is positive. <strong>Incorrect prediction</strong></li>
+</ul></li>
+</ul>
 </section>
 <section id="precision-and-recall" class="level4">
 <h4 class="anchored" data-anchor-id="precision-and-recall">Precision and Recall</h4>
@@ -513,7 +540,7 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <h2 data-number="8.6" class="anchored" data-anchor-id="classification"><span class="header-section-number">8.6</span> Classification</h2>
 <p>In this section, we demonstrate how we can use <code>scikit-learn</code> to perform supervised learning on a classification problem.</p>
 <div id="exm-heart-failure-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 8.1 (Example: Heart Failure)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 8.1 (Heart failure)</strong></span> </p>
 <p>This dataset, from the <a href="https://archive.ics.uci.edu/dataset/519/heart+failure+clinical+records">UCI machine learning repository</a> contains records on 299 patients who had heart failure. The data was collected during the follow-up period; each patient had 13 clinical features recorded. The primary variable of interest (<span class="math inline">\(y\)</span>) was whether they died or not. Here are more details about each column:</p>
 <ul>
 <li><code>age</code>: age of the patient (years)</li>
@@ -530,7 +557,7 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <li><code>time</code>: follow-up period (days)</li>
 <li><code>DEATH_EVENT</code>: if the patient died during the follow-up period (boolean). This is the categorical outcome that we wish to predict.</li>
 </ul>
-<div id="b294ff31" class="cell" data-execution_count="2">
+<div id="d4d929ec" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hf <span class="op">=</span> pd.read_csv(<span class="st">"data/heart+failure+clinical+records/"</span><span class="op">+</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>                 <span class="st">"heart_failure_clinical_records_dataset.csv"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="bu">print</span>(hf.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,19 +589,19 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <h3 class="anchored" data-anchor-id="sec-08-dec-tree">Decision Tree</h3>
 <p>To begin our journey into supervised learning, we shall fit a decision tree to this dataset. A decision tree consists of a hierarchal set of rules, that when followed, will return a prediction for an individual observation. Each is a (typically binary) split of one of the features in the observation. One of the main advantages of decision tree classifiers is that they are easy to interpret. However, some disadvantages are that: They tend to overfit to a dataset, and they have high variability. This latter point means that a small change in the training data <em>could</em> lead to vastly different predictions. Although in this example we focus on classification, a decision tree can also be used for regression.</p>
 <p>In this first example, we shall only split the data into a test and training set. We shall fit the tree using the training set, and then apply the model to the test set.</p>
-<div id="0c077bb7" class="cell" data-execution_count="3">
+<div id="5a0725ae" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>y <span class="op">=</span> hf.DEATH_EVENT</span>
 <span id="cb4-2"><a href="#cb4-2"></a>X <span class="op">=</span> hf.iloc[:, <span class="dv">0</span>:<span class="dv">12</span>]</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a>clf <span class="op">=</span> tree.DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>max_depth</code> of a decision is the maximum number of splits down each branch of a tree. If it is not specified, it is possible that the splits continue until the terminal nodes are homogeneous. This could result in overfitting of the tree to this particular dataset.</p>
-<div id="d7fbc8fa" class="cell" data-execution_count="4">
+<div id="2f0d06a7" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>X_train,X_test,y_train,y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, </span>
 <span id="cb5-2"><a href="#cb5-2"></a>                                                 random_state<span class="op">=</span><span class="dv">41</span>, stratify<span class="op">=</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>train_test_split</code> divides the data into a training and test set. When doing so, the function will attempt to ensure that the proportion of classes in both the training and test sets are roughly equal to the proportion in the overall dataset.</p>
-<div id="0f67e0fd" class="cell" data-execution_count="5">
+<div id="af7d9244" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the overall data is </span><span class="sc">{</span>y<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the training data is </span><span class="sc">{</span>y_train<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the test data is </span><span class="sc">{</span>y_test<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -584,7 +611,10 @@ The proportion of 1's in the training data is 0.321.
 The proportion of 1's in the test data is 0.320.</code></pre>
 </div>
 </div>
-<div id="9bc46494" class="cell" data-execution_count="6">
+<div id="exm-heart-failure-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 8.2 (Heart failure decision tree)</strong></span> </p>
+<p>All estimators in <code>sklearn</code> have a <code>.fit()</code> method. This routine will use the data to estimate the optimal parameters for the particular model, which in this case is a decision tree.</p>
+<div id="cbc12ef7" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>clf.fit(X_train, y_train,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <style>#sk-container-id-1 {
@@ -1186,25 +1216,32 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </script>
 </div>
 </div>
-<p>Notice that when we call the <code>.fit()</code> method, there is no output object returned; it is just that the parameters in the <code>clf</code> object are updated.</p>
-<div id="09cd2938" class="cell" data-execution_count="7">
+<p>Notice that when we call the <code>.fit()</code> method, there is no output object returned; it is just that the parameters in the <code>clf</code> object are updated. We can now use the trained model to make predictions. In this case, we attempt to predict <code>DEATH_EVENT</code> for a randomly selected row in the training data.</p>
+<div id="64cead5c" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>clf.predict_proba(X_train.sample(random_state<span class="op">=</span><span class="dv">3005</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>array([[0.66666667, 0.33333333]])</code></pre>
 </div>
 </div>
-<div id="9b255ebb" class="cell" data-execution_count="8">
+</div>
+<p>We can visualise the fitted decision tree as follows. This is an important step in understanding and interpreting the fitted model.</p>
+<div id="cell-fig-heart-dt" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>plt.figure(figsize <span class="op">=</span>(<span class="dv">18</span>, <span class="dv">6</span>))</span>
 <span id="cb11-2"><a href="#cb11-2"></a>tree.plot_tree(clf,feature_names<span class="op">=</span>X.columns, filled<span class="op">=</span><span class="va">True</span>, max_depth<span class="op">=</span><span class="dv">2</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-9-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1358" height="463"></p>
+<div id="fig-heart-dt" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-heart-dt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-heart-dt-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1358" height="463">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heart-dt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.2: Heart failure decision tree
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The figure above visualises the rules in the first two layers (depth 2) of the tree. First off, notice that the tree is upside down, with the root on top; the terminal nodes (or boxes) at the bottom are referred to as the leaves. To understand the tree, consider using it to obtain a new prediction, with the following two features:</p>
+<p><a href="#fig-heart-dt" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> visualises the rules in the first two layers (depth 2) of the tree. First off, notice that the tree is upside down, with the root on top; the terminal nodes (or boxes) at the bottom are referred to as the leaves. To understand the tree, consider using it to obtain a new prediction, with the following two features:</p>
 <ul>
 <li><code>time</code>=70, <code>ejection_fraction</code> = 40.5</li>
 </ul>
@@ -1215,21 +1252,22 @@ p_0(1 - p_0)
 \]</span></p>
 <p>where <span class="math inline">\(p_0\)</span> is the proportion of class 0 at that node. If a node consists all 0’s or all 1’s, then the impurity index would be 0. The fitting algorithm tries all features, and all split points for each feature, to obtain the feature and split point that yields the largest drop in impurity at that node.</p>
 <p>Before proceeding with the calculation of error metrics, notice the non-linearity of the splits. Both the initial split and the subsequent split on the left are on <code>time</code>. This indicates a non-linear relationship with time, and is not a property of classical models such as out-of-the-box linear regression.</p>
-<div id="exm-heart-failure-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 8.2 (Example: Heart Failure Classification Scores)</strong></span> </p>
-<p>Performance of classification algorithms are usually presented in the form of a <em>confusion matrix</em>. First we display the results for the training set.</p>
-<div id="6baa0c5f" class="cell" data-execution_count="9">
+<div id="exm-heart-failure-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 8.3 (Heart failure classification scores)</strong></span> </p>
+<p>Performance of classification algorithms are usually presented in the form of a <em>confusion matrix</em>. First we display the results for the training set in <a href="#fig-confusion-training" class="quarto-xref">Figure&nbsp;<span>8.3</span></a>.</p>
+<div id="cell-fig-confusion-training" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>y_pred_train <span class="op">=</span> clf.predict(X_train)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, </span>
-<span id="cb12-3"><a href="#cb12-3"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="ss">##: For training set:</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="ss">----</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3"></a>                                        text_kw<span class="op">=</span>{<span class="st">'size'</span>: <span class="st">'xx-large'</span>},</span>
+<span id="cb12-4"><a href="#cb12-4"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="ss">##: For training set:</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="ss">----</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ##: For training set:
@@ -1241,26 +1279,32 @@ The f1-score (for cat. 1) is 0.882
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-10-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="504" height="429"></p>
+<div id="fig-confusion-training" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusion-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-confusion-training-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="504" height="429">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.3: Confusion matrix, training set
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Next, we display the results for the test set.</p>
-<div id="52f7e62c" class="cell" data-execution_count="10">
+<p>Next, we display the results for the test set in <a href="#fig-confusion-test" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>.</p>
+<div id="cell-fig-confusion-test" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>y_pred_test <span class="op">=</span> clf.predict(X_test)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test, </span>
-<span id="cb14-3"><a href="#cb14-3"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="ss">##: For test set:</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="ss">----</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-2"><a href="#cb14-2"></a>ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test,  </span>
+<span id="cb14-3"><a href="#cb14-3"></a>                                        text_kw<span class="op">=</span>{<span class="st">'size'</span>: <span class="st">'xx-large'</span>},</span>
+<span id="cb14-4"><a href="#cb14-4"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="ss">##: For test set:</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="ss">----</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ##: For test set:
@@ -1272,19 +1316,25 @@ The f1-score (for cat. 1) is 0.609
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-11-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="496" height="429"></p>
+<div id="fig-confusion-test" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusion-test-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-confusion-test-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="496" height="429">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-test-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.4: Confusion matrix, test set
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
 <p>It is normal to observe poorer performance on the test set than on the training set. However, such a large difference in the scores usually indicates that there has been overfitting by the model; it is too tuned to the data in the training set. In supervised learning, we aim for a classifier that performs almost as well on the test data as it does on the training data. That would indicate that the model, with this particular hyperparameter configuration, will perform well on new data that has yet to be seen.</p>
+<p>In this particular dataset, we may want to go back to the fitting step, and reduce the <code>max_depth</code>, or to impose a larger number of samples in the leaf nodes via <code>min_samples_leaf</code>.</p>
 </section>
 <section id="variable-importance" class="level3">
 <h3 class="anchored" data-anchor-id="variable-importance">Variable importance</h3>
-<p>As we shall discuss in a later section of this topic, it is important to be able to identify which features are important to the model. This allows non-technical folk in your team (who could be end-user domain experts, or upper management) to have faith in your models. If the features that are identified to be important align with what the domain experts know or intuit, that provides more buy-in for your analyses and recommendations.</p>
+<p>As we shall discuss in <a href="#sec-08-interpretability" class="quarto-xref"><span>Section 8.8</span></a>, it is important to be able to identify which features are important to the model. This allows non-technical folk in your team (who could be end-user domain experts, or upper management) to have faith in your models. If the features that are identified to be important align with what the domain experts know or intuit, that provides more buy-in for your analyses and recommendations.</p>
 <p>We shall demonstrate two types of feature importance:</p>
 <ol type="1">
 <li><em>Permutation based feature importance</em>. It works by permuting one of the features at a time, and measuring the drop in accuracy on the test set. The intuition is that, if a variable is highly important, randomising it will cause a sharp drop in predictive value.</li>
@@ -1295,71 +1345,81 @@ The f1-score (for cat. 1) is 0.609
 </ol></li>
 </ol>
 <p>There are certain caveats with using the above measures. One is that these measures are indicative of how important a feature is to a particular model, not to predictive value. Hence an unimportant feature for a poor model (in terms of accuracy) could in fact be an important feature for a good model! Second, in the permutation approach, the importance of a variable may not show up if certain features are highly correlated (dropping one of them may have no effect because the other feature is still present in the model).</p>
-<section id="permutation-based" class="level4">
-<h4 class="anchored" data-anchor-id="permutation-based">Permutation Based</h4>
-<div id="eea0b372" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>result <span class="op">=</span> permutation_importance(</span>
-<span id="cb16-2"><a href="#cb16-2"></a>    clf, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">30</span>, random_state<span class="op">=</span><span class="dv">42</span>,</span>
-<span id="cb16-3"><a href="#cb16-3"></a>    <span class="co"># clf, X_test, y_test, n_repeats=10, random_state=42, n_jobs=2</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a></span>
-<span id="cb16-5"><a href="#cb16-5"></a>)</span>
-<span id="cb16-6"><a href="#cb16-6"></a></span>
-<span id="cb16-7"><a href="#cb16-7"></a>sorted_importances_idx <span class="op">=</span> result.importances_mean.argsort()</span>
-<span id="cb16-8"><a href="#cb16-8"></a>importances <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb16-9"><a href="#cb16-9"></a>    result.importances[sorted_importances_idx].T,</span>
-<span id="cb16-10"><a href="#cb16-10"></a>    columns<span class="op">=</span>X.columns[sorted_importances_idx],</span>
-<span id="cb16-11"><a href="#cb16-11"></a>)</span>
-<span id="cb16-12"><a href="#cb16-12"></a>ax <span class="op">=</span> importances.plot.box(vert<span class="op">=</span><span class="va">False</span>, whis<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb16-13"><a href="#cb16-13"></a>ax.set_title(<span class="st">"Permutation Importances (test set)"</span>)</span>
-<span id="cb16-14"><a href="#cb16-14"></a>ax.axvline(x<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">"k"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cb16-15"><a href="#cb16-15"></a>ax.set_xlabel(<span class="st">"Decrease in accuracy score"</span>)</span>
-<span id="cb16-16"><a href="#cb16-16"></a>ax.figure.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="exm-heart-failure-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 8.4 (Heart failure permutation based)</strong></span> </p>
+<p>Here is how we can use <code>sklearn</code> to obtain the importance of variables based on permutating the values to break the relationship.</p>
+<div id="cell-fig-var-impt-perm" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>result <span class="op">=</span> permutation_importance(clf, X_test, y_test,  </span>
+<span id="cb16-2"><a href="#cb16-2"></a>                                n_repeats<span class="op">=</span><span class="dv">30</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a>sorted_importances_idx <span class="op">=</span> result.importances_mean.argsort()</span>
+<span id="cb16-5"><a href="#cb16-5"></a>importances <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb16-6"><a href="#cb16-6"></a>    result.importances[sorted_importances_idx].T,</span>
+<span id="cb16-7"><a href="#cb16-7"></a>    columns<span class="op">=</span>X.columns[sorted_importances_idx],</span>
+<span id="cb16-8"><a href="#cb16-8"></a>)</span>
+<span id="cb16-9"><a href="#cb16-9"></a>ax <span class="op">=</span> importances.plot.box(vert<span class="op">=</span><span class="va">False</span>, whis<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb16-10"><a href="#cb16-10"></a>ax.set_title(<span class="st">"Permutation Importances (test set)"</span>)</span>
+<span id="cb16-11"><a href="#cb16-11"></a>ax.axvline(x<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">"k"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb16-12"><a href="#cb16-12"></a>ax.set_xlabel(<span class="st">"Decrease in accuracy score"</span>)</span>
+<span id="cb16-13"><a href="#cb16-13"></a>ax.figure.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-12-output-1.png" width="661" height="470" class="figure-img"></p>
+<div id="fig-var-impt-perm" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-var-impt-perm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-var-impt-perm-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="661" height="470">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-var-impt-perm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.5: Variable importance, permutation approach
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>In the plot above, we can see that <code>time</code>, <code>ejection_fraction</code> and <code>serum_sodium</code> are the top 3 in terms of importance when assessing generalisability to test set.</p>
-</section>
-<section id="partial-dependence-plots" class="level4">
-<h4 class="anchored" data-anchor-id="partial-dependence-plots">Partial Dependence Plots</h4>
-<div id="26cea43f" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">3</span>, nrows<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a>features_info <span class="op">=</span> {</span>
-<span id="cb17-3"><a href="#cb17-3"></a>    <span class="st">"features"</span>: [<span class="st">"age"</span>, <span class="st">"creatinine_phosphokinase"</span>, <span class="st">"platelets"</span>, </span>
-<span id="cb17-4"><a href="#cb17-4"></a>                 <span class="st">"serum_creatinine"</span>, <span class="st">"serum_sodium"</span>, (<span class="st">"age"</span>, <span class="st">"serum_creatinine"</span>),</span>
-<span id="cb17-5"><a href="#cb17-5"></a>                ],</span>
-<span id="cb17-6"><a href="#cb17-6"></a>    <span class="st">"kind"</span>: <span class="st">"average"</span>,</span>
-<span id="cb17-7"><a href="#cb17-7"></a>}</span>
-<span id="cb17-8"><a href="#cb17-8"></a>display <span class="op">=</span> PartialDependenceDisplay.from_estimator(</span>
-<span id="cb17-9"><a href="#cb17-9"></a>    clf,</span>
-<span id="cb17-10"><a href="#cb17-10"></a>    X_train,</span>
-<span id="cb17-11"><a href="#cb17-11"></a>    <span class="op">**</span>features_info,</span>
-<span id="cb17-12"><a href="#cb17-12"></a>    ax<span class="op">=</span>ax,</span>
-<span id="cb17-13"><a href="#cb17-13"></a>    contour_kw <span class="op">=</span> {<span class="st">'cmap'</span>: <span class="st">"Reds"</span>}</span>
-<span id="cb17-14"><a href="#cb17-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/sklearn/inspection/_partial_dependence.py:717: FutureWarning:
-
-The column 2 contains integer data. Partial dependence plots are not supported for integer data: this can lead to implicit rounding with NumPy arrays or even errors with newer pandas versions. Please convert numerical featuresto floating point dtypes ahead of time to avoid problems. This will raise ValueError in scikit-learn 1.9.
-
-/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/sklearn/inspection/_partial_dependence.py:717: FutureWarning:
-
-The column 8 contains integer data. Partial dependence plots are not supported for integer data: this can lead to implicit rounding with NumPy arrays or even errors with newer pandas versions. Please convert numerical featuresto floating point dtypes ahead of time to avoid problems. This will raise ValueError in scikit-learn 1.9.
-</code></pre>
+<p>In <a href="#fig-var-impt-perm" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>, we can see that <code>time</code> and <code>ejection_fraction</code> are the top 2 in terms of importance when assessing generalisability to test set.</p>
 </div>
+<p><br></p>
+<section id="section" class="level4">
+<h4 class="anchored" data-anchor-id="section"></h4>
+<div id="exm-heart-failure-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 8.5 (Heart failure partial dependence)</strong></span> </p>
+<p>In order to obtain PDP plots, the features need to be float-point, not integer. The following code snippets converts <code>creatinine_phosphokinase</code> and <code>serum_sodium</code> into floats.</p>
+<div id="53f038bb" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>X_train2 <span class="op">=</span> X_train.copy()</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a>X_train2[<span class="st">'creatinine_phosphokinase'</span>] <span class="op">=</span> X_train2[<span class="st">'creatinine_phosphokinase'</span>].astype(<span class="bu">float</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>X_train2[<span class="st">'serum_sodium'</span>] <span class="op">=</span> X_train2[<span class="st">'serum_sodium'</span>].astype(<span class="bu">float</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can create and display the PDP plots for 5 individual features, and one double-feature.</p>
+<div id="cell-fig-var-impt-pdp" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">3</span>, nrows<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>features_info <span class="op">=</span> {</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    <span class="st">"features"</span>: [<span class="st">"age"</span>, <span class="st">"creatinine_phosphokinase"</span>, <span class="st">"platelets"</span>, </span>
+<span id="cb18-4"><a href="#cb18-4"></a>                 <span class="st">"serum_creatinine"</span>, <span class="st">"serum_sodium"</span>, (<span class="st">"age"</span>, <span class="st">"serum_creatinine"</span>),</span>
+<span id="cb18-5"><a href="#cb18-5"></a>                ],</span>
+<span id="cb18-6"><a href="#cb18-6"></a>    <span class="st">"kind"</span>: <span class="st">"average"</span>,</span>
+<span id="cb18-7"><a href="#cb18-7"></a>}</span>
+<span id="cb18-8"><a href="#cb18-8"></a>display <span class="op">=</span> PartialDependenceDisplay.from_estimator(</span>
+<span id="cb18-9"><a href="#cb18-9"></a>    clf,</span>
+<span id="cb18-10"><a href="#cb18-10"></a>    X_train2,</span>
+<span id="cb18-11"><a href="#cb18-11"></a>    <span class="op">**</span>features_info,</span>
+<span id="cb18-12"><a href="#cb18-12"></a>    ax<span class="op">=</span>ax,</span>
+<span id="cb18-13"><a href="#cb18-13"></a>    contour_kw <span class="op">=</span> {<span class="st">'cmap'</span>: <span class="st">"Reds"</span>}</span>
+<span id="cb18-14"><a href="#cb18-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-13-output-2.png" width="1163" height="587" class="figure-img"></p>
+<div id="fig-var-impt-pdp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-var-impt-pdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-var-impt-pdp-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1163" height="587">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-var-impt-pdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.6: Variable importance, partial dependence
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>PDP are meant to visualise the relationship that has been learned in the training set; hence it is not usually created with the test set. From the plots, we can interpret that when other variables are already in the model, age returns a visible bump in the probability of death. <code>serum_creatinine</code> is associated with a similar increase, but at low levels. The final plot, at the lower right, darker reds indicate higher probability of death.</p>
+<p>PDP are meant to visualise the relationship that has been learned in the training set; hence it is not usually created with the test set. From <a href="#fig-var-impt-pdp" class="quarto-xref">Figure&nbsp;<span>8.6</span></a>, we can interpret that when other variables are already in the model, age returns a visible bump in the probability of death at around age 80. <code>serum_creatinine</code> is associated with a similar increase, but at low levels. The final plot, at the lower right, darker reds indicate higher probability of death.</p>
+</div>
 </section>
 </section>
 <section id="sec-08-forest" class="level3">
@@ -1371,8 +1431,11 @@ The column 8 contains integer data. Partial dependence plots are not supported f
 <li>Set aside block <span class="math inline">\(i\)</span>, and use the <em>remaining</em> data to fit the model.</li>
 <li>Use the fitted model to predict on block <span class="math inline">\(i\)</span>, thus obtaining one estimate of generalised error.</li>
 </ol>
-<p>The process yields <span class="math inline">\(k\)</span> estimates of error - one for each block that was set aside. This can be used to compare between hyperparamter settings. In this case below, we try to identify the optimal <code>max_depth</code> parameter for the trees. Too large a depth would overfit to the data, and we wish to avoid that.</p>
-<div id="0c28c58d" class="cell" data-execution_count="13">
+<p>The process yields <span class="math inline">\(k\)</span> estimates of error - one for each block that was set aside. This can be used to compare between hyperparamter settings.</p>
+<div id="exm-heart-failure-6" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 8.6 (Heart failure grid search)</strong></span> </p>
+<p>Earlier, in <a href="#exm-heart-failure-3" class="quarto-xref">Example&nbsp;<span>8.3</span></a>, we noticed that our decision tree had been overfitting to the data. In this example, we try to identify the optimal <code>max_depth</code> parameter for the trees by testing models with different depths, ranging from 1 to 10, and identifying the one with the best generalised error.</p>
+<div id="1f00b008" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="co">#list(p_range)</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a>cv_search <span class="op">=</span> GridSearchCV(RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, random_state<span class="op">=</span><span class="dv">21</span>), </span>
@@ -1383,7 +1446,7 @@ The column 8 contains integer data. Partial dependence plots are not supported f
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 5 folds for each of 10 candidates, totalling 50 fits</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <style>#sk-container-id-2 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -2079,9 +2142,9 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </div>
 </div>
 <p>After calling the <code>.fit()</code> method, the optimal parameters are available for persual:</p>
-<div id="ba8fa2a9" class="cell" data-execution_count="14">
+<div id="e93d64ec" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>cv_search.best_estimator_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <style>#sk-container-id-3 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -2711,8 +2774,9 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </script>
 </div>
 </div>
+</div>
 <p>It is also possible, at this point, to extract the training and test scores for each cross-validation set, and to then plot the validation curve.</p>
-<div id="9e481d78" class="cell" data-execution_count="15">
+<div id="cell-fig-valid-curve" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>train_means <span class="op">=</span> cv_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
 <span id="cb22-2"><a href="#cb22-2"></a>train_sd <span class="op">=</span> cv_search.cv_results_[<span class="st">'std_train_score'</span>]</span>
 <span id="cb22-3"><a href="#cb22-3"></a></span>
@@ -2729,25 +2793,31 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <span id="cb22-14"><a href="#cb22-14"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)<span class="op">;</span>plt.ylabel(<span class="st">'Accuracy'</span>)<span class="op">;</span></span>
 <span id="cb22-15"><a href="#cb22-15"></a>plt.xlabel(<span class="st">'Complexity'</span>)<span class="op">;</span>plt.title(<span class="st">'Validation Curve'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-16-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="597" height="449"></p>
+<div id="fig-valid-curve" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-valid-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-valid-curve-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="597" height="449">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-valid-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.7: Validation curve, random forest
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>From the above chart, we can see that as the max. depth increases, both the training and test errors increase sharply, and then plateau. It even appears that the test error appears to come down. As we discussed, it is normal for the test error to be lower than the training set. Observe that with too high a complexity, accuracy in the training set approaches 1. From the curve, a good choice for the <code>max_depth</code> parameter is 3:</p>
+<p>From <a href="#fig-valid-curve" class="quarto-xref">Figure&nbsp;<span>8.7</span></a>, we can see that as the max. depth increases, both the training and test errors increase sharply, and then plateau. It even appears that the test error appears to come down. As we discussed, it is normal for the test error to be lower than the training set. Observe that with too high a complexity, accuracy in the training set approaches 1. From the curve, a good choice for the <code>max_depth</code> parameter is 3, because:</p>
 <ul>
 <li>The test error for this value is close to the training error.</li>
 <li>Any <code>max_depth</code> larger than this would lead to overfitting (fitting the noise patterns in the data to the model).</li>
 <li>The convention is to take the smallest complexity that is not more than 1 standard error away from the best performing model.</li>
 </ul>
-<div id="exm-heart-failure-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 8.3 (Example: Heart Failure Classification Scores II)</strong></span> </p>
-<div id="80f223f9" class="cell" data-execution_count="16">
+<div id="exm-heart-failure-7" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 8.7 (Heart failure random forest classification scores)</strong></span> </p>
+<p>In this example, we use the optimal <code>max_depth</code> to fit a random forest, and assess the test error.</p>
+<div id="fd60fd6d" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, max_depth<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">40</span>)</span>
 <span id="cb23-2"><a href="#cb23-2"></a>rf.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <style>#sk-container-id-4 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -3377,18 +3447,21 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </script>
 </div>
 </div>
-<div id="5a0a6dd4" class="cell" data-execution_count="17">
+<p>The following code returns the error from the training error.</p>
+<div id="beb74594" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>y_pred_train <span class="op">=</span> rf.predict(X_train)</span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="bu">print</span>(<span class="ss">f"""##: For training set:</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a><span class="ss">----</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb24-7"><a href="#cb24-7"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb24-8"><a href="#cb24-8"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="ss">For training set:</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="ss">-----------------</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##: For training set:
-----
+<pre><code>
+For training set:
+-----------------
 The precision (for cat. 1) is 0.950
 The recall (for cat. 1) is 0.792
 The accuracy (for cat. 1) is 0.920
@@ -3396,18 +3469,21 @@ The f1-score (for cat. 1) is 0.864
 </code></pre>
 </div>
 </div>
-<div id="ba0815df" class="cell" data-execution_count="18">
+<p>Here is the test error.</p>
+<div id="99b65da0" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>y_pred_test <span class="op">=</span> rf.predict(X_test)</span>
-<span id="cb26-2"><a href="#cb26-2"></a><span class="bu">print</span>(<span class="ss">f"""##: For test set:</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a><span class="ss">----")</span></span>
-<span id="cb26-4"><a href="#cb26-4"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb26-8"><a href="#cb26-8"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="ss">For test set:</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="ss">-------------</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##: For test set:
-----")
+<pre><code>
+For test set:
+-------------
 The precision (for cat. 1) is 0.762
 The recall (for cat. 1) is 0.667
 The accuracy (for cat. 1) is 0.827
@@ -3421,9 +3497,8 @@ The f1-score (for cat. 1) is 0.711
 </section>
 <section id="regression" class="level2" data-number="8.7">
 <h2 data-number="8.7" class="anchored" data-anchor-id="regression"><span class="header-section-number">8.7</span> Regression</h2>
-<p>Just to demonstrate the use of random forests for regression, we return to the Taiwan Data. In our scoring, instead of using RMSE or MAE, we shall use the <span class="math inline">\(R^2\)</span>.</p>
-<p>First, we read the Taiwan data into Python and transform each column to have mean 0 and sd 1.</p>
-<div id="cd030536" class="cell" data-execution_count="19">
+<p>Just to demonstrate the use of random forests for regression, we return to the Taiwan dataset. In our scoring, instead of using RMSE or MAE, we shall use the <span class="math inline">\(R^2\)</span>. First, we read the Taiwan data into Python and transform each column to have mean 0 and sd 1.</p>
+<div id="26f10de3" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>re2 <span class="op">=</span> pd.read_csv(<span class="st">"data/taiwan_dataset.csv"</span>)</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a>X_re <span class="op">=</span> re2.loc[:, [<span class="st">'trans_date'</span>, <span class="st">'house_age'</span>, <span class="st">'dist_MRT'</span>, </span>
@@ -3439,7 +3514,7 @@ The f1-score (for cat. 1) is 0.711
 <section id="random-forest-regressor" class="level3">
 <h3 class="anchored" data-anchor-id="random-forest-regressor">Random Forest Regressor</h3>
 <p>Next, we set up a grid search to set up a random forest regressor.</p>
-<div id="5d9e88e5" class="cell" data-execution_count="20">
+<div id="e7f127fb" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
 <span id="cb29-2"><a href="#cb29-2"></a>rf_search <span class="op">=</span> GridSearchCV(RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">43</span>), </span>
 <span id="cb29-3"><a href="#cb29-3"></a>                         {<span class="st">'max_depth'</span>: p_range}, </span>
@@ -3449,7 +3524,7 @@ The f1-score (for cat. 1) is 0.711
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 5 folds for each of 10 candidates, totalling 50 fits</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <style>#sk-container-id-5 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
@@ -4074,8 +4149,8 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </script>
 </div>
 </div>
-<p>Here is the validation curve, that will allow us to decide on the optimal number of trees.</p>
-<div id="b482e859" class="cell" data-execution_count="21">
+<p>Here is the validation curve, that will allow us to decide on the optimal maximum depth, using 10 trees.</p>
+<div id="cell-fig-taiwan-random-forest" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>train_means <span class="op">=</span> rf_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
 <span id="cb31-2"><a href="#cb31-2"></a>train_sd <span class="op">=</span> rf_search.cv_results_[<span class="st">'std_train_score'</span>]</span>
 <span id="cb31-3"><a href="#cb31-3"></a></span>
@@ -4093,658 +4168,35 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <span id="cb31-15"><a href="#cb31-15"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)<span class="op">;</span>plt.ylabel(<span class="st">'R2'</span>)<span class="op">;</span></span>
 <span id="cb31-16"><a href="#cb31-16"></a>plt.xlabel(<span class="st">'Complexity'</span>)<span class="op">;</span>plt.title(<span class="st">'Validation Curve'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-22-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="589" height="449"></p>
+<div id="fig-taiwan-random-forest" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-taiwan-random-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-taiwan-random-forest-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="589" height="449">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-taiwan-random-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.8: Validation curve, random forest for Taiwan data
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div id="exm-taiwan-data-14" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 8.4 (Example: Taiwan Data Regression)</strong></span> </p>
-<p>We shall fit a model with 10 trees, and max_depth 2, and assess the test error.</p>
-<div id="a2a439f6" class="cell" data-execution_count="22">
+<p><span class="theorem-title"><strong>Example 8.8 (Taiwan data random forest regression)</strong></span> </p>
+<p>Based on <a href="#fig-taiwan-random-forest" class="quarto-xref">Figure&nbsp;<span>8.8</span></a>, we shall fit a model with 10 trees and <code>max_depth</code> 2, and assess the <span class="math inline">\(R^2\)</span> on the test set.</p>
+<div id="61a1c047" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>rf1 <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, max_depth <span class="op">=</span> <span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">89</span>)</span>
-<span id="cb32-2"><a href="#cb32-2"></a>rf1.fit(Xre_train, yre_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
-<style>#sk-container-id-6 {
-  /* Definition of color scheme common for light and dark mode */
-  --sklearn-color-text: #000;
-  --sklearn-color-text-muted: #666;
-  --sklearn-color-line: gray;
-  /* Definition of color scheme for unfitted estimators */
-  --sklearn-color-unfitted-level-0: #fff5e6;
-  --sklearn-color-unfitted-level-1: #f6e4d2;
-  --sklearn-color-unfitted-level-2: #ffe0b3;
-  --sklearn-color-unfitted-level-3: chocolate;
-  /* Definition of color scheme for fitted estimators */
-  --sklearn-color-fitted-level-0: #f0f8ff;
-  --sklearn-color-fitted-level-1: #d4ebff;
-  --sklearn-color-fitted-level-2: #b3dbfd;
-  --sklearn-color-fitted-level-3: cornflowerblue;
-
-  /* Specific color for light theme */
-  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
-  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-icon: #696969;
-
-  @media (prefers-color-scheme: dark) {
-    /* Redefinition of color scheme for dark theme */
-    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
-    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-icon: #878787;
-  }
-}
-
-#sk-container-id-6 {
-  color: var(--sklearn-color-text);
-}
-
-#sk-container-id-6 pre {
-  padding: 0;
-}
-
-#sk-container-id-6 input.sk-hidden--visually {
-  border: 0;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-#sk-container-id-6 div.sk-dashed-wrapped {
-  border: 1px dashed var(--sklearn-color-line);
-  margin: 0 0.4em 0.5em 0.4em;
-  box-sizing: border-box;
-  padding-bottom: 0.4em;
-  background-color: var(--sklearn-color-background);
-}
-
-#sk-container-id-6 div.sk-container {
-  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
-     but bootstrap.min.css set `[hidden] { display: none !important; }`
-     so we also need the `!important` here to be able to override the
-     default hidden behavior on the sphinx rendered scikit-learn.org.
-     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
-  display: inline-block !important;
-  position: relative;
-}
-
-#sk-container-id-6 div.sk-text-repr-fallback {
-  display: none;
-}
-
-div.sk-parallel-item,
-div.sk-serial,
-div.sk-item {
-  /* draw centered vertical line to link estimators */
-  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
-  background-size: 2px 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-/* Parallel-specific style estimator block */
-
-#sk-container-id-6 div.sk-parallel-item::after {
-  content: "";
-  width: 100%;
-  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
-  flex-grow: 1;
-}
-
-#sk-container-id-6 div.sk-parallel {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  background-color: var(--sklearn-color-background);
-  position: relative;
-}
-
-#sk-container-id-6 div.sk-parallel-item {
-  display: flex;
-  flex-direction: column;
-}
-
-#sk-container-id-6 div.sk-parallel-item:first-child::after {
-  align-self: flex-end;
-  width: 50%;
-}
-
-#sk-container-id-6 div.sk-parallel-item:last-child::after {
-  align-self: flex-start;
-  width: 50%;
-}
-
-#sk-container-id-6 div.sk-parallel-item:only-child::after {
-  width: 0;
-}
-
-/* Serial-specific style estimator block */
-
-#sk-container-id-6 div.sk-serial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--sklearn-color-background);
-  padding-right: 1em;
-  padding-left: 1em;
-}
-
-
-/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
-clickable and can be expanded/collapsed.
-- Pipeline and ColumnTransformer use this feature and define the default style
-- Estimators will overwrite some part of the style using the `sk-estimator` class
-*/
-
-/* Pipeline and ColumnTransformer style (default) */
-
-#sk-container-id-6 div.sk-toggleable {
-  /* Default theme specific background. It is overwritten whether we have a
-  specific estimator or a Pipeline/ColumnTransformer */
-  background-color: var(--sklearn-color-background);
-}
-
-/* Toggleable label */
-#sk-container-id-6 label.sk-toggleable__label {
-  cursor: pointer;
-  display: flex;
-  width: 100%;
-  margin-bottom: 0;
-  padding: 0.5em;
-  box-sizing: border-box;
-  text-align: center;
-  align-items: start;
-  justify-content: space-between;
-  gap: 0.5em;
-}
-
-#sk-container-id-6 label.sk-toggleable__label .caption {
-  font-size: 0.6rem;
-  font-weight: lighter;
-  color: var(--sklearn-color-text-muted);
-}
-
-#sk-container-id-6 label.sk-toggleable__label-arrow:before {
-  /* Arrow on the left of the label */
-  content: "▸";
-  float: left;
-  margin-right: 0.25em;
-  color: var(--sklearn-color-icon);
-}
-
-#sk-container-id-6 label.sk-toggleable__label-arrow:hover:before {
-  color: var(--sklearn-color-text);
-}
-
-/* Toggleable content - dropdown */
-
-#sk-container-id-6 div.sk-toggleable__content {
-  display: none;
-  text-align: left;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-6 div.sk-toggleable__content.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-6 div.sk-toggleable__content pre {
-  margin: 0.2em;
-  border-radius: 0.25em;
-  color: var(--sklearn-color-text);
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-6 div.sk-toggleable__content.fitted pre {
-  /* unfitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-6 input.sk-toggleable__control:checked~div.sk-toggleable__content {
-  /* Expand drop-down */
-  display: block;
-  width: 100%;
-  overflow: visible;
-}
-
-#sk-container-id-6 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
-  content: "▾";
-}
-
-/* Pipeline/ColumnTransformer-specific style */
-
-#sk-container-id-6 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-6 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator-specific style */
-
-/* Colorize estimator box */
-#sk-container-id-6 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-6 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-#sk-container-id-6 div.sk-label label.sk-toggleable__label,
-#sk-container-id-6 div.sk-label label {
-  /* The background is the default theme color */
-  color: var(--sklearn-color-text-on-default-background);
-}
-
-/* On hover, darken the color of the background */
-#sk-container-id-6 div.sk-label:hover label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-/* Label box, darken color on hover, fitted */
-#sk-container-id-6 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator label */
-
-#sk-container-id-6 div.sk-label label {
-  font-family: monospace;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 1.2em;
-}
-
-#sk-container-id-6 div.sk-label-container {
-  text-align: center;
-}
-
-/* Estimator-specific */
-#sk-container-id-6 div.sk-estimator {
-  font-family: monospace;
-  border: 1px dotted var(--sklearn-color-border-box);
-  border-radius: 0.25em;
-  box-sizing: border-box;
-  margin-bottom: 0.5em;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-6 div.sk-estimator.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-/* on hover */
-#sk-container-id-6 div.sk-estimator:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-6 div.sk-estimator.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Specification for estimator info (e.g. "i" and "?") */
-
-/* Common style for "i" and "?" */
-
-.sk-estimator-doc-link,
-a:link.sk-estimator-doc-link,
-a:visited.sk-estimator-doc-link {
-  float: right;
-  font-size: smaller;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1em;
-  height: 1em;
-  width: 1em;
-  text-decoration: none !important;
-  margin-left: 0.5em;
-  text-align: center;
-  /* unfitted */
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-  color: var(--sklearn-color-unfitted-level-1);
-}
-
-.sk-estimator-doc-link.fitted,
-a:link.sk-estimator-doc-link.fitted,
-a:visited.sk-estimator-doc-link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-div.sk-estimator:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover,
-div.sk-label-container:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover,
-div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-/* Span, style for the box shown on hovering the info icon */
-.sk-estimator-doc-link span {
-  display: none;
-  z-index: 9999;
-  position: relative;
-  font-weight: normal;
-  right: .2ex;
-  padding: .5ex;
-  margin: .5ex;
-  width: min-content;
-  min-width: 20ex;
-  max-width: 50ex;
-  color: var(--sklearn-color-text);
-  box-shadow: 2pt 2pt 4pt #999;
-  /* unfitted */
-  background: var(--sklearn-color-unfitted-level-0);
-  border: .5pt solid var(--sklearn-color-unfitted-level-3);
-}
-
-.sk-estimator-doc-link.fitted span {
-  /* fitted */
-  background: var(--sklearn-color-fitted-level-0);
-  border: var(--sklearn-color-fitted-level-3);
-}
-
-.sk-estimator-doc-link:hover span {
-  display: block;
-}
-
-/* "?"-specific style due to the `<a>` HTML tag */
-
-#sk-container-id-6 a.estimator_doc_link {
-  float: right;
-  font-size: 1rem;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1rem;
-  height: 1rem;
-  width: 1rem;
-  text-decoration: none;
-  /* unfitted */
-  color: var(--sklearn-color-unfitted-level-1);
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-}
-
-#sk-container-id-6 a.estimator_doc_link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-#sk-container-id-6 a.estimator_doc_link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-#sk-container-id-6 a.estimator_doc_link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-}
-
-.estimator-table summary {
-    padding: .5rem;
-    font-family: monospace;
-    cursor: pointer;
-}
-
-.estimator-table details[open] {
-    padding-left: 0.1rem;
-    padding-right: 0.1rem;
-    padding-bottom: 0.3rem;
-}
-
-.estimator-table .parameters-table {
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-
-.estimator-table .parameters-table tr:nth-child(odd) {
-    background-color: #fff;
-}
-
-.estimator-table .parameters-table tr:nth-child(even) {
-    background-color: #f6f6f6;
-}
-
-.estimator-table .parameters-table tr:hover {
-    background-color: #e0e0e0;
-}
-
-.estimator-table table td {
-    border: 1px solid rgba(106, 105, 104, 0.232);
-}
-
-.user-set td {
-    color:rgb(255, 94, 0);
-    text-align: left;
-}
-
-.user-set td.value pre {
-    color:rgb(255, 94, 0) !important;
-    background-color: transparent !important;
-}
-
-.default td {
-    color: black;
-    text-align: left;
-}
-
-.user-set td i,
-.default td i {
-    color: black;
-}
-
-.copy-paste-icon {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNy4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjUgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZD0iTTIwOCAwTDMzMi4xIDBjMTIuNyAwIDI0LjkgNS4xIDMzLjkgMTQuMWw2Ny45IDY3LjljOSA5IDE0LjEgMjEuMiAxNC4xIDMzLjlMNDQ4IDMzNmMwIDI2LjUtMjEuNSA0OC00OCA0OGwtMTkyIDBjLTI2LjUgMC00OC0yMS41LTQ4LTQ4bDAtMjg4YzAtMjYuNSAyMS41LTQ4IDQ4LTQ4ek00OCAxMjhsODAgMCAwIDY0LTY0IDAgMCAyNTYgMTkyIDAgMC0zMiA2NCAwIDAgNDhjMCAyNi41LTIxLjUgNDgtNDggNDhMNDggNTEyYy0yNi41IDAtNDgtMjEuNS00OC00OEwwIDE3NmMwLTI2LjUgMjEuNS00OCA0OC00OHoiLz48L3N2Zz4=);
-    background-repeat: no-repeat;
-    background-size: 14px 14px;
-    background-position: 0;
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    cursor: pointer;
-}
-</a></style><div id="sk-container-id-6" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestRegressor(max_depth=2, n_estimators=10, random_state=89)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox" checked=""><label for="sk-estimator-id-8" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>RandomForestRegressor</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted" data-param-prefix="">
-        <div class="estimator-table">
-            <details>
-                <summary>Parameters</summary>
-                
-<table class="parameters-table caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<tbody>
-<tr class="odd user-set">
-<td><em></em></td>
-<td class="param">n_estimators&nbsp;</td>
-<td class="value">10</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">criterion&nbsp;</td>
-<td class="value">'squared_error'</td>
-</tr>
-<tr class="odd user-set">
-<td><em></em></td>
-<td class="param">max_depth&nbsp;</td>
-<td class="value">2</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">min_samples_split&nbsp;</td>
-<td class="value">2</td>
-</tr>
-<tr class="odd default">
-<td><em></em></td>
-<td class="param">min_samples_leaf&nbsp;</td>
-<td class="value">1</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">min_weight_fraction_leaf&nbsp;</td>
-<td class="value">0.0</td>
-</tr>
-<tr class="odd default">
-<td><em></em></td>
-<td class="param">max_features&nbsp;</td>
-<td class="value">1.0</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">max_leaf_nodes&nbsp;</td>
-<td class="value">None</td>
-</tr>
-<tr class="odd default">
-<td><em></em></td>
-<td class="param">min_impurity_decrease&nbsp;</td>
-<td class="value">0.0</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">bootstrap&nbsp;</td>
-<td class="value">True</td>
-</tr>
-<tr class="odd default">
-<td><em></em></td>
-<td class="param">oob_score&nbsp;</td>
-<td class="value">False</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">n_jobs&nbsp;</td>
-<td class="value">None</td>
-</tr>
-<tr class="odd user-set">
-<td><em></em></td>
-<td class="param">random_state&nbsp;</td>
-<td class="value">89</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">verbose&nbsp;</td>
-<td class="value">0</td>
-</tr>
-<tr class="odd default">
-<td><em></em></td>
-<td class="param">warm_start&nbsp;</td>
-<td class="value">False</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">ccp_alpha&nbsp;</td>
-<td class="value">0.0</td>
-</tr>
-<tr class="odd default">
-<td><em></em></td>
-<td class="param">max_samples&nbsp;</td>
-<td class="value">None</td>
-</tr>
-<tr class="even default">
-<td><em></em></td>
-<td class="param">monotonic_cst&nbsp;</td>
-<td class="value">None</td>
-</tr>
-</tbody>
-</table>
-
-            </details>
-        </div>
-    </div></div></div></div></div><script>function copyToClipboard(text, element) {
-    // Get the parameter prefix from the closest toggleable content
-    const toggleableContent = element.closest('.sk-toggleable__content');
-    const paramPrefix = toggleableContent ? toggleableContent.dataset.paramPrefix : '';
-    const fullParamName = paramPrefix ? `${paramPrefix}${text}` : text;
-
-    const originalStyle = element.style;
-    const computedStyle = window.getComputedStyle(element);
-    const originalWidth = computedStyle.width;
-    const originalHTML = element.innerHTML.replace('Copied!', '');
-
-    navigator.clipboard.writeText(fullParamName)
-        .then(() => {
-            element.style.width = originalWidth;
-            element.style.color = 'green';
-            element.innerHTML = "Copied!";
-
-            setTimeout(() => {
-                element.innerHTML = originalHTML;
-                element.style = originalStyle;
-            }, 2000);
-        })
-        .catch(err => {
-            console.error('Failed to copy:', err);
-            element.style.color = 'red';
-            element.innerHTML = "Failed!";
-            setTimeout(() => {
-                element.innerHTML = originalHTML;
-                element.style = originalStyle;
-            }, 2000);
-        });
-    return false;
-}
-
-document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
-    const toggleableContent = element.closest('.sk-toggleable__content');
-    const paramPrefix = toggleableContent ? toggleableContent.dataset.paramPrefix : '';
-    const paramName = element.parentElement.nextElementSibling.textContent.trim();
-    const fullParamName = paramPrefix ? `${paramPrefix}${paramName}` : paramName;
-
-    element.setAttribute('title', fullParamName);
-});
-</script>
-</div>
-</div>
-<div id="9930f85f" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>yrf_pred <span class="op">=</span> rf1.predict(Xre_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="d25dc005" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>r2_score(yre_test, yrf_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<span id="cb32-2"><a href="#cb32-2"></a>rf1.fit(Xre_train, yre_train)</span>
+<span id="cb32-3"><a href="#cb32-3"></a>yrf_pred <span class="op">=</span> rf1.predict(Xre_test)</span>
+<span id="cb32-4"><a href="#cb32-4"></a>r2_score(yre_test, yrf_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>0.5487486857968205</code></pre>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="interpretability-of-models" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="interpretability-of-models"><span class="header-section-number">8.8</span> Interpretability of Models</h2>
+<section id="sec-08-interpretability" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="sec-08-interpretability"><span class="header-section-number">8.8</span> Interpretability of Models</h2>
 <section id="lime" class="level3">
 <h3 class="anchored" data-anchor-id="lime">LIME</h3>
 <p>While the earlier methods indicated how we can understand the importance of features to the overall model, we have better tools to understand how features play a role in particular predictions. One such approach is known as LIME (Local Interpretable Model-Agnostic Explanations). A local model is one that explains why the model is making a particular prediction for a particular combination of feature values.</p>
@@ -4755,91 +4207,95 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <li>Weight the new samples according to their proximity to the instance of interest.</li>
 <li>Train a weighted, interpretable model on the dataset with the variations.</li>
 </ol>
-<p>The following diagram visualises the process when making predictions (light-blue vs.&nbsp;gray) using two features (<span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>). The instance of interest is the yellow point.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/lime-fitting-1.jpeg" class="img-fluid figure-img" style="width:60.0%"></p>
-<figcaption>LIME</figcaption>
+<p><a href="#fig-lime-fit" class="quarto-xref">Figure&nbsp;<span>8.9</span></a> visualises the process when making predictions (light-blue vs.&nbsp;gray) using two features (<span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>). The instance of interest is the yellow point.</p>
+<div id="fig-lime-fit" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lime-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/lime-fitting-1.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lime-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.9: LIME
+</figcaption>
 </figure>
 </div>
 <div id="exm-taiwan-data-15" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 8.5 (Example: Taiwan Data LIME)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 8.9 (Taiwan data LIME)</strong></span> </p>
 <p>Now we return to our dataset on real estate transations and attempt to understand the prediction made for a particular instance:</p>
-<div id="28269fd6" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>re_scaler.inverse_transform(Xre_test[<span class="dv">4</span>, :].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)).<span class="bu">round</span>()</span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="co">#X_re.mean(axis=0).round(3)</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#Xre_test[4, :].round(4)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div id="d8df728d" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>re_scaler.inverse_transform(Xre_test[<span class="dv">4</span>, :].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)).<span class="bu">round</span>()</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="co">#X_re.mean(axis=0).round(3)</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#Xre_test[4, :].round(4)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>array([[2013.,   12., 1144.,    4.,    0.,    3.]])</code></pre>
 </div>
 </div>
 <p>First we instantiate an explainer object, and then provide it with the instance we wish to explain.</p>
-<div id="b60be427" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>explainer <span class="op">=</span> lime_tabular.LimeTabularExplainer(</span>
-<span id="cb38-2"><a href="#cb38-2"></a>    training_data<span class="op">=</span>np.array(Xre_train),</span>
-<span id="cb38-3"><a href="#cb38-3"></a>    feature_names<span class="op">=</span>X_re.columns,</span>
-<span id="cb38-4"><a href="#cb38-4"></a>    mode<span class="op">=</span><span class="st">'regression'</span>,</span>
-<span id="cb38-5"><a href="#cb38-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="504ea19f" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>explainer <span class="op">=</span> lime_tabular.LimeTabularExplainer(</span>
+<span id="cb36-2"><a href="#cb36-2"></a>    training_data<span class="op">=</span>np.array(Xre_train),</span>
+<span id="cb36-3"><a href="#cb36-3"></a>    feature_names<span class="op">=</span>X_re.columns,</span>
+<span id="cb36-4"><a href="#cb36-4"></a>    mode<span class="op">=</span><span class="st">'regression'</span>,</span>
+<span id="cb36-5"><a href="#cb36-5"></a>)</span>
+<span id="cb36-6"><a href="#cb36-6"></a>exp <span class="op">=</span> explainer.explain_instance(</span>
+<span id="cb36-7"><a href="#cb36-7"></a>    data_row<span class="op">=</span>Xre_test[<span class="dv">4</span>, :], </span>
+<span id="cb36-8"><a href="#cb36-8"></a>    predict_fn<span class="op">=</span>rf1.predict,</span>
+<span id="cb36-9"><a href="#cb36-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e8a3666c" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>exp <span class="op">=</span> explainer.explain_instance(</span>
-<span id="cb39-2"><a href="#cb39-2"></a>    data_row<span class="op">=</span>Xre_test[<span class="dv">4</span>, :], </span>
-<span id="cb39-3"><a href="#cb39-3"></a>    predict_fn<span class="op">=</span>rf1.predict,</span>
-<span id="cb39-4"><a href="#cb39-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="107f1de6" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>exp.as_pyplot_figure()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-fig-taiwan-lime" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>exp.as_pyplot_figure()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-29-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="746" height="431"></p>
+<div id="fig-taiwan-lime" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-taiwan-lime-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08-supervised_files/figure-html/fig-taiwan-lime-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="746" height="431">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-taiwan-lime-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div id="f9b3b690" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># exp.show_in_notebook(show_table=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Here is how we can interpret the plots above. In terms of importance to the prediction <em>of this particular instance</em>, <code>dist_MRT</code> is the highest. The local model that has been fit has been constrained to make as close a prediction as possible to the original model. However, it may fall short. In this case, the original predicted value was 29.58. However, the value predicted by the local approximation was:</p>
-<div id="d28371f7" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="bu">print</span>(<span class="ss">f"The value predicted by the local approximation was: </span><span class="sc">{</span>exp<span class="sc">.</span>local_pred[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here is how we can interpret the plot in <a href="#fig-taiwan-lime" class="quarto-xref">Figure&nbsp;<span>8.10</span></a>. In terms of importance to the prediction <em>of this particular instance</em>, <code>dist_MRT</code> is the highest. The local model that has been fit has been constrained to make as close a prediction as possible to the original model. However, it may fall short. In this case, the original predicted value was 29.58. However, the value predicted by the local approximation was:</p>
+<div id="6599077f" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="bu">print</span>(<span class="ss">f"The value predicted by the local approximation was: </span><span class="sc">{</span>exp<span class="sc">.</span>local_pred[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The value predicted by the local approximation was: 33.665</code></pre>
+<pre><code>The value predicted by the local approximation was: 34.526</code></pre>
 </div>
 </div>
 <p>The numbers in the bar chart essentially decompose this prediction from the local model:</p>
-<div id="45190758" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>s <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb44-2"><a href="#cb44-2"></a><span class="cf">for</span> x,y <span class="kw">in</span> exp.local_exp[<span class="dv">1</span>]:</span>
-<span id="cb44-3"><a href="#cb44-3"></a>    s <span class="op">+=</span> y</span>
-<span id="cb44-4"><a href="#cb44-4"></a></span>
-<span id="cb44-5"><a href="#cb44-5"></a>s <span class="op">+</span> exp.intercept[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
-<pre><code>33.665071024508386</code></pre>
+<div id="90bc9077" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>s <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="cf">for</span> x,y <span class="kw">in</span> exp.local_exp[<span class="dv">1</span>]:</span>
+<span id="cb40-3"><a href="#cb40-3"></a>    s <span class="op">+=</span> y</span>
+<span id="cb40-4"><a href="#cb40-4"></a></span>
+<span id="cb40-5"><a href="#cb40-5"></a>s <span class="op">+</span> exp.intercept[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>34.52639097147727</code></pre>
 </div>
 </div>
-<p>This means that, from the values, we can see that the <code>dist_MRT</code>, which was close to the average distance, had a negative impact on the price. The longitude had a positive impact on the price.</p>
+<p>This means that, from the values, we can see that the <code>dist_MRT</code>, which was close to the average distance, had a negative impact on the price. So too did <code>house_age</code>. Meanwhile, longitude and latitude had a positive impact on the price.</p>
 </div>
 </section>
 <section id="ice-plots" class="level3">
 <h3 class="anchored" data-anchor-id="ice-plots">ICE plots</h3>
 <p>ICE plots are conditional versions of PDP. Instead of <em>averaging</em> over all instances in the training set, a single line is generated for each instance corresponding to features other than the one under study. This allows us to inspect if the relationship between the response and the feature is consistent across the data.</p>
-<div id="d2660feb" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, nrows<span class="op">=</span><span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb46-2"><a href="#cb46-2"></a>features_info <span class="op">=</span> {</span>
-<span id="cb46-3"><a href="#cb46-3"></a>    <span class="st">"features"</span>: [<span class="dv">1</span>,<span class="dv">2</span>], <span class="co"># no names in the array; 1 and 2 correspond to house_age and dist_MRT</span></span>
-<span id="cb46-4"><a href="#cb46-4"></a>    <span class="st">"kind"</span>: <span class="st">"both"</span>,</span>
-<span id="cb46-5"><a href="#cb46-5"></a>}</span>
-<span id="cb46-6"><a href="#cb46-6"></a>display <span class="op">=</span> PartialDependenceDisplay.from_estimator(</span>
-<span id="cb46-7"><a href="#cb46-7"></a>    rf1,</span>
-<span id="cb46-8"><a href="#cb46-8"></a>    Xre_train,</span>
-<span id="cb46-9"><a href="#cb46-9"></a>    <span class="op">**</span>features_info,</span>
-<span id="cb46-10"><a href="#cb46-10"></a>    ax<span class="op">=</span>ax</span>
-<span id="cb46-11"><a href="#cb46-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c293f324" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, nrows<span class="op">=</span><span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb42-2"><a href="#cb42-2"></a>features_info <span class="op">=</span> {</span>
+<span id="cb42-3"><a href="#cb42-3"></a>    <span class="st">"features"</span>: [<span class="dv">1</span>,<span class="dv">2</span>], <span class="co"># no names in the array; 1 and 2 correspond to house_age and dist_MRT</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a>    <span class="st">"kind"</span>: <span class="st">"both"</span>,</span>
+<span id="cb42-5"><a href="#cb42-5"></a>}</span>
+<span id="cb42-6"><a href="#cb42-6"></a>display <span class="op">=</span> PartialDependenceDisplay.from_estimator(</span>
+<span id="cb42-7"><a href="#cb42-7"></a>    rf1,</span>
+<span id="cb42-8"><a href="#cb42-8"></a>    Xre_train,</span>
+<span id="cb42-9"><a href="#cb42-9"></a>    <span class="op">**</span>features_info,</span>
+<span id="cb42-10"><a href="#cb42-10"></a>    ax<span class="op">=</span>ax</span>
+<span id="cb42-11"><a href="#cb42-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-33-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1163" height="395"></p>
+<p><img src="08-supervised_files/figure-html/cell-31-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1163" height="395"></p>
 </figure>
 </div>
 </div>
