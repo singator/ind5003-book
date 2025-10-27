@@ -18,3 +18,10 @@ In order to render the pdf and html versions on your own, you will need to:
 
 You can then use Rstudio to render the pdf and/or html versions. It should pick up the 
 virtual environment automatically, without needing reticulate.
+
+## License
+
+- Text, figures, and other content: © 2025 Vik Gopal, Tiong Wee Lim. Licensed under
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). 
+
+- Code snippets: Licensed under the [MIT License](./LICENSE-CODE).
