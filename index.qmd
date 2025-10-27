@@ -27,7 +27,9 @@ analysis.
 
 If you are a fellow instructor and you find something useful in this textbook,
 please do let me know at vik.gopal@nus.edu.sg. If you need more details about
-anything, do feel free to write as well.
+anything, do feel free to write as well. Please cite this book as:
+
+Gopal, V. and Lim, T.W. (2025) *Data Analytics for Sense-Making*. Zenodo. doi:10.5281/zenodo.17451642.
 
 So long, and thanks for reading!
 
