@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.52">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -310,7 +310,7 @@ window.Quarto = {
 <li><strong>Seasonal</strong>: A seasonal pattern exists when a series is influenced by factors such as quarters of the year, the month, the day of the week, or time of day. Seasonality is always of a <strong>fixed and known</strong> period.</li>
 <li><strong>Cyclic</strong>: A cyclic pattern exists when there are rises and falls that are not of a fixed period.</li>
 </ol>
-<div id="b7b24b62" class="cell" data-execution_count="2">
+<div id="a8f2497a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> datetime, calendar</span>
@@ -338,7 +338,7 @@ window.Quarto = {
 <div id="exm-housing-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.1 (Basic plots of housing Data)</strong></span> </p>
 <p>This dataset comes from an R package <a href="https://www.rdocumentation.org/packages/fma/versions/2.5/topics/hsales"><code>fma</code></a>. It contains counts of monthly sales of new one-family houses sold in the USA since 1973.</p>
-<div id="1e918f08" class="cell" data-execution_count="3">
+<div id="f6e979db" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hsales <span class="op">=</span> pd.read_csv(<span class="st">'data/hsales.csv'</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>])</span>
 <span id="cb2-2"><a href="#cb2-2"></a>hsales.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a>hsales.index.freq <span class="op">=</span> <span class="st">'MS'</span></span>
@@ -355,7 +355,7 @@ window.Quarto = {
 <p>We observe a strong seasonality within each year. There is some indication of cyclic behaviour every 6 – 10 years. There is no apparent monotonic trend over this period. With pandas objects, we can resample the series. This allows us to compute summaries over time windows that could be of business importance. For instance, we might be interested in a breakdown by quarters instead of months.</p>
 </div>
 <p>With the <code>resample()</code> function, we can perform both downsampling (reducing the frequency of observations) or upsampling (via interpolation or nearest neighbour imputation).</p>
-<div id="5899e15c" class="cell" data-execution_count="4">
+<div id="083c05cc" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>hsales.resample(<span class="st">'14D'</span>).interpolate().head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -450,7 +450,7 @@ Figure&nbsp;6.1: Season plot of housing sales
 <div id="exm-aus-elec-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.3 (Australian quarterly electricity production)</strong></span> </p>
 <p>This dataset is from another R package: <a href="https://www.rdocumentation.org/packages/fpp2/versions/2.5/topics/qauselec"><code>fpp2</code></a>. It records quarterly electric production in Australia (in billion kWh) from 1965 till now.</p>
-<div id="62ff1089" class="cell" data-execution_count="6">
+<div id="8674682a" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>qau <span class="op">=</span> pd.read_csv(<span class="st">'data/qauselec.csv'</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>])</span>
 <span id="cb5-2"><a href="#cb5-2"></a>qau.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>qau.index.freq <span class="op">=</span> <span class="st">'QS'</span></span>
@@ -505,7 +505,7 @@ Figure&nbsp;6.2: Season plot, electric production
 <div id="exm-housing-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.4 (Lag plots of housing sales data)</strong></span> </p>
 <p>Here is a matrix of lag plots for the housing sales data.</p>
-<div id="0a1d9682" class="cell" data-execution_count="8">
+<div id="4a69ea91" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>f, aa <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">3</span>,ncols<span class="op">=</span><span class="dv">4</span>, sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a>f.set_figheight(<span class="dv">9</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>f.set_figwidth(<span class="dv">12</span>)</span>
@@ -580,7 +580,7 @@ Figure&nbsp;6.3: Additive decomposition
 <div id="exm-aus-elec-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.6 (Multiplicative decomposition, Aus electricity data)</strong></span> </p>
 <p>Here is the <em>multiplicative decomposition</em> for the Australian electric data.</p>
-<div id="d0659c39" class="cell" data-execution_count="10">
+<div id="2470a1b9" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>qau_mult <span class="op">=</span> seasonal_decompose(qau.loc[:, <span class="st">'kWh'</span>], model<span class="op">=</span><span class="st">'multiplicative'</span>,</span>
 <span id="cb9-2"><a href="#cb9-2"></a>                              extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a>ax <span class="op">=</span> qau_mult.plot()<span class="op">;</span></span>
@@ -658,7 +658,7 @@ Note
 <div id="exm-housing-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.8 (Benchmark forecasts housing sales)</strong></span> </p>
 <p>Suppose we apply some of the above forecasts to the housing sales dataset. We withhold the most recent 2 years of data and forecast those. Here is a plot depicting the forecasts, and the true values.</p>
-<div id="f5b1cc37" class="cell" data-execution_count="12">
+<div id="d4663e15" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Set aside the last two years as the test set.</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="co">#hsales = hsales.drop(columns=['year', 'month'])</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>train_set <span class="op">=</span> hsales.iloc[:<span class="op">-</span><span class="dv">24</span>,]</span>
@@ -700,7 +700,7 @@ Note
 <div id="exm-housing-4a" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.9 (Benchmark forecast errors)</strong></span> </p>
 <p>Let us assess the forecasts made in the previous example, using RMSE and MAE.</p>
-<div id="e301486c" class="cell" data-execution_count="13">
+<div id="03594eab" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="cf">for</span> x <span class="kw">in</span> [ts.rmse, ts.mae]:</span>
 <span id="cb12-2"><a href="#cb12-2"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">,mean: </span><span class="sc">{</span>x(test_set.hsales.values, mean_forecast.values)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">,snaive: </span><span class="sc">{</span>x(test_set.hsales.values, snaive_forecast.values)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
@@ -717,7 +717,7 @@ mae,snaive: 4.792
 <p>In our simple example, the seasonal naive model outperforms the simple mean forecast according to all the metrics but in general, things are not always this clear-cut.</p>
 </div>
 <p>For reference, the MASE for the seasonal naive forecast is as follows.</p>
-<div id="f07581a9" class="cell" data-execution_count="14">
+<div id="187ad92e" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>ts.mase(test_set.hsales.values,  snaive_forecast.values, train_set.values, </span>
 <span id="cb14-2"><a href="#cb14-2"></a>        seasonality<span class="op">=</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
@@ -737,7 +737,7 @@ mae,snaive: 4.792
 <div id="exm-dow-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.10 (Dow Jones index)</strong></span> </p>
 <p>Consider the following time series of the Dow Jones index.</p>
-<div id="819cd7c2" class="cell" data-execution_count="15">
+<div id="08a441a6" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>dj <span class="op">=</span> pd.read_csv(<span class="st">'data/dj.csv'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2"></a>dj.plot(legend<span class="op">=</span><span class="va">False</span>, title<span class="op">=</span><span class="st">'Dow Jones Index'</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -752,7 +752,7 @@ mae,snaive: 4.792
 <p><span class="math display">\[\begin{equation}
 \Delta y_t = y_t - y_{t-1}
 \end{equation}\]</span></p>
-<div id="b292d0b9" class="cell" data-execution_count="16">
+<div id="52e5ca68" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>ddj <span class="op">=</span> diff(dj)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>ddj.plot(legend<span class="op">=</span><span class="va">False</span>, title<span class="op">=</span><span class="st">'Differenced Dow Jones'</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -799,7 +799,7 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 <div id="exm-aus-elec-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.11 (Auto ARIMA on Aus electricity)</strong></span> </p>
 <p>Let us try out the ARIMA auto-fitting algorithm on the qau electricity usage dataset. We shall set aside the last three years of data as the test set. Recall that this is quarterly data. First, we establish the seasonal naive benchmark error for this dataset.</p>
-<div id="4e5a753b" class="cell" data-execution_count="18">
+<div id="285b86bc" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>train2 <span class="op">=</span> qau.kWh[:<span class="op">-</span><span class="dv">12</span>]</span>
 <span id="cb19-2"><a href="#cb19-2"></a>test2 <span class="op">=</span> qau.kWh[<span class="op">-</span><span class="dv">12</span>:]</span>
 <span id="cb19-3"><a href="#cb19-3"></a></span>
@@ -810,38 +810,39 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 </div>
 </div>
 <p>Let us see if the automatically fitted ARIMA models can do better than this.</p>
-<div id="6fc32884" class="cell" data-execution_count="20">
+<div id="8dcdf1f6" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>arima_m1 <span class="op">=</span> pm.auto_arima(train2.values, seasonal<span class="op">=</span><span class="va">True</span>, m<span class="op">=</span><span class="dv">4</span>, test<span class="op">=</span><span class="st">'adf'</span>, </span>
 <span id="cb21-2"><a href="#cb21-2"></a>                         trace<span class="op">=</span><span class="va">False</span>, suppress_warnings<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is the summary of the final chosen model.</p>
-<div id="eae169c1" class="cell" data-execution_count="21">
+<div id="9b0df5c8" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="bu">print</span>(arima_m1.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                      SARIMAX Results                                      
-===========================================================================================
-Dep. Variable:                                   y   No. Observations:                  206
-Model:             SARIMAX(2, 1, 2)x(1, 0, [1], 4)   Log Likelihood                -175.320
-Date:                             Sat, 11 Oct 2025   AIC                            364.640
-Time:                                     23:27:47   BIC                            387.901
-Sample:                                          0   HQIC                           374.049
-                                             - 206                                         
-Covariance Type:                               opg                                         
+<pre><code>                                       SARIMAX Results                                        
+==============================================================================================
+Dep. Variable:                                      y   No. Observations:                  206
+Model:             SARIMAX(1, 1, 1)x(2, 0, [1, 2], 4)   Log Likelihood                -174.692
+Date:                                Tue, 14 Oct 2025   AIC                            365.384
+Time:                                        14:08:15   BIC                            391.968
+Sample:                                             0   HQIC                           376.136
+                                                - 206                                         
+Covariance Type:                                  opg                                         
 ==============================================================================
                  coef    std err          z      P&gt;|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-ar.L1         -0.1675      0.613     -0.273      0.785      -1.369       1.034
-ar.L2          0.3262      0.418      0.781      0.435      -0.492       1.145
-ma.L1         -0.1472      0.604     -0.244      0.807      -1.330       1.036
-ma.L2         -0.6210      0.589     -1.054      0.292      -1.776       0.534
-ar.S.L4        0.9889      0.009    116.030      0.000       0.972       1.006
-ma.S.L4       -0.6195      0.085     -7.310      0.000      -0.786      -0.453
-sigma2         0.3110      0.026     12.139      0.000       0.261       0.361
+intercept      0.0023      0.004      0.625      0.532      -0.005       0.009
+ar.L1          0.5358      0.081      6.621      0.000       0.377       0.694
+ma.L1         -0.8998      0.053    -17.132      0.000      -1.003      -0.797
+ar.S.L4        0.0945      0.215      0.439      0.661      -0.327       0.516
+ar.S.L8        0.8794      0.212      4.146      0.000       0.464       1.295
+ma.S.L4        0.3137      0.208      1.510      0.131      -0.093       0.721
+ma.S.L8       -0.5930      0.114     -5.220      0.000      -0.816      -0.370
+sigma2         0.3182      0.028     11.178      0.000       0.262       0.374
 ===================================================================================
-Ljung-Box (L1) (Q):                   0.19   Jarque-Bera (JB):                21.89
-Prob(Q):                              0.67   Prob(JB):                         0.00
-Heteroskedasticity (H):               9.53   Skew:                            -0.09
-Prob(H) (two-sided):                  0.00   Kurtosis:                         4.59
+Ljung-Box (L1) (Q):                   0.03   Jarque-Bera (JB):                25.07
+Prob(Q):                              0.87   Prob(JB):                         0.00
+Heteroskedasticity (H):               9.13   Skew:                            -0.13
+Prob(H) (two-sided):                  0.00   Kurtosis:                         4.69
 ===================================================================================
 
 Warnings:
@@ -874,15 +875,15 @@ Figure&nbsp;6.6: ARIMA residual diagnostics
 </div>
 </div>
 <p>Finally, we assess the error on the test set. The out-of-sample performance is better than the naive methods.</p>
-<div id="7c6661c0" class="cell" data-execution_count="23">
+<div id="9674b1c2" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>rmse1 <span class="op">=</span> ts.rmse(test2.values, arima_m1.predict(n_periods<span class="op">=</span><span class="dv">12</span>))</span>
 <span id="cb25-2"><a href="#cb25-2"></a>mase1 <span class="op">=</span> ts.mase(test2.values, arima_m1.predict(n_periods<span class="op">=</span><span class="dv">12</span>), </span>
 <span id="cb25-3"><a href="#cb25-3"></a>                train2.values, seasonality<span class="op">=</span><span class="dv">4</span>)</span>
 <span id="cb25-4"><a href="#cb25-4"></a><span class="bu">print</span>(<span class="ss">f"The RMSE on the test set is </span><span class="sc">{</span>rmse1<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb25-5"><a href="#cb25-5"></a><span class="bu">print</span>(<span class="ss">f"The MASE on the test set is </span><span class="sc">{</span>mase1<span class="sc">:.3f}</span><span class="ss">."</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The RMSE on the test set is 1.929.
-The MASE on the test set is 1.245.</code></pre>
+<pre><code>The RMSE on the test set is 1.964.
+The MASE on the test set is 1.313.</code></pre>
 </div>
 </div>
 <p>Let us proceed to make a plot of the predictions.</p>
@@ -946,6 +947,7 @@ l_t &amp;=&amp; \alpha y_t + (1- \alpha)l_{t-1} \\
 <img src="figs/ets_add.png" id="fig-ets-add-models" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-ets-add-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.8
 </figcaption>
 </figure>
 </div>
@@ -959,6 +961,7 @@ l_t &amp;=&amp; \alpha y_t + (1- \alpha)l_{t-1} \\
 <img src="figs/ets_mult.png" id="fig-ets-mult-models" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-ets-mult-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.9
 </figcaption>
 </figure>
 </div>
@@ -968,7 +971,7 @@ l_t &amp;=&amp; \alpha y_t + (1- \alpha)l_{t-1} \\
 <div id="exm-aus-elec-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.12 (ETS model on Aus electricity dataset)</strong></span> </p>
 <p>Let us try one of the basic models, with just a slope, level and seasonal effect ETS(A,A,A), on the qau dataset.</p>
-<div id="dc346d85" class="cell" data-execution_count="25">
+<div id="c78d0fd1" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>ets_m1 <span class="op">=</span> ExponentialSmoothing(train2.values, seasonal_periods<span class="op">=</span><span class="dv">4</span>, trend<span class="op">=</span><span class="st">'add'</span>, </span>
 <span id="cb28-2"><a href="#cb28-2"></a>                              seasonal<span class="op">=</span><span class="st">'add'</span>)</span>
 <span id="cb28-3"><a href="#cb28-3"></a>ets_fit <span class="op">=</span> ets_m1.fit()</span>
@@ -981,21 +984,21 @@ Model:             ExponentialSmoothing   SSE                             64.907
 Optimized:                         True   AIC                           -221.915
 Trend:                         Additive   BIC                           -195.292
 Seasonal:                      Additive   AICC                          -220.787
-Seasonal Periods:                     4   Date:                 Sat, 11 Oct 2025
-Box-Cox:                          False   Time:                         23:27:48
+Seasonal Periods:                     4   Date:                 Tue, 14 Oct 2025
+Box-Cox:                          False   Time:                         14:08:16
 Box-Cox Coeff.:                    None                                         
 =================================================================================
                           coeff                 code              optimized      
 ---------------------------------------------------------------------------------
-smoothing_level               0.6205891                alpha                 True
-smoothing_trend              1.4395e-11                 beta                 True
-smoothing_seasonal            0.2690339                gamma                 True
-initial_level                 4.0245281                  l.0                 True
-initial_trend                 0.2509921                  b.0                 True
-initial_seasons.0            -0.3901302                  s.0                 True
-initial_seasons.1             0.1114788                  s.1                 True
-initial_seasons.2             0.2913054                  s.2                 True
-initial_seasons.3            -0.3722268                  s.3                 True
+smoothing_level               0.6206195                alpha                 True
+smoothing_trend                0.000000                 beta                 True
+smoothing_seasonal            0.2690403                gamma                 True
+initial_level                 4.0245565                  l.0                 True
+initial_trend                 0.2509972                  b.0                 True
+initial_seasons.0            -0.3899470                  s.0                 True
+initial_seasons.1             0.1112569                  s.1                 True
+initial_seasons.2             0.2908034                  s.2                 True
+initial_seasons.3            -0.3718619                  s.3                 True
 ---------------------------------------------------------------------------------</code></pre>
 </div>
 </div>
@@ -1023,7 +1026,7 @@ Figure&nbsp;6.10: ETS trend and level components
 </div>
 </div>
 <p>Finally, let’s take a look if the predictions on the test set are competitive with the automatic ARIMA model that was selected earlier. The forecasts are better than the naive ones, but not as good as the ARIMA. However, keep in mind that we are working with a single model - just as we did for ARIMA models, we should iterate over several ETS models and pick the best one in order to compare with the ARIMA model found.</p>
-<div id="5626eebd" class="cell" data-execution_count="27">
+<div id="eec1251c" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>ets_fc <span class="op">=</span> ets_fit.forecast(steps<span class="op">=</span><span class="dv">12</span>)</span>
 <span id="cb31-2"><a href="#cb31-2"></a><span class="bu">print</span>(<span class="ss">f"The RMSE on the test set is </span><span class="sc">{</span>ts<span class="sc">.</span>rmse(test2.values, ets_fc)<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1045,7 +1048,7 @@ y_t = \frac{1}{2}(x_{\theta,t} + x_{1 - \theta,t})
 <div id="exm-tourism-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.13 (International tourism arrivals to Singapore)</strong></span> </p>
 <p>The Singapore Department of Statistics shares information on tourist arrivals to Singapore at the monthly level. Here is a time series plot of arrivals from South East Asian Countries:</p>
-<div id="3a06c028" class="cell" data-execution_count="28">
+<div id="84d2ab95" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>tourism <span class="op">=</span> pd.read_excel(<span class="st">"data/international_visitor_arrivals_sg.xlsx"</span>, </span>
 <span id="cb33-2"><a href="#cb33-2"></a>                        parse_dates<span class="op">=</span>[<span class="dv">0</span>], date_format<span class="op">=</span><span class="st">"%Y %b"</span>, </span>
 <span id="cb33-3"><a href="#cb33-3"></a>                        na_values<span class="op">=</span><span class="st">'na'</span>)</span>
@@ -1073,7 +1076,7 @@ y_t = \frac{1}{2}(x_{\theta,t} + x_{1 - \theta,t})
 </div>
 <p><br></p>
 <p>To fit the theta model for this dataset, we use the following code:</p>
-<div id="4117dc77" class="cell" data-execution_count="29">
+<div id="069c22e7" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>theta_mod <span class="op">=</span> ThetaModel(sea2)</span>
 <span id="cb34-2"><a href="#cb34-2"></a>theta_mod_fit <span class="op">=</span> theta_mod.fit()</span>
 <span id="cb34-3"><a href="#cb34-3"></a><span class="bu">print</span>(theta_mod_fit.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1082,8 +1085,8 @@ y_t = \frac{1}{2}(x_{\theta,t} + x_{1 - \theta,t})
 ==============================================================================
 Dep. Variable:                    SEA   No. Observations:                  504
 Method:                       OLS/SES   Deseasonalized:                   True
-Date:                Sat, 11 Oct 2025   Deseas. Method:         Multiplicative
-Time:                        23:27:50   Period:                             12
+Date:                Tue, 14 Oct 2025   Deseas. Method:         Multiplicative
+Time:                        14:08:18   Period:                             12
 Sample:                    01-01-1978                                         
                          - 12-01-2019                                         
   Parameter Estimates   
@@ -1143,7 +1146,7 @@ Figure&nbsp;6.11: Theta decomposition
 </div>
 </div>
 <p>Finally, we visualise the forecasts from this theta decomposition model. We only plot the final 360 observations for the visualisation.</p>
-<div id="b0f524ec" class="cell" data-execution_count="31">
+<div id="0ac87fb1" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>theta_forecasts <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb37-2"><a href="#cb37-2"></a>    {</span>
 <span id="cb37-3"><a href="#cb37-3"></a>        <span class="st">"original"</span>: sea2,</span>
@@ -1166,7 +1169,7 @@ Figure&nbsp;6.11: Theta decomposition
 <div id="exm-tourism-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.14 (Tourism forecasts with decomposition)</strong></span> </p>
 <p>Here is the code that will use and STL model to decompose the series, and fit a pre-chosen ARIMA(3,1,2) model to the seasonally adjusted series.</p>
-<div id="0368d90a" class="cell" data-execution_count="32">
+<div id="0a413b0e" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>stlf <span class="op">=</span> STLForecast(sea2, ARIMA, model_kwargs<span class="op">=</span>{<span class="st">"order"</span>: (<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>)})</span>
 <span id="cb38-2"><a href="#cb38-2"></a>res <span class="op">=</span> stlf.fit( )</span>
 <span id="cb38-3"><a href="#cb38-3"></a>forecasts2 <span class="op">=</span> pd.DataFrame(</span>
@@ -1177,7 +1180,7 @@ Figure&nbsp;6.11: Theta decomposition
 <span id="cb38-8"><a href="#cb38-8"></a>)</span>
 <span id="cb38-9"><a href="#cb38-9"></a>forecasts2.tail(<span class="dv">360</span>).plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.10/site-packages/statsmodels/tsa/statespace/sarimax.py:966: UserWarning:
+<pre><code>C:\Users\stavg\Documents\courses\ind5003-book\env\lib\site-packages\statsmodels\tsa\statespace\sarimax.py:966: UserWarning:
 
 Non-stationary starting autoregressive parameters found. Using zeros as starting parameters.
 </code></pre>
@@ -1200,7 +1203,7 @@ Non-stationary starting autoregressive parameters found. Using zeros as starting
 <div id="exm-us-emp-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.15 (Time series clustering, US employment data)</strong></span> </p>
 <p>The <a href="https://otexts.com/fpp3/">Forecasting: Principles and Practice</a> contains time series data on employment in various sectors in the US. There are 148 unique series in the dataset.</p>
-<div id="8cf14d7e" class="cell" data-execution_count="33">
+<div id="ced8e4ac" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>us_employment <span class="op">=</span> pd.read_csv(<span class="st">"data/us_employment.csv"</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>], </span>
 <span id="cb40-2"><a href="#cb40-2"></a>                            date_format<span class="op">=</span><span class="st">"%Y %b"</span>)</span>
 <span id="cb40-3"><a href="#cb40-3"></a>series_ids <span class="op">=</span> us_employment.Series_ID.unique()</span>
@@ -1221,60 +1224,60 @@ Non-stationary starting autoregressive parameters found. Using zeros as starting
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">104968</td>
-<td>1965-05-01</td>
-<td>CEU6056140001</td>
-<td>Professional and Business Services: Business S...</td>
+<td data-quarto-table-cell-role="th">55935</td>
+<td>1997-07-01</td>
+<td>CEU4244500001</td>
+<td>Retail Trade: Food and Beverage Stores</td>
+<td>2981.2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">95813</td>
+<td>2009-12-01</td>
+<td>CEU6054000001</td>
+<td>Professional and Business Services: Profession...</td>
+<td>7515.6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">90184</td>
+<td>1944-08-01</td>
+<td>CEU5553000001</td>
+<td>Financial Activities: Real Estate and Rental a...</td>
 <td>NaN</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">106594</td>
-<td>1939-05-01</td>
-<td>CEU6056200001</td>
-<td>Professional and Business Services: Waste Mana...</td>
+<td data-quarto-table-cell-role="th">68263</td>
+<td>1975-02-01</td>
+<td>CEU4348400001</td>
+<td>Transportation and Warehousing: Truck Transpor...</td>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">27590</td>
-<td>1977-03-01</td>
-<td>CEU3133440001</td>
-<td>Durable Goods: Semiconductors and Electronic C...</td>
+<td data-quarto-table-cell-role="th">114120</td>
+<td>2001-04-01</td>
+<td>CEU6562140001</td>
+<td>Education and Health Services: Outpatient Care...</td>
+<td>436.6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">109174</td>
+<td>1992-11-01</td>
+<td>CEU6561000001</td>
+<td>Education and Health Services: Educational Ser...</td>
+<td>1833.6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">60211</td>
+<td>1950-02-01</td>
+<td>CEU4245200001</td>
+<td>Retail Trade: General Merchandise Stores</td>
 <td>NaN</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">138542</td>
-<td>2017-09-01</td>
-<td>CEU9092200001</td>
-<td>Government: State Government, Excluding Education</td>
-<td>2686.6</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">19103</td>
-<td>1996-09-01</td>
-<td>CEU3100000001</td>
-<td>Durable Goods</td>
-<td>10535.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">14398</td>
-<td>2008-05-01</td>
-<td>CEU2023700001</td>
-<td>Construction: Heavy and Civil Engineering Cons...</td>
-<td>1002.3</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">87900</td>
-<td>1996-07-01</td>
-<td>CEU5552211001</td>
-<td>Financial Activities: Commercial Banking</td>
-<td>1285.9</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">2235</td>
-<td>1963-10-01</td>
-<td>CEU0800000001</td>
-<td>Private Service-Providing</td>
-<td>28394.0</td>
+<td data-quarto-table-cell-role="th">18314</td>
+<td>2011-09-01</td>
+<td>CEU3000000001</td>
+<td>Manufacturing</td>
+<td>11840.0</td>
 </tr>
 </tbody>
 </table>
@@ -1283,7 +1286,7 @@ Non-stationary starting autoregressive parameters found. Using zeros as starting
 </div>
 </div>
 <p>Here is a plot of one of the time series in the dataset.</p>
-<div id="18315a80" class="cell" data-execution_count="34">
+<div id="42d94315" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>us_employment[us_employment.Title <span class="op">==</span> <span class="st">"Total Private"</span>].plot(x<span class="op">=</span><span class="st">'Month'</span>, </span>
 <span id="cb41-2"><a href="#cb41-2"></a>                                                           y<span class="op">=</span><span class="st">'Employed'</span>, </span>
 <span id="cb41-3"><a href="#cb41-3"></a>                                                           figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1296,13 +1299,13 @@ Non-stationary starting autoregressive parameters found. Using zeros as starting
 </div>
 </div>
 <p>Since we are going to perform clustering on the time series data, our first step is to remove the missing values.</p>
-<div id="8e9d0f18" class="cell" data-execution_count="35">
+<div id="1136de33" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>us_full <span class="op">=</span> us_employment[(us_employment.Month <span class="op">&gt;=</span> datetime.datetime(<span class="dv">2002</span>, <span class="dv">9</span>, <span class="dv">30</span>)) <span class="op">&amp;</span> (us_employment.Month <span class="op">&lt;</span> datetime.datetime(<span class="dv">2018</span>, <span class="dv">1</span>, <span class="dv">1</span>) )   ]</span>
 <span id="cb42-2"><a href="#cb42-2"></a>us2 <span class="op">=</span> us_full.pivot(index<span class="op">=</span><span class="st">'Series_ID'</span>, columns<span class="op">=</span><span class="st">'Month'</span>, values<span class="op">=</span><span class="st">"Employed"</span>)</span>
 <span id="cb42-3"><a href="#cb42-3"></a>us2_array <span class="op">=</span> us2.to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can begin the clustering procedure. The first line in the code below generates a 148 x 148 distance matrix.</p>
-<div id="fc4abc48" class="cell" data-execution_count="36">
+<div id="487e1314" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>out <span class="op">=</span> pdist(us2_array, metric<span class="op">=</span><span class="st">'correlation'</span>)</span>
 <span id="cb43-2"><a href="#cb43-2"></a>lm1 <span class="op">=</span> hierarchy.linkage(out, method<span class="op">=</span><span class="st">'average'</span>, optimal_ordering<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb43-3"><a href="#cb43-3"></a></span>
