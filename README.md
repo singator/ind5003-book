@@ -26,3 +26,6 @@ virtual environment automatically, without needing reticulate.
 - Code snippets: Licensed under the [MIT License](./LICENSE-CODE).
 - [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17451642.svg)](https://doi.org/10.5281/zenodo.17451642)[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](LICENSE)[![Code: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)](LICENSE-CODE)
 
+Please cite as:
+
+Gopal, V. and Lim, T.W. (2025) *Data Analytics for Sense-Making.* Zenodo. doi:10.5281/zenodo.17451642.
