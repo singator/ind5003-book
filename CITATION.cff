@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: "Data Analytics for Sense-Making"
+authors:
+  - family-names: Gopal
+    given-names: Vik
+    orcid: "https://orcid.org/0000-0002-7232-2063"
+    affiliation: National University of Singapore
+  - family-names: Lim
+    given-names: Tiong Wee
+    affiliation: National University of Singapore
+version: "v0.1"
+date-released: "2025-10-11"
+doi: 10.5281/zenodo.17451642
+url: https://singator.github.io/ind5003-book/
+license: CC-BY-SA-4.0
