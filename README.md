@@ -22,6 +22,6 @@ virtual environment automatically, without needing reticulate.
 ## License
 
 - Text, figures, and other content: © 2025 Vik Gopal, Tiong Wee Lim. Licensed under
-  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). 
+  [CC BY-SA 4.0](https://creativecommons.org/licenses/by/4.0/). 
 
 - Code snippets: Licensed under the [MIT License](./LICENSE-CODE).
