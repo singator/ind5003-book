@@ -20,7 +20,7 @@ book:
     - references.qmd
   cookie-consent: true
   google-analytics:
-    tracking-id: "G-J93EWPPL3L"
+    tracking-id: "G-K3T2VC9F47"
     anonymize-ip: true
 
 bibliography: references.bib
