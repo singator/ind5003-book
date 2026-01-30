@@ -18,6 +18,10 @@ book:
     - 08-supervised.qmd
     - 09-vision.qmd
     - references.qmd
+  cookie-consent: true
+  google-analytics:
+    tracking-id: "G-37NYQNXWRB"
+    anonymize-ip: true
 
 bibliography: references.bib
 
