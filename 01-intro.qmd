@@ -30,7 +30,7 @@ To install Python, navigate to the official
 appropriate installer for your operating system. 
 
 ::: {.callout-important}
-For our class, please ensure that you are using Python 3.10.12.
+For our class, please ensure that you are using Python 3.14.
 :::
 
 The next step is to create a virtual environment for this course. Virtual 
@@ -55,12 +55,12 @@ Jupyter notebooks consist of cells, which can be of three main types:
 * output cells, and 
 * markdown cells. 
 
-![Jupyter Lab](figs/jupyter_lab2.png){#fig-jupyter fig-alt="Jupyter Lab" fig-align="center"}
+![Jupyter Lab interface](figs/jupyter_lab2.png){#fig-jupyter fig-alt="Jupyter Lab" fig-align="center"}
 
-In @fig-jupyter, the red box labelled 1 is a markdown cell. It can be used to
-contain descriptions or summary of the code. The cells in the box labelled 2 are
-code cells. To run the codes from our notes, you can copy and paste the codes
-into a new cell, and then execute them with Ctrl-Enter. 
+In @fig-jupyter, the red box labelled 1 is a markdown cell. It can contain
+formatted text. The cells in the box labelled 2 are code cells. To run the codes
+from our notes, you can copy and paste the codes into a new cell, and then
+execute them with Ctrl-Enter.
 
 Try out this Easter egg that comes with any Python installation:
 
@@ -96,8 +96,9 @@ x_tuple = (1, 2, 3)
 x_dict = {'a': 1, 'b': 2, 'c': 3} # access with x_dict['a']
 ```
 
-By the way, this is what mean by (im)mutable. The following is OK, because "x"
-is a list, and hence mutable:
+By the way, this is what mean by (im)mutable. The following is OK, because
+`x_list` is a list, and hence mutable. In other words, elements inside it can be
+overwritten.
 
 ```{python mutable-1}
 x = [1, 3, 5, 7, 8, 9, 10]
@@ -105,7 +106,7 @@ x[3] = 17
 print(x)  
 ```
 
-But the following code will return an error, because x_tuple is a tuple, and hence 
+But the following code will return an error, because `x_tuple` is a tuple, and hence 
 immutable.
 
 ```{python mutable-2}
@@ -128,6 +129,12 @@ the end point index is not included.
 ```{python slice-1}
 char_list = ['P', 'y', 't', 'h', 'o', 'n']
 char_list[0]           # returns first element
+```
+
+Try out the following two applications of the slice operator:
+
+```{python slice-1a}
+#| eval: false
 char_list[-1]          # returns last element
 char_list[::2]         # from first to last, every 2 apart.
 ```
@@ -143,7 +150,7 @@ This slice syntax is used in the additional packages we use as well, so it is
 good to know about it. @fig-py-slice displays a pictorial representation of how
 positive and negative indexes work together.
 
-![Positive and negative indices](figs/python_slice.png){#fig-py-slice fig-alt="Python slice" fig-align="center" width="55%"}
+![Positive and negative indices with the slice operator](figs/python_slice.png){#fig-py-slice fig-alt="Python slice" fig-align="center" width="55%"}
 
 ## Loops in Python
 
@@ -238,13 +245,11 @@ for x in test_str:
 print(f"There were {count} upper-case characters in the sentence.")
 ```
 
-The corresponding method to convert a string to lower case is:
+The method to convert a string to lower case is:
 
 ```{python strings-5}
 test_str.lower()
 ```
-
-
 
 ## Functions, Modules and Packages 
 
@@ -328,6 +333,9 @@ although this is not the recommended way.
 c1.radius = 6
 c1.area()
 ```
+
+We shall practice more with writing classes in Python in chapter 7 (@sec-07-top)
+when we use the Mesa package.
 
 ## Numpy
 
@@ -414,11 +422,10 @@ to it.
 np.zeros((3, 5))
 ```
 
-Similarly, there is also an `np.ones()` function.
-
-Instead of specifying the dimensions of an array ourselves, we can create arrays
-of zeros or ones in the shape of other existing arrays. The following code creates
-an array of ones, of the same shape as `arr_real`.
+Similarly, there is also an `np.ones()` function. Instead of specifying the
+dimensions of an array ourselves, we can create arrays of zeros or ones in the
+shape of other existing arrays. The following code creates an array of ones, of
+the same shape as `arr_real`.
 
 ```{python}
 np.ones_like(arr_real)
@@ -640,6 +647,9 @@ show(laliga.head())
 
 ::: {.content-visible when-format="pdf"}
 ```{python}
+#| label: tbl-laliga
+#| tbl-cap: La Liga results dataframe
+
 laliga.head()
 ```
 :::
@@ -691,6 +701,9 @@ print(happ[10:12])
 To select columns, you may use a list of column names.
 
 ```{python}
+#| label: tbl-happ1
+#| tbl-cap: Extracting a subset of columns.
+
 happ[['GDP', 'Freedom']].head()
 # note the difference with happ['GDP']
 ```
@@ -739,12 +752,18 @@ Notice below how the slice operator is inclusive when we use `.loc`, but not
 inclusive when we use `.iloc`. Consider the following output, using `.loc`.
 
 ```{python}
+#| label: tbl-happ2
+#| tbl-cap: Extracting a subset of columns using the slice operator with .loc
+
 happ.loc[2:10:4, "GDP":"Generosity":2]
 ```
 
 In order to obtain the same output with `.iloc`, we have to use this instead:
 
 ```{python}
+#| label: tbl-happ3
+#| tbl-cap: Extracting a subset of columns using the slice operator with .iloc
+
 happ.iloc[2:11:4, 3:8:2] 
 ```
 
@@ -759,7 +778,10 @@ the data with a boolean array.
 \index{Happiness!Happiest countries}
 
 Suppose we retrieve the happiest countries; those with a score more than 6.95.
+
+::: {.callout-note}
 Can you surmise why we use this value? 
+:::
 
 ```{python}
 happiest = happ[happ['Happiness.Score'] > 6.95]
@@ -828,3 +850,29 @@ language. It will be used again in at least DSA5102.
    View Student Status Letter, then take a photo of the pdf. Your application
    status should be shown in the same GitHub page. It will take a few days for the
    copilot access to be granted after your application is approved.
+   
+## Exercises
+
+1.  Compute the mean of the `arr_real` array, by the second axis. You should obtain:
+```{python}
+#| echo: false
+arr_real.mean(axis=1)
+```
+2.  Use Boolean indexing on the `laliga` DataFrame to retrieve the rows where 
+    Valencia had more than 10 defeats.
+3.  If a win is 3 points, a draw is 1 point and a loss is 0, compute the number 
+    of points the team obtained for each row in the `laliga` DataFrame. Store the
+    results in a new column named `pts`.
+4.  What does the following code do? How different is it from a conventional loop
+    in Python?
+```{python}
+#| eval: false
+olist = [dict1[x] for x in dict1.keys()]
+```
+5.  Look up the `str` methods in Python and use the appropriate one to convert 
+    `test_str` into this:
+```{python}
+#| echo: false
+test_str.title()
+```
+
