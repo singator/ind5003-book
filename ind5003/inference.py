@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.stats as stats
-
+import statsmodels.api as sm
 
 def check_normality(pd_series):
     """Creates a panel of three plots for checking Normality.
@@ -12,15 +12,16 @@ def check_normality(pd_series):
     The output is a plot figure with three subplots - a boxplot, a histogram and 
     a qq-plot.
     """
-    plt.figure(1, figsize=(15, 4))
-    plt.subplot(131)
-    pd_series.plot(kind='box')
+    plt.figure(1, figsize=(10, 4))
+    #tmp = plt.subplot(131)
+    #pd_series.plot(kind='box');
+    #tmp.set_title("Boxplot");
 
-    plt.subplot(132)
+    plt.subplot(121)
     pd_series.hist(grid=False);
 
-    plt.subplot(133)
-    stats.probplot(pd_series, plot=plt);
+    tmp = plt.subplot(122)
+    sm.qqplot(pd_series, line="q", ax=tmp);
     
 def generate_one_sample(delta_m, sd1, n, alpha=0.05):
     """Simulates data and output for two-sample t-test.
