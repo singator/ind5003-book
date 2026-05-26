@@ -37,6 +37,7 @@ import plotly.express as px
 
 from itables import show
 from pprint import pprint
+import os
 
 import folium
 import geopandas
@@ -217,18 +218,20 @@ us proceed with that, and assess how many we should keep using a *scree* plot.
 
 ```{python}
 pca_full = decomposition.PCA(n_components=11)
-pca_full.fit(X_scaled)
+pca_full.fit(X_scaled);
 ```
 
 A scree plots the variance explained by each subsequent principal component (on
 the $y$-axis) versus the order of the principal component. It indicates how much
 more value there is in including the subsequent principal component. Generally,
-we look for an "elbow" shape to inform us of how many to keep. From below, we
-would probably want to retain 4 or 5 principal components.
+we look for an "elbow" shape to inform us of how many to keep. Judging from 
+@fig-wine-scree, we would probably want to retain 4 or 5 principal components.
 
 ```{python}
 #| fig.align: center
-#| fig-cap: "Scree plot"
+#| fig-cap: "Scree plot for wine principal components"
+#| fig-pos: 'ht'
+#| label: fig-wine-scree
 
 PC_values = np.arange(pca_full.n_components_) + 1
 plt.figure(figsize=(6,3))
@@ -247,8 +250,8 @@ pca_full.explained_variance_ratio_.cumsum()
 <br>
 
 With `scikit-learn`, estimated parameters will be accessible through attributes
-that end in an underscore. Above, we can see that the first principal component
-explains 27.5% of the total variation. The first two componetns explain 50.2% of
+that end with an underscore. Above, we can see that the first principal component
+explains 27.5% of the total variation. The first two components explain 50.2% of
 the variation, and so on.
 
 It appears that 5 components are enough to explain 79.7% of the variance. Let us
@@ -263,28 +266,35 @@ loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
 loading_matrix = pd.DataFrame(loadings, 
                               columns=['PC' + str(x+1) for x in range(0, 5)], 
                               index=col_names[:-2])
-```
-
-In social sciences especially, it is a convention to drop loadings that are
-smaller than 0.3 in absolute value and then to interpret the remaining
-coefficients as well as possible.
-
-```{python}
 loading_matrix2 = loading_matrix.copy()
 loading_matrix2[loading_matrix.abs()  < 0.300] = 0.00
 ```
 
 ::: {.content-visible when-format="html"}
+
+In social sciences especially, it is a convention to drop loadings that are
+smaller than 0.3 in absolute value and then to interpret the remaining
+coefficients as well as possible (see @tbl-wine-loading2).
+
 ```{python}
 #| echo: false
+#| tbl-cap: Loading matrix, wine dataset
+#| label: tbl-wine-loading2
 loading_matrix2.round(3).style.background_gradient(cmap='coolwarm_r', 
                                                    vmin=-1, vmax=1)
 ```
 :::
 
 ::: {.content-visible when-format="pdf"}
+
+In social sciences especially, it is a convention to drop loadings that are
+smaller than 0.3 in absolute value and then to interpret the remaining
+coefficients as well as possible (see @tbl-wine-loading).
+
 ```{python}
 #| echo: false
+#| tbl-cap: Loading matrix, wine dataset
+#| label: tbl-wine-loading
 loading_matrix2.round(2)
 ```
 :::
@@ -300,6 +310,9 @@ principal components ($\mathbf{y}_j$'s).
 
 ```{python}
 #| fig-align: center
+#| fig-pos: 'ht'
+#| fig-cap: Plot of principal components, split by wine rating
+#| label: fig-pc-rating
 
 X_transformed = pca.transform(X_scaled)
 X_transformed_df = pd.DataFrame(X_transformed, 
@@ -310,9 +323,9 @@ sns.relplot(data=X_transformed_df, x='PC1', y='PC2', col='quality', col_wrap= 3,
             hue='type', marker='o', alpha=0.3, height=3, aspect=1.2);
 ```
 
-Judging from the plots, red wines tend to be lower on PC1. Can we tie this back
-to the columns in the data to understand the difference between white and red
-wines more?
+Judging from the plots in @fig-pc-rating, red wines tend to be lower on PC1. Can
+we tie this back to the columns in the data to understand the difference between
+white and red wines more?
 
 For white wines, there seems to be a linear relation between PC1 and PC2.
 However, for red wines, the range of PC1 values is quite narrow, and the PC1
@@ -396,11 +409,11 @@ d_W(G,H) = \sqrt{\frac{|H| + |G_1|}{N_G + N_H}d_W(H,G_1)^2 + \frac{|H| + |G_2|}{
 \end{equation*}
 
 The choice of linkage can affect the final clusters we obtain, so it is
-important to choose carefully based on the subject matter. Here is a plot from
-sklearn, demonstrating the impact of the linkage on the clusters in toy
-datasets.
+important to choose carefully based on the subject matter.
+@fig-sklearn-clustering, from `sklearn` website, demonstrates the impact of the 
+choice of linkage on the clusters in toy datasets.
 
-![sklearn documentation](figs/sklearn_linkage_comparison_001.png){width=80%}
+![sklearn documentation](figs/sklearn_linkage_comparison_001.png){#fig-sklearn-clustering  fig-align="center" width=70%}
 
 #### Agglomerative Hierarchical Clustering Algorithm
 
@@ -453,11 +466,14 @@ for x,y in enumerate(fc_dict.items()):
 ```
 
 
-As we can see the number of clusters changed from 3 to 2 and then to 1. Here is
-how we can visualise the hierarchy:
+As we can see the number of clusters changed from 3 to 2 and then to 1. @fig-toy-dendrogram
+shows a visualisation of the hierarchy in the toy dataset.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Dendrogram for toy dataset
+#| label: fig-toy-dendrogram
+#| fig-pos: 'ht'
 
 lm0 = hierarchy.linkage(X)
 plt.figure(figsize=(4, 3))
@@ -481,6 +497,10 @@ Now we apply this technique to the scaled wine dataset.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Dendrogram for wine dataset
+#| label: fig-wine-dendrogram
+#| fig-pos: 'ht'
+
 hc1 = hierarchy.linkage(X_transformed_df.iloc[:, :-2], method='ward')
 
 plt.figure(figsize=(12,4))
@@ -530,6 +550,10 @@ out of the possible values we tried, $K=2$ seems to be the best.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Wine PC, by red/white wine
+#| label: fig-wine-scatter-pc
+#| fig-pos: 'ht'
+
 out = hierarchy.cut_tree(hc1, n_clusters=2).ravel() 
 X_transformed_df['groups'] = out
 
@@ -537,15 +561,18 @@ sns.relplot(data=X_transformed_df, x='PC1', y='PC2', col='groups',
             hue='type', marker='o', alpha=0.3, height=3, aspect=1.2);
 ```
 
-As we can see, the groupings closely mirror the type of wine (red or white).
+As we can see from @fig-wine-scatter-pc, the groupings closely mirror the type
+of wine (red or white).
 
 ```{python}
+#| tbl-cap: Wine counts, by clusters
+#| label: tbl-wine-clusters
 wine2.type.groupby(X_transformed_df.groups).describe()
 ```
 
-However, notice that there are a number of white wines grouped as 0 (with most
-of the other reds). It would be interesting to study what qualities of these
-wines led to them being grouped with the reds.
+However, notice from @tbl-wine-clusters that there are a number of white wines
+grouped as 0 (with most of the other reds). It would be interesting to study
+what qualities of these wines led to them being grouped with the reds.
 
 Also, consider what value the PCA brought to this problem. Go back and re-run
 the clustering algorithm with the scaled but untransformed data. Does the
@@ -592,7 +619,7 @@ After reading in and scaling the data, we fit the `IsolationForest` estimator.
 ```{python}
 clf = IsolationForest(max_samples=300, max_features=2, contamination=0.01, 
                       random_state=503)
-clf.fit(X_re_scaled)
+clf.fit(X_re_scaled);
 ```
 
 Here is a brief explanation of the arguments in the call to `IsolationForest`:
@@ -618,25 +645,37 @@ re2['outliers'] = id_outliers
 ```
 
 ::: {.content-visible when-format="html"}
+
+We can see from @tbl-taiwan-outliers2 that the outliers are very different from
+the remaining points: the distance to MRT, X-coordinates, and price are all very
+different. Having identified these points, our job as analysts is to interpret
+the differences.
+
 ```{python}
+#| tbl-cap: Outlier properties, by explanatory values
+#| label: tbl-taiwan-outliers2
 show(re2[['house_age', 'dist_MRT', 'num_stores', 'price', 
           'Xs', 'Ys']].groupby(re2.outliers).describe().T)
 ```
 :::
 
 ::: {.content-visible when-format="pdf"}
+
+We can see from @tbl-taiwan-outliers that the outliers are very different from
+the remaining points: the distance to MRT, X-coordinates, and price are all very
+different. Having identified these points, our job as analysts is to interpret
+the differences.
+
 ```{python}
 #| echo: false
+#| tbl-cap: Outlier properties, by explanatory values
+#| label: tbl-taiwan-outliers
 
 tmp_df = re2[['house_age', 'dist_MRT', 'num_stores', 'price', 
 		'Xs', 'Ys']].groupby(re2.outliers).describe().T
 tmp_df.xs("mean", level=1).round(3)
 ```
 :::
-
-We can see that the outliers are very different from the remaining points: the
-distance to MRT, X-coordinates, and price are all very different. Having
-identified these points, our job as analysts is to interpret the differences.
 
 
 :::
@@ -746,8 +785,8 @@ Now we turn to the MDS transformation.
 
 ```{python}
 #| scrolled: true
-embedding = MDS(n_components=2, normalized_stress='auto', 
-		dissimilarity='precomputed', n_init=4,
+embedding = MDS(n_components=2, normalized_stress='auto', init = 'random',
+		        metric='precomputed', n_init=4,
                 random_state=42, max_iter=500, verbose=0)
 
 # pdist2 is 41x41
@@ -771,12 +810,16 @@ fig.update_traces(textposition='top center')
 
 ::: {.content-visible when-format="pdf"}
 
-In this pdf version, we display a static image. However, the online version
-contains an interactive plot.
+In this pdf version in @fig-mds-disease, we display a static image. However, the
+online version contains an interactive plot.
 
 ```{python}
 #| fig-align: center
-plt.figure(figsize=(8, 4))
+#| fig-cap: MDS plot of disease
+#| label: fig-mds-disease
+#| fig-pos: 'ht'
+
+plt.figure(figsize=(9, 4))
 ax = sns.scatterplot(
     data=X_transformed_df, x="X", y="Y"
 )
@@ -827,8 +870,9 @@ Here is the 3-D version of the earlier plot:
 
 ```{python}
 #| fig-align: center
-embedding3 = MDS(n_components=3, normalized_stress='auto', dissimilarity='precomputed',  
-		 n_init=4, random_state=42, max_iter=500, verbose=0)
+embedding3 = MDS(n_components=3, normalized_stress='auto', metric='precomputed',
+                 init = 'random', n_init=4,
+                 random_state=42, max_iter=500, verbose=0)
 X_transformed3 = embedding3.fit_transform(pdist2)
 X_transformed3_df = pd.DataFrame(X_transformed3, columns=['X', 'Y', 'Z'])
 X_transformed3_df['disease'] = disease_names
@@ -894,9 +938,9 @@ to convert each tweet into the vector of length 384. The model is one of several
 models provided and maintained by [Hugging Face](https://huggingface.co/)
 
 ```{python}
+hf_token = os.environ.get('HF_TOKEN')
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L12-v2')
-#sentences = ["This is an example sentence. can we move on?", 
-#             "Each sentence is converted"]
+#sentences = ["This is an example sentence.", "Each sentence is converted."]
 #embeddings = model.encode(sentences)
 #embeddings.shape
 ```
