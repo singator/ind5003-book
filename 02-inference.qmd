@@ -1234,7 +1234,7 @@ With HT and with CI, there has been a tendency to manipulate the data or tests
 until the desired outcome has been reached. Do be watchful of this. Conducting
 multiple tests increases the false positive error rate, so please do avoid this
 as well. If you conduct multiple tests, adjust for multiple testing. Use
-statitsical inference techniques as a guide together with common sense and
+statistical inference techniques as a guide together with common sense and
 domain expertise.
 
 ## References {#sec-02-ref}
