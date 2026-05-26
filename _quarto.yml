@@ -10,6 +10,7 @@ book:
     - index.qmd
     - 01-intro.qmd
     - 02-inference.qmd
+    - 03-unsupervised.qmd
     - references.qmd
   cookie-consent: true
   google-analytics:

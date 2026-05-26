@@ -60,7 +60,7 @@ the problem at hand.
 
 ::: {.callout-note}
 Think of the choice of 5% as corresponding to accepting an error at a rate of 1
-in 20 - that's how it was originally decided upon by [R A Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher).
+in 20 - that's how it was originally decided upon by [Sir R A Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher).
 :::
 
 #### Step 3: Compute the test statistic
@@ -191,6 +191,8 @@ import statsmodels.stats.multicomp as mc
 import seaborn as sns
 import matplotlib.pyplot as plt
 from itables import show
+
+from ind5003 import inference
 ```
 
 
@@ -206,10 +208,19 @@ of physical characteristics, along with the gender status. We derive a sample of
 to study if there is a significant difference between the viscera weight between
 males and females. The derived dataset can be found on Canvas.
 
+::: {.content-visible when-format="html"}
 ```{python}
 abl = pd.read_csv("data/abalone_sub.csv")
 show(abl)
 ```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{python}
+abl = pd.read_csv("data/abalone_sub.csv")
+abl.head()
+```
+:::
 
 ```{python}
 x = abl.viscera[abl.gender == "F"]
@@ -217,13 +228,11 @@ y = abl.viscera[abl.gender == "M"]
 
 t_out = stats.ttest_ind(y, x)
 ci_95 = t_out.confidence_interval()
-```
 
-```{python}
 print(f"""
-	The $p$-value for the test is {t_out.pvalue:.3f}. 
-	The actual value of the test statistic is {t_out.statistic:.3f}. 
-	The upper and lower limits of the CI are ({ci_95[0]:.3f}, {ci_95[1]:.3f}).
+The $p$-value for the test is {t_out.pvalue:.3f}. 
+The actual value of the test statistic is {t_out.statistic:.3f}. 
+The upper and lower limits of the CI are ({ci_95[0]:.3f}, {ci_95[1]:.3f}).
 	""")
 ```
 
@@ -233,24 +242,29 @@ To assess the normality assumption, we make histograms and qq-plots. Histograms
 of data from a Normal distribution should appear symmetric and bell-shaped. The
 tails on both sides should come down at a moderate pace. If we observe asymmetry
 in our histogram, we might suspect deviation from Normality. As we can see from
-the figure below, a histogram with a long tail on the right (left) is referred
+@fig-sample-hist below, a histogram with a long tail on the right (left) is referred
 to as right-skewed (corr. left-skewed).
 
-![Sample Histograms](figs/summ_data-05.png){width=75%}
+![Sample histograms](figs/summ_data-05.png){#fig-sample-hist fig-align="center" width=75%}
 
 ::: {#exm-abalone-1a style="background-color: #D5D1D164; padding: 20px"}
 
 ### Abalone measurements histograms
 \index{Abalone!Histogram checks for Normality}
 
-Now we turn back to the histograms for the abalone data. Indeed, they do
-indicate some deviation from Normality - the female group is a little skewed to
-the right, while the male group appears to have a sharper peak than a Normal.
+Now we turn back to the histograms (see @fig-abalone-hist) for the abalone data.
+Indeed, they do indicate some deviation from Normality - the female group is a
+little skewed to the right, while the male group appears to have a sharper peak
+than a Normal.
 
 ```{python}
 #| fig-align: center
+#| label: fig-abalone-hist
+#| fig-cap: Abalone dataset histograms
+#| fig-pos: 'ht'
+#| 
 sns.displot(abl, x='viscera', col='gender', kind='hist', stat='density', 
-            binwidth=0.1, height=4, aspect=1.2);
+            binwidth=0.1, height=2.5, aspect=1.2);
 ```
 
 :::
@@ -264,13 +278,13 @@ quantiles of a N(0; 1) distribution. If they fall on a straight line, then we
 would say that there is evidence that the data came from a normal distribution.
 Especially for unimodal datasets, the points in the middle will fall close to
 the line. The value of a QQ-plot is in judging if the tails of the data are
-fatter or thinner than the tails of the Normal. 
+fatter or thinner than the tails of the Normal (see @fig-qq-thinner and @fig-qq-fatter).
 
 
 ::: {layout-ncol=2}
-![Thinner](figs/fig-qq-1-3.png){width=80%}
+![Both tails thinner than Normal (qq-plot)](figs/fig-qq-1-3.png){#fig-qq-thinner width=80%}
 
-![Fatter](figs/fig-qq-1-4.png){width=80%}
+![Both tails fatter than Normal (qq-plot)](figs/fig-qq-1-4.png){#fig-qq-fatter width=80%}
 
 :::
 
@@ -286,7 +300,11 @@ Normal's.
 
 ```{python}
 #| fig-align: center
-f, axs = plt.subplots(1, 2, figsize=(8,4))
+#| fig-pos: 'ht'
+#| label: fig-abalone-qq
+#| fig-cap: Abalone dataset qq-plots
+#| 
+f, axs = plt.subplots(1, 2, figsize=(8,3))
 tmp = plt.subplot(121)
 sm.qqplot(x, line="q", ax=tmp)
 tmp.set_title('Females')
@@ -296,10 +314,9 @@ tmp.set_title('Males');
 ```
 
 :::
-<br>
 
 There are also numerous hypothesis tests for Normality. If you are keen on
-learning about them, take a look at the references @sec-02-ref.
+learning about them, take a look at the references (@sec-02-ref).
 
 We also need to assess if the variances are equal. While there are many
 hypothesis tests specifically for assessing if variances are equal (e.g. Levene,
@@ -386,34 +403,35 @@ $$
 $$
 
 ::: {#exm-hr-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Heart Rate Before/After Treadmill
+### Heart Rate Before/After Treadmill
 \index{Treadmill!Paired t-test}
 
-The following dataset comes from a textbook. In a self-recorded experiment, 
-an individual recorded his heart rate before using a treadmill (baseline) and 
-5 minutes after use, for 12 days in 2006. 
+The following dataset comes from a textbook (@rosner2015fundamentals, page 309).
+In a self-recorded experiment, an individual recorded his heart rate before
+using a treadmill (baseline) and 5 minutes after use, for 12 days in 2006.
 
 ```{python}
 hr_df = pd.read_csv("data/health_promo_hr.csv")
 p_test_out = stats.ttest_rel(hr_df.baseline, hr_df.after5)
 
 print(f"""
-  The $p$-value for the test is {p_test_out.pvalue:.2g}. 
-  The difference in means is {hr_df.baseline.mean() - hr_df.after5.mean():.3f}. 
-  """)
+The $p$-value for the test is {p_test_out.pvalue:.2g}. 
+The difference in means is {hr_df.baseline.mean() - hr_df.after5.mean():.3f}. 
+""")
 ```
 
 While we do not include them here, it is imperative to also make the checks for
 Normality. If you were to make them, you would realise that the sample size is
 rather small. It is difficult to make the case for Normality here.
 
-Here is a plot that is particularly useful in paired sample studies:
-
 ```{python}
 #| fig-align: center
 #| fig-cap: "Agreement plot"
+#| fig-pos: "ht"
+#| label: fig-agreement
+
 ax1 = hr_df.plot(x='baseline', y='after5',kind='scatter', marker='o', 
-                 edgecolor='blue', color='none')
+                 figsize=(4,3), edgecolor='blue', color='none')
 group_means = hr_df.loc[:, ['baseline', 'after5']].mean(axis=0)
 ax1.set_xlim(75, 105)
 ax1.set_ylim(75,105)
@@ -422,12 +440,12 @@ ax1.scatter(group_means.iloc[0], group_means.iloc[1],  marker='o',
             edgecolor='blue', color='none', s=100);
 ax1.set_title('Agreement of after5 and baseline');
 ```
-<br>
 
-In an agreement plot, we check to see if the scatter of points is close to the 
-diagonal. If it is, we have evidence of little difference between the means. The
-largest circle in the plot corresponds to the mean readings, before and after 
-the treadmill run.
+@fig-agreement is a plot that is particularly useful in paired sample studies.
+It is known as an agreement plot. In such a plot, we check to see if the scatter
+of points is close to the diagonal. If it is, we have evidence of little
+difference between the means. The largest circle in the plot corresponds to the
+mean readings, before and after the treadmill run.
 
 :::
 
@@ -441,54 +459,55 @@ While the $F$-test in ANOVA provides a determination of whether or not the group
 means are different, in practice, we would always want to follow up with
 specific comparisons between groups as well.
 
-::: {#exm-antibiotics-1 style="background-color: #D5D1D164; padding: 20px"}
-### Heifers dataset
-\index{Heifers!Description}
+::: {#exm-tartar-1 style="background-color: #D5D1D164; padding: 20px"}
+### Tartar dataset
+\index{Tartar!Description}
 
-The following example was taken from 
-[Introduction to Statistical Data Analysis for Life Sciences](https://biostatistics.dk/isdals/). 
+The following example was taken from Exercise 3.2 in [Introduction to Statistical Data Analysis for Life Sciences](https://biostatistics.dk/isdals/).
 
-An experiment with dung from heifers was carried out in order to explore the
-influence of antibiotics on the decomposition of dung organic material. As part
-of the experiment, 36 heifers were randomly assigned into six groups. Note that
-a heifer is a young, female cow that has not had her first calf yet.
+A dog experiment was carried out in order to examine the effect of two treatments
+on the development of tartar. Apart from the two treatment groups there was also
+a control group. Twenty-six dogs were used and allocated to one of the three 
+groups, denoted control (standard feed), $P_2O_7$ (pyrosulphate added to the feed), 
+and HMP (hexametaphosphate added to the feed).
 
-Antibiotics of different types were added to the feed for heifers in five of the 
-groups. The remaining group served as a control group. For each heifer, a bag of 
-dung was dug into the soil, and after 8 weeks the amount of organic material was 
-measured for each bag.
+After four weeks, each dog was examined and the development of tartar was summarised 
+by an index taking into account the spread of tartar on the teeth as well as the 
+thickness of the tartar.
 
-Here is a boxplot of the data from each group, along with summary statistics in 
-a table below.
+#### Tartar: Questions of Interest
 
-```{python}
-#| fig-align: center
-heifers = pd.read_csv('data/antibio.csv')
-sns.boxplot(heifers, x='type', y='org',);
-```
-
-Compared to the control group, it does appear that the median organic weight of
-the dung from the other heifer groups is higher. The following table 
-displays the mean, standard deviation, and count from each group:
+1. Is there any significant difference, at 5% level, between the mean tartar
+   index of the groups?
+2. At 5% level, is the mean level for $P_2 O_7$ different from $HMP$?
+3. At 5% level, is there a significant difference between the mean of the two
+   treatment groups and the control group?
+   
+@fig-tartar-bw shows a boxplot of the readings from the three groups:
 
 ```{python}
-heifers.groupby('type').describe()
+#| fig-pos: 'ht'
+#| fig-align: 'center'
+#| label: fig-tartar-bw
+#| fig-cap: Boxplots for Tartar dataset
+
+tartar = pd.read_table("data/tartar.txt", sep="\\s+")
+
+plt.figure(figsize=(4, 3))
+ax1 = sns.boxplot(tartar, x='treat', y='index')
+ax1.set_xlabel("Treatment"); ax1.set_ylabel("Tartar Index");
+ax1.set_title("Tartar on teeth");
 ```
 
-Observe that the Spiramycin group only yielded 4 readings instead of 6. Our goal
-in this topic is to understand a technique for assessing if group means are
-statistically different from one another. Here are the specific analyses that we 
-shall carry out:
+@tbl-tartar-summary contains the summary statistics for the data, by treatment
+group.
 
-#### Heifers: Questions of Interest
+```{python}
+#| label: tbl-tartar-summary
+#| tbl-cap: Tartar dataset summary
 
-1. Is there any significant difference, at 5% level, between the mean decomposition
-   level of the groups?
-2. At 5% level, is the mean level for Enrofloxacin different from the control group?
-3. Pharmacologically speaking, Ivermectin and Fenbendazole are similar to each
-   other. Let us call this sub-group (A). They work differently than Enrofloxacin.
-   At 5% level, is there a significant difference between the mean from sub-group 
-   A and Enrofloxacin?
+tartar.groupby('treat').describe()
+```
 
 :::
 
@@ -610,52 +629,56 @@ $$
    that if the ratio of the largest to smallest standard deviation is less than
    2, we can proceed with the analysis.
 
-   
-::: {#exm-antibiotics-2 style="background-color: #D5D1D164; padding: 20px"}
-### Heifers ANOVA F-test
-\index{Heifers!F-test}
+::: {#exm-tartar-2 style="background-color: #D5D1D164; padding: 20px"}
+### Tartar ANOVA F-test
+\index{Tartar!F-test}
 
-Let us now apply the F-test to the heifers dataset.
+Let us now apply the F-test to the tartar dataset. In the specification of the 
+formula, the notation on the right of the tilde enforces that we wish to set the
+`Control` level as the reference level. In the estimation procedure, this means that 
+$\alpha_1$ will be set to 0.
 
 ```{python}
-heifer_lm = ols('org ~ type', data=heifers).fit()
-anova_tab = sm.stats.anova_lm(heifer_lm, type=3,)
+tartar_lm = ols("index ~ C(treat, Treatment('Control'))", data=tartar).fit()
+anova_tab = sm.stats.anova_lm(tartar_lm, type=3,)
 anova_tab
 ```
 
 At the 5% significance level, we reject the null hypothesis to conclude that the
-group means are significantly different from one another. This answers the first question we set out to.
+group means are significantly different from one another. This answers the first
+question we set out to (pending the check on the assumptions).
 
 To extract the estimated parameters, we can use the following code:
 
 ```{python}
-heifer_lm.summary()
+tartar_lm.summary()
 ```
 
-<br/>
-
-When estimating, Python sets one of the $\alpha_i$ to be equal to 0. 
-We can tell from the output that the constraint has been placed on the coefficient for `Alfacyp` (since it is missing).
-
-From the output, we can read off (the Intercept term) that the estimate for 
-`Alfacyp` is precisely
+Notice, from the output, that the $\alpha_i$ estimate for the `Control` group is
+missing. It has been set to 0. Hence the estimate of $\mu + \alpha+i$ for the 
+`Control` group is precisely
 $$
-2.895 + 0 = 2.895
+1.089 + 0 = 1.089
 $$
 
-To check the assumptions, we can use the following code:
+To check the assumption of Normality, we can use the following code to generate
+@fig-tartar-norm.
 
 ```{python}
 #| fig-align: center
-f, axs = plt.subplots(1, 2, figsize=(10,4))
-tmp = plt.subplot(121)
-heifer_lm.resid.hist();
-tmp = plt.subplot(122)
-sm.qqplot(heifer_lm.resid, line="q", ax=tmp);
+#| label: fig-tartar-norm
+#| fig-cap: Normality plots for Tartar dataset
+
+inference.check_normality(pd.Series(tartar_lm.resid_pearson))
 ```
 
-:::
+For the remaining assumption pertaining to equal variance within groups, we adopt the
+same approach as for two-sample tests. @tbl-tartar-summary displays that the largest
+s.d. is not greater than two times the smallest s.d. Hence, we conclude that the 
+equal variance assumption is not violated.
 
+:::
+   
 ### Comparing specific groups {#sec-spec-grps}
 
 The $F$-test in a One-Way ANOVA indicates if all means are equal, but does not
@@ -679,38 +702,22 @@ t_{n-k, \alpha/2}  \times
 \sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
 $$
 
-::: {.callout-note}
+::: {#exm-tartar-3 style="background-color: #D5D1D164; padding: 20px"}
 
-<p>
-If you notice from the summary statistics output for each group, the
-rule-of-thumb regarding standard deviations has not been satisfied. The ratio of
-largest to smallest standard deviations is slightly more than 2. Hence *we
-should not continue with ANOVA*; the pooled estimate of the variance may not be
-valid.
-</p>
-
-<p>
-However, we shall proceed with this dataset just to demonstrate the next few
-techniques, instead of introducing a new dataset.
-</p>
-:::
-
-::: {#exm-antibiotics-3 style="background-color: #D5D1D164; padding: 20px"}
-
-### Enrofloxacin vs. Control
-\index{Heifers!Comparing two groups}
+### $HMP$ vs. $P_2 O_7$
+\index{Tartar!Comparing two groups}
 
 Let us attempt to answer question (2), that we had set out earlier.
 
 ```{python}
-est1  = heifer_lm.params.iloc[2] - heifer_lm.params.iloc[1]
-MSW = heifer_lm.mse_resid
-df = heifer_lm.df_resid
+est1  = tartar_lm.params.iloc[2] - tartar_lm.params.iloc[1]
+MSW = tartar_lm.mse_resid
+df = tartar_lm.df_resid
 q1 = -stats.t.ppf(0.025, df)
 
-lower_ci = est1 - q1*np.sqrt(MSW * (1/6 + 1/4))
-upper_ci = est1 + q1*np.sqrt(MSW * (1/6 + 1/4))
-print("The 95% CI for the diff. between Enrofloxacin and control is" +
+lower_ci = est1 - q1*np.sqrt(MSW * (1/8 + 1/9))
+upper_ci = est1 + q1*np.sqrt(MSW * (1/8 + 1/9))
+print("The 95% CI for the diff. between HMP and P2O7 is" +
       f"({lower_ci:.3f}, {upper_ci:.3f}).") 
 ```
 
@@ -752,20 +759,20 @@ $$
 
 ::: {#exm-antibiotics-4 style="background-color: #D5D1D164; padding: 20px"}
 
-### Heifers: Comparing collections of groups
-\index{Heifers!Contrast estimation}
+### Tartar: Comparing collections of groups
+\index{Tartar!Contrast estimation}
 
-As we mentioned earliers, let sub-group 1 consist of Ivermectin and Fenbendazole. 
-Here is how we can compute a confidence interval for the difference between 
-this sub-group, and Enrofloxacin.
+As we mentioned earliers, let sub-group 1 consist of $HMP$ and $P_2O_7$. Here is
+how we can compute a confidence interval for the difference between this
+sub-group, and the control group.
 
 ```{python}
 c1 = np.array([-1, 0.5, 0.5])
-n_vals = np.array([6, 6, 6,])
-L = np.sum(c1 * heifer_lm.params.iloc[2:5])
+n_vals = np.array([9, 8, 9,])
+L = np.sum(c1 * np.append(0, tartar_lm.params.iloc[1:].to_numpy()))
 
-MSW = heifer_lm.mse_resid
-df = heifer_lm.df_resid
+MSW = tartar_lm.mse_resid
+df = tartar_lm.df_resid
 q1 = -stats.t.ppf(0.025, df)
 se1 = np.sqrt(MSW*np.sum(c1**2 / n_vals))
 
@@ -801,20 +808,27 @@ to construct confidence intervals for **all** pairwise comparisons. For the same
 $\alpha$-level, Tukey's HSD method provides shorter confidence intervals than
 a Bonferroni correction for all pairwise comparisons.
 
-::: {#exm-antibiotics-5 style="background-color: #D5D1D164; padding: 20px"}
+::: {#exm-tartar-5 style="background-color: #D5D1D164; padding: 20px"}
 
 ### Multiple comparisons
-\index{Heifers!Multiple comparisons}
+\index{Tartar!Multiple comparisons}
 
-Let us apply Tukey's procedure to the heifers dataset.
+Let us apply Tukey's procedure to the tartar dataset. The printout below shows
+the adjusted intervals for the three *pairwise differences*, while @fig-tartar-hsd
+visualises the adjusted means for the *individual groups*.
+
+```{python}
+cp = mc.MultiComparison(tartar.index, tartar.treat)
+tk = cp.tukeyhsd()
+print(tk)
+```
 
 ```{python}
 #| fig-align: center
-cp = mc.MultiComparison(heifers.org, heifers.type)
-tk = cp.tukeyhsd()
-#print(tk)
-
-tk.plot_simultaneous();
+#| fig-pos: 'ht'
+#| fig-cap: Multiple comparisons plot, tartar dataset
+#| label: fig-tartar-hsd
+tk.plot_simultaneous(comparison_name = 'Control', figsize=(6,3));
 ```
 
 :::
@@ -848,10 +862,13 @@ known as a *contingency table*.
 
 ```{python}
 #| fig-align: center
-#| 
+#| fig-pos: 'ht'
+#| fig-cap: Contingency table for chest pain and gender
+#| label: fig-chest-tbl
+
 chest_array = np.array([[46, 474], [37, 516]])
 #print(chest_array)
-
+plt.figure(figsize=(4, 2)) 
 sns.heatmap(chest_array, annot=True, square=True, fmt='', 
             xticklabels=['pain', 'no pain'],
             yticklabels=['Male', 'Female'], 
@@ -1012,9 +1029,9 @@ As we can see from the p-value, the result is similar to the $\chi^2$-test.
 
 Measures of association quantify how two random variables vary together. When
 both variables are continuous, a common measure that is used is Pearson
-correlation. We shall return to this in topics such as regression. For now, we
-touch on bivariate measures of association for contingency tables (two
-categorical variables).
+correlation. We shall return to this in topics such as regression (@sec-05-top).
+For now, we touch on bivariate measures of association for contingency tables
+(two categorical variables).
 
 ### Odds Ratio
 
@@ -1143,12 +1160,19 @@ original data come from a nationwide survey conducted in the US in 1996.
 
 ```{python}
 #| fig-align: center
+#| fig-pos: 'ht'
+#| fig-cap: Contingency table for job satisfaction by income
+#| label: fig-job-income-tbl
+
+
 us_svy_tab = np.array([[1, 3, 10, 6], 
                       [2, 3, 10, 7],
                       [1, 6, 14, 12],
                       [0, 1,  9, 11]])
 col_names = ['V. Diss', 'L. Diss', 'M. Sat', 'V. Sat']
 row_names = ['<15K', '15-25K', '25-40K', '>40K']
+
+plt.figure(figsize=(4, 2)) 
 sns.heatmap(us_svy_tab, annot=True, square=True, fmt='', 
             xticklabels=col_names,
             yticklabels=row_names, 
@@ -1233,3 +1257,18 @@ domain expertise.
    * Wilcoxon signed rank - the nonparametric equivalent of paired sample t-test
    * Mann Whitney test - the nonparametric equivalent of independent samples t test
    * Somer's D - measure of association for two categorical variables (one ordinal and one nominal).
+
+
+## Exercises
+
+1.  From the political association data, extract the standardised residuals (under
+    independence), and create a QQ-plot.
+2.  Instead of using ANOVA, perform three 2-sample t-tests to compare the means
+    of the three groups in the Tartar dataset. What is the difference between the 
+    two procedures? Is there any difference in the result in this case?
+3.  What is the interpretation of $\gamma$ implied by the text?
+4.  For the political association data, collapse the categories to obtain a 2-by-2
+    table, and then compute a 95% confidence interval for the Odds Ratio from the 
+    resulting table.
+5.  Apply the Fisher Exact test to the political association data. How does it work
+    in this case?

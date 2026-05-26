@@ -12,7 +12,7 @@ def check_normality(pd_series):
     The output is a plot figure with three subplots - a boxplot, a histogram and 
     a qq-plot.
     """
-    plt.figure(1, figsize=(10, 4))
+    plt.figure(1, figsize=(8, 3))
     #tmp = plt.subplot(131)
     #pd_series.plot(kind='box');
     #tmp.set_title("Boxplot");
