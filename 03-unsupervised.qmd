@@ -935,7 +935,9 @@ numerical vector of length 384. Then we are going to visualise it using t-SNE.
 For more details on how words are converted into vectors, take a look at
 @sec-04-numeric-rep-text. In the next code chunk, we use a neural language model
 to convert each tweet into the vector of length 384. The model is one of several
-models provided and maintained by [Hugging Face](https://huggingface.co/)
+models provided and maintained by [Hugging Face](https://huggingface.co/). The first 
+line in the code below retrieves a token from the operating system. This token
+authenticates with Hugging Face before downloading begins. The following [web-page](https://www.cs.virginia.edu/~rmw7my/Courses/AgenticAISpring2026/COMPLETE_HF_AUTH_GUIDE.html) has more detailed instructions on generating and adding a token to your computer.
 
 ```{python}
 hf_token = os.environ.get('HF_TOKEN')
@@ -1032,3 +1034,16 @@ For another application of t-SNE visualisation, refer to @sec-04-t-SNE.
 1. [t-SNE, explained by Josh Starmer](https://www.youtube.com/watch?v=NEaUSP4YerM)
 2. [A general video on high-dimensional space](https://www.youtube.com/watch?v=wvsE8jm1GzE): A nice explainer from Google.
 
+## Exercises
+
+1.  Apply t-SNE to visualise the wine quality data. Do you observe similarities 
+    in the points that appear close to each other? For instance, do red wines tend 
+    to be close to each other?
+2.  Refer to the disease symptoms dataset. What symptoms are common to Hepatitis 
+    A, B, C, D and E?
+3.  Apply the PCA technique to the Taiwan dataset. How many components will you 
+    need to explain 80% of the variation in the data?
+4.  Consider the groups identified by hierarchical clustering in Example 3.4. Which
+    variables in the original wine quality data are most associated with this grouping?
+    You will have to use the methods from Chapter 2, and you will have to convert the 
+    numeric columns into categories (e.g. High, Low, etc.).
