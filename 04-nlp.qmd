@@ -588,6 +588,233 @@ Would we be able to make such a plot using tf-idf? Why or why not?
 
 :::
 
+## Neural Language Models
+
+Language is complex. It is incredible how we can understand such long paragraphs
+of texts with such ease. We somehow seem to have learnt complicated sets of
+grammar and syntax just by listening to others speak. To get a machine to learn
+language has not been easy. It is only recently that Large Language Models such
+as chatGPT have demonstrated that it is possible for machines to converse with
+humans just as we do to one another.
+
+Neural Models (or deep learning models) have been the key to this. In this
+subsection, we provide a very brief overview of their characteristics that
+allow them to achieve impressive performance on a range of language-related
+tasks.
+
+The basic unit of a neural model is the neural unit (@fig-neural-unit). It consists
+of weights and a non-linear activation function. Given an input vector, the
+weights are multiplied by the input vector, summed and then fed through the
+activation function to generate an output.
+
+::: {layout-ncol=2}
+![A neural unit, from @jm3](figs/j_m_fig_7_2_neural_unit.png){#fig-neural-unit width=70%}
+
+![Neuron figure from <https://en.wikipedia.org/wiki/Neuron>](figs/Blausen_0657_MultipolarNeuron.png){width=70%}
+:::
+
+Neural models are made up of many neural units, organised into layers. The first
+neural models were Feed-Forward Networks. Due to the virtue of being able to
+incorporate many parameters, and due to semi-supervised learning, they were
+already a huge improvement over earlier models. @fig-ffn shows a simple set up,
+with one hidden layer for training a language model (used to predict the next
+word, from the preceding three). It can also be used to learn embeddings.
+
+![Feed-forward neural network, from @jm3](figs/j_m_fig_7_17_ffn_training.png){#fig-ffn width=70%}
+
+The next evolution in neural models was the ability to incorporate words in the
+recent history. For humans, this comes naturally. For instance, we know that
+this is grammatically correct:
+
+> The flights the airline was cancelling **were** full.
+
+For neural models to have this ability, it was necessary to incorporate the
+hidden layers from recent words when processing the current word. Recurrent
+Neural Networks (RNNs) and Long-Short Term Memory (LSTM) networks had these
+features, but they were very slow to train. The major breakthrough came with the
+invention of the transformer architecture. The self-attention layer of these
+networks gave a word access to *all* preceding words in the training window,
+instead of just one (see @fig-basic-transformer). Most importantly. the training
+of these networks could be parallelised!
+
+![Basic transformer architecture, from @jm3](figs/j_m_fig_10_18_training_transformer_lm.png){#fig-basic-transformer width=70%}
+
+Here are some more examples where transformers excel:
+
+> The keys to the cabinet *are* on the table.
+> 
+> The chicken crossed the road because *it* wanted to get to the other side.
+> 
+> I walked along the pond, and noticed that one of the trees along the *bank*
+> had fallen into the water after the storm.
+
+In the final sentence, the word `bank` has two meanings - how will a model know
+to decide the correct one? With transformers, because the full context of a word
+is captured along with it, it is possible to perform this disambiguation. In
+@fig-disambig, we can see that almost every word has multiple meanings. But with
+context, the correct meaning can be identified.
+
+![Disambiguation is possible with contextual embeddings, from @jm3](figs/j_m_fig_11_8_wsd.png){#fig-disambig width=80%}
+
+## Applications {#sec-nlp-applications}
+
+[Hugging Face](https://huggingface.co/) has spent a considerable effort to make
+Neural Language Models accessible and available to all with minimal coding. For
+starters, they have ensured that all their models are described in a
+standardised manner with model cards. Here is an example of a 
+[model card for BERT](https://huggingface.co/google-bert/bert-base-uncased).
+
+Moreover, they have developed easy to use pipelines. For NLP, the following
+tasks have mature pipelines:
+
+* Feature-extraction (obtaining the embedding of a text)
+* Named Entity Recognition
+* Question-answering
+* Sentiment-analysis
+* Summarization
+* Text-generation
+* Translation, and
+* Zero-shot-classification.
+  
+### Sentiment Analysis
+
+In this subsection, we shall utilise one of their sentiment analysis models on
+the wine reviews dataset. This is a transformer-based neural language model
+(BERT) that has been fine-tuned with data labelled with sentiments. All we have
+to do is feed in the sentence, and we will obtain a confidence score, and a
+sentiment label.
+
+```{python}
+classifier = pipeline("sentiment-analysis", 
+  model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")
+  
+classifier(["I love this course!", "I absolutely detest this course."])
+```
+
+::: {#exm-wine-reviews-3 style="background-color: #D5D1D164; padding: 20px"}
+
+### Wine reviews sentiments
+\index{Wine Reviews!Sentiment Analysis}
+
+The number of reviews we have is close to 120,000. Hence, computing the
+sentiments for each and every one will take a long time. Instead, we shall
+compute the sentiments for a sample (of size 20, where possible) from each
+variety of wine.
+
+The following snippet samples 20 reviews from each wine type.
+
+```{python}
+tmp_df = wine_reviews.head(0).copy()
+
+for x,vv in wine_reviews.groupby(wine_reviews.variety):
+    grp_len = vv.shape[0]
+    if(grp_len >= 20):
+        vv = vv.sample(n=20, random_state=99)
+    tmp_df = pd.concat([tmp_df, vv], ignore_index=True)
+    
+review_list = list(tmp_df.description)
+```
+
+The next snippet computes the sentiment scores for those sampled reviews, and 
+uses a widget to keep track of progress of the iterations.
+
+```{python}
+tmp_df['score'] = 0.00
+tmp_df['label'] = ''
+
+for i, rr in tqdm(enumerate(review_list), total=len(review_list), desc="Classifying reviews"):
+    tmp = classifier(rr)[0]
+    tmp_df.loc[i, 'score'] = tmp['score']
+    tmp_df.loc[i, 'label'] = tmp['label']
+```
+
+Finally, we tabulate the sentiment classifications for the wine types.
+
+```{python}
+sent_counts = pd.crosstab(tmp_df.variety, tmp_df.label, margins=True)
+sent_counts['proportion'] = sent_counts.POSITIVE/sent_counts.All
+```
+
+::: {.content-visible when-format="html"}
+
+```{python}
+show(sent_counts)
+```
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+```{python}
+sent_counts.head()
+```
+
+:::
+
+These are the reviews for one of the varieties that had a proportion of positive
+reviews close to 50%.
+
+```{python}
+for x in wine_reviews[wine_reviews.variety == 'Tempranillo Blanco'].description.values:
+    pp.pprint(x) 
+```
+
+The corresponding labels from the classifer are :
+
+```{python}
+tmp_df[tmp_df.variety == 'Tempranillo Blanco'][['description', 'label']]
+```
+
+:::
+
+::: {.callout-note}
+Do you agree with the classifications above? What would you investigate next?
+:::
+
+### Information Retrieval
+
+In the NLP context, Information Retrieval (IR) refers to the task of returning
+the most relevant set of documents, when given a query string. Search engines,
+e.g. Google, are trained to perform fast and accurate IR. Typically, a long
+list of documents is returned, with the most relevant one on top.
+
+::: {.callout-note}
+Pause for a moment, and consider how you would assess the performance of such a
+search engine.
+:::
+
+::: {#exm-wine-reviews-2 style="background-color: #D5D1D164; padding: 20px"}
+
+### Wine reviews information retrieval
+\index{Wine Reviews!Information retrieval}
+
+A simple way to perform IR is to use cosine similarity to compute how close the
+given query vector is to the individual documents in the corpus.
+
+The next snippet initialises a `NearestNeighbors` model for retrieving similar documents.
+
+```{python}
+# IR retrieval use-case:
+wine_tfidf = TfidfVectorizer(stop_words='english')
+X2 = wine_tfidf.fit_transform(wine_reviews.description)
+
+wine_nbrs = NearestNeighbors(n_neighbors=10, metric='cosine', algorithm='auto').fit(X2)
+```
+
+Next, we retrieve the most relevant reviews for the query: "acidic white chardonnay".
+
+```{python}
+awc = wine_tfidf.transform(['acidic white chardonnay'])
+distances, indices = wine_nbrs.kneighbors(awc, n_neighbors=8)
+for x in indices[0]:
+    pp.pprint(all_review_strings[x]) 
+```
+
+:::
+
+::: {.callout-note}
+Try your favourite tastes, see if you discover a wine you like/dislike 🍷🍇🥂
+:::
 
 
 ## Interpretation of Neural Models
