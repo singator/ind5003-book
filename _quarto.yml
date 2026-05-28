@@ -11,6 +11,7 @@ book:
     - 01-intro.qmd
     - 02-inference.qmd
     - 03-unsupervised.qmd
+    - 04-nlp.qmd
     - references.qmd
   cookie-consent: true
   google-analytics:

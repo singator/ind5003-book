@@ -990,10 +990,13 @@ df2['labels'] = t2_l
 
 ::: {.content-visible when-format="pdf"}
 
-Please refer to the online version of the text for an interactive plot.
+Please refer to the online version of the text for an interactive plot (@fig-tsne-tweets).
 
 ```{python}
 #| fig-align: center
+#| fig-cap: t-SNE plot of Tweets
+#| label: fig-tsne-tweets
+#| fig-pos: 'ht'
 plt.figure(figsize=(8, 4))
 sns.scatterplot( data=df2, x="x", y="y")
 ```
