@@ -12,6 +12,7 @@ book:
     - 02-inference.qmd
     - 03-unsupervised.qmd
     - 04-nlp.qmd
+    - 05-regression.qmd
     - references.qmd
   cookie-consent: true
   google-analytics:

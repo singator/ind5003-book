@@ -451,7 +451,7 @@ with two tasks:
 
 Self-supervised algorithms differ from supervised algorithms in that there are
 no labels that need to be created. The pre-text task trains a model to perform
-predictions, based on a sliding window context (see @fig-cs229-self).
+predictions, based on a sliding window context (see @fig-cs229-self-sup).
 
 ::: {layout-ncol=1}
 ![](figs/word2vec-001a.png){width=70%}
@@ -816,7 +816,133 @@ for x in indices[0]:
 Try your favourite tastes, see if you discover a wine you like/dislike 🍷🍇🥂
 :::
 
+### Topic Modeling
 
+The LDA (Latent Dirichlet Allocation) model assumes the following intuitive
+generative process for the documents:
+
+1. There is a set of $K$ topics that the documents come from. Each document
+   contains words from several topics. There is a probability mass function on the
+   topics for each document.
+2. For each topic, there is a probability mass function for the distribution of
+   words in that topic. 
+
+At the end of LDA topic modeling, we will be able to tell, for a particular (new
+or old) document: the weight combination of the topics for that document. For
+each topic, we would be able to tell the terms that are salient. LDA only gives
+us the probabilistic weights - we have to interpret them ourselves.
+
+::: {#exm-wine-reviews-lda style="background-color: #D5D1D164; padding: 20px"}
+
+### Wine reviews topic modeling
+\index{Wine Reviews!Topic modeling}
+
+Suppose we decide to split the corpus into 5 topics. Let us investigate what
+these topics consist of. First, we add words that are specific to wine reviews,
+but common to different topics, to our list of stop words.
+
+```{python}
+en_stop_words = en_stop_words + ["flavors", "years", "wine", "drink", "fruits", 
+                                 "fruit", "finish", "aromas", "palate", "feels", 
+                                 "notes", "oak", "offers", "like", "bottling", 
+                                 "nose", "shows"]
+
+# Step 3: Train LDA model
+lda_obj = LatentDirichletAllocation(
+    n_components=5,           # Number of topics
+    random_state=41,
+    max_iter=20,
+    learning_method='batch',
+    evaluate_every=-1, verbose=0, n_jobs=2
+)
+
+wine_tfidf = TfidfVectorizer(stop_words=en_stop_words)
+X2 = wine_tfidf.fit_transform(wine_reviews.description)
+lda_obj.fit(X2);
+```
+
+The output object provides the most common terms that define each topic
+(remember: each topic is defined as a *probability distribution over the vocabulary*).
+
+The following code snippet will print the 10 most common words from each topic:
+
+```{python}
+feature_names = wine_tfidf.get_feature_names_out()
+
+n_top = 10
+rows = []
+for i, topic in enumerate(lda_obj.components_):
+    top_words = [feature_names[j.item()] for j in topic.argsort()[-n_top:][::-1]]
+    rows.append(top_words)
+
+[','.join(x) for x in rows]
+```
+
+:::
+
+This is the point where human interpretation and domain knowledge enters the fray. 
+We could interpret the five topics as follows:
+
+* Topic 0: Discussion about bold red wines, with with dark fruit and tannins. 
+* Topic 1: Wines defined by their acidity and structure — likely medium-bodied reds 
+  or fuller whites with some oak influence. Focus is on balance and mouthfeel.
+* Topic 2: Sweet white wines, Chardonnay-focused — aromatic whites with fruit, 
+  sweetness, and vanilla notes.
+* Topic 3: Lighter-bodied wines with both red fruit and citrus/herbal notes. These 
+  could cover lighter reds or dry whites. The variety of fruit types suggests a 
+  more generic/mixed category.
+* Topic 4: Red wines with spice and pepper character. Shares some vocabulary with 
+  Topic 0.
+
+A delightful visualisation from `pyLDAvis` allows us to understand the
+"distance" between topics, and the frequent words from each topic easily. To
+generate the visualisation in your notebook, execute the following command. By
+default, `pyLDAvis` tries to install `gensim`, but that clashes with `scipy`.
+Hence I did not include `pyLDAvis` in `requirements.txt`. Instead, install it
+manually with this command in a Jupyter notebook cell:
+
+```{python}
+#| eval: false
+%pip install --no-deps pyLDAvis
+```
+
+Once installed, run the visualisation with the follwing snippet:
+
+```{python}
+#| eval: false
+import pyLDAvis
+import pyLDAvis.lda_model as lda_model
+
+vis = lda_model.prepare(lda_obj, X2, wine_tfidf)
+pyLDAvis.display(vis)
+```
+
+The online version of our textbook contains the interactive version.
+
+::: {.content-visible when-format="html"}
+
+* [Interactive visualisation](04-nlp_ldavis.html)
+
+:::
+
+::: {.content-visible when-format="pdf"}
+Here is a static version for the pdf textbook:
+
+![LDA visualisation](figs/ldavis_random_state_41.png){align="center"}
+:::
+
+A couple of things to note:
+
+1. The numbering of topics in the paragraph above does not match the 
+   numbers within the circles of the visualisation. For easy mapping, we have the
+   following mapping of text topics to visual circles:
+   * 0 -> 1, 1 -> 4, 2 -> 5, 3 -> 2, 4 -> 3.
+2. The circles in the visualisation represent the topics. The distance between
+   circles is the distance between the topic distributions, projected onto $R^2$ 
+   using MDS. From the visual, we can see that topics 2 and 3 are similar, and
+   they are similar to topic 1. However topics 4 and 5 are different from each other,
+   and from the group 1, 2, and 3.
+   
 ## Interpretation of Neural Models
 
 Neural models have achieved impressive performance on a number of
@@ -824,17 +950,17 @@ language-related tasks. However, one criticism of them is that they are
 "black-box" models; we do not fully grasp how they work. This can lead to a
 mistrust of such models, with good reason. If we do not fully know how these
 models work, we would not know when they are might fail, or we might not know
-the reason when they do fail (or make an incorrect prediction). For this
-reason, a huge amount of research effort is currently directed towards
-understanding and interpreting neural models.
+the reason when they do fail (or make an incorrect prediction). For this reason,
+a huge amount of research effort is currently directed towards understanding and
+interpreting neural models.
 
 One approach is to identify which examples in the training set were most
 influential for predictions regarding particular test instances. For incorrect
-predictions, this could give us intuition on why the model is failing, and
-guide us to ways to fix it. Here is an example where it was possible to
+predictions, this could give us intuition on why the model is failing, and guide
+us to ways to fix it. @fig-black-box depicts an example where it was possible to
 pinpoint why a model yielded incorrect sentiment prediction.
 
-![@han2020explaining](figs/explaining_black_box_predictions.png){#fig-black-box width=70%}
+![Understanding why an incorrect classifcation was made, from @han2020explaining](figs/explaining_black_box_predictions.png){#fig-black-box width=75%}
 
 In the example shown in @fig-black-box, the statement "A sometimes tedious film"
 has been wrongly classified as having a "positive" sentiment. To understand why
@@ -854,15 +980,17 @@ question to be answered correctly. In this case, the study revealed something
 pathological about the model. A one-word question seemed to still provide the 
 correct answer from this passage!
 
-![@sun2021interpreting](figs/pathologies_03.png){width=80% #fig-infl-test-cases}
+![Perturbing the test case to understand the primary driver of a model output, from @sun2021interpreting](figs/pathologies_03.png){width=75% #fig-infl-test-cases}
 
 For transformers in particular, a great deal of study has focused on the
 weights that the attention layers pick up. By relating these to linguistic
 information, researchers try to infer the precise language-related information
 that models retain. For instance, it has been found that BERT learns parts of
-speech. It is also able to identify the dependencies between words (see @fig-bert-dep).
+speech. It is also able to identify the dependencies between words. In @fig-bert-dep, 
+we can conclude that the prepositions place great attention on their objects, e.g. 
+*of* on *Treasury* and *bonds*, and *in* on *trading*, and so on.
 
-![@clark2019does](figs/what_does_bert_clark_preposition.png){width=80% #fig-bert-dep}
+![Visualising attention in transformer heads, from @clark2019does](figs/what_does_bert_clark_preposition.png){width=75% #fig-bert-dep}
 
 ## References
 
