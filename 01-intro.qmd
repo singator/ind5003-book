@@ -293,50 +293,6 @@ pi
 A Python package is a collection of modules.
 :::
 
-## Object-Oriented Programming
-
-Python has been developed as both a functional and object-oriented programming
-language. Much of the code we will soon use involves creation of an instance,
-and then accessing the attributes (data or methods) of that instance.
-
-Consider the following class Circle.
-
-```{python}
-class Circle:
-    """ A simple class definition 
-    
-    c0 = Circle()
-    c0.radius
-    
-    """
-    def __init__(self, radius = 1.0):
-        self.radius = radius
-        
-    def area(self):
-        """ Compute area of circle"""
-        return pi*(self.radius**2)
-```
-
-Having defined the class, we can *instantiate* it and use the methods it 
-contains.
-
-```{python}
-c1 = Circle(3.2)
-c2 = Circle(4.0)
-c2.area()
-```
-
-In this simple class, we can also set the value of the attribute of an instance,
-although this is not the recommended way.
-
-```{python}
-c1.radius = 6
-c1.area()
-```
-
-We shall practice more with writing classes in Python in chapter 7 (@sec-07-top)
-when we use the Mesa package.
-
 ## Numpy
 
 ```{python}

@@ -460,7 +460,7 @@ The diagram in @fig-agent-flow depicts the flow of events for each agent. It is
 useful to sketch such a flowchart when implementing agent-based models, since
 it allows for easier debugging and information sharing with colleagues.
 
-![Agent trajectory](figs/money_agent_flowchart.png){#fig-agent-flow fig-align="center" width=60%}
+![Agent trajectory](figs/money_agent_flowchart.png){#fig-agent-flow fig-align="center" width=50%}
 
 The next class defines the model itself. The initialisation of a model
 typically consists of populating it with various agents. At every time time
@@ -569,8 +569,9 @@ class MoneyModel(mesa.Model):
 ### Boltzmann model data collection
 \index{Boltzmann Model!v1 data collection}
 
-Once again, we reset the seed and re-run the model. We can then retrieve the
-zero-wealth proprortion at *every step of the model*.
+We initialise the random number generator using a seed (not an `rng` object)
+and re-run the model. We can then retrieve the zero-wealth proprortion at
+*every step of the model*.
 
 ```{python}
 model = MoneyModel(N=10, rng=35)
@@ -604,13 +605,16 @@ iteration consists of a fresh set of 100 time steps.
 
 ```{python}
 #| fig-align: center
-#| eval: false
+#| fig-cap: "Proportion of zero wealth agents, over 100 iterations"
+#| label: fig-prop-zero-mult-iterations
+#| fig-pos: 'ht'
+
 params = {"N": 10}
 
 results = mesa.batch_run(
     MoneyModel,
     parameters=params,
-    iterations=50,
+    rng= [None]*50,
     max_steps=100,
     number_processes=1,
     data_collection_period=-1
@@ -622,8 +626,9 @@ results_df.zero_prop.hist(grid=False,
                           figsize=(4,3));
 ```
 
-We can see that the proportion of agents with zero income is considerably higher
-than the 0.0 that the population began with.
+We can see from @fig-prop-zero-mult-iterations that the proportion of agents
+with zero income is considerably higher than the 0.0 that the population began
+with.
 
 ```{python}
 ttest_out = stats.ttest_1samp(results_df.zero_prop, 0.0).confidence_interval()
@@ -692,23 +697,19 @@ def compute_gini(model):
 class MoneyModel(mesa.Model):
     """A model with some number of agents."""
 
-    def __init__(self, N):
-        super().__init__()
+    def __init__(self, N, rng=None):
+        super().__init__(rng=rng)
         self.num_agents = N
-        # Create scheduler and assign it to the model
-        # self.schedule = mesa.time.RandomActivation(self)
 
         # Create agents
-        for i in range(self.num_agents):
-            a = MoneyAgent(self)
-            # Add the agent to the scheduler
-            # self.schedule.add(a)
+        MoneyAgent.create_agents(model=self, n=N)
 
         # initialise the data collector, telling it to use both the gini() 
         # and compute_zero_prop() function
         # on the model.
         self.datacollector = mesa.DataCollector(
-            model_reporters={"Gini": compute_gini, "zero_prop": compute_zero_prop}
+            model_reporters={"Gini": compute_gini, 
+                             "zero_prop": compute_zero_prop}
         )
 
     def step(self):
@@ -730,13 +731,12 @@ We shall use the `batch_run` to run 50 iterations, and then create a summary
 visualisation of the evolution of Gini coefficient for each iteration.
 
 ```{python}
-#| eval: false
 params = {"N": 10}
 
 results = mesa.batch_run(
     MoneyModel,
     parameters=params,
-    iterations=50,
+    rng = [None]*50,
     max_steps=100,
     number_processes=1,
     data_collection_period=1
@@ -752,6 +752,8 @@ and plot them.
 #| fig-align: center
 #| fig-cap: "Evolution of Gini coefficient"
 #| label: fig-gini-coef
+#| fig-pos: 'ht'
+
 results_df = pd.DataFrame(results)
 grp_by_step = results_df.Gini.groupby(results_df.Step).describe()
 #grp_by_step.head()
@@ -784,8 +786,8 @@ the grid.
 class MoneyModel(mesa.Model):
     """A model with some number of agents."""
 
-    def __init__(self, N, width, height):
-        super().__init__()
+    def __init__(self, N, width, height, rng=None):
+        super().__init__(rng=rng)
         self.num_agents = N
         self.grid = mesa.space.MultiGrid(width, height, True)
 
@@ -858,10 +860,14 @@ class MoneyAgent(mesa.Agent):
 ### Data Collection
 
 As an example of how the code works, the next code cell runs a *single* iteration
-with 100 agents in a 10x10 grid.
+with 100 agents in a 10x10 grid (see @fig-gini-coef-2).
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Evolution of Gini coefficient"
+#| label: fig-gini-coef-2
+#| fig-pos: 'ht'
+
 model = MoneyModel(100, 10, 10)
 for i in range(100):
     model.step()
@@ -887,7 +893,7 @@ params = {"width": 10, "height": 10, "N": range(5, 20, 5)}
 results = mesa.batch_run(
     MoneyModel,
     parameters=params,
-    iterations=50,
+    rng=[None]*50,
     max_steps=100,
     number_processes=1,
     data_collection_period=1#,
@@ -923,6 +929,66 @@ As we can see from @fig-gini-over-time-steps, the value at which the Gini
 coefficient converges to differs for varying `N`. For smaller `N`, the final
 Gini value seems to be lower. For all the settings, the convergence does appear
 to happen at approximately the same time step.
+
+:::
+
+The next example shows how we can use `mesa` to generate an interactive visualisation
+of how the model evolves step-by-step.
+
+::: {#exm-boltzmann-7 style="background-color: #D5D1D164; padding: 20px"}
+
+### Boltzmann model visualisation
+\index{Boltzmann Model!v3 interactive}
+
+```{python}
+#| eval: false
+
+
+from mesa.visualization import SolaraViz, SpaceRenderer, make_plot_component
+from mesa.visualization.components import AgentPortrayalStyle
+
+def agent_portrayal(agent):
+    portrayal = AgentPortrayalStyle(size=50, color="tab:orange")
+    if agent.wealth == 0:
+        portrayal.update(("color", "tab:blue"), ("size", 100))
+    return portrayal
+
+model_params = {
+    "N": {
+        "type": "SliderInt",
+        "value": 50,
+        "label": "Number of agents:",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+    },
+    "width": 10,
+    "height": 10,
+}
+
+money_model = MoneyModel(N=50, width=10, height=10)  # keyword arguments
+
+renderer = (
+    SpaceRenderer(model=money_model, backend="matplotlib")
+    .setup_agents(agent_portrayal)
+    .render()
+)
+
+GiniPlot = make_plot_component("Gini", page=0)
+
+page = SolaraViz(
+    money_model,
+    renderer,
+    components=[GiniPlot],
+    model_params=model_params,
+    name="Boltzmann Wealth Model",
+)
+
+# This is required to render the visualization in the Jupyter notebook
+page
+
+```
+
 
 :::
 
@@ -1072,6 +1138,8 @@ rejection probability varies with the sample size.
 #| fig-align: center
 #| label: fig-power
 #| fig-cap: "Power analysis using simulation"
+#| fig-pos: 'ht'
+#| 
 n_vals = np.arange(5, 50, step=4)
 
 power_est = []

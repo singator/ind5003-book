@@ -158,7 +158,7 @@ plt.xlabel('Qtr-Year'); plt.ylabel('Billion kWh');
 
 @fig-aus-elec-time shows a very clear increasing trend. There is strong
 seasonality, and there is no evidence of cyclic behaviour (see
-@fig-season-quaselec).
+@fig-season-qauselec).
 
 ```{python}
 #| fig-align: center
@@ -278,7 +278,7 @@ $\hat{R}_t = y_t - \hat{T}_t - \hat{S}_t$.
 ### Additive decomposition, housing sales
 \index{Housing Sales!Additive Decomposition}
 
-@fig-add-decomp-sales contains the naive additive decomposition of the housing
+@fig-add-decomp-hsales contains the naive additive decomposition of the housing
 sales data.
 
 ```{python}

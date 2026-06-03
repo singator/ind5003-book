@@ -352,7 +352,7 @@ data to estimate the optimal parameters for the particular model, which in this
 case is a decision tree.
 
 ```{python}
-clf.fit(X_train, y_train,)
+clf.fit(X_train, y_train,);
 ```
 
 Notice that when we call the `.fit()` method, there is no output object
@@ -373,6 +373,7 @@ in understanding and interpreting the fitted model.
 #| fig-align: center
 #| fig-cap: "Heart failure decision tree"
 #| label: fig-heart-dt
+#| fig-pos: 'ht'
 
 plt.figure(figsize =(18, 6))
 tree.plot_tree(clf,feature_names=X.columns, filled=True, max_depth=2);
@@ -427,6 +428,7 @@ Performance of classification algorithms are usually presented in the form of a
 #| fig-align: center
 #| label: fig-confusion-training
 #| fig-cap: "Confusion matrix, training set"
+#| fig-pos: 'ht'
 
 y_pred_train = clf.predict(X_train)
 ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, 
@@ -448,6 +450,7 @@ Next, we display the results for the test set in @fig-confusion-test.
 #| fig-align: center
 #| label: fig-confusion-test
 #| fig-cap: "Confusion matrix, test set"
+#| fig-pos: 'ht'
 
 y_pred_test = clf.predict(X_test)
 ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test,  
@@ -517,6 +520,8 @@ permutating the values to break the relationship.
 #| fig-align: center
 #| label: fig-var-impt-perm
 #| fig-cap: "Variable importance, permutation approach"
+#| fig-pos: 'ht'
+
 result = permutation_importance(clf, X_test, y_test,  
                                 n_repeats=30, random_state=42)
 
@@ -562,6 +567,7 @@ double-feature.
 #| fig-align: center
 #| label: fig-var-impt-pdp
 #| fig-cap: "Variable importance, partial dependence"
+#| fig-pos: 'ht'
  
 _, ax = plt.subplots(ncols=3, nrows=2, figsize=(12, 6), constrained_layout=True)
 features_info = {
@@ -635,14 +641,14 @@ cv_search = GridSearchCV(RandomForestClassifier(n_estimators=20, random_state=21
                          return_train_score=True,
                          param_grid ={'max_depth': p_range},
                          scoring = 'accuracy', cv= 5, verbose=1)
-cv_search.fit(X_train, y_train)
+cv_search.fit(X_train, y_train);
 ```
 
 After calling the `.fit()` method, the optimal parameters are available for 
 persual:
 
 ```{python}
-cv_search.best_estimator_
+cv_search.best_estimator_;
 ```
 
 :::
@@ -694,7 +700,7 @@ the test error.
 
 ```{python}
 rf = RandomForestClassifier(n_estimators=20, max_depth=3, random_state=40)
-rf.fit(X_train, y_train)
+rf.fit(X_train, y_train);
 ```
 
 The following code returns the error from the training error.
@@ -761,7 +767,7 @@ rf_search = GridSearchCV(RandomForestRegressor(n_estimators=10, random_state=43)
                          {'max_depth': p_range}, 
                          scoring='r2', cv=5, verbose=1, return_train_score=True)
 rf_search.fit(Xre_train, yre_train,)
-rf_search.best_estimator_
+rf_search.best_estimator_;
 ```
 
 Here is the validation curve, that will allow us to decide on the optimal maximum 
