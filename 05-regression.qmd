@@ -48,6 +48,8 @@ import statsmodels.api as sm
 from statsmodels.formula.api import ols
 
 from scipy import stats
+
+from ind5003 import inference
 ```
 
 ::: {#exm-taiwan-reg-1 style="background-color: #D5D1D164; padding: 20px"}
@@ -77,10 +79,15 @@ print(re2.head())
 ```
 
 ::: {.content-visible when-format="pdf"}
-Here is a scatter plot of the points in the dataset.
+@fig-taiwan-scatter shows a scatter plot of the points in the dataset.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Locations of Taiwan real estate
+#| label: fig-taiwan-scatter
+#| fig-pos: 'ht'
+
+plt.figure(figsize=(5,5))
 ax = sns.scatterplot(data=re2, x='X', y='Y', hue='price', size='price')
 ax.set_title("Taiwan real estate data");
 ```
@@ -104,11 +111,16 @@ gdf.explore("price", #tiles="CartoDB positron",
 
 :::
 
-Let us first explore the dataset with Python. How do this plots aid in your
-understanding of the dataset?
+Let us first explore the dataset with Python. Take a look at the plots in
+@fig-taiwan-eda. How do they aid in your understanding of the dataset?
 
 ```{python}
-plt.figure(figsize=(10,4));
+#| fig-align: center
+#| fig-cap: Exploring relationship between variables, Taiwan data
+#| label: fig-taiwan-eda
+#| fig-pos: 'ht'
+
+plt.figure(figsize=(9,4));
 ax=plt.subplot(131)
 re2.plot(x='dist_MRT', y='price', kind='scatter', ax=ax, title='distance to MRT')
 
@@ -293,13 +305,13 @@ is preferable to have a parsimonious model that explains the response variable w
 ### Price vs. house age
 \index{Taiwan Data!Simple linear, price vs. house}
 
-As a first model, we fit price ($Y$) against house age ($X_1$). From the plot
-above, we already suspect this may not be ideal, but let us use it as a
-starting point.
+As a first model, we fit price ($Y$) against house age ($X_1$). From the plot in
+@fig-taiwan-eda earlier, we already suspect this may not be ideal, but let us
+use it as a starting point.
 
 ```{python}
 lm_house_age_1 = ols('price ~ house_age', data=re2).fit()
-print(lm_house_age_1.summary())
+lm_house_age_1.summary(slim=True)
 ```
 
 From the output, we can tell that the *estimated* model for Price ($Y$) against
@@ -311,11 +323,10 @@ $$
 
 
 The estimates are $\hat{\beta_0} = 42.43$ and $\hat{\beta_1} = -0.25$. The
-output includes the 95% confidence intervals for $\beta_0$ and $\beta_1$. The
-$R^2$ is 0.044, which means that means that only 4.4% of the variation in $Y$
-is explained by $X$. This is extremely poor, even though the $p$-value for the
-$F$-test is very small (0.000016).
-
+output includes the 95% confidence intervals for $\beta_0$ (40.1, 44.8) and
+$\beta_1$ (-0.4, -0.1). The $R^2$ is 0.044, which means that means that only
+4.4% of the variation in $Y$ is explained by $X$. This is extremely poor, even
+though the $p$-value for the $F$-test is very small (0.000016).
 
 A simple interpretation of the model is as follows:
 
@@ -325,8 +336,8 @@ A simple interpretation of the model is as follows:
 :::
 
 ::: {.callout-warning}
-Note that this interpretation has to be taken very cautiously, especially when there are
-other explanatory variables in the model.
+Note that this interpretation has to be taken very cautiously, especially when
+there are other explanatory variables in the model.
 :::
 
 ::: {#exm-taiwan-reg-3 style="background-color: #D5D1D164; padding: 20px"}
@@ -348,14 +359,20 @@ $$
 $$
 
 Thus we can vary the values of $X$ to study how the mean of $Y$ changes. Here 
-is how we can do so for the model that we have just fit.
+is how we can do so for the model that we have just fit. The accompanying plot in 
+@fig-taiwan-mod1-ci shows the predicted mean for various house age, along with the 
+confidence intervals for these means. 
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Predicted mean price and 95% CI for varying house age.
+#| label: fig-taiwan-mod1-ci
+#| fig-pos: 'ht'
 
-new_df = sm.add_constant(pd.DataFrame({'house_age' : np.linspace(0, 45, 100)}))
+new_df = pd.DataFrame({'house_age' : np.linspace(0, 45, 100)})
 predictions_out = lm_house_age_1.get_prediction(new_df)
 
+# plot predicted mean and CI
 ax = re2.plot(x='house_age', y='price', kind='scatter', alpha=0.5 )
 ax.set_title('Price vs. age');
 ax.plot(new_df.house_age, predictions_out.conf_int()[:, 0].reshape(-1), 
@@ -502,7 +519,7 @@ on house age ($X_1$) and distance to MRT ($X_2$).
 
 ```{python}
 lm_age_mrt_1 = ols('price ~ house_age + dist_MRT', data=re2).fit()
-print(lm_age_mrt_1.summary())
+lm_age_mrt_1.summary(slim=True)
 ```
 
 The estimated equation for the model is 
@@ -512,7 +529,8 @@ Y = 49.89 - 0.23 X_1 - 0.0072 X_2
 $$
 
 At 5%-level, the estimates for both $\beta_1$ and $\beta_2$ are significantly
-different from 0. Moreover, the adjusted $R^2$ is now a more respectable 0.49. 
+different from 0. Moreover, the adjusted $R^2$ is now a more respectable 0.49. This 
+is a huge improvement from @exm-taiwan-reg-2.
 :::
 
 <br/>
@@ -544,7 +562,7 @@ is similar to including a polynomial term, but this is simpler to interpret.
 re2['x3'] = [(x - 25) if x > 25 else 0 for x in re2.house_age]
 
 lm_age_mrt_2 = ols('price ~ house_age + x3 + dist_MRT', data=re2).fit()
-print(lm_age_mrt_2.summary())
+lm_age_mrt_2.summary(slim=True)
 ```
 
 We've managed to improve the adjusted $R^2$ by a little, but let's focus on
@@ -575,10 +593,16 @@ The special cases correspond to:
    2. $X_1 > 25$:
       * $Y = 14.25 + 0.56 X_1$
 
-Visually, here is what the estimated lines look like:
+Visually, we can inspect the estimated lines in @fig-taiwan-mod3-broken-line.
 
 ```{python}
-new_df = sm.add_constant(pd.DataFrame({'house_age' : np.linspace(0, 45, 100)}))
+#| fig-align: center
+#| fig-cap: Predicted mean price and 95% CI for piecewise linear regression
+#| label: fig-taiwan-mod3-broken-line
+#| fig-pos: 'ht'
+
+# make predictions
+new_df = pd.DataFrame({'house_age' : np.linspace(0, 45, 100)})
 new_df['x3'] = [(x - 25) if x > 25 else 0 for x in new_df.house_age]
 new_df2 = new_df.copy()
 
@@ -587,10 +611,8 @@ new_df2['dist_MRT'] = 1500
 
 predictions_out = lm_age_mrt_2.get_prediction(new_df)
 predictions_out2 = lm_age_mrt_2.get_prediction(new_df2)
-```
 
-```{python}
-#| fig-align: center
+# create plot.
 ax = re2.plot(x='house_age', y='price', kind='scatter', alpha=0.5 )
 ax.set_title('Price vs. age');
 ax.plot(new_df.house_age, predictions_out.predicted_mean, 
@@ -653,8 +675,8 @@ whether or not there were 4 stores or less (resp. more than 5).
 ```{python}
 re2['num_stores_cat'] = ['low' if x <= 4 else 'high' for x in re2.num_stores]
 
-lm_cat_1 = ols('price ~ dist_MRT + num_stores_cat', re2).fit()
-print(lm_cat_1.summary())
+lm_cat_1 = ols('price ~ dist_MRT + C(num_stores_cat, Treatment("low"))', re2).fit()
+lm_cat_1.summary(slim=True)
 ```
 
 The categorical variable has been coded (by Python) as follows:
@@ -662,8 +684,8 @@ The categorical variable has been coded (by Python) as follows:
 $$
 X_4 = 
 \begin{cases}
-1, & \text{if there were 4 nearby stores or less} \\
-0, & \text{otherwise}
+0, & \text{if there were 4 nearby stores or less} \\
+1, & \text{otherwise}
 \end{cases}
 $$
 
@@ -711,8 +733,8 @@ In an earlier model, we fitted the number of stores and distance to MRT to the
 model. Here, we include an interaction term.
 
 ```{python}
-lm_cat_2 = ols('price ~ dist_MRT * num_stores_cat', re2).fit()
-print(lm_cat_2.summary())
+lm_cat_2 = ols('price ~ dist_MRT * C(num_stores_cat, Treatment("low"))', re2).fit()
+lm_cat_2.summary(slim=True)
 ```
 
 Notice that we now have the largest adjusted $R^2$ out of all of the models we have fit so far.
@@ -778,35 +800,21 @@ for our course.
 ### Normality check for `lm_age_mrt_1`
 \index{Taiwan Data!Normality check}
 
-One of the first checks for Normality is to create a histogram. If the
-residuals adhere to a Normal distribution, we should observe a symmetric
-bell-shaped distribution.
+Let us inspect the histogram and qq-plot for the residuals from the model in
+@exm-taiwan-reg-4.
 
 ```{python}
 #| fig-align: center
-plt.figure(figsize=(4,3))
-r_s = pd.Series(lm_age_mrt_1.resid_pearson)
-r_s.hist();
+#| fig-cap: Histogram and qq-plot for `lm_age_mrt_1`
+#| label: fig-taiwan-norm-check
+#| fig-pos: 'ht'
+
+inference.check_normality(pd.Series(lm_age_mrt_1.resid_pearson))
 ```
 
-From above, it appears that the distribution is slightly skewed, and there is
-one noticeable outlier. A second graphical diagnostic plot that we make is a
-QQ-plot. 
-
-A QQ-plot plots the standardized sample quantiles against the theoretical
-quantiles of a N(0; 1) distribution. If they fall on a straight line, then we
-would say that there is evidence that the data came from a normal distribution.
-
-Especially for unimodal datasets, the points in the middle will fall close to the 
-line. The value of a QQ-plot is in judging if the tails of the data are fatter 
-or thinner than the tails of the Normal. 
-
-```{python}
-#| fig-align: center
-fig = sm.qqplot(r_s[r_s < 6], line="q")
-fig.set_size_inches(4,3);
-```
-
+From @fig-taiwan-norm-check, it appears that the distribution is slightly
+skewed, and there is one noticeable outlier. The qq-plot does suggest fatter 
+tails than the Normal on the right, even if we were to set aside the outlier.
 :::
 
 Overall, the residuals do indicate a lack of Normal behaviour. Non-normality in
@@ -829,9 +837,9 @@ Hence, if the model is good, the residuals should only contain random noise. The
 should be no apparent pattern to them. If we find such a pattern in one of the above
 plots, we would have some clue as to how we could improve the model.
 
-We typically inspect the plots for the following patterns:
+We typically inspect the plots for the following patterns (see @fig-example-resid-patterns):
 
-![Residuals](figs/regression_residuals.png){width=80%}
+![Examples of residual plot patterns](figs/regression_residuals.png){#fig-example-resid-patterns width=80%}
 
 
 1. A pattern like the one on the extreme left is ideal. Residuals are 
@@ -847,13 +855,18 @@ We typically inspect the plots for the following patterns:
    
 
 ::: {#exm-taiwan-reg-9 style="background-color: #D5D1D164; padding: 20px"}
-### Example: Residual Plots for `lm_age_mrt_2`
+### Residual Plots for `lm_age_mrt_2`
 \index{Taiwan Data!Residual scatterplots}
 
-Let us extract and create the residual plots for the second model that we had fit, earlier.
+Let us extract and create the residual plots for the second model that we had fit, 
+earlier in @exm-taiwan-reg-5.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Residual plots for `lm_age_mrt_2`
+#| label: fig-taiwan-resid-checks
+#| fig-pos: 'ht'
+
 plt.figure(figsize=(12,4));
 r_s = lm_age_mrt_2.resid_pearson
 ax=plt.subplot(121)
@@ -869,8 +882,8 @@ ax.axhline(y=0, color='red', linestyle='--');
 
 While the plot for house age looks acceptable (points are evenly scattered
 about the red dashed line), the one for distance shows some curvature. This is
-something we can try to fix, using a transformation of the x-variable.
-
+something we can try to fix, using a transformation of the x-variable (see 
+@sec-regression-transformation).
 :::
 
 ### Influential Points
@@ -885,8 +898,7 @@ influential on coefficient $j$:
 3.  Compare the $\beta$'s from step 2 with the original estimate from step 1.
 
 While the above method assesses influence on parameter estimates, Cook's distance
-performs a similar iteration to assess the influence on the fitted values. Cook's
-distance values greater than 1 indicate possibly influential points.
+performs a similar iteration to assess the influence on the fitted values.
 
 There are several ways to deal with influential points. First, we can remove
 the influential point (or sets of points) and asssess how much the model
@@ -894,63 +906,52 @@ changes. Based on our understanding of the domain, we can then decide to keep
 or remove those points. A second approach is to create a dummy variable that
 identifies those points (individually).  Fitting the subsequent model allows
 all points to be used in estimating standard errors, but quantifies an
-adjustment for those points. A third approach is to use a *robust linear
-model*. This is a model that automatically reduces the influence of aberrant
-points. This is a good topic to know about - do read up on it if you are keen!
+adjustment for those points. A third approach is to use a *robust linear model*. 
+This is a model that automatically reduces the influence of aberrant points.
+This is a good topic to know about - do read up on it if you are keen!
 
 ::: {#exm-taiwan-reg-10 style="background-color: #D5D1D164; padding: 20px"}
 ### Example: Influential Points for `lm_age_mrt_2` 
 \index{Taiwan Data!Influential points}
 
-The influence of a point on the inference can be judged by how much the inference
-changes with and without the point. For instance to assess if point $i$ is 
-influential on coefficient $j$:
-
-1.  Estimate the model coefficients with all the data points.
-2.  Leave out the observations $(Y_i , X_i)$ one at a time and re-estimate 
-    the model coefficients.
-3.  Compare the $\beta$'s from step 2 with the original estimate from step 1.
-
-While the above method assesses influence on parameter estimates, Cook's distance
-performs a similar iteration to assess the influence on the fitted values. Cook's
-distance values greater than 1 indicate possibly influential points.
+In this example, we inspect the influential points in the model that we fitted in 
+@exm-taiwan-reg-5.
 
 ```{python}
 infl = lm_age_mrt_2.get_influence()
 infl_df = infl.summary_frame()
+print(infl_df.sort_values(by='cooks_d', ascending=False).head())
 ```
 
-```{python}
-print(infl_df.head())
-```
+We can see from the output that the point with index 270 has a large Cook's distance,
+and also has quite a large influence on the $\beta$-estimate for `dist_MRT`. This is 
+a point worth investigating.
+
 :::
 
-## Transformation
+## Transformation {#sec-regression-transformation}
 
 ::: {#exm-taiwan-reg-11 style="background-color: #D5D1D164; padding: 20px"}
 ### Log-transformation
 \index{Taiwan Data!Log transformation}
 
-As we observed in the residual plots, the distance-to-MRT variable displays a
-slight curvature. We can fix this by taking a log-transformation of the
-variable before fitting the model.
-
-Below, we include the code to perform this fitting.
+As we observed in the residual plots in @fig-taiwan-resid-checks, the
+distance-to-MRT variable displays a slight curvature. We can fix this by taking
+a log-transformation of the variable before fitting the model. Below, we include
+the code to perform this fitting.
 
 ```{python}
 re2['ldist'] = np.log(re2.dist_MRT)
 
 lm_age_mrt_3 = ols('price ~ house_age + x3 + num_stores + ldist', data=re2).fit()
-print(lm_age_mrt_3.summary())
+lm_age_mrt_3.summary(slim=True)
 ```
+
+This model turns out to have one of the highest adjusted $R^2$ that we have encountered 
+in this chapter. However, that should not be the criteria for deciding on the model.
+As analysts, we should fully understand the model's strengths and weaknesses before 
+using it. Toward that end, take a look at the questions in the @sec-reg-exercises.
 :::
-
-Now, take some to investigate the following issues:
-
-1. Interpret the coefficient for `dist_MRT`.
-2. Have the issues with the residuals been fixed?
-3. What is the difference between how this model uses `num_stores`, and how `lm_cat_1` uses it?
-4. How did we choose 25 as the breakpoint for house-age? Is it the ideal one?
 
 ## Summary, Further topics
 
@@ -980,3 +981,13 @@ Good reference textbooks for this topic are @draper1998applied and
 3. [Stats models documentation](https://www.statsmodels.org/stable/regression.html)
 6. [Diagnostics](https://www.zeileis.org/teaching/AER/Ch-Validation-handout.pdf)
 6. [On residual plots](https://online.stat.psu.edu/stat462/node/120/)
+
+## Exercises {#sec-reg-exercises}
+
+Take some to investigate the following issues pertaining to the model fitted in 
+@exm-taiwan-reg-11.
+
+1. Interpret the coefficient for `dist_MRT`.
+2. Have the issues with the residuals been fixed?
+3. What is the difference between how this model uses `num_stores`, and how `lm_cat_1` uses it?
+4. How did we choose 25 as the breakpoint for house-age? Is it the ideal one?

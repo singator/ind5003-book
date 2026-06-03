@@ -48,7 +48,7 @@ import seaborn as sns
 ```
 
 ::: {#exm-housing-1 style="background-color: #D5D1D164; padding: 20px"}
-### Basic plots of housing Data
+### Basic plot of housing data
 \index{Housing Sales!Basic Plots}
 
 This dataset comes from an R package
@@ -58,19 +58,23 @@ since 1973.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Housing sales time plot
+#| label: fig-one-fam-houses
+#| fig-pos: 'ht'
 
 hsales = pd.read_csv('data/hsales.csv', parse_dates=[0])
 hsales.set_index('date', inplace=True)
 hsales.index.freq = 'MS'
-hsales.plot(title='Sales of One-Family Houses, USA', legend=False, figsize=(12,5))
+hsales.plot(title='Sales of One-Family Houses, USA', legend=False, figsize=(12,4))
 plt.xlabel('Month-Year'); plt.ylabel('Sales');
 ```
 
-We observe a strong seasonality within each year. There is some indication of
-cyclic behaviour every 6 -- 10 years. There is no apparent monotonic trend over
-this period. With pandas objects, we can resample the series. This allows us to
-compute summaries over time windows that could be of business importance. For
-instance, we might be interested in a breakdown by quarters instead of months. 
+In @fig-one-fam-houses, we observe a strong seasonality within each year. There
+is some indication of cyclic behaviour every 6 -- 10 years. There is no
+apparent monotonic trend over this period. With pandas objects, we can resample
+the series. This allows us to compute summaries over time windows that could be
+of business importance. For instance, we might be interested in a breakdown by
+quarters instead of months. 
 
 :::
 
@@ -102,6 +106,7 @@ beginning of the season till the end (from Jan to Dec).
 #| fig-align: center
 #| fig-cap: "Season plot of housing sales"
 #| label: fig-season-sales
+#| fig-pos: 'ht'
 
 hsales.loc[:, 'year'] = hsales.index.year
 hsales.loc[:, 'month'] = hsales.index.month
@@ -110,7 +115,7 @@ yrs = np.sort(hsales.year.unique())
 color_ids = np.linspace(0, 1, num=len(yrs))
 colors_to_use = plt.cm.YlOrRd(color_ids)
 
-plt.figure(figsize=(10, 7))
+plt.figure(figsize=(10, 6))
 
 for i,yr in enumerate(yrs):
     df_tmp = hsales.loc[hsales.year == yr, :]
@@ -139,6 +144,10 @@ till now.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Aus electric production time plot
+#| label: fig-aus-elec-time
+#| fig-pos: 'ht'
+
 qau = pd.read_csv('data/qauselec.csv', parse_dates=[0])
 qau.set_index('date', inplace=True)
 qau.index.freq = 'QS'
@@ -147,13 +156,15 @@ qau.plot(figsize=(8,4), title='Electrcity Production by Quarter', legend=False)
 plt.xlabel('Qtr-Year'); plt.ylabel('Billion kWh');
 ```
 
-There is a strong increasing trend. There is strong seasonality, and there is
-no evidence of cyclic behaviour.
+@fig-aus-elec-time shows a very clear increasing trend. There is strong
+seasonality, and there is no evidence of cyclic behaviour (see
+@fig-season-qauselec).
 
 ```{python}
 #| fig-align: center
 #| fig-cap: "Season plot, electric production"
 #| label: fig-season-qauselec
+#| fig-pos: 'ht'
 
 qau2 = qau.copy()
 
@@ -163,7 +174,7 @@ yrs = np.sort(qau2.year.unique())
 color_ids = np.linspace(0, 1, num=len(yrs))
 colors_to_use = plt.cm.YlOrRd(color_ids)
 
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 5))
 
 for i,yr in enumerate(yrs):
     df_tmp = qau2.loc[qau2.year == yr, :]
@@ -199,10 +210,15 @@ this relationship.
 ### Lag plots of housing sales data
 \index{Housing Sales!Lag Plots}
 
-Here is a matrix of lag plots for the housing sales data.
+@fig-lag-sales displays a matrix of lag plots for the housing sales data (see
+@fig-one-fam-houses and @fig-season-sales for reference).
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Lag plots of housing sales data
+#| label: fig-lag-sales
+#| fig-pos: 'ht'
+
 f, aa = plt.subplots(nrows=3,ncols=4, sharex=True, sharey=True)
 f.set_figheight(9)
 f.set_figwidth(12)
@@ -262,16 +278,19 @@ $\hat{R}_t = y_t - \hat{T}_t - \hat{S}_t$.
 ### Additive decomposition, housing sales
 \index{Housing Sales!Additive Decomposition}
 
-Here is the naive additive decomposition of the housing sales data.
+@fig-add-decomp-hsales contains the naive additive decomposition of the housing
+sales data.
 
 ```{python}
 #| fig-align: center
 #| fig-cap: "Additive decomposition"
 #| label: fig-add-decomp-hsales
+#| fig-pos: 'ht'
+
 hsales_add = seasonal_decompose(hsales.loc[:, 'hsales'], 
                                 model='additive', extrapolate_trend='freq')
 ax = hsales_add.plot()
-ax.set_figheight(6)
+ax.set_figheight(5)
 ```
 
 :::
@@ -293,14 +312,18 @@ little or no trend, and a constant variability over time.
 ### Multiplicative decomposition, Aus electricity data
 \index{Australian QEC!Multiplicative Decomposition}
 
-Here is the *multiplicative decomposition* for the Australian electric data.
+@fig-mult-decomp-qau the *multiplicative decomposition* for the Australian electric data.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Additive decomposition"
+#| label: fig-mult-decomp-qau
+#| fig-pos: 'ht'
+
 qau_mult = seasonal_decompose(qau.loc[:, 'kWh'], model='multiplicative',
                               extrapolate_trend='freq')
 ax = qau_mult.plot();
-ax.set_figheight(6)
+ax.set_figheight(5)
 ```
 
 Take note that in multiplicative decompositions, the residuals are centred around 
@@ -328,9 +351,10 @@ Trend decomposition with Loess), please refer to the original paper @cleveland19
 #| fig-align: center
 #| fig-cap: "STL decomposition, electricity data"
 #| label: fig-stl-decomp
+#| fig-pos: 'ht'
 qau_stl = STL(qau.kWh).fit()
 ax = qau_stl.plot();
-ax.set_figheight(6)
+ax.set_figheight(5)
 ```
 
 Notice in @fig-stl-decomp how the seasonal pattern varies over time. One
@@ -381,13 +405,15 @@ period for the forecast:
 \index{Housing Sales!Benchmark Forecasts}
 
 Suppose we apply some of the above forecasts to the housing sales dataset. We
-withhold the most recent 2 years of data and forecast those. Here is a plot
-depicting the forecasts, and the true values.
+withhold the most recent 2 years of data and forecast those. Take a look at 
+@fig-benchmark-hsales, that depicts the forecasts along with the true values.
 
 
 ```{python}
 #| fig-align: center
-#| fig-cap: "Benchmark forecasts"
+#| fig-cap: "Benchmark forecasts, housing sales data"
+#| label: fig-benchmark-hsales
+#| fig-pos: 'ht'
 
 # Set aside the last two years as the test set.
 #hsales = hsales.drop(columns=['year', 'month'])
@@ -442,7 +468,7 @@ series and hence do not allow us to make such comparisons.
 ### Benchmark forecast errors
 \index{Housing Sales!Benchmark forecast errors}
 
-Let us assess the forecasts made in the previous example, using RMSE and MAE.
+Let us assess the forecasts made in @exm-housing-4, using RMSE and MAE.
 
 ```{python}
 for x in [ts.rmse, ts.mae]:
@@ -485,16 +511,22 @@ not stationary. Why?
 ### Dow Jones index
 \index{Dow Jones!Differencing}
 
-Consider the following time series of the Dow Jones index.
+Consider the following time series of the Dow Jones index, shown in
+@fig-dow-ts.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Dow Jones, time series plot
+#| label: fig-dow-ts
+#| fig-pos: 'ht'
+
 dj = pd.read_csv('data/dj.csv')
 dj.plot(legend=False, title='Dow Jones Index', figsize=(12,4));
 ```
 
 It is nonstationary because the mean (level) of the time series is not constant.
-However, the following differenced version of the same series is:
+However, the following differenced version of the same series is stationary.
+Take a look at @fig-dow-diff-ts to see the constant mean and variance depicted.
 
 \begin{equation}
 \Delta y_t = y_t - y_{t-1}
@@ -502,6 +534,10 @@ However, the following differenced version of the same series is:
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Dow Jones, differenced plot
+#| label: fig-dow-diff-ts
+#| fig-pos: 'ht'
+
 ddj = diff(dj)
 ddj.plot(legend=False, title='Differenced Dow Jones', figsize=(12,4));
 ```
@@ -520,8 +556,9 @@ Dow Jones data, before and after differencing.
 #| fig-align: center
 #| fig-cap: "ACF, before and after differencing"
 #| label: fig-acf-diff
+#| fig-pos: 'ht'
  
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(8, 5))
 plt.subplot(211)
 plt.stem(acf(dj, fft=False))
 plt.title("Non-differenced")
@@ -589,7 +626,7 @@ arima_m1 = pm.auto_arima(train2.values, seasonal=True, m=4, test='adf',
 Here is the summary of the final chosen model.
 
 ```{python}
-print(arima_m1.summary())
+arima_m1.summary()
 ```
 
 The output indicates that a seasonal ARIMA model has been found to be the best 
@@ -622,6 +659,7 @@ that the residuals are uncorrelated. This is precisely what we wished to see.
 #| fig-align: center
 #| fig-cap: "ARIMA residual diagnostics"
 #| label: fig-arima-diag
+#| fig-pos: 'ht'
 arima_m1.plot_diagnostics(figsize=(12,6));
 ```
 
@@ -636,12 +674,13 @@ print(f"The RMSE on the test set is {rmse1:.3f}.")
 print(f"The MASE on the test set is {mase1:.3f}.") 
 ```
 
-Let us proceed to make a plot of the predictions.
+Let us proceed to make a plot of the predictions (see @fig-arima-fc).
 
 ```{python}
 #| fig-align: center
 #| label: fig-arima-fc
 #| fig-cap: "ARIMA forecasts"
+#| fig-pos: 'ht'
 n_periods = 12
 fc, confint = arima_m1.predict(n_periods=n_periods, return_conf_int=True)
 
@@ -694,9 +733,9 @@ requiring the assumption of stationarity!
 
 ::: {layout-ncol=1}
 
-![](figs/ets_add.png){#fig-ets-add-models width=80%}
+![ETS additive models](figs/ets_add.png){#fig-ets-add-models width=80%}
 
-![](figs/ets_mult.png){#fig-ets-mult-models width=80%}
+![ETS multiplictive models](figs/ets_mult.png){#fig-ets-mult-models width=80%}
 
 :::
 
@@ -713,7 +752,7 @@ effect ETS(A,A,A), on the qau dataset.
 ets_m1 = ExponentialSmoothing(train2.values, seasonal_periods=4, trend='add', 
                               seasonal='add')
 ets_fit = ets_m1.fit()
-print(ets_fit.summary())
+ets_fit.summary()
 ```
 
 The plots in @fig-ets-components plot the estimated trend and level for the
@@ -723,6 +762,8 @@ series. Notice how there is an almost constant slope for the series.
 #| fig-align: center
 #| fig-cap: ETS trend and level components
 #| label: fig-ets-components
+#| fig-pos: 'ht'
+
 plt.subplot(211)
 plt.plot(train2.index, ets_fit.trend, scaley=False)
 plt.ylim(0.245, 0.255)
@@ -780,11 +821,15 @@ its curvature amplified.
 \index{Singapore tourist numbers!Basic plot}
 
 The Singapore Department of Statistics shares information on tourist arrivals
-to Singapore at the monthly level. Here is a time series plot of arrivals from
-South East Asian Countries:
+to Singapore at the monthly level. @fig-sg-tourism-ts contains a time series
+plot of arrivals from South East Asian Countries:
 
 ```{python}
 #| fig-align: center
+#| label: fig-sg-tourism-ts
+#| fig-cap: Singapore monthly tourist arrivals
+#| fig-pos: 'ht'
+
 tourism = pd.read_excel("data/international_visitor_arrivals_sg.xlsx", 
                         parse_dates=[0], date_format="%Y %b", 
                         na_values='na')
@@ -835,9 +880,10 @@ seasonally adjusted time series.
 
 ```{python}
 #| fig-align: center
-#| fig-cap: "Theta decomposition"
+#| fig-cap: "Theta decomposition, showing the breakdown into long- and short-term trends"
 #| label: fig-theta-decomp
-#| 
+#| fig-pos: 'ht'
+
 # carry out mutliplicative decomposition in order to obtain seasonally adjusted series
 sea2_mult = seasonal_decompose(sea2, model='multiplicative', extrapolate_trend='freq')
 
@@ -859,11 +905,16 @@ yvals2.plot(legend=True, label='Short-term trend', style="--");
 fig.set_title("Theta decomposition");
 ```
 
-Finally, we visualise the forecasts from this theta decomposition model. We only 
-plot the final 360 observations for the visualisation.
+Finally, we visualise the forecasts from this theta decomposition model in
+@fig-theta-decomp-fc. We only plot the final 360 observations for the
+visualisation.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Theta decomposition forecasts for tourism time series"
+#| label: fig-theta-decomp-fc
+#| fig-pos: 'ht'
+
 theta_forecasts = pd.DataFrame(
     {
         "original": sea2,
@@ -889,10 +940,15 @@ forecasts will then be combined to create the final forecast.
 \index{Singapore tourist numbers!Forecast with decomposition}
 
 Here is the code that will use and STL model to decompose the series, and fit a
-pre-chosen ARIMA(3,1,2) model to the seasonally adjusted series.
+pre-chosen ARIMA(3,1,2) model to the seasonally adjusted series. The output
+forecasts can be seen in @fig-decomp-fc.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Forecasting with STL decomposition
+#| label: fig-decomp-fc
+#| fig-pos: 'ht'
+
 stlf = STLForecast(sea2, ARIMA, model_kwargs={"order": (3, 1, 2)})
 res = stlf.fit( )
 forecasts2 = pd.DataFrame(
@@ -925,10 +981,15 @@ series_ids = us_employment.Series_ID.unique()
 us_employment.sample(n=8)
 ```
 
-Here is a plot of one of the time series in the dataset.
+@fig-emp-ts-example contains a time series plot of one of the time series in
+the dataset.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Sample time series from US employment time series
+#| label: fig-emp-ts-example
+#| fig-pos: 'ht'
+
 us_employment[us_employment.Title == "Total Private"].plot(x='Month', 
                                                            y='Employed', 
                                                            figsize=(12,4));
@@ -944,10 +1005,16 @@ us2_array = us2.to_numpy()
 ```
 
 Now we can begin the clustering procedure. The first line in the code below generates
-a 148 x 148 distance matrix.
+a 148 x 148 distance matrix. For more details on hierarchical clustering, refer
+to @sec-07-clustering. The resulting dendrogram can be seen in
+@fig-emp-dendrogram.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Dendrogram for employment time series clustering
+#| label: fig-emp-dendrogram
+#| fig-pos: 'ht'
+
 out = pdist(us2_array, metric='correlation')
 lm1 = hierarchy.linkage(out, method='average', optimal_ordering=True)
 
@@ -956,12 +1023,13 @@ hierarchy.dendrogram(lm1, p=3, truncate_mode='level',color_threshold=True);
 ```
 
 We reorder the columns and rows in the matrix so that similar time series appear
-next to one another.
+next to one another (see @fig-heatmap-correl).
 
 ```{python}
 #| fig-align: center
 #| label: fig-heatmap-correl
 #| fig-cap: "Heatmap of correlation matrix"
+#| fig-pos: 'ht'
  
 X_ord = us2_array[hierarchy.leaves_list(lm1)]
 corr_mat_ord = np.corrcoef(X_ord)
@@ -981,7 +1049,9 @@ those in @fig-sim-2 have a cyclical pattern.
 ```{python}
 #| fig-align: center
 #| label: fig-sim-1
-#| fig-cap: Series from top left corner of heatmap
+#| fig-cap: Series from top left corner of heatmap in @fig-heatmap-correl
+#| fig-pos: 'ht'
+
 us2_series = us2.index.to_list()
 ss = [us2_series[x] for x in [22, 24, 32, 33, 34]]
 us2.T.loc[:, ss].plot(figsize=(12,4));
@@ -991,7 +1061,9 @@ plt.legend(loc='upper right');
 ```{python}
 #| fig-align: center
 #| label: fig-sim-2
-#| fig-cap: Series from bottom right corner of heatmap
+#| fig-cap: Series from bottom right corner of heatmap in @fig-heatmap-correl
+#| fig-pos: 'ht'
+
 ss = [us2_series[x] for x in [143, 144, 145]]
 us2.T.loc[:, ss].plot(figsize=(12,4));
 ```

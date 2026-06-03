@@ -46,28 +46,24 @@ import pandas as pd
 
 from itables import show
 import pprint
-import os
-import string
-from tqdm import tqdm
 
+import gensim
+from gensim.parsing.preprocessing import *
+import gensim.downloader as api
 from nltk.stem import PorterStemmer, WordNetLemmatizer
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn import manifold
-from sklearn.neighbors import NearestNeighbors
-from sklearn.decomposition import LatentDirichletAllocation
 
 from transformers import pipeline
-from staticvectors import StaticVectors
+
+import pyLDAvis
+import pyLDAvis.gensim_models as gensimvis
 
 import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
-
-from ind5003 import nlp
 ```
 
 ## Definitions
@@ -149,63 +145,45 @@ for x in rng.choice(wine_reviews.description, size=5):
 
 :::
 
-### Pre-processing Text with Python
+### Pre-processing Text with Gensim
 
-Text documents consist of sentences of varying lengths. Typically, the main step
-is to break the sentence up into pieces. This process is known as
-**tokenising**. When tokenizing a document, we can do it at several levels of
-resolution: at the sentence, line, word or even punctuation level. But apart
-from tokenising, there are other steps to consider when pre-processing text.
+Text documents consist of sentences of varying lengths. Usually, the first step
+to analysing a document is to break it up into pieces. This process is known as
+**tokenizing**. When tokenizing a document, we can do it at several levels of
+resolution: at the sentence, line, word or even punctuation level.
 
-For instance, since what we are about to do in the initial part of our activity
-is based on frequency counts of tokens, we are going to remove common "filler"
-words that could end up skewing the eventual probability distributions of
-counts. These filler words are known as *stop words*. They were identified by
-linguists, and they vary from model to model, from Python package to package,
-and of course, from language to language.
+Tokenizing can easily done using the `.split()` method, which is built into
+python. But after that, we need to further pre-process the tokens.
+
+The `gensim` package includes a module for pre-processing text strings. Here is
+a list of some of the functions there:
+
+* `strip_multiple_whitespaces`
+* `strip_non_alphanum`
+* `strip_numeric`
+* `strip_punctuation`
+* `strip_short`
+
+Since what we are about to do in the initial part of our activity is based on
+frequency counts of tokens, apart from some of the above steps, we are also
+going to remove common "filler" words that could end up skewing the eventual
+probability distributions of counts. These filler words are known as stop
+words. They were identified by linguists, and they vary from model to model,
+from Python package to package, and of course, from language to language.
 
 Whether stop-word removal is meaningful or not also depends on your particular
 application. At times, it is only done in order to speed up the training of a
 model. However, it is possible to change the entire meaning of a sentence by
 removing stop-words.
 
-We are going to use the following custom function for pre-processing the 
-wine reviews:
+For us, we are going to apply this list of filters to each wine review:
 
-```{python}
-def custom_preprocessor(x, min_length = 3, stop_words = []):
-    output = x.lower()
-    output = output.translate(str.maketrans('', '', string.punctuation + '0123456789'))
-    tokens = word_tokenize(output)
-    output_list = [y for y in tokens if y not in stop_words and len(y) > min_length]
-    return output_list
-```
-
-1. The function converts the entire string to lower-case.
-2. Punctuations and digits are removed from the string.
-3. The string is split into tokens using a function from `nltk`.
-4. Stop words are removed, along with words that are 3 characters or less.
-
-Now let us go ahead and perform the pre-processing on the wine reviews.
-
-```{python}
-en_stop_words = stopwords.words('english')
-all_review_strings = wine_reviews.description.values
-all_strings_tokenized = [custom_preprocessor(x, 3, en_stop_words) for x in all_review_strings]
-```
-
-We now have a list of lists. Each sub-list contains the tokens for a particular
-wine_review. For instance, the original review in row 234 is:
-
-```{python}
-pp.pprint(wine_reviews.description.values[233])
-```
-
-The corresponding processed output is:
-
-```{python}
-pp.pprint(all_strings_tokenized[233])
-```
+1. `strip_punctuation()`,
+2. `strip_multiple_whitespaces()`,
+3. `strip_numeric()`,
+4. `remove_stopwords()`,
+5. `strip_short()`,
+6. `lemmatize()`
 
 **Lemmatizing** a word is to reduce it to its root word. You will come across
 **stemming** whenever you read about lemmatizing. In both cases, we wish to
@@ -258,7 +236,39 @@ wn = WordNetLemmatizer()
 
 :::
 
-To apply the Wordnet lemmatizer on each token, we use the following code:
+Now let us go ahead and perform the pre-processing on the wine reviews.
+
+```{python}
+CUSTOM_FILTER = [lambda x: x.lower(), strip_punctuation, 
+                 strip_multiple_whitespaces, strip_numeric, 
+                 remove_stopwords, strip_short]
+#CUSTOM_FILTER[1]
+```
+
+The object `CUSTOM_FILTER` is a collection of functions that will be applied 
+to each wine review.
+
+```{python}
+all_review_strings = wine_reviews.description.values
+all_strings_tokenized = [preprocess_string(x, CUSTOM_FILTER) for x in all_review_strings]
+```
+
+At this point in time, what we have is a list of lists. Each sub-list contains
+the tokens for a particular wine_review. For instance, the original review in 
+row 234 is:
+
+```{python}
+pp.pprint(wine_reviews.description.values[233])
+```
+
+The corresponding processed output is:
+
+```{python}
+pp.pprint(all_strings_tokenized[233])
+```
+
+`gensim` does not have a lemmatizer, so we use the Wordnet lemmatizer on each
+token.
 
 ```{python}
 preprocessed_corpus = [[wn.lemmatize(w) for w in dd ] for dd in all_strings_tokenized]
@@ -302,11 +312,11 @@ As the name tf-idf suggests, our first step should be to compute the frequency
 of each term (token) within each document.
 
 ```{python}
-vectorizer1 = CountVectorizer(stop_words='english', min_df=1) 
-raw_docs_dtm = vectorizer1.fit_transform(raw_docs)
+vectorizer1 = CountVectorizer(stop_words='english', min_df=1)
+X1 = vectorizer1.fit_transform(raw_docs)
 
-print(pd.DataFrame(raw_docs_dtm.toarray(),  
-   columns=vectorizer1.get_feature_names_out()).iloc[:, :10])
+print(pd.DataFrame(X1.toarray(), 
+  columns=vectorizer1.get_feature_names_out()).iloc[:, :10])
 ```
 
 The counts indicate the number of times each feature (or words) were present in
@@ -353,9 +363,9 @@ w'_{ij} = 1 \times \log ( (1+3)/(1 +2)) = 1.287
 
 ```{python}
 vectorizer2 = TfidfVectorizer(stop_words='english', norm=None)
-raw_docs_tfidf_no_norm = vectorizer2.fit_transform(raw_docs)
+X2 = vectorizer2.fit_transform(raw_docs)
 
-print(pd.DataFrame(raw_docs_tfidf_no_norm.toarray(), 
+print(pd.DataFrame(X2.A, 
   columns=list(vectorizer2.get_feature_names_out())).iloc[:, :10].round(3))
 ```
 
@@ -363,32 +373,32 @@ The final step normalises the weights within each document.
 
 ```{python}
 vectorizer3 = TfidfVectorizer(stop_words='english')
-raw_docs_tfidf_norm = vectorizer3.fit_transform(raw_docs)
+X3 = vectorizer3.fit_transform(raw_docs)
 
-print(pd.DataFrame(raw_docs_tfidf_norm.toarray(), 
+print(pd.DataFrame(X3.A, 
   columns=list(vectorizer3.get_feature_names_out())).iloc[:, :10].round(3))
 ```
 
 :::
 
-The above matrices are known as **document-term** matrices, since the columns
-are defined by terms, and each row is a document. At this point, we can use each
+The above matrix is known as a **document-term matrix**, since the columns are
+defined by terms, and each row is a document. At this point, we can use each
 **row** as a vector representation of each document. If necessary, for this
 corpus, we could even represent each term using its corresponding **column**.
 
 Note that some books/software use a slightly different convention - they may
 work with the *term-document* matrix. However, the idea is the same. Take a
-look at the following term-document matrix in @fig-term-doc-jm, assembled from the complete works
+look at the following term-document matrix, assembled from the complete works
 of Shakespeare:
 
-![Example of term-document matrix, taken from @jm3](figs/term-doc-shakespeare-1.png){#fig-term-doc-jm width=70%}
+![@jm3](figs/term-doc-shakespeare-1.png){width=70%}
 
 If we intend to represent each document as a numeric vector, the columns,
 highlighted by the red boxes, would be a natural choice. Suppose we only focus
 on the coordinates corresponding to the words `battle` and `fool`. Then a
-visualisation of the documents would look like @fig-doc-vis-jm.
+visualisation of the documents would look like this:
 
-![Visualising document vectors, taken from @jm3](figs/term-doc-shakespeare-2.png){#fig-doc-vis-jm width=70%}
+![@jm3](figs/term-doc-shakespeare-2.png){width=70%}
 
 Visually, it is easy to tell that "Henry V" and "Julius Caesar" are similar
 (they point in the same direction) as opposed to "As You Like It" and "Twelfth
@@ -412,9 +422,9 @@ $$
 \cos \theta = \frac{\sum_{i=1}^N v_i w_i}{\sqrt{\sum_{i=1}^N v_i^2} \sqrt{\sum_{i=1}^N w_i^2}}
 $$
 
-Geometrically, cosine similarity measures the size of the angle between vectors (see @fig-cos-sim-jm).
+Geometrically, cosine similarity measures the size of the angle between vectors:
 
-![Cosine similarity between documents, from @jm3](figs/term-doc-shakespeare-4.png){#fig-cos-sim-jm width=70%}
+![@jm3](figs/term-doc-shakespeare-4.png){width=70%}
 
 ### Dense Embeddings
 
@@ -436,8 +446,7 @@ to obtain a numeric representation of a word,
 *in the context of it's surrounding words*. Consider this statement:
 
 > 13% of the United States population eats <font color="red">pizza</font> on any given day. Mozzarella is commonly used on
-> <font color="red">pizza</font>, with the highest quality mozzarella from Naples. In Italy, <font color="red">pizza</font> served in formal 
-> settings is eaten with a fork and knife.
+> <font color="red">pizza</font>, with the highest quality mozzarella from Naples. In Italy, <font color="red">pizza</font> served in formal > settings is eaten with a fork and knife.
 
 The words `eats`, `served` and `mozzarella` appear close to `pizza`. Hence
 another word that appears in similar contexts, should be *similar* to `pizza`.
@@ -451,12 +460,12 @@ with two tasks:
 
 Self-supervised algorithms differ from supervised algorithms in that there are
 no labels that need to be created. The pre-text task trains a model to perform
-predictions, based on a sliding window context (see @fig-cs229-self-sup).
+predictions, based on a sliding window context:
 
 ::: {layout-ncol=1}
 ![](figs/word2vec-001a.png){width=70%}
 
-![Self-supervised learning NLP, taken from @CS229_2021_selfsupervision](figs/word2vec-001b.png){#fig-cs229-self-sup width=70%}
+![](figs/word2vec-001b.png){width=70%}
 :::
 
 
@@ -480,43 +489,31 @@ solve, while on the right, we have visualisations of GLoVe.
 
 ::: {layout-ncol=2}
 
-![Relationships captured by word2vec, from @mikolov2013efficient](figs/word2vec-relationships.png){width=70%}
+![word2vec](figs/word2vec-relationships.png){width=70%}
 
-![GloVE relations, taken from @gloVeStanford](figs/glove-001.jpg){width=70%}
+![GloVE](figs/glove-001.jpg){width=70%}
 :::
 
 ::: {#exm-glove-01 style="background-color: #D5D1D164; padding: 20px"}
+
 
 ### Glove dense embeddings
 
 Here's how we can use `gensim` code to conduct the analogy task. First, we load
 400,000 GLoVe vectors, each representing a different word. Each vector is of
-length 300. We load the vectors from Hugging Face, just like we will later in 
-@sec-nlp-applications.
+length 100.
 
 ```{python}
-hf_token = os.environ.get('HF_TOKEN')
-word_vectors = StaticVectors("neuml/glove-6B")
+word_vectors = api.load("glove-wiki-gigaword-100")
 ```
 
-The `word_vectors` object can be used to return GloVe embeddings for tokens. For
-instance, `word_vectors.embeddings('woman')` will return the numpy array
-corresponding to "woman".
-
-The following code will create a `NearestNeighbors` object, that allows us to 
-retrieve the nearest vector(s) to a given one. 
-
-```{python}
-nbrs = NearestNeighbors(n_neighbors=5, 
-                        metric='cosine', algorithm='auto').fit(word_vectors.vectors)
-```
-
-The following code will run the analogy task. It returns the answer to:
+The `word_vectors` object is similar to a dictionary. For instance,
+`word_vectors['woman']` will return the vector corresponding to "woman".
 
 > Man is to king as woman is to ______ .
 
 ```{python}
-nlp.word_analogy(word_vectors, nbrs, 'man', 'king', 'woman')
+word_analogy(word_vectors, nbrs, 'man', 'king', 'woman')
 #word_analogy(word_vectors, nbrs, 'switzerland', 'swiss', 'cambodia')
 ```
 
@@ -530,35 +527,37 @@ of words. This means that vectors that are close to each other are similar
 in meaning. Let us use t-SNE to visualise the GloVe embeddings.
 
 There are a total of 400,000 vectors in the embedding. Even with t-SNE that will
-be difficult to make sense of. Hence for now, we simply visualise the first 1000
+be difficult to make sense of. Hence for now, we simply visualise the first 100
 most common words.
 
-The following code extracts the first 1000 word vectors and applies the t-SNE 
+The following code extracts the first 100 word vectors and applies the t-SNE 
 transformation to them. Please refer to @sec-03-t-SNE for more details.
 
 ```{python}
 nn = 1000
-glove_1e3 = word_vectors.vectors[:nn, :]
-labels = pd.Series(list(word_vectors.tokens.keys())[:nn])
+
+X = np.zeros((nn, 100))
+for ii in np.arange(nn):
+    X[ii,] = word_vectors.get_vector(ii)
+labels = pd.Series([word_vectors.index_to_key[x] for x in np.arange(nn)])
 
 tsne1 = manifold.TSNE(n_components=2, init="random", perplexity=10, 
                       metric='cosine', verbose=0, max_iter=5000, 
                       random_state=222)
-glove_transformed = tsne1.fit_transform(glove_1e3)
-
-df2 = pd.DataFrame(glove_transformed, columns=['x','y'])
-df2['labels'] = labels
+X_transformed2 = tsne1.fit_transform(X)
 ```
 
-You should get the same plot (@fig-tsne-glove) as us since we have set the same
-seed at the start of the cell, and when we initialise the transformer. Explore
-the resulting plot - notice how months of the year appear close together at the bottom left.
+You should get the same plot as us since we have set the same seed at the start
+of the cell, and when we initialise the transformer. Explore the resulting plot
+- notice how months of the year appear close together at the bottom left.
 Around the left as well, the calendar years appear as a group.
 
 ::: {.content-visible when-format="html"}
 
 ```{python}
 #| fig-align: center
+df2 = pd.DataFrame(X_transformed2, columns=['x','y'])
+df2['labels'] = labels
 fig = px.scatter(df2, x='x', y='y', text='labels', width=1024, height=960)
 fig.update_traces(textposition='top center')
 fig.show()
@@ -573,10 +572,6 @@ text labels.
 
 ```{python}
 #| fig-align: center
-#| fig-cap: t-SNE plot of GloVe embedding
-#| label: fig-tsne-glove
-#| fig-pos: 'ht'
-
 plt.figure(figsize=(8, 4))
 sns.scatterplot(data=df2, x="x", y="y")
 ```
@@ -602,25 +597,26 @@ subsection, we provide a very brief overview of their characteristics that
 allow them to achieve impressive performance on a range of language-related
 tasks.
 
-The basic unit of a neural model is the neural unit (@fig-neural-unit). It consists
+The basic unit of a neural model is the neural unit (on the left). It consists
 of weights and a non-linear activation function. Given an input vector, the
 weights are multiplied by the input vector, summed and then fed through the
 activation function to generate an output.
 
 ::: {layout-ncol=2}
-![A neural unit, from @jm3](figs/j_m_fig_7_2_neural_unit.png){#fig-neural-unit width=70%}
+![@jm3](figs/j_m_fig_7_2_neural_unit.png){width=70%}
 
 ![Neuron figure from <https://en.wikipedia.org/wiki/Neuron>](figs/Blausen_0657_MultipolarNeuron.png){width=70%}
 :::
 
-Neural models are made up of many neural units, organised into layers. The first
-neural models were Feed-Forward Networks. Due to the virtue of being able to
-incorporate many parameters, and due to semi-supervised learning, they were
-already a huge improvement over earlier models. @fig-ffn shows a simple set up,
-with one hidden layer for training a language model (used to predict the next
-word, from the preceding three). It can also be used to learn embeddings.
 
-![Feed-forward neural network, from @jm3](figs/j_m_fig_7_17_ffn_training.png){#fig-ffn width=70%}
+Neural models are made up of many neural units, organised into layers. The
+first neural models were Feed-Forward Networks. Due to the virtue of being able
+to incorporate many parameters, and due to semi-supervised learning, they were
+already a huge improvement over earlier models. Here is a simple set up, with
+one hidden layer for training a language model (used to predict the next word).
+It can also be used to learn embeddings.
+
+![@jm3, FFN](figs/j_m_fig_7_17_ffn_training.png)
 
 The next evolution in neural models was the ability to incorporate words in the
 recent history. For humans, this comes naturally. For instance, we know that
@@ -631,13 +627,13 @@ this is grammatically correct:
 For neural models to have this ability, it was necessary to incorporate the
 hidden layers from recent words when processing the current word. Recurrent
 Neural Networks (RNNs) and Long-Short Term Memory (LSTM) networks had these
-features, but they were very slow to train. The major breakthrough came with the
-invention of the transformer architecture. The self-attention layer of these
-networks gave a word access to *all* preceding words in the training window,
-instead of just one (see @fig-basic-transformer). Most importantly. the training
-of these networks could be parallelised!
+features, but they were very slow to train. The major breakthrough came with
+the invention of the transformer architecture. The self-attention layer of
+these networks gave a word access to *all* preceding words in the training
+window, instead of just one. Most importantly. the training of these networks
+could be parallelised!
 
-![Basic transformer architecture, from @jm3](figs/j_m_fig_10_18_training_transformer_lm.png){#fig-basic-transformer width=70%}
+![@jm3](figs/j_m_fig_10_18_training_transformer_lm.png){width=70%}
 
 Here are some more examples where transformers excel:
 
@@ -649,12 +645,11 @@ Here are some more examples where transformers excel:
 > had fallen into the water after the storm.
 
 In the final sentence, the word `bank` has two meanings - how will a model know
-to decide the correct one? With transformers, because the full context of a word
-is captured along with it, it is possible to perform this disambiguation. In
-@fig-disambig, we can see that almost every word has multiple meanings. But with
-context, the correct meaning can be identified.
+to decide the correct one? With transformers, because the full context of a
+word is captured along with it, it is possible to perform this disambiguation.
 
-![Disambiguation is possible with contextual embeddings, from @jm3](figs/j_m_fig_11_8_wsd.png){#fig-disambig width=80%}
+
+![@jm3](figs/j_m_fig_11_8_wsd.png){width=80%}
 
 ## Applications {#sec-nlp-applications}
 
@@ -667,14 +662,14 @@ standardised manner with model cards. Here is an example of a
 Moreover, they have developed easy to use pipelines. For NLP, the following
 tasks have mature pipelines:
 
-* Feature-extraction (obtaining the embedding of a text)
-* Named Entity Recognition
-* Question-answering
-* Sentiment-analysis
-* Summarization
-* Text-generation
-* Translation, and
-* Zero-shot-classification.
+* feature-extraction (obtaining the embedding of a text)
+* ner
+* question-answering
+* sentiment-analysis
+* summarization
+* text-generation
+* translation, and
+* zero-shot-classification.
   
 ### Sentiment Analysis
 
@@ -715,20 +710,18 @@ for x,vv in wine_reviews.groupby(wine_reviews.variety):
 review_list = list(tmp_df.description)
 ```
 
-The next snippet computes the sentiment scores for those sampled reviews, and 
-uses a widget to keep track of progress of the iterations.
+The next snippet computes the sentiment scores for those sampled reviews.
 
 ```{python}
 tmp_df['score'] = 0.00
 tmp_df['label'] = ''
-
-for i, rr in tqdm(enumerate(review_list), total=len(review_list), desc="Classifying reviews"):
+for i,rr in enumerate(review_list):
     tmp = classifier(rr)[0]
     tmp_df.loc[i, 'score'] = tmp['score']
     tmp_df.loc[i, 'label'] = tmp['label']
 ```
 
-Finally, we tabulate the sentiment classifications for the wine types.
+This next snippet tabulates the sentiment classifications for the wine types.
 
 ```{python}
 sent_counts = pd.crosstab(tmp_df.variety, tmp_df.label, margins=True)
@@ -736,19 +729,15 @@ sent_counts['proportion'] = sent_counts.POSITIVE/sent_counts.All
 ```
 
 ::: {.content-visible when-format="html"}
-
 ```{python}
 show(sent_counts)
 ```
-
 :::
 
 ::: {.content-visible when-format="pdf"}
-
 ```{python}
 sent_counts.head()
 ```
-
 :::
 
 These are the reviews for one of the varieties that had a proportion of positive
@@ -764,6 +753,7 @@ The corresponding labels from the classifer are :
 ```{python}
 tmp_df[tmp_df.variety == 'Tempranillo Blanco'][['description', 'label']]
 ```
+
 
 :::
 
@@ -791,22 +781,50 @@ search engine.
 A simple way to perform IR is to use cosine similarity to compute how close the
 given query vector is to the individual documents in the corpus.
 
-The next snippet initialises a `NearestNeighbors` model for retrieving similar documents.
+The next snippet initialises a model for retrieving similar documents.
 
 ```{python}
-# IR retrieval use-case:
-wine_tfidf = TfidfVectorizer(stop_words='english')
-X2 = wine_tfidf.fit_transform(wine_reviews.description)
-
-wine_nbrs = NearestNeighbors(n_neighbors=10, metric='cosine', algorithm='auto').fit(X2)
+dct = gensim.corpora.Dictionary(all_strings_tokenized)
+bow_corpus = [dct.doc2bow(text) for text in all_strings_tokenized]
+tfidf = gensim.models.TfidfModel(dictionary=dct)
 ```
 
-Next, we retrieve the most relevant reviews for the query: "acidic white chardonnay".
+
+NLP corpora are typically very large. Before we can find matching documents, we
+build a similarity index, so that matches are returned quicker. We try
+something simple at first:
+
+> Which documents/reviews are similar to the first one?
 
 ```{python}
-awc = wine_tfidf.transform(['acidic white chardonnay'])
-distances, indices = wine_nbrs.kneighbors(awc, n_neighbors=8)
-for x in indices[0]:
+index = gensim.similarities.Similarity(None, 
+  corpus=tfidf[bow_corpus], num_features=len(dct))
+sims = index[tfidf[bow_corpus[0]]]
+```
+
+These are the most similar reviews to _review id 0_. Of course, the first review
+itself is there! Let's retrieve and print all the reviews similar to the first
+one.
+
+```{python}
+for x in np.argsort(-sims)[:5]:
+    pp.pprint(all_review_strings[x]) 
+```
+
+Now we try a new query of our own: "acidic chardonnay". First we preprocess it,
+like we did the original documents.
+
+```{python}
+q1 = [wn.lemmatize(x) for x in preprocess_string('acidic white chardonnay', CUSTOM_FILTER)]
+sims = index[tfidf[dct.doc2bow(q1)]]
+```
+
+Now we print the top 5 most similar reviews to our query.
+
+```{python}
+q1_results = np.argsort(-sims)[:5]
+
+for x in q1_results:
     pp.pprint(all_review_strings[x]) 
 ```
 
@@ -837,84 +855,42 @@ us the probabilistic weights - we have to interpret them ourselves.
 ### Wine reviews topic modeling
 \index{Wine Reviews!Topic modeling}
 
-Suppose we decide to split the corpus into 5 topics. Let us investigate what
-these topics consist of. First, we add words that are specific to wine reviews,
-but common to different topics, to our list of stop words.
+Suppose we decide to split the corpus into 10 topics. Let us investigate what
+these topics consist of.
 
 ```{python}
-en_stop_words = en_stop_words + ["flavors", "years", "wine", "drink", "fruits", 
-                                 "fruit", "finish", "aromas", "palate", "feels", 
-                                 "notes", "oak", "offers", "like", "bottling", 
-                                 "nose", "shows"]
+lda1 = gensim.models.LdaModel(corpus= bow_corpus, num_topics=10, 
+                              id2word=dct, random_state=41)
+reviews_vis_data = gensimvis.prepare(lda1, bow_corpus, dct)
 
-# Step 3: Train LDA model
-lda_obj = LatentDirichletAllocation(
-    n_components=5,           # Number of topics
-    random_state=41,
-    max_iter=20,
-    learning_method='batch',
-    evaluate_every=-1, verbose=0, n_jobs=2
-)
-
-wine_tfidf = TfidfVectorizer(stop_words=en_stop_words)
-X2 = wine_tfidf.fit_transform(wine_reviews.description)
-lda_obj.fit(X2);
+pp.pprint(lda1.show_topics())
 ```
 
-The output object provides the most common terms that define each topic
-(remember: each topic is defined as a *probability distribution over the vocabulary*).
+The output provides the most common terms that define each topic (remember:
+each topic is defined as a *probability distribution over the vocabulary*). 
 
-The following code snippet will print the 10 most common words from each topic:
+We can also find out which *topics* a particular document is distributed over.
+For instance, the output below shows that words in document 0 are predominantly
+drawn from topic 3.
 
 ```{python}
-feature_names = wine_tfidf.get_feature_names_out()
+lda1.get_document_topics(bow_corpus[0])
+```
 
-n_top = 10
-rows = []
-for i, topic in enumerate(lda_obj.components_):
-    top_words = [feature_names[j.item()] for j in topic.argsort()[-n_top:][::-1]]
-    rows.append(top_words)
-
-[','.join(x) for x in rows]
+```{python}
+pp.pprint(all_review_strings[0])
 ```
 
 :::
 
-This is the point where human interpretation and domain knowledge enters the fray. 
-We could interpret the five topics as follows:
-
-* Topic 0: Discussion about bold red wines, with with dark fruit and tannins. 
-* Topic 1: Wines defined by their acidity and structure — likely medium-bodied reds 
-  or fuller whites with some oak influence. Focus is on balance and mouthfeel.
-* Topic 2: Sweet white wines, Chardonnay-focused — aromatic whites with fruit, 
-  sweetness, and vanilla notes.
-* Topic 3: Lighter-bodied wines with both red fruit and citrus/herbal notes. These 
-  could cover lighter reds or dry whites. The variety of fruit types suggests a 
-  more generic/mixed category.
-* Topic 4: Red wines with spice and pepper character. Shares some vocabulary with 
-  Topic 0.
-
-A delightful visualisation from `pyLDAvis` allows us to understand the
-"distance" between topics, and the frequent words from each topic easily. To
-generate the visualisation in your notebook, execute the following command. By
-default, `pyLDAvis` tries to install `gensim`, but that clashes with `scipy`.
-Hence I did not include `pyLDAvis` in `requirements.txt`. Instead, install it
-manually with this command in a Jupyter notebook cell:
+A delightful visualisation from `pyLDAvis` allows us to
+understand the "distance" between topics, and the frequent words from each topic
+easily. To generate the visualisation in your notebook, execute the following 
+command.
 
 ```{python}
 #| eval: false
-%pip install --no-deps pyLDAvis
-```
-
-Once installed, run the visualisation with the follwing snippet:
-
-```{python}
-#| eval: false
-import pyLDAvis
-import pyLDAvis.lda_model as lda_model
-
-vis = lda_model.prepare(lda_obj, X2, wine_tfidf)
-pyLDAvis.display(vis)
+pyLDAvis.display(reviews_vis_data)
 ```
 
 The online version of our textbook contains the interactive version.
@@ -931,17 +907,26 @@ Here is a static version for the pdf textbook:
 ![LDA visualisation](figs/ldavis_random_state_41.png){align="center"}
 :::
 
-A couple of things to note:
+A few things to note:
 
-1. The numbering of topics in the paragraph above does not match the 
+1. The numbering of topics in the text version of the topics does not match the 
    numbers within the circles of the visualisation. For easy mapping, we have the
    following mapping of text topics to visual circles:
-   * 0 -> 1, 1 -> 4, 2 -> 5, 3 -> 2, 4 -> 3.
+   * 0 -> 7, 1 -> 1, 2 -> 6, 3 -> 4, 4 -> 3, 
+     5 -> 8, 6 -> 9, 7 -> 2, 8 -> 5, 9 -> 10
 2. The circles in the visualisation represent the topics. The distance between
    circles is the distance between the topic distributions, projected onto $R^2$ 
-   using MDS. From the visual, we can see that topics 2 and 3 are similar, and
-   they are similar to topic 1. However topics 4 and 5 are different from each other,
-   and from the group 1, 2, and 3.
+   using MDS. From the visual, we can see that topics 6 and 3 are very similar, 
+   and so too are topics 4 and 5, and topics 1 and 8. It may be worth re-running
+   the algorithm with a smaller number of topics.
+3. If you inspect the text version of topics, you will notice many words repeated
+   across topics, e.g. fruits, flavors, wine and palate. These should be removed
+   before re-running the algorithm. Doing so would result in more distinct topics.
+4. In terms of interpretation, checking against the topic distribution, it
+   appears topics 4, 5, and 9 from the visual relate to acidic white wines with a
+   citrus/fruit taste. Topics 1, 8, 2 and 7 correspond to strong tasting red wines.
+   Topics 3 and 6 describe aromatic wines.
+   taste
    
 ## Interpretation of Neural Models
 
@@ -950,17 +935,17 @@ language-related tasks. However, one criticism of them is that they are
 "black-box" models; we do not fully grasp how they work. This can lead to a
 mistrust of such models, with good reason. If we do not fully know how these
 models work, we would not know when they are might fail, or we might not know
-the reason when they do fail (or make an incorrect prediction). For this reason,
-a huge amount of research effort is currently directed towards understanding and
-interpreting neural models.
+the reason when they do fail (or make an incorrect prediction). For this
+reason, a huge amount of research effort is currently directed towards
+understanding and interpreting neural models.
 
 One approach is to identify which examples in the training set were most
 influential for predictions regarding particular test instances. For incorrect
-predictions, this could give us intuition on why the model is failing, and guide
-us to ways to fix it. @fig-black-box depicts an example where it was possible to
+predictions, this could give us intuition on why the model is failing, and
+guide us to ways to fix it. Here is an example where it was possible to
 pinpoint why a model yielded incorrect sentiment prediction.
 
-![Understanding why an incorrect classifcation was made, from @han2020explaining](figs/explaining_black_box_predictions.png){#fig-black-box width=75%}
+![@han2020explaining](figs/explaining_black_box_predictions.png){#fig-black-box width=70%}
 
 In the example shown in @fig-black-box, the statement "A sometimes tedious film"
 has been wrongly classified as having a "positive" sentiment. To understand why
@@ -980,17 +965,15 @@ question to be answered correctly. In this case, the study revealed something
 pathological about the model. A one-word question seemed to still provide the 
 correct answer from this passage!
 
-![Perturbing the test case to understand the primary driver of a model output, from @sun2021interpreting](figs/pathologies_03.png){width=75% #fig-infl-test-cases}
+![@sun2021interpreting](figs/pathologies_03.png){width=80% #fig-infl-test-cases}
 
 For transformers in particular, a great deal of study has focused on the
 weights that the attention layers pick up. By relating these to linguistic
 information, researchers try to infer the precise language-related information
 that models retain. For instance, it has been found that BERT learns parts of
-speech. It is also able to identify the dependencies between words. In @fig-bert-dep, 
-we can conclude that the prepositions place great attention on their objects, e.g. 
-*of* on *Treasury* and *bonds*, and *in* on *trading*, and so on.
+speech. It is also able to identify the dependencies between words (see @fig-bert-dep).
 
-![Visualising attention in transformer heads, from @clark2019does](figs/what_does_bert_clark_preposition.png){width=75% #fig-bert-dep}
+![@clark2019does](figs/what_does_bert_clark_preposition.png){width=80% #fig-bert-dep}
 
 ## References
 

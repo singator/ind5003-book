@@ -41,14 +41,17 @@ format:
     documentclass: scrreprt
     papersize: a4
     fig-align: center
+    lof: true
     toc: true
     toc-title: Contents
     toc-depth: 3
     number-sections: true
     number-depth: 2 
     include-in-header: 
-      text: |
+      text: | 
+        \titlehead{\includegraphics[width=6in]{figs/IND5003_logo.png}}
         \usepackage{makeidx}
+        \usepackage{tocbibind}
         \makeindex
     include-after-body: 
       text: |
