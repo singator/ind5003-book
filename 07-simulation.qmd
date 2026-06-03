@@ -60,11 +60,15 @@ which is just a table or a function describing $P(X=i)$ for all possible $i$
 values. Once we know the pmf of a random variable, we know everything about it
 - the mean, variance, quantiles, maximum values, etc.
 
-We can visualise a pmf using a bar-chart. Here is the pmf for the above biased
-coin.
+We can visualise a pmf using a bar-chart. @fig-pmf-biased-coin contains the
+chart for the above biased coin.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Pmf for a biased coin. Note that there are only two possible values of X. This is the support of this random variable.
+#| label: fig-pmf-biased-coin
+#| fig-pos: 'ht'
+
 plt.figure(figsize=(5,3))
 plt.bar([0,1], [1/3, 2/3], tick_label=['0', '1'], width=0.3);
 plt.xlim(-1,2); 
@@ -72,16 +76,20 @@ plt.ylim(0,1);
 plt.title('pmf of \'X\' random variable' );
 ```
 
-Here is the pmf for a random variable representing the total number of Heads
-after 10 tosses of that same coin. Suppose we call that new random variable
-$Y$.
+@fig-pmf-ten-tosses displays the pmf for a random variable representing the
+total number of Heads after 10 tosses of that same coin. Suppose we call that
+new random variable $Y$.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: Pmf for 10 tosses of a biased coin. Note that there are eleven possible values of Y.
+#| label: fig-pmf-ten-tosses
+#| fig-pos: 'ht'
+
 plt.figure(figsize=(5,3))
 probs = binom.pmf(np.arange(0, 11), n=10, p=2/3)
 plt.bar(np.arange(0, 11), probs);plt.ylim(0,1);
-plt.title('pmf of no. of coin tosses');
+plt.title('pmf of number of heads');
 ```
 
 If we wish to find the probability of events, for instance, $P(Y \le 4)$, we
@@ -97,9 +105,11 @@ of values, for instance, all real numbers in the interval $[0,1]$.
 #| fig-align: center
 #| fig-cap: "Continuous random variables"
 #| label: fig-cts-rv
+#| fig-pos: 'ht'
+
 x = np.linspace(-3, 3, num=100)
 y = norm.pdf(x)
-plt.figure(figsize=(8,3), facecolor='0.9')
+plt.figure(figsize=(8,3))
 plt.subplot(131)
 plt.plot(x,y)
 plt.ylim(0,1)
@@ -132,6 +142,8 @@ instance,
 #| fig-align: center
 #| fig-cap: "Histogram of random variables"
 #| label: fig-cts-hist
+#| fig-pos: 'ht'
+
 rng = default_rng(5003)
 
 yvals = np.zeros((3,300))
@@ -139,7 +151,7 @@ yvals[0,:] = rng.normal(size=300)
 yvals[1,:] = rng.exponential(size=300)
 yvals[2, :] = rng.uniform(size=300)
 pdfs = ['Normal', 'Exponential', 'Uniform']
-plt.figure(figsize=(8,3), facecolor='0.9')
+plt.figure(figsize=(8,3))
 
 for i in np.arange(0,3):
     plt.subplot(1, 3, i+1)
@@ -439,34 +451,33 @@ class MoneyAgent(mesa.Agent):
     def step(self):
         # Verify agent has some wealth
         if self.wealth > 0:
-            other_agent = self.random.choice(self.model.agents)
+            other_agent = self.rng.choice(self.model.agents)
             other_agent.wealth += 1
             self.wealth -= 1
 ```
 
-The following flowchart depicts the flow of events for each agent. It is useful to sketch such a flowchart when implementing agent-based models, since it allows for easier debugging and information sharing with colleagues.
+The diagram in @fig-agent-flow depicts the flow of events for each agent. It is
+useful to sketch such a flowchart when implementing agent-based models, since
+it allows for easier debugging and information sharing with colleagues.
 
-![Agent trajectory](figs/money_agent_flowchart.png){fig-align="center" width=60%}
+![Agent trajectory](figs/money_agent_flowchart.png){#fig-agent-flow fig-align="center" width=60%}
 
-The next class defines the model itself. The initialisation of a model typically
-consists of populating it with various agents. However, it is also important to
-define the scheduler. In this case, the scheduler is based on
-`RandomActivation`. This means that *at every step*, the agents are shuffled,
-and then each of their `step` methods are executed in that order. The order
-changes at every time step. It is necessary to avoid running all agents' steps
-at the same time to avoid clashes.
+The next class defines the model itself. The initialisation of a model
+typically consists of populating it with various agents. At every time time
+step, the agents are shuffled, and then each of their `step` methods are
+executed in that order. The order changes at every time step. It is necessary
+to avoid running all agents' steps at the same time to avoid clashes.
 
 ```{python}
 class MoneyModel(mesa.Model):
     """A model with some number of agents."""
 
-    def __init__(self, N):
-        super().__init__()
+    def __init__(self, N, rng=None):
+        super().__init__(rng=rng)
         self.num_agents = N
 
         # Create agents
-        for i in range(self.num_agents):
-            a = MoneyAgent(self)
+        MoneyAgent.create_agents(model=self, n=N)
 
     def step(self):
         """Advance the model by one step."""
@@ -489,17 +500,14 @@ steps.
 
 
 ```{python}
+rng2 = default_rng(5023)
 all_wealth = []
-model = MoneyModel(10)
-
-# allows replicability of results; useful for debugging
-model.reset_randomizer(seed=5003) 
+model = MoneyModel(N=10, rng=rng2)
 
 for i in range(100):
     model.step()
 
 # Extract the results
-# for agent in model.schedule.agents:
 for agent in model.agents:
     all_wealth.append(agent.wealth)
     
@@ -537,13 +545,12 @@ individual agents.
 class MoneyModel(mesa.Model):
     """A model with some number of agents."""
 
-    def __init__(self, N):
-        super().__init__()
+    def __init__(self, N, rng=None):
+        super().__init__(rng=rng)
         self.num_agents = N
 
         # Create agents
-        for i in range(self.num_agents):
-            a = MoneyAgent(self)
+        MoneyAgent.create_agents(model=self, n=N)
 
         # initialise the data collector, telling it to use the 
         # compute_zero_prop() function
@@ -566,8 +573,7 @@ Once again, we reset the seed and re-run the model. We can then retrieve the
 zero-wealth proprortion at *every step of the model*.
 
 ```{python}
-model = MoneyModel(10)
-model.reset_randomizer(seed=5003)
+model = MoneyModel(N=10, rng=35)
 
 for i in range(100):
     model.step()
@@ -598,6 +604,7 @@ iteration consists of a fresh set of 100 time steps.
 
 ```{python}
 #| fig-align: center
+#| eval: false
 params = {"N": 10}
 
 results = mesa.batch_run(
@@ -723,6 +730,7 @@ We shall use the `batch_run` to run 50 iterations, and then create a summary
 visualisation of the evolution of Gini coefficient for each iteration.
 
 ```{python}
+#| eval: false
 params = {"N": 10}
 
 results = mesa.batch_run(
@@ -873,6 +881,7 @@ g.set(title="Gini Coefficient over Time", ylabel="Gini Coefficient");
 Now we run the spatial model for 50 iterations.
 
 ```{python}
+#| eval: false
 params = {"width": 10, "height": 10, "N": range(5, 20, 5)}
 
 results = mesa.batch_run(
