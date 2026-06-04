@@ -113,68 +113,95 @@ the image to work with, or to modify. This is typically done using masks. Masks
 are black-and-white images that identify the foreground (white) and the
 background (black).
 
-Let us work with the following image of Lionel Messi, and see how we can use
-masks and colour selection to outline the ball.
+Let us work with the following image of Lionel Messi (@fig-messi-orig), and see
+how we can use masks and colour selection to outline the ball.
 
 ```{python}
-Image('data/messi5.jpg')
+#| fig-align: center
+#| fig-cap: "Lionel Messi, footballer."
+#| label: fig-messi-orig
+#| fig-pos: 'ht'
+#| echo: false
+
+Image('data/messi5.jpg', width=480)
 ```
 
-Our first task is to read the data into Python, and use a colour picker to
+::: {#exm-messi-1 style="background-color: #D5D1D164; padding: 20px"}
+### Creating a mask for the football
+\index{Lionel Messi!Mask}
+
+After reading the image into Python, we are going to use a colour picker to
 identify the colour of the ball. The following website provides a useful tool
-for us to upload an image, and isolate the HSV (Hue-Saturation-Value)
-representaion of the colour we wish to pick out:
+for us to upload an image, and isolate the RGB representaion of the colour we
+wish to pick out: <https://redketchup.io/color-picker>
 
-<https://redketchup.io/color-picker>
+Using this website, we learn that the RGB representation we want is $(244, 251, 95)$. 
+It should be clear that there is a range of values corresponding to the yellow
+of the ball. To accommodate this range, we convert the colour representation to
+HSV (Hue-Saturation-Value), using a function from `cv2`.
 
-Using this website, we learn that the RGB representation we want is
-RGB=(244,251,95). We the convert this to HSV using a colour conversion
-function.
+```{python}
+# R=244, G=251, B=95
+cv2.cvtColor(np.uint8([[[95, 251, 244 ]]]), cv2.COLOR_BGR2HSV)
+```
+
+The resulting tuple corresponds to the HSV representation of the ball's colour.
+The first coordinate corresponds to the hue. We use it to set a range of values
+to pick up in the image.
 
 ```{python}
 messi = cv2.imread('data/messi5.jpg')
 hsv = cv2.cvtColor(messi, cv2.COLOR_BGR2HSV)
-```
 
-```{python}
-# 244, 251, 95
-cv2.cvtColor(np.uint8([[[95, 251, 244 ]]]), cv2.COLOR_BGR2HSV)
-```
-
-```{python}
-# define range of yellow color in HSV 
+# define range of yellow color in HSV, using H=31, S=158, V=251 as the reference.
 lower_yellow = np.array([21,  100, 100])
 upper_yellow = np.array([41, 255, 255])
 ```
 
-```{python}
-# Threshold the HSV image to get only blue colors
-mask1 = cv2.inRange(hsv, lower_yellow, upper_yellow)
-```
-
-Compare the black-and-white image below with the original one. The white
-regions below correspond to yellow coloured sections in the original image. The
-white pixels take the value 255, while the black pixels are 0. We are going to
-modify the numpy array corresponding to this mask to correspond to only the
-ball. 
-
-*Take note of where the origin is: at the top-left corner. The x-values increase to the right from there; y-values increase downward from there.*
+The final line of code to create the mask is the following.
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Mask for football, and other yellow segments."
+#| label: fig-messi-mask
+#| fig-pos: 'ht'
+
+# Threshold the HSV image to get only blue colors
+mask1 = cv2.inRange(hsv, lower_yellow, upper_yellow)
 plt.imshow(mask1, cmap='gray');
 ```
+
+Compare the black-and-white image in @fig-messi-mask with the original one in
+@fig-messi-orig. The white regions below correspond to yellow coloured sections
+in the original image. The white pixels take the value 255, while the black
+pixels are 0. 
+
+::: {.callout-important}
+Take note of where the origin is: at the top-left corner. The x-values increase
+to the right from there; y-values increase downward from there.
+:::
+
+Just before we close this example, we are going to modify the numpy array
+corresponding to this mask, to encompass the whole ball, not just the yellow
+segments.
 
 ```{python}
 mask1[:, :330] = 0
 mask1[:, 405:] = 0
 ```
 
+:::
+
 The next section of code identifies contours around the ball region, computes
-the convex hull around these points and then draws this on the original image.
+the convex hull around these points and then draws this on the original image (see 
+@fig-messi-mask-2).
 
 ```{python}
 #| fig-align: center
+#| fig-cap: "Lionel Messi with outline of ball"
+#| label: fig-messi-mask-2
+#| fig-pos: 'ht'
+
 #im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 contours, _ = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -186,6 +213,7 @@ cv2.drawContours(messi, [hull], -1, (0, 0, 255), thickness=2)
 plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB));
 ```
 
+
 ## Modifying Perspective of Images
 
 There are situations where we need to transform the perspective of an image, in
@@ -195,25 +223,43 @@ and the corresponding four points in the transformed image. Here are a couple
 of examples.
 
 ::: {#exm-sudoku-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example 1: Sudoku
+### Sudoku perspective transform
 \index{Sudoku!Perspective}
 
-Here is an example of transforming the perspective.
+Here is an example of transforming the perspective of a sudoku board from a
+newspaper. The coordinates that result in the red quadrilateral in
+@fig-sudoku-orig were obtained by manual inspection; this process typically
+requires a little trial and error.
 
 ```{python}
 #| fig-align: center
-sudoku = cv2.imread('data/sudoku.png')
-rows,cols,ch = sudoku.shape
+#| fig-cap: "Sudoku reference points"
+#| label: fig-sudoku-orig
+#| fig-pos: 'ht'
 
+sudoku = cv2.imread('data/sudoku.png')
+
+# Coordinates of original reference points
 pts1 = np.float32([[73,85], [350, 88], [355, 360], [48, 357]])
 
+# Create a polygon (clockwise) from reference points.
 pts = np.array(pts1, np.int32)
 img2 = cv2.polylines(sudoku, [pts], True, (255, 0, 0), 2 )
 plt.imshow(img2);
 ```
 
+The critical functions are `cv2.getPerspectiveTransform` and
+`cv2.warpPerspective`. The output of the transformed figure is shown on the
+right of @fig-sudoku-warped. It would be much easier to perform OCR on the
+figure on the right.
+
 ```{python}
 #| fig-align: center
+#| fig-cap: "Sudoku original and transformed"
+#| label: fig-sudoku-warped
+#| fig-pos: 'ht'
+
+# destination coordinates of original reference points.
 pts2 = np.float32([[0,0],[300,0],[300,300],[0,300]])
 M = cv2.getPerspectiveTransform(pts1,pts2)
 dst = cv2.warpPerspective(sudoku ,M,(300,300))
@@ -223,13 +269,27 @@ plt.subplot(122),plt.imshow(dst),plt.title('Output');
 ```
 :::
 
-::: {#exm-football-1 style="background-color: #D5D1D164; padding: 20px"}
-### Example 2: Football
-\index{Football!Perspective}
+For our second example, we turn to a screen capture of a football game
+telecast. Our goal is to switch the view from that in @fig-football-orig to a
+top-down view of the field.
 
 ```{python}
-Image('data/football1.png')
+#| fig-align: center
+#| fig-cap: "Football match screen capture"
+#| label: fig-football-orig
+#| fig-pos: 'ht'
+#| echo: false
+
+Image('data/football1.png', width=480)
 ```
+
+
+::: {#exm-football-1 style="background-color: #D5D1D164; padding: 20px"}
+### Football screen capture
+\index{Football!Perspective}
+
+Once again, it should be emphasised that the coordinates to be chosen require
+some trial and error.
 
 ```{python}
 football1 = cv2.imread('data/football1.png')
@@ -244,8 +304,16 @@ pts = pts.reshape((-1,1,2))
 img2 = cv2.polylines(football1, [pts], True, (255, 0, 0), 1 )
 ```
 
+From @fig-football-warped, it should be clear that only the plane of the
+*field* is transformed. The crowd in the stands, and even the players on the
+field, are in a different 2-D plane, and hence appear distorted.
+
 ```{python}
 #| fig-align: center
+#| fig-cap: "Football match transformed"
+#| label: fig-football-warped
+#| fig-pos: 'ht'
+
 fig = plt.figure(figsize=(10, 5)) 
 gs = fig.add_gridspec(1, 2, width_ratios=[2, 1]) 
 

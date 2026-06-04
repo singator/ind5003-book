@@ -604,11 +604,6 @@ In this example, we shall run the model for *50 iterations*. Remember that each
 iteration consists of a fresh set of 100 time steps.
 
 ```{python}
-#| fig-align: center
-#| fig-cap: "Proportion of zero wealth agents, over 100 iterations"
-#| label: fig-prop-zero-mult-iterations
-#| fig-pos: 'ht'
-
 params = {"N": 10}
 
 results = mesa.batch_run(
@@ -621,6 +616,13 @@ results = mesa.batch_run(
     #display_progress=True,
 )
 results_df = pd.DataFrame(results)
+```
+
+```{python}
+#| fig-align: center
+#| fig-cap: "Proportion of zero wealth agents, over 100 iterations"
+#| label: fig-prop-zero-mult-iterations
+#| fig-pos: 'ht'
 results_df.zero_prop.hist(grid=False, 
                           bins=np.arange(0.10, 1.00, 0.05),
                           figsize=(4,3));

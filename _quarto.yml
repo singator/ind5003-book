@@ -16,6 +16,7 @@ book:
     - 06-ts.qmd
     - 07-simulation.qmd
     - 08-supervised.qmd
+    - 09-vision.qmd
     - references.qmd
   cookie-consent: true
   google-analytics:
