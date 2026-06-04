@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.5.52">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -339,7 +339,7 @@ window.Quarto = {
 <li><strong>Seasonal</strong>: A seasonal pattern exists when a series is influenced by factors such as quarters of the year, the month, the day of the week, or time of day. Seasonality is always of a <strong>fixed and known</strong> period.</li>
 <li><strong>Cyclic</strong>: A cyclic pattern exists when there are rises and falls that are not of a fixed period.</li>
 </ol>
-<div id="2434d569" class="cell" data-execution_count="1">
+<div id="9c1edad3" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> datetime, calendar</span>
@@ -367,14 +367,14 @@ window.Quarto = {
 <div id="exm-housing-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.1 (Basic plot of housing data)</strong></span> </p>
 <p>This dataset comes from an R package <a href="https://www.rdocumentation.org/packages/fma/versions/2.5/topics/hsales"><code>fma</code></a>. It contains counts of monthly sales of new one-family houses sold in the USA since 1973.</p>
-<div id="cell-fig-one-fam-houses" class="cell" data-execution_count="2">
+<div id="cell-fig-one-fam-houses" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hsales <span class="op">=</span> pd.read_csv(<span class="st">'data/hsales.csv'</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>])</span>
 <span id="cb2-2"><a href="#cb2-2"></a>hsales.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a>hsales.index.freq <span class="op">=</span> <span class="st">'MS'</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>hsales.plot(title<span class="op">=</span><span class="st">'Sales of One-Family Houses, USA'</span>, legend<span class="op">=</span><span class="va">False</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))</span>
 <span id="cb2-5"><a href="#cb2-5"></a>plt.xlabel(<span class="st">'Month-Year'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Sales'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-one-fam-houses" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-one-fam-houses" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-one-fam-houses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-one-fam-houses-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -389,7 +389,7 @@ Figure&nbsp;6.1: Housing sales time plot
 <p>In <a href="#fig-one-fam-houses" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>, we observe a strong seasonality within each year. There is some indication of cyclic behaviour every 6 – 10 years. There is no apparent monotonic trend over this period. With pandas objects, we can resample the series. This allows us to compute summaries over time windows that could be of business importance. For instance, we might be interested in a breakdown by quarters instead of months.</p>
 </div>
 <p>With the <code>resample()</code> function, we can perform both downsampling (reducing the frequency of observations) or upsampling (via interpolation or nearest neighbour imputation).</p>
-<div id="d673d8bf" class="cell" data-execution_count="3">
+<div id="feef4d37" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>hsales.resample(<span class="st">'14D'</span>).interpolate().head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -449,7 +449,7 @@ Note
 <div id="exm-housing-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.2 (Season plots of housing data)</strong></span> </p>
 <p>A season plot allows us to visualise what happens within a season. In this case, each line in the graph below traces the behaviour of the series from the beginning of the season till the end (from Jan to Dec).</p>
-<div id="cell-fig-season-sales" class="cell" data-execution_count="4">
+<div id="cell-fig-season-sales" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>hsales.loc[:, <span class="st">'year'</span>] <span class="op">=</span> hsales.index.year</span>
 <span id="cb4-2"><a href="#cb4-2"></a>hsales.loc[:, <span class="st">'month'</span>] <span class="op">=</span> hsales.index.month</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
@@ -467,7 +467,7 @@ Note
 <span id="cb4-15"><a href="#cb4-15"></a>plt.xlim(<span class="dv">0</span>, <span class="dv">13</span>)</span>
 <span id="cb4-16"><a href="#cb4-16"></a>plt.xticks(np.arange(<span class="dv">1</span>, <span class="dv">13</span>), calendar.month_abbr[<span class="dv">1</span>:<span class="dv">13</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-season-sales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-season-sales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-season-sales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-season-sales-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -484,7 +484,7 @@ Figure&nbsp;6.2: Season plot of housing sales
 <div id="exm-aus-elec-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.3 (Australian quarterly electricity production)</strong></span> </p>
 <p>This dataset is from another R package: <a href="https://www.rdocumentation.org/packages/fpp2/versions/2.5/topics/qauselec"><code>fpp2</code></a>. It records quarterly electric production in Australia (in billion kWh) from 1965 till now.</p>
-<div id="cell-fig-aus-elec-time" class="cell" data-execution_count="5">
+<div id="cell-fig-aus-elec-time" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>qau <span class="op">=</span> pd.read_csv(<span class="st">'data/qauselec.csv'</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>])</span>
 <span id="cb5-2"><a href="#cb5-2"></a>qau.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>qau.index.freq <span class="op">=</span> <span class="st">'QS'</span></span>
@@ -492,7 +492,7 @@ Figure&nbsp;6.2: Season plot of housing sales
 <span id="cb5-5"><a href="#cb5-5"></a>qau.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>), title<span class="op">=</span><span class="st">'Electrcity Production by Quarter'</span>, legend<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb5-6"><a href="#cb5-6"></a>plt.xlabel(<span class="st">'Qtr-Year'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Billion kWh'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-aus-elec-time" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-aus-elec-time" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-aus-elec-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-aus-elec-time-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -505,7 +505,7 @@ Figure&nbsp;6.3: Aus electric production time plot
 </div>
 </div>
 <p><a href="#fig-aus-elec-time" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> shows a very clear increasing trend. There is strong seasonality, and there is no evidence of cyclic behaviour (see <a href="#fig-season-qauselec" class="quarto-xref">Figure&nbsp;<span>6.4</span></a>).</p>
-<div id="cell-fig-season-qauselec" class="cell" data-execution_count="6">
+<div id="cell-fig-season-qauselec" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>qau2 <span class="op">=</span> qau.copy()</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a>qau2.loc[:, <span class="st">'year'</span>] <span class="op">=</span> qau2.index.year</span>
@@ -524,7 +524,7 @@ Figure&nbsp;6.3: Aus electric production time plot
 <span id="cb6-16"><a href="#cb6-16"></a>plt.xlim(<span class="dv">0</span>, <span class="dv">5</span>)</span>
 <span id="cb6-17"><a href="#cb6-17"></a>plt.xticks(np.arange(<span class="dv">1</span>, <span class="dv">5</span>), [<span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-season-qauselec" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-season-qauselec" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-season-qauselec-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-season-qauselec-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -544,7 +544,7 @@ Figure&nbsp;6.4: Season plot, electric production
 <div id="exm-housing-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.4 (Lag plots of housing sales data)</strong></span> </p>
 <p><a href="#fig-lag-sales" class="quarto-xref">Figure&nbsp;<span>6.5</span></a> displays a matrix of lag plots for the housing sales data (see <a href="#fig-one-fam-houses" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> and <a href="#fig-season-sales" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> for reference).</p>
-<div id="cell-fig-lag-sales" class="cell" data-execution_count="7">
+<div id="cell-fig-lag-sales" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>f, aa <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">3</span>,ncols<span class="op">=</span><span class="dv">4</span>, sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a>f.set_figheight(<span class="dv">9</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>f.set_figwidth(<span class="dv">12</span>)</span>
@@ -557,7 +557,7 @@ Figure&nbsp;6.4: Season plot, electric production
 <span id="cb7-10"><a href="#cb7-10"></a>        aa[i,j].set_xlabel(<span class="st">"lag "</span> <span class="op">+</span> <span class="bu">str</span>(lag))</span>
 <span id="cb7-11"><a href="#cb7-11"></a>f.suptitle(<span class="st">'Lag plots'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-lag-sales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-lag-sales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-lag-sales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-lag-sales-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -599,13 +599,13 @@ y_t = S_t \times T_t \times R_t
 <div id="exm-housing-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.5 (Additive decomposition, housing sales)</strong></span> </p>
 <p><a href="#fig-add-decomp-hsales" class="quarto-xref">Figure&nbsp;<span>6.6</span></a> contains the naive additive decomposition of the housing sales data.</p>
-<div id="cell-fig-add-decomp-hsales" class="cell" data-execution_count="8">
+<div id="cell-fig-add-decomp-hsales" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>hsales_add <span class="op">=</span> seasonal_decompose(hsales.loc[:, <span class="st">'hsales'</span>], </span>
 <span id="cb8-2"><a href="#cb8-2"></a>                                model<span class="op">=</span><span class="st">'additive'</span>, extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3"></a>ax <span class="op">=</span> hsales_add.plot()</span>
 <span id="cb8-4"><a href="#cb8-4"></a>ax.set_figheight(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-add-decomp-hsales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-add-decomp-hsales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-add-decomp-hsales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-add-decomp-hsales-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -624,13 +624,13 @@ Figure&nbsp;6.6: Additive decomposition
 <div id="exm-aus-elec-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.6 (Multiplicative decomposition, Aus electricity data)</strong></span> </p>
 <p><a href="#fig-mult-decomp-qau" class="quarto-xref">Figure&nbsp;<span>6.7</span></a> the <em>multiplicative decomposition</em> for the Australian electric data.</p>
-<div id="cell-fig-mult-decomp-qau" class="cell" data-execution_count="9">
+<div id="cell-fig-mult-decomp-qau" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>qau_mult <span class="op">=</span> seasonal_decompose(qau.loc[:, <span class="st">'kWh'</span>], model<span class="op">=</span><span class="st">'multiplicative'</span>,</span>
 <span id="cb9-2"><a href="#cb9-2"></a>                              extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a>ax <span class="op">=</span> qau_mult.plot()<span class="op">;</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a>ax.set_figheight(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-mult-decomp-qau" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-mult-decomp-qau" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mult-decomp-qau-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-mult-decomp-qau-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -653,12 +653,12 @@ Figure&nbsp;6.7: Additive decomposition
 <div id="exm-aus-elec-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.7 (STL decomposition, Aus electricity)</strong></span> </p>
 <p>Newer algorithms such as STL decomposition, X11 and others attempt to address these issues. They use locally weighted regression models to obtain the trend. These algorithms iterate over the time series several times, so as to ensure that outliers are not affecting the outcome. For full details on STL (Seasonal Trend decomposition with Loess), please refer to the original paper <span class="citation" data-cites="cleveland1990stl">Cleveland et al. (<a href="references.html#ref-cleveland1990stl" role="doc-biblioref">1990</a>)</span>.</p>
-<div id="cell-fig-stl-decomp" class="cell" data-execution_count="10">
+<div id="cell-fig-stl-decomp" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>qau_stl <span class="op">=</span> STL(qau.kWh).fit()</span>
 <span id="cb10-2"><a href="#cb10-2"></a>ax <span class="op">=</span> qau_stl.plot()<span class="op">;</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a>ax.set_figheight(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-stl-decomp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-stl-decomp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-stl-decomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-stl-decomp-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -707,7 +707,7 @@ Note
 <div id="exm-housing-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.8 (Benchmark forecasts housing sales)</strong></span> </p>
 <p>Suppose we apply some of the above forecasts to the housing sales dataset. We withhold the most recent 2 years of data and forecast those. Take a look at <a href="#fig-benchmark-hsales" class="quarto-xref">Figure&nbsp;<span>6.9</span></a>, that depicts the forecasts along with the true values.</p>
-<div id="cell-fig-benchmark-hsales" class="cell" data-execution_count="11">
+<div id="cell-fig-benchmark-hsales" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Set aside the last two years as the test set.</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="co">#hsales = hsales.drop(columns=['year', 'month'])</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>train_set <span class="op">=</span> hsales.iloc[:<span class="op">-</span><span class="dv">24</span>,]</span>
@@ -724,7 +724,7 @@ Note
 <span id="cb11-14"><a href="#cb11-14"></a>snaive_forecast.plot(ax<span class="op">=</span>ax, legend<span class="op">=</span><span class="va">False</span>, style<span class="op">=</span><span class="st">'-'</span>)</span>
 <span id="cb11-15"><a href="#cb11-15"></a>plt.legend(labels<span class="op">=</span>[<span class="st">'train'</span>, <span class="st">'test'</span>, <span class="st">'mean'</span>, <span class="st">'snaive'</span>], loc<span class="op">=</span><span class="st">'lower right'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-benchmark-hsales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-benchmark-hsales" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-benchmark-hsales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-benchmark-hsales-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -753,7 +753,7 @@ Figure&nbsp;6.9: Benchmark forecasts, housing sales data
 <div id="exm-housing-4a" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.9 (Benchmark forecast errors)</strong></span> </p>
 <p>Let us assess the forecasts made in <a href="#exm-housing-4" class="quarto-xref">Example&nbsp;<span>6.8</span></a>, using RMSE and MAE.</p>
-<div id="6627b5ee" class="cell" data-execution_count="12">
+<div id="2f36f4c8" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="cf">for</span> x <span class="kw">in</span> [ts.rmse, ts.mae]:</span>
 <span id="cb12-2"><a href="#cb12-2"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">,mean: </span><span class="sc">{</span>x(test_set.hsales.values, mean_forecast.values)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">,snaive: </span><span class="sc">{</span>x(test_set.hsales.values, snaive_forecast.values)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
@@ -770,7 +770,7 @@ mae,snaive: 4.792
 <p>In our simple example, the seasonal naive model outperforms the simple mean forecast according to all the metrics but in general, things are not always this clear-cut.</p>
 </div>
 <p>For reference, the MASE for the seasonal naive forecast is as follows.</p>
-<div id="17ef806b" class="cell" data-execution_count="13">
+<div id="8e80defa" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>ts.mase(test_set.hsales.values,  snaive_forecast.values, train_set.values, </span>
 <span id="cb14-2"><a href="#cb14-2"></a>        seasonality<span class="op">=</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
@@ -790,11 +790,11 @@ mae,snaive: 4.792
 <div id="exm-dow-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.10 (Dow Jones index)</strong></span> </p>
 <p>Consider the following time series of the Dow Jones index, shown in <a href="#fig-dow-ts" class="quarto-xref">Figure&nbsp;<span>6.10</span></a>.</p>
-<div id="cell-fig-dow-ts" class="cell" data-execution_count="14">
+<div id="cell-fig-dow-ts" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>dj <span class="op">=</span> pd.read_csv(<span class="st">'data/dj.csv'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2"></a>dj.plot(legend<span class="op">=</span><span class="va">False</span>, title<span class="op">=</span><span class="st">'Dow Jones Index'</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-dow-ts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-dow-ts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dow-ts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-dow-ts-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -810,11 +810,11 @@ Figure&nbsp;6.10: Dow Jones, time series plot
 <p><span class="math display">\[\begin{equation}
 \Delta y_t = y_t - y_{t-1}
 \end{equation}\]</span></p>
-<div id="cell-fig-dow-diff-ts" class="cell" data-execution_count="15">
+<div id="cell-fig-dow-diff-ts" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>ddj <span class="op">=</span> diff(dj)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>ddj.plot(legend<span class="op">=</span><span class="va">False</span>, title<span class="op">=</span><span class="st">'Differenced Dow Jones'</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-dow-diff-ts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-dow-diff-ts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dow-diff-ts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-dow-diff-ts-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -828,7 +828,7 @@ Figure&nbsp;6.11: Dow Jones, differenced plot
 </div>
 </div>
 <p>ARIMA models revolve around the idea that if we have a non-stationary series, we can transform it into a stationary one with a suitable number of differencing. A more general way of studying if a series is stationary is to plot it’s AutoCorrelation Function (ACF). The ARIMA method directly models the ACF. That is why it is so important for this class of models. The ACF of a stationary process should “die down” quickly. <a href="#fig-acf-diff" class="quarto-xref">Figure&nbsp;<span>6.12</span></a> shows the ACF of the Dow Jones data, before and after differencing.</p>
-<div id="cell-fig-acf-diff" class="cell" data-execution_count="16">
+<div id="cell-fig-acf-diff" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb18-2"><a href="#cb18-2"></a>plt.subplot(<span class="dv">211</span>)</span>
 <span id="cb18-3"><a href="#cb18-3"></a>plt.stem(acf(dj, fft<span class="op">=</span><span class="va">False</span>))</span>
@@ -837,7 +837,7 @@ Figure&nbsp;6.11: Dow Jones, differenced plot
 <span id="cb18-6"><a href="#cb18-6"></a>plt.stem(acf(ddj, fft<span class="op">=</span><span class="va">False</span>))<span class="op">;</span></span>
 <span id="cb18-7"><a href="#cb18-7"></a>plt.title(<span class="st">"Differenced Series"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-acf-diff" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-acf-diff" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-acf-diff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-acf-diff-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -862,7 +862,7 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 <div id="exm-aus-elec-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.11 (Auto ARIMA on Aus electricity)</strong></span> </p>
 <p>Let us try out the ARIMA auto-fitting algorithm on the qau electricity usage dataset. We shall set aside the last three years of data as the test set. Recall that this is quarterly data. First, we establish the seasonal naive benchmark error for this dataset.</p>
-<div id="fb2f55e9" class="cell" data-execution_count="17">
+<div id="355861f2" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>train2 <span class="op">=</span> qau.kWh[:<span class="op">-</span><span class="dv">12</span>]</span>
 <span id="cb19-2"><a href="#cb19-2"></a>test2 <span class="op">=</span> qau.kWh[<span class="op">-</span><span class="dv">12</span>:]</span>
 <span id="cb19-3"><a href="#cb19-3"></a></span>
@@ -873,12 +873,12 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 </div>
 </div>
 <p>Let us see if the automatically fitted ARIMA models can do better than this.</p>
-<div id="3fe757c2" class="cell" data-execution_count="19">
+<div id="365e4716" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>arima_m1 <span class="op">=</span> pm.auto_arima(train2.values, seasonal<span class="op">=</span><span class="va">True</span>, m<span class="op">=</span><span class="dv">4</span>, test<span class="op">=</span><span class="st">'adf'</span>, </span>
 <span id="cb21-2"><a href="#cb21-2"></a>                         trace<span class="op">=</span><span class="va">False</span>, suppress_warnings<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is the summary of the final chosen model.</p>
-<div id="2fe08668" class="cell" data-execution_count="20">
+<div id="63b53a1c" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>arima_m1.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
@@ -892,27 +892,27 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
-<td>SARIMAX(1, 1, 1)x(2, 0, [1, 2], 4)</td>
+<td>SARIMAX(2, 1, 2)x(1, 0, [1], 4)</td>
 <td data-quarto-table-cell-role="th">Log Likelihood</td>
-<td>-174.648</td>
+<td>-175.200</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 03 Jun 2026</td>
+<td>Sat, 30 May 2026</td>
 <td data-quarto-table-cell-role="th">AIC</td>
-<td>365.295</td>
+<td>364.400</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>16:38:57</td>
+<td>21:42:09</td>
 <td data-quarto-table-cell-role="th">BIC</td>
-<td>391.880</td>
+<td>387.661</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Sample:</td>
 <td>0</td>
 <td data-quarto-table-cell-role="th">HQIC</td>
-<td>376.048</td>
+<td>373.809</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th"></td>
@@ -942,76 +942,67 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 <td data-quarto-table-cell-role="th">0.975]</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">intercept</td>
-<td>0.0021</td>
-<td>0.003</td>
-<td>0.678</td>
-<td>0.498</td>
-<td>-0.004</td>
-<td>0.008</td>
+<td data-quarto-table-cell-role="th">ar.L1</td>
+<td>-0.3584</td>
+<td>0.254</td>
+<td>-1.412</td>
+<td>0.158</td>
+<td>-0.856</td>
+<td>0.139</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">ar.L1</td>
-<td>0.5539</td>
-<td>0.078</td>
-<td>7.100</td>
-<td>0.000</td>
-<td>0.401</td>
-<td>0.707</td>
+<td data-quarto-table-cell-role="th">ar.L2</td>
+<td>0.4194</td>
+<td>0.232</td>
+<td>1.807</td>
+<td>0.071</td>
+<td>-0.036</td>
+<td>0.874</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">ma.L1</td>
-<td>-0.9001</td>
-<td>0.050</td>
-<td>-18.115</td>
-<td>0.000</td>
-<td>-0.998</td>
-<td>-0.803</td>
+<td>0.0346</td>
+<td>0.250</td>
+<td>0.138</td>
+<td>0.890</td>
+<td>-0.456</td>
+<td>0.525</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">ar.S.L4</td>
-<td>0.0880</td>
-<td>0.230</td>
-<td>0.382</td>
-<td>0.702</td>
-<td>-0.364</td>
-<td>0.540</td>
+<td data-quarto-table-cell-role="th">ma.L2</td>
+<td>-0.7546</td>
+<td>0.284</td>
+<td>-2.657</td>
+<td>0.008</td>
+<td>-1.311</td>
+<td>-0.198</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">ar.S.L8</td>
-<td>0.8868</td>
-<td>0.227</td>
-<td>3.905</td>
+<td data-quarto-table-cell-role="th">ar.S.L4</td>
+<td>0.9891</td>
+<td>0.009</td>
+<td>113.956</td>
 <td>0.000</td>
-<td>0.442</td>
-<td>1.332</td>
+<td>0.972</td>
+<td>1.006</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">ma.S.L4</td>
-<td>0.2908</td>
-<td>0.221</td>
-<td>1.317</td>
-<td>0.188</td>
-<td>-0.142</td>
-<td>0.724</td>
+<td>-0.6264</td>
+<td>0.072</td>
+<td>-8.641</td>
+<td>0.000</td>
+<td>-0.768</td>
+<td>-0.484</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">ma.S.L8</td>
-<td>-0.6146</td>
-<td>0.125</td>
-<td>-4.903</td>
-<td>0.000</td>
-<td>-0.860</td>
-<td>-0.369</td>
-</tr>
-<tr class="odd">
 <td data-quarto-table-cell-role="th">sigma2</td>
-<td>0.2977</td>
-<td>0.025</td>
-<td>11.973</td>
+<td>0.3090</td>
+<td>0.026</td>
+<td>11.967</td>
 <td>0.000</td>
-<td>0.249</td>
-<td>0.346</td>
+<td>0.258</td>
+<td>0.360</td>
 </tr>
 </tbody>
 </table>
@@ -1021,19 +1012,19 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Ljung-Box (L1) (Q):</td>
-<td>0.00</td>
+<td>0.08</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>20.82</td>
+<td>20.44</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Q):</td>
-<td>0.95</td>
+<td>0.78</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
 <td>0.00</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Heteroskedasticity (H):</td>
-<td>8.43</td>
+<td>9.46</td>
 <td data-quarto-table-cell-role="th">Skew:</td>
 <td>-0.09</td>
 </tr>
@@ -1041,7 +1032,7 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 <td data-quarto-table-cell-role="th">Prob(H) (two-sided):</td>
 <td>0.00</td>
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>4.55</td>
+<td>4.54</td>
 </tr>
 </tbody>
 </table>
@@ -1058,10 +1049,10 @@ y'_t = c + \phi_1 y'_{t-1} + \phi_2 y'_{t-2} + \cdots + \phi_p y'_{t-p} + \theta
 <p>Once we have found the best-fitting model, we do what we do with any other model in data analytics: we have to inspect the residuals. The residuals should look like trash to us - there should be no clues about the data in them. With reference to <a href="#fig-arima-diag" class="quarto-xref">Figure&nbsp;<span>6.13</span></a>, the standardized residual in the top left should be consistently wide; it isn’t. In fact this information is also reflected in the model output summary (see <code>Heteroskedasticity (H)</code>). This suggests some sort of transformation of the data before modeling might be appropriate.</p>
 <p>The two plots on the off-diagonal are meant for us to assess if the residuals are Normally distributed with mean 0. They do indeed look like it.</p>
 <p>The final plot, in the bottom right, displays an ACF with no spikes, indicating that the residuals are uncorrelated. This is precisely what we wished to see.</p>
-<div id="cell-fig-arima-diag" class="cell" data-execution_count="21">
+<div id="cell-fig-arima-diag" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>arima_m1.plot_diagnostics(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-arima-diag" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-arima-diag" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-arima-diag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-arima-diag-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1074,19 +1065,19 @@ Figure&nbsp;6.13: ARIMA residual diagnostics
 </div>
 </div>
 <p>Finally, we assess the error on the test set. The out-of-sample performance is better than the naive methods.</p>
-<div id="b29931e3" class="cell" data-execution_count="22">
+<div id="e6256088" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>rmse1 <span class="op">=</span> ts.rmse(test2.values, arima_m1.predict(n_periods<span class="op">=</span><span class="dv">12</span>))</span>
 <span id="cb24-2"><a href="#cb24-2"></a>mase1 <span class="op">=</span> ts.mase(test2.values, arima_m1.predict(n_periods<span class="op">=</span><span class="dv">12</span>), </span>
 <span id="cb24-3"><a href="#cb24-3"></a>                train2.values, seasonality<span class="op">=</span><span class="dv">4</span>)</span>
 <span id="cb24-4"><a href="#cb24-4"></a><span class="bu">print</span>(<span class="ss">f"The RMSE on the test set is </span><span class="sc">{</span>rmse1<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb24-5"><a href="#cb24-5"></a><span class="bu">print</span>(<span class="ss">f"The MASE on the test set is </span><span class="sc">{</span>mase1<span class="sc">:.3f}</span><span class="ss">."</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The RMSE on the test set is 1.972.
-The MASE on the test set is 1.336.</code></pre>
+<pre><code>The RMSE on the test set is 1.943.
+The MASE on the test set is 1.235.</code></pre>
 </div>
 </div>
 <p>Let us proceed to make a plot of the predictions (see <a href="#fig-arima-fc" class="quarto-xref">Figure&nbsp;<span>6.14</span></a>).</p>
-<div id="cell-fig-arima-fc" class="cell" data-execution_count="23">
+<div id="cell-fig-arima-fc" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>n_periods <span class="op">=</span> <span class="dv">12</span></span>
 <span id="cb26-2"><a href="#cb26-2"></a>fc, confint <span class="op">=</span> arima_m1.predict(n_periods<span class="op">=</span>n_periods, return_conf_int<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb26-3"><a href="#cb26-3"></a></span>
@@ -1101,7 +1092,7 @@ The MASE on the test set is 1.336.</code></pre>
 <span id="cb26-12"><a href="#cb26-12"></a>plt.plot(test2, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'True'</span>)</span>
 <span id="cb26-13"><a href="#cb26-13"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-arima-fc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-arima-fc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-arima-fc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-arima-fc-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1170,7 +1161,7 @@ Figure&nbsp;6.16: ETS multiplictive models
 <div id="exm-aus-elec-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.12 (ETS model on Aus electricity dataset)</strong></span> </p>
 <p>Let us try one of the basic models, with just a slope, level and seasonal effect ETS(A,A,A), on the qau dataset.</p>
-<div id="4b745de8" class="cell" data-execution_count="24">
+<div id="64c3b78b" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>ets_m1 <span class="op">=</span> ExponentialSmoothing(train2.values, seasonal_periods<span class="op">=</span><span class="dv">4</span>, trend<span class="op">=</span><span class="st">'add'</span>, </span>
 <span id="cb27-2"><a href="#cb27-2"></a>                              seasonal<span class="op">=</span><span class="st">'add'</span>)</span>
 <span id="cb27-3"><a href="#cb27-3"></a>ets_fit <span class="op">=</span> ets_m1.fit()</span>
@@ -1213,13 +1204,13 @@ Figure&nbsp;6.16: ETS multiplictive models
 <td data-quarto-table-cell-role="th">Seasonal Periods:</td>
 <td>4</td>
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 03 Jun 2026</td>
+<td>Sat, 30 May 2026</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Box-Cox:</td>
 <td>False</td>
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>16:38:57</td>
+<td>21:42:10</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Box-Cox Coeff.:</td>
@@ -1241,7 +1232,7 @@ Figure&nbsp;6.16: ETS multiplictive models
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">smoothing_level</td>
-<td>0.6206192</td>
+<td>0.6206188</td>
 <td>alpha</td>
 <td>True</td>
 </tr>
@@ -1253,43 +1244,43 @@ Figure&nbsp;6.16: ETS multiplictive models
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">smoothing_seasonal</td>
-<td>0.2690403</td>
+<td>0.2690402</td>
 <td>gamma</td>
 <td>True</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">initial_level</td>
-<td>4.0245534</td>
+<td>4.0245540</td>
 <td>l.0</td>
 <td>True</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">initial_trend</td>
-<td>0.2509973</td>
+<td>0.2509971</td>
 <td>b.0</td>
 <td>True</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">initial_seasons.0</td>
-<td>-0.3899476</td>
+<td>-0.3899510</td>
 <td>s.0</td>
 <td>True</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">initial_seasons.1</td>
-<td>0.1112562</td>
+<td>0.1112586</td>
 <td>s.1</td>
 <td>True</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">initial_seasons.2</td>
-<td>0.2908031</td>
+<td>0.2908070</td>
 <td>s.2</td>
 <td>True</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">initial_seasons.3</td>
-<td>-0.3718630</td>
+<td>-0.3718649</td>
 <td>s.3</td>
 <td>True</td>
 </tr>
@@ -1298,7 +1289,7 @@ Figure&nbsp;6.16: ETS multiplictive models
 </div>
 </div>
 <p>The plots in <a href="#fig-ets-components" class="quarto-xref">Figure&nbsp;<span>6.17</span></a> plot the estimated trend and level for the series. Notice how there is an almost constant slope for the series.</p>
-<div id="cell-fig-ets-components" class="cell" data-execution_count="25">
+<div id="cell-fig-ets-components" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>plt.subplot(<span class="dv">211</span>)</span>
 <span id="cb28-2"><a href="#cb28-2"></a>plt.plot(train2.index, ets_fit.trend, scaley<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb28-3"><a href="#cb28-3"></a>plt.ylim(<span class="fl">0.245</span>, <span class="fl">0.255</span>)</span>
@@ -1308,7 +1299,7 @@ Figure&nbsp;6.16: ETS multiplictive models
 <span id="cb28-7"><a href="#cb28-7"></a>plt.plot(train2.index, ets_fit.level)</span>
 <span id="cb28-8"><a href="#cb28-8"></a>plt.ylabel(<span class="st">'level'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-ets-components" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-ets-components" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ets-components-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-ets-components-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1321,7 +1312,7 @@ Figure&nbsp;6.17: ETS trend and level components
 </div>
 </div>
 <p>Finally, let’s take a look if the predictions on the test set are competitive with the automatic ARIMA model that was selected earlier. The forecasts are better than the naive ones, but not as good as the ARIMA. However, keep in mind that we are working with a single model - just as we did for ARIMA models, we should iterate over several ETS models and pick the best one in order to compare with the ARIMA model found.</p>
-<div id="5ca379a2" class="cell" data-execution_count="26">
+<div id="2e2169ee" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>ets_fc <span class="op">=</span> ets_fit.forecast(steps<span class="op">=</span><span class="dv">12</span>)</span>
 <span id="cb29-2"><a href="#cb29-2"></a><span class="bu">print</span>(<span class="ss">f"The RMSE on the test set is </span><span class="sc">{</span>ts<span class="sc">.</span>rmse(test2.values, ets_fc)<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1343,7 +1334,7 @@ y_t = \frac{1}{2}(x_{\theta,t} + x_{1 - \theta,t})
 <div id="exm-tourism-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.13 (International tourism arrivals to Singapore)</strong></span> </p>
 <p>The Singapore Department of Statistics shares information on tourist arrivals to Singapore at the monthly level. <a href="#fig-sg-tourism-ts" class="quarto-xref">Figure&nbsp;<span>6.18</span></a> contains a time series plot of arrivals from South East Asian Countries:</p>
-<div id="cell-fig-sg-tourism-ts" class="cell" data-execution_count="27">
+<div id="cell-fig-sg-tourism-ts" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>tourism <span class="op">=</span> pd.read_excel(<span class="st">"data/international_visitor_arrivals_sg.xlsx"</span>, </span>
 <span id="cb31-2"><a href="#cb31-2"></a>                        parse_dates<span class="op">=</span>[<span class="dv">0</span>], date_format<span class="op">=</span><span class="st">"%Y %b"</span>, </span>
 <span id="cb31-3"><a href="#cb31-3"></a>                        na_values<span class="op">=</span><span class="st">'na'</span>)</span>
@@ -1360,7 +1351,7 @@ y_t = \frac{1}{2}(x_{\theta,t} + x_{1 - \theta,t})
 <span id="cb31-14"><a href="#cb31-14"></a>fig <span class="op">=</span> sea2.plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span>
 <span id="cb31-15"><a href="#cb31-15"></a>fig.set_title(<span class="st">'Monthly Arrivals from SEA Countries before COVID-19'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sg-tourism-ts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sg-tourism-ts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sg-tourism-ts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-sg-tourism-ts-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1376,7 +1367,7 @@ Figure&nbsp;6.18: Singapore monthly tourist arrivals
 </div>
 <p><br></p>
 <p>To fit the theta model for this dataset, we use the following code:</p>
-<div id="354e2764" class="cell" data-execution_count="28">
+<div id="723bec52" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>theta_mod <span class="op">=</span> ThetaModel(sea2)</span>
 <span id="cb32-2"><a href="#cb32-2"></a>theta_mod_fit <span class="op">=</span> theta_mod.fit()</span>
 <span id="cb32-3"><a href="#cb32-3"></a><span class="bu">print</span>(theta_mod_fit.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1385,8 +1376,8 @@ Figure&nbsp;6.18: Singapore monthly tourist arrivals
 ==============================================================================
 Dep. Variable:                    SEA   No. Observations:                  504
 Method:                       OLS/SES   Deseasonalized:                   True
-Date:                Wed, 03 Jun 2026   Deseas. Method:         Multiplicative
-Time:                        16:38:59   Period:                             12
+Date:                Sat, 30 May 2026   Deseas. Method:         Multiplicative
+Time:                        21:42:11   Period:                             12
 Sample:                    01-01-1978                                         
                          - 12-01-2019                                         
   Parameter Estimates   
@@ -1412,7 +1403,7 @@ Note
 <p>The calculations in the next cell are based on formulas for the theta decomposition that we won’t get into. They are just for illustration of how the decomposition is in terms of long and short term trends, rather than the cross-sectional decompositions we have been dealing with so far. The orange dashed line in <a href="#fig-theta-decomp" class="quarto-xref">Figure&nbsp;<span>6.19</span></a> denotes the long-term trend that the model has identified, while the green dashed line denotes the short-term trend. The blue solid line is the seasonally adjusted time series.</p>
 </div>
 </div>
-<div id="cell-fig-theta-decomp" class="cell" data-execution_count="29">
+<div id="cell-fig-theta-decomp" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># carry out mutliplicative decomposition in order to obtain seasonally adjusted series</span></span>
 <span id="cb34-2"><a href="#cb34-2"></a>sea2_mult <span class="op">=</span> seasonal_decompose(sea2, model<span class="op">=</span><span class="st">'multiplicative'</span>, extrapolate_trend<span class="op">=</span><span class="st">'freq'</span>)</span>
 <span id="cb34-3"><a href="#cb34-3"></a></span>
@@ -1433,7 +1424,7 @@ Note
 <span id="cb34-18"><a href="#cb34-18"></a>yvals2.plot(legend<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Short-term trend'</span>, style<span class="op">=</span><span class="st">"--"</span>)<span class="op">;</span></span>
 <span id="cb34-19"><a href="#cb34-19"></a>fig.set_title(<span class="st">"Theta decomposition"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-theta-decomp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-theta-decomp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-theta-decomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-theta-decomp-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1446,7 +1437,7 @@ Figure&nbsp;6.19: Theta decomposition, showing the breakdown into long- and shor
 </div>
 </div>
 <p>Finally, we visualise the forecasts from this theta decomposition model in <a href="#fig-theta-decomp-fc" class="quarto-xref">Figure&nbsp;<span>6.20</span></a>. We only plot the final 360 observations for the visualisation.</p>
-<div id="cell-fig-theta-decomp-fc" class="cell" data-execution_count="30">
+<div id="cell-fig-theta-decomp-fc" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>theta_forecasts <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb35-2"><a href="#cb35-2"></a>    {</span>
 <span id="cb35-3"><a href="#cb35-3"></a>        <span class="st">"original"</span>: sea2,</span>
@@ -1455,7 +1446,7 @@ Figure&nbsp;6.19: Theta decomposition, showing the breakdown into long- and shor
 <span id="cb35-6"><a href="#cb35-6"></a>)</span>
 <span id="cb35-7"><a href="#cb35-7"></a>theta_forecasts.tail(<span class="dv">360</span>).plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-theta-decomp-fc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-theta-decomp-fc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-theta-decomp-fc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-theta-decomp-fc-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1474,7 +1465,7 @@ Figure&nbsp;6.20: Theta decomposition forecasts for tourism time series
 <div id="exm-tourism-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.14 (Tourism forecasts with decomposition)</strong></span> </p>
 <p>Here is the code that will use and STL model to decompose the series, and fit a pre-chosen ARIMA(3,1,2) model to the seasonally adjusted series. The output forecasts can be seen in <a href="#fig-decomp-fc" class="quarto-xref">Figure&nbsp;<span>6.21</span></a>.</p>
-<div id="cell-fig-decomp-fc" class="cell" data-execution_count="31">
+<div id="cell-fig-decomp-fc" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>stlf <span class="op">=</span> STLForecast(sea2, ARIMA, model_kwargs<span class="op">=</span>{<span class="st">"order"</span>: (<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>)})</span>
 <span id="cb36-2"><a href="#cb36-2"></a>res <span class="op">=</span> stlf.fit( )</span>
 <span id="cb36-3"><a href="#cb36-3"></a>forecasts2 <span class="op">=</span> pd.DataFrame(</span>
@@ -1485,11 +1476,11 @@ Figure&nbsp;6.20: Theta decomposition forecasts for tourism time series
 <span id="cb36-8"><a href="#cb36-8"></a>)</span>
 <span id="cb36-9"><a href="#cb36-9"></a>forecasts2.tail(<span class="dv">360</span>).plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\stavg\Documents\courses\ind5003-book\env\Lib\site-packages\statsmodels\tsa\statespace\sarimax.py:966: UserWarning: Non-stationary starting autoregressive parameters found. Using zeros as starting parameters.
+<pre><code>/home/viknesh/NUS/coursesTaught/ind5003-book/env/lib/python3.14/site-packages/statsmodels/tsa/statespace/sarimax.py:966: UserWarning: Non-stationary starting autoregressive parameters found. Using zeros as starting parameters.
   warn('Non-stationary starting autoregressive parameters'</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-decomp-fc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-decomp-fc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-decomp-fc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-decomp-fc-output-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1511,7 +1502,7 @@ Figure&nbsp;6.21: Forecasting with STL decomposition
 <div id="exm-us-emp-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 6.15 (Time series clustering, US employment data)</strong></span> </p>
 <p>The <a href="https://otexts.com/fpp3/">Forecasting: Principles and Practice</a> contains time series data on employment in various sectors in the US. There are 148 unique series in the dataset.</p>
-<div id="b8eb7a76" class="cell" data-execution_count="32">
+<div id="b3317536" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>us_employment <span class="op">=</span> pd.read_csv(<span class="st">"data/us_employment.csv"</span>, parse_dates<span class="op">=</span>[<span class="dv">0</span>], </span>
 <span id="cb38-2"><a href="#cb38-2"></a>                            date_format<span class="op">=</span><span class="st">"%Y %b"</span>)</span>
 <span id="cb38-3"><a href="#cb38-3"></a>series_ids <span class="op">=</span> us_employment.Series_ID.unique()</span>
@@ -1532,59 +1523,59 @@ Figure&nbsp;6.21: Forecasting with STL decomposition
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">52093</td>
-<td>2000-05-01</td>
-<td>CEU4244110001</td>
-<td>Retail Trade: Automobile Dealers</td>
-<td>1214.5</td>
+<td data-quarto-table-cell-role="th">35802</td>
+<td>2015-07-01</td>
+<td>CEU3231100001</td>
+<td>Nondurable Goods: Food Manufacturing</td>
+<td>1541.9</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">115465</td>
-<td>1951-11-01</td>
-<td>CEU6562200001</td>
-<td>Education and Health Services: Hospitals</td>
+<td data-quarto-table-cell-role="th">58336</td>
+<td>1955-05-01</td>
+<td>CEU4244800001</td>
+<td>Retail Trade: Clothing and Clothing Accessorie...</td>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">131782</td>
-<td>2019-08-01</td>
-<td>CEU8081300001</td>
-<td>Other Services: Membership Associations and Or...</td>
-<td>3082.7</td>
+<td data-quarto-table-cell-role="th">36369</td>
+<td>1982-01-01</td>
+<td>CEU3231300001</td>
+<td>Nondurable Goods: Textile Mills</td>
+<td>NaN</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">19831</td>
-<td>1976-08-01</td>
-<td>CEU3132100001</td>
-<td>Durable Goods: Wood Products</td>
+<td data-quarto-table-cell-role="th">44579</td>
+<td>1939-06-01</td>
+<td>CEU4000000001</td>
+<td>Trade, Transportation, and Utilities</td>
+<td>6701.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">118987</td>
+<td>2003-02-01</td>
+<td>CEU6562400001</td>
+<td>Education and Health Services: Social Assistance</td>
+<td>2297.6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">80013</td>
+<td>1985-04-01</td>
+<td>CEU5051700001</td>
+<td>Information: Telecommunications</td>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">113341</td>
-<td>2017-02-01</td>
+<td data-quarto-table-cell-role="th">105305</td>
+<td>1993-06-01</td>
+<td>CEU6056140001</td>
+<td>Professional and Business Services: Business S...</td>
+<td>552.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">112673</td>
+<td>1961-06-01</td>
 <td>CEU6562110001</td>
 <td>Education and Health Services: offices of Phys...</td>
-<td>2559.4</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">102833</td>
-<td>1948-12-01</td>
-<td>CEU6056100001</td>
-<td>Professional and Business Services: Administra...</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">57177</td>
-<td>1939-07-01</td>
-<td>CEU4244700001</td>
-<td>Retail Trade: Gasoline Stations</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">70884</td>
-<td>1951-04-01</td>
-<td>CEU4348700001</td>
-<td>Transportation and Warehousing: Scenic and Sig...</td>
 <td>NaN</td>
 </tr>
 </tbody>
@@ -1594,12 +1585,12 @@ Figure&nbsp;6.21: Forecasting with STL decomposition
 </div>
 </div>
 <p><a href="#fig-emp-ts-example" class="quarto-xref">Figure&nbsp;<span>6.22</span></a> contains a time series plot of one of the time series in the dataset.</p>
-<div id="cell-fig-emp-ts-example" class="cell" data-execution_count="33">
+<div id="cell-fig-emp-ts-example" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a>us_employment[us_employment.Title <span class="op">==</span> <span class="st">"Total Private"</span>].plot(x<span class="op">=</span><span class="st">'Month'</span>, </span>
 <span id="cb39-2"><a href="#cb39-2"></a>                                                           y<span class="op">=</span><span class="st">'Employed'</span>, </span>
 <span id="cb39-3"><a href="#cb39-3"></a>                                                           figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-emp-ts-example" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-emp-ts-example" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-emp-ts-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-emp-ts-example-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1612,20 +1603,20 @@ Figure&nbsp;6.22: Sample time series from US employment time series
 </div>
 </div>
 <p>Since we are going to perform clustering on the time series data, our first step is to remove the missing values.</p>
-<div id="45e4474a" class="cell" data-execution_count="34">
+<div id="e8d9c660" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>us_full <span class="op">=</span> us_employment[(us_employment.Month <span class="op">&gt;=</span> datetime.datetime(<span class="dv">2002</span>, <span class="dv">9</span>, <span class="dv">30</span>)) <span class="op">&amp;</span> (us_employment.Month <span class="op">&lt;</span> datetime.datetime(<span class="dv">2018</span>, <span class="dv">1</span>, <span class="dv">1</span>) )   ]</span>
 <span id="cb40-2"><a href="#cb40-2"></a>us2 <span class="op">=</span> us_full.pivot(index<span class="op">=</span><span class="st">'Series_ID'</span>, columns<span class="op">=</span><span class="st">'Month'</span>, values<span class="op">=</span><span class="st">"Employed"</span>)</span>
 <span id="cb40-3"><a href="#cb40-3"></a>us2_array <span class="op">=</span> us2.to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can begin the clustering procedure. The first line in the code below generates a 148 x 148 distance matrix. For more details on hierarchical clustering, refer to <a href="03-unsupervised.html#sec-07-clustering" class="quarto-xref"><span>Section 3.3</span></a>. The resulting dendrogram can be seen in <a href="#fig-emp-dendrogram" class="quarto-xref">Figure&nbsp;<span>6.23</span></a>.</p>
-<div id="cell-fig-emp-dendrogram" class="cell" data-execution_count="35">
+<div id="cell-fig-emp-dendrogram" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>out <span class="op">=</span> pdist(us2_array, metric<span class="op">=</span><span class="st">'correlation'</span>)</span>
 <span id="cb41-2"><a href="#cb41-2"></a>lm1 <span class="op">=</span> hierarchy.linkage(out, method<span class="op">=</span><span class="st">'average'</span>, optimal_ordering<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb41-3"><a href="#cb41-3"></a></span>
 <span id="cb41-4"><a href="#cb41-4"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
 <span id="cb41-5"><a href="#cb41-5"></a>hierarchy.dendrogram(lm1, p<span class="op">=</span><span class="dv">3</span>, truncate_mode<span class="op">=</span><span class="st">'level'</span>,color_threshold<span class="op">=</span><span class="va">True</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-emp-dendrogram" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-emp-dendrogram" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-emp-dendrogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-emp-dendrogram-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1638,13 +1629,13 @@ Figure&nbsp;6.23: Dendrogram for employment time series clustering
 </div>
 </div>
 <p>We reorder the columns and rows in the matrix so that similar time series appear next to one another (see <a href="#fig-heatmap-correl" class="quarto-xref">Figure&nbsp;<span>6.24</span></a>).</p>
-<div id="cell-fig-heatmap-correl" class="cell" data-execution_count="36">
+<div id="cell-fig-heatmap-correl" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>X_ord <span class="op">=</span> us2_array[hierarchy.leaves_list(lm1)]</span>
 <span id="cb42-2"><a href="#cb42-2"></a>corr_mat_ord <span class="op">=</span> np.corrcoef(X_ord)</span>
 <span id="cb42-3"><a href="#cb42-3"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>))</span>
 <span id="cb42-4"><a href="#cb42-4"></a>sns.heatmap(corr_mat_ord, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>, cmap<span class="op">=</span><span class="st">'coolwarm_r'</span>, center<span class="op">=</span><span class="dv">0</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-heatmap-correl" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-heatmap-correl" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-heatmap-correl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-heatmap-correl-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1659,13 +1650,13 @@ Figure&nbsp;6.24: Heatmap of correlation matrix
 </div>
 <p>In the next few plots, we use the heatmap in <a href="#fig-heatmap-correl" class="quarto-xref">Figure&nbsp;<span>6.24</span></a> to pick out series that are close to one another. Series in blue segments of the matrix are highly correlated; here we inspect them to try to characterise the similarity.</p>
 <p>The series in <a href="#fig-sim-1" class="quarto-xref">Figure&nbsp;<span>6.25</span></a> seem to have a dip around the period 2009 - 2011, while those in <a href="#fig-sim-2" class="quarto-xref">Figure&nbsp;<span>6.26</span></a> have a cyclical pattern.</p>
-<div id="cell-fig-sim-1" class="cell" data-execution_count="37">
+<div id="cell-fig-sim-1" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>us2_series <span class="op">=</span> us2.index.to_list()</span>
 <span id="cb43-2"><a href="#cb43-2"></a>ss <span class="op">=</span> [us2_series[x] <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">22</span>, <span class="dv">24</span>, <span class="dv">32</span>, <span class="dv">33</span>, <span class="dv">34</span>]]</span>
 <span id="cb43-3"><a href="#cb43-3"></a>us2.T.loc[:, ss].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span>
 <span id="cb43-4"><a href="#cb43-4"></a>plt.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sim-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sim-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sim-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-sim-1-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -1677,11 +1668,11 @@ Figure&nbsp;6.25: Series from top left corner of heatmap in <a href="#fig-heatma
 </div>
 </div>
 </div>
-<div id="cell-fig-sim-2" class="cell" data-execution_count="38">
+<div id="cell-fig-sim-2" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>ss <span class="op">=</span> [us2_series[x] <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">143</span>, <span class="dv">144</span>, <span class="dv">145</span>]]</span>
 <span id="cb44-2"><a href="#cb44-2"></a>us2.T.loc[:, ss].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sim-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sim-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sim-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="06-ts_files/figure-html/fig-sim-2-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
