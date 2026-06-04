@@ -38,6 +38,7 @@ import numpy as np
 import os
 
 import matplotlib.pyplot as plt
+from matplotlib import colormaps
 from IPython.display import YouTubeVideo, display, HTML, Image, Video
 
 opencv_path = "opencv/samples/data/"
@@ -54,25 +55,45 @@ numpy array. Each layer corresponds to one of these channels. However, opencv
 uses the order BGR. When you use `plt.imshow` to plot an image that has been
 read in using opencv, take note of this, as it might not appear "correct".
 
+::: {#exm-starry-night-1 style="background-color: #D5D1D164; padding: 20px"}
+### Reading in The Starry Night image
+\index{The Starry Night!Reading}
+
+Consider the painting *The Starry Night*. The original colours are shown in 
+@fig-starry-night-orig.
+
 ```{python}
 #| fig-align: center
-Image("data/starry_night.jpg", width=240)
+#| fig-cap: "Starry Night original colours"
+#| label: fig-starry-night-orig
+#| fig-pos: 'ht'
+#| echo: false
 
-from matplotlib import colormaps
-#list(colormaps)
+Image("data/starry_night.jpg", width=240)
 ```
 
+However, if we use `cv2` to read the image before displaying, the colours will
+be reversed (see @fig-starry-night-cv2).
+
+
 ```{python}
 #| fig-align: center
-starry_night = cv2.imread('data/starry_night.jpg')
+#| fig-cap: "Starry Night reversed colour channels"
+#| label: fig-starry-night-cv2
+#| fig-pos: 'ht'
 
+starry_night = cv2.imread('data/starry_night.jpg')
 # Reversed (not correct)
 plt.imshow(starry_night);
-#plt.imshow(starry_night[:, :, 0], cmap='Blues');
 ```
 
-The following code should open up the starry night image in a new window on your
-computer.
+:::
+
+Instead of reading the image file with `cv2` and then using `matplotlib`, we
+can display the image with `cv2` as well. The following code should open up
+The Starry Night image in a new window on your computer. Press `q` to close the
+window.
+
 ```{python}
 #| eval: false
 # plotting with cv2.imshow returns the correct colours.
