@@ -818,7 +818,7 @@ to a neighbouring cell. With mesa, it is possible to define a couple of types of
 neighbourhoods: Moore and Von Neumann. In this case, we use the Moore
 neighbourghood (see @fig-moore-nbhd).
 
-![](figs/Moore_neighborhood_with_cardinal_directions.png){#fig-moore-nbhd fig-align=center width=30%}
+![Moore neighbourhood](figs/Moore_neighborhood_with_cardinal_directions.png){#fig-moore-nbhd fig-align=center width=30%}
 
 In the `give_money` method, the logic proceeds as follows:
 
