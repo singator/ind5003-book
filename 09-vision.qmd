@@ -24,12 +24,16 @@ Here is a short list of applications of computer vision techniques:
 comprehensive list of applications.
 
 In computer vision, the goal is to get a computer to perceive the world as *we*
-see it. This is not easy even for us to do - we can get fooled by optical
-illusions such as the ones below.
+see it. This is not easy even for us humans to do - we can get fooled by
+optical illusions such as the ones below. In general though, for us, it is
+possible to do things like pick out faces that we recognise from a photograph
+of a crowd. But how can we get a computer to do it? 
 
-In general though, for us, it is possible to do things like pick out faces that
-we recognise from a photograph of a crowd. But how can we get a computer to do
-it? 
+In this chapter, we shall begin with techniques for processing images. Although
+computer vision models are impressive, their performance can be typically be
+improved greatly by pre-processing images before applying the ready-to-use
+models. Toward the end of the chapter, we shall demonstrate how to call various
+models.
 
 ```{python}
 import cv2
@@ -40,9 +44,6 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib import colormaps
 from IPython.display import YouTubeVideo, display, HTML, Image, Video
-
-opencv_path = "opencv/samples/data/"
-opencvxtra_path = "opencv_extra/testdata/dnn/"
 ```
 
 ## Image Processing
@@ -56,7 +57,7 @@ uses the order BGR. When you use `plt.imshow` to plot an image that has been
 read in using opencv, take note of this, as it might not appear "correct".
 
 ::: {#exm-starry-night-1 style="background-color: #D5D1D164; padding: 20px"}
-### Reading in The Starry Night image
+### Reading in the Starry Night image
 \index{The Starry Night!Reading}
 
 Consider the painting *The Starry Night*. The original colours are shown in 
@@ -89,6 +90,8 @@ plt.imshow(starry_night);
 
 :::
 
+::: {.callout-note}
+
 Instead of reading the image file with `cv2` and then using `matplotlib`, we
 can display the image with `cv2` as well. The following code should open up
 The Starry Night image in a new window on your computer. Press `q` to close the
@@ -96,22 +99,133 @@ window.
 
 ```{python}
 #| eval: false
-# plotting with cv2.imshow returns the correct colours.
-cv2.namedWindow('dst_rt', cv2.WINDOW_NORMAL)
-cv2.resizeWindow('dst_rt', starry_night.shape[1], starry_night.shape[0])
 
-# hit "q" to close window (do not hit the "X" button)
-cv2.imshow('dst_rt', starry_night)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# plotting with cv2.imshow returns the correct colours.
+# Hit any key on the keyboard to close window (do not hit the "X" button)
+
+cv2.imshow('Starry Night', starry_night)
+cv2.waitKey()
+cv2.destroyWindow('Starry Night')
 ```
 
-## Working with Masks
+Ensure that the above works for you, because we are going to be using this
+approach (instead of matplotlib) to display the capture from your laptop camera
+in the later sections of this chapter.
+:::
+
+### Image Transformations
+
+Computer vision models can be sensitive to lighting, angle of capture, and to
+extraneous objects in the image. Hence it is best to process the image before
+applying the model; this will typically result in more reliable performance. In
+this subsection, we demonstrate a few common image processing steps.
+
+
+::: {#exm-starry-night-2 style="background-color: #D5D1D164; padding: 20px"}
+### Common image transformations
+\index{The Starry Night!Transformations}
+
+We are going to apply four common transformations to the Starry Night image:
+
+1.  First, we are going to convert the colorspace to grayscale. Several
+    computer vision techniques work only on grayscale images, so this is a common
+    step to be aware of. Take note that grayscale images are numpy arrays with
+    shape $R \times C$, whereas RGB/BGR images are stored as arrays with shape 
+    $R \times C \times 3$.
+
+```{python}
+# create grayscale version of image
+sn_grayscale = cv2.cvtColor(starry_night, cv2.COLOR_BGR2GRAY)
+```
+
+2.  Second, we shall demonstrate how to translate an image. In the code for
+    this procedure, take note that the origin (ie. the (0,0) coordinate) is at the 
+    top-left corner. The x-values increase to the right from there until the
+    number of columns; y-values increase downward from there until the number
+    of rows.
+
+```{python}
+rows,cols = starry_night.shape[:2]
+
+# Create RGB version of translated image, moved 400 pixels to the right, and
+# 100 pixels down. The translation matrix must be of the form:
+# [ [1, 0, x-distance],
+#   [0, 1, y-distance]]
+M = np.float32([[1, 0, 400],[0, 1, 100]]) # Translation matrix
+sn_translate = cv2.warpAffine(starry_night, M, (cols, rows))
+sn_translate_rgb = cv2.cvtColor(sn_translate, cv2.COLOR_BGR2RGB)
+```
+
+3.  The third code snippet demonstrates how to rotate an image. For this, and
+    the previous step, we require a transformation matrix, that we then apply 
+    to the image using `cv2.warpAffine`.
+
+```{python}
+# Create RGB version of image, rotated 30 degrees anti-clockwise, about it's 
+# centre.
+rotation_matrix = cv2.getRotationMatrix2D((0.5*cols, 0.5*rows), 30, 1)
+sn_rotated = cv2.warpAffine(starry_night, rotation_matrix, (cols, rows))
+sn_rotated_rgb = cv2.cvtColor(sn_rotated, cv2.COLOR_BGR2RGB)
+```
+
+4.  Finally, we show how an image can be resized (scaled up or down) using 
+    `opencv`. When an image is made larger, the pixels need to be interpolated 
+    to fill up the gaps; this can be done using a linear or cubic
+    interpolation.
+
+```{python}
+# Resize the image by 20% in each direction, with cubic interpolation.
+sn_resized = cv2.resize(starry_night, None,fx=1.2, fy=1.2, 
+                        interpolation = cv2.INTER_CUBIC)
+sn_resized_rgb = cv2.cvtColor(sn_resized, cv2.COLOR_BGR2RGB)
+# Uncomment this line to save the new image and compare with the original.
+# cv2.imwrite('data/test_sn.jpg', sn_resized)
+```
+
+Figure @fig-starry-night-transformations displays the four transformed images
+using `matplotlib`. Take note of the axes dimensions for the resized image;
+although the displayed image appears to be the same size as the others, it is
+not, due to the resizing.
+
+```{python}
+#| fig-align: center
+#| fig-cap: "Image transformations"
+#| label: fig-starry-night-transformations
+#| fig-pos: 'ht'
+#| echo: false
+
+images = [sn_grayscale, sn_rotated_rgb, sn_translate_rgb, sn_resized_rgb]
+titles = ['Grayscale', 'Rotated 30 degrees', 'Translated', 'Resized']
+
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+
+for ax, img, title in zip(axes.flat, images, titles):
+    if title == 'Grayscale': 
+        ax.imshow(img, cmap='gray') 
+    else: 
+        ax.imshow(img) 
+    ax.set_title(title) 
+
+plt.tight_layout() 
+```
+:::
+
+<br/>
+
+There are several other image processing steps that can be very helpful to know
+about. These include
+[smoothing](https://docs.opencv.org/4.13.0/d4/d13/tutorial_py_filtering.html), 
+[thresholding](https://docs.opencv.org/4.13.0/d7/d4d/tutorial_py_thresholding.html), and 
+[morphological operations](https://docs.opencv.org/4.13.0/d9/d61/tutorial_py_morphological_ops.html) such 
+as erosion, dilation, opening and closing. Please refer to linked pages on the
+opencv documentation website for examples and details.
+
+### Working with Masks
 
 When working in a computer vision project, we often need to extract parts of
 the image to work with, or to modify. This is typically done using masks. Masks
 are black-and-white images that identify the foreground (white) and the
-background (black).
+background (black). This is also sometimes referred to as binary thresholding.
 
 Let us work with the following image of Lionel Messi (@fig-messi-orig), and see
 how we can use masks and colour selection to outline the ball.
@@ -176,11 +290,6 @@ Compare the black-and-white image in @fig-messi-mask with the original one in
 in the original image. The white pixels take the value 255, while the black
 pixels are 0. 
 
-::: {.callout-important}
-Take note of where the origin is: at the top-left corner. The x-values increase
-to the right from there; y-values increase downward from there.
-:::
-
 Just before we close this example, we are going to modify the numpy array
 corresponding to this mask, to encompass the whole ball, not just the yellow
 segments.
@@ -192,6 +301,7 @@ mask1[:, 405:] = 0
 
 :::
 
+<br/>
 The next section of code identifies contours around the ball region, computes
 the convex hull around these points and then draws this on the original image (see 
 @fig-messi-mask-2).
@@ -213,14 +323,15 @@ cv2.drawContours(messi, [hull], -1, (0, 0, 255), thickness=2)
 plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB));
 ```
 
-
-## Modifying Perspective of Images
+### Modifying Perspective of Images
 
 There are situations where we need to transform the perspective of an image, in
 order to identify objects better, or to perform OCR better. To do so, we need
 to provide a map of four points from the original image (in the same plane),
-and the corresponding four points in the transformed image. Here are a couple
-of examples.
+and the corresponding four points in the transformed image. At its heart, this
+is still a transformation, just like a rotation or a translation, but the
+transformation will not preserve lengths and angles. Here are a couple of
+examples. 
 
 ::: {#exm-sudoku-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Sudoku perspective transform
@@ -280,9 +391,8 @@ top-down view of the field.
 #| fig-pos: 'ht'
 #| echo: false
 
-Image('data/football1.png', width=480)
+Image('data/football1.png', width=360)
 ```
-
 
 ::: {#exm-football-1 style="background-color: #D5D1D164; padding: 20px"}
 ### Football screen capture
@@ -313,6 +423,7 @@ field, are in a different 2-D plane, and hence appear distorted.
 #| fig-cap: "Football match transformed"
 #| label: fig-football-warped
 #| fig-pos: 'ht'
+#| echo: false
 
 fig = plt.figure(figsize=(10, 5)) 
 gs = fig.add_gridspec(1, 2, width_ratios=[2, 1]) 
@@ -329,6 +440,13 @@ ax2.set_title('Transformed Image');
 ```
 
 :::
+
+## Edge Detection
+
+
+- Sobel
+- Canny
+- Hough transform
 
 ## Computer Vision Tasks
 
