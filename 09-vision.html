@@ -297,9 +297,9 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">9.1</span> Introduction</a></li>
   <li><a href="#image-processing" id="toc-image-processing" class="nav-link" data-scroll-target="#image-processing"><span class="header-section-number">9.2</span> Image Processing</a></li>
-  <li><a href="#working-with-masks" id="toc-working-with-masks" class="nav-link" data-scroll-target="#working-with-masks"><span class="header-section-number">9.3</span> Working with Masks</a></li>
-  <li><a href="#modifying-perspective-of-images" id="toc-modifying-perspective-of-images" class="nav-link" data-scroll-target="#modifying-perspective-of-images"><span class="header-section-number">9.4</span> Modifying Perspective of Images</a></li>
-  <li><a href="#computer-vision-tasks" id="toc-computer-vision-tasks" class="nav-link" data-scroll-target="#computer-vision-tasks"><span class="header-section-number">9.5</span> Computer Vision Tasks</a></li>
+  <li><a href="#edge-detection" id="toc-edge-detection" class="nav-link" data-scroll-target="#edge-detection"><span class="header-section-number">9.3</span> Edge Detection</a></li>
+  <li><a href="#computer-vision-demonstrations" id="toc-computer-vision-demonstrations" class="nav-link" data-scroll-target="#computer-vision-demonstrations"><span class="header-section-number">9.4</span> Computer Vision Demonstrations</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.5</span> Summary</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.6</span> References</a></li>
   </ul>
 </nav>
@@ -337,9 +337,9 @@ window.Quarto = {
 <li>Machine inspection: Automatically detecting damage on components manufactured, such as silicon wafers, etc.</li>
 </ol>
 <p><a href="https://www.cs.ubc.ca/~lowe/vision.html">Here</a> is an old page with a more comprehensive list of applications.</p>
-<p>In computer vision, the goal is to get a computer to perceive the world as <em>we</em> see it. This is not easy even for us to do - we can get fooled by optical illusions such as the ones below.</p>
-<p>In general though, for us, it is possible to do things like pick out faces that we recognise from a photograph of a crowd. But how can we get a computer to do it?</p>
-<div id="4586f5e6" class="cell" data-execution_count="1">
+<p>In computer vision, the goal is to get a computer to perceive the world as <em>we</em> see it. This is not easy even for us humans to do - we can get fooled by optical illusions such as the ones below. In general though, for us, it is possible to do things like pick out faces that we recognise from a photograph of a crowd. But how can we get a computer to do it?</p>
+<p>In this chapter, we shall begin with techniques for processing images. Although computer vision models are impressive, their performance can be typically be improved greatly by pre-processing images before applying the ready-to-use models. Toward the end of the chapter, we shall demonstrate how to call various models.</p>
+<div id="5952bf55" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> cv2</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -347,10 +347,7 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5"></a></span>
 <span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> matplotlib <span class="im">import</span> colormaps</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML, Image, Video</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a>opencv_path <span class="op">=</span> <span class="st">"opencv/samples/data/"</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>opencvxtra_path <span class="op">=</span> <span class="st">"opencv_extra/testdata/dnn/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML, Image, Video</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="image-processing" class="level2" data-number="9.2">
@@ -359,11 +356,11 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="reading-images">Reading Images</h3>
 <p>The <code>opencv</code> package contains routines for reading images into Python. Images are typically represented using the RGB colorspace. Each image is a (W x H x 3) numpy array. Each layer corresponds to one of these channels. However, opencv uses the order BGR. When you use <code>plt.imshow</code> to plot an image that has been read in using opencv, take note of this, as it might not appear “correct”.</p>
 <div id="exm-starry-night-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 9.1 (Reading in The Starry Night image)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 9.1 (Reading in the Starry Night image)</strong></span> </p>
 <p>Consider the painting <em>The Starry Night</em>. The original colours are shown in <a href="#fig-starry-night-orig" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>.</p>
 <div id="cell-fig-starry-night-orig" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
-<div id="fig-starry-night-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-starry-night-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-starry-night-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-starry-night-orig-output-1.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="240">
@@ -381,7 +378,7 @@ Figure&nbsp;9.1: Starry Night original colours
 <span id="cb2-2"><a href="#cb2-2"></a><span class="co"># Reversed (not correct)</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>plt.imshow(starry_night)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-starry-night-cv2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-starry-night-cv2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-starry-night-cv2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-starry-night-cv2-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
@@ -394,224 +391,276 @@ Figure&nbsp;9.2: Starry Night reversed colour channels
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Instead of reading the image file with <code>cv2</code> and then using <code>matplotlib</code>, we can display the image with <code>cv2</code> as well. The following code should open up The Starry Night image in a new window on your computer. Press <code>q</code> to close the window.</p>
-<div id="d7b46cd7" class="cell" data-execution_count="4">
+<div id="18fff660" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># plotting with cv2.imshow returns the correct colours.</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>cv2.namedWindow(<span class="st">'dst_rt'</span>, cv2.WINDOW_NORMAL)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>cv2.resizeWindow(<span class="st">'dst_rt'</span>, starry_night.shape[<span class="dv">1</span>], starry_night.shape[<span class="dv">0</span>])</span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># hit "q" to close window (do not hit the "X" button)</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>cv2.imshow(<span class="st">'dst_rt'</span>, starry_night)</span>
-<span id="cb3-7"><a href="#cb3-7"></a>cv2.waitKey(<span class="dv">0</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>cv2.destroyAllWindows()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Hit any key on the keyboard to close window (do not hit the "X" button)</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>cv2.imshow(<span class="st">'Starry Night'</span>, starry_night)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>cv2.waitKey()</span>
+<span id="cb3-6"><a href="#cb3-6"></a>cv2.destroyWindow(<span class="st">'Starry Night'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ensure that the above works for you, because we are going to be using this approach (instead of matplotlib) to display the capture from your laptop camera in the later sections of this chapter.</p>
+</div>
 </div>
 </section>
+<section id="image-transformations" class="level3">
+<h3 class="anchored" data-anchor-id="image-transformations">Image Transformations</h3>
+<p>Computer vision models can be sensitive to lighting, angle of capture, and to extraneous objects in the image. Hence it is best to process the image before applying the model; this will typically result in more reliable performance. In this subsection, we demonstrate a few common image processing steps.</p>
+<div id="exm-starry-night-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 9.2 (Common image transformations)</strong></span> </p>
+<p>We are going to apply four common transformations to the Starry Night image:</p>
+<ol type="1">
+<li>First, we are going to convert the colorspace to grayscale. Several computer vision techniques work only on grayscale images, so this is a common step to be aware of. Take note that grayscale images are numpy arrays with shape <span class="math inline">\(R \times C\)</span>, whereas RGB/BGR images are stored as arrays with shape <span class="math inline">\(R \times C \times 3\)</span>.</li>
+</ol>
+<div id="2c6cbbbd" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># create grayscale version of image</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>sn_grayscale <span class="op">=</span> cv2.cvtColor(starry_night, cv2.COLOR_BGR2GRAY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Second, we shall demonstrate how to translate an image. In the code for this procedure, take note that the origin (ie. the (0,0) coordinate) is at the top-left corner. The x-values increase to the right from there until the number of columns; y-values increase downward from there until the number of rows.</li>
+</ol>
+<div id="ddc95db9" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rows,cols <span class="op">=</span> starry_night.shape[:<span class="dv">2</span>]</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co"># Create RGB version of translated image, moved 400 pixels to the right, and</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># 100 pixels down. The translation matrix must be of the form:</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># [ [1, 0, x-distance],</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#   [0, 1, y-distance]]</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>M <span class="op">=</span> np.float32([[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">400</span>],[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">100</span>]]) <span class="co"># Translation matrix</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>sn_translate <span class="op">=</span> cv2.warpAffine(starry_night, M, (cols, rows))</span>
+<span id="cb5-9"><a href="#cb5-9"></a>sn_translate_rgb <span class="op">=</span> cv2.cvtColor(sn_translate, cv2.COLOR_BGR2RGB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>The third code snippet demonstrates how to rotate an image. For this, and the previous step, we require a transformation matrix, that we then apply to the image using <code>cv2.warpAffine</code>.</li>
+</ol>
+<div id="9e0f3d0a" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Create RGB version of image, rotated 30 degrees anti-clockwise, about it's </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># centre.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>rotation_matrix <span class="op">=</span> cv2.getRotationMatrix2D((<span class="fl">0.5</span><span class="op">*</span>cols, <span class="fl">0.5</span><span class="op">*</span>rows), <span class="dv">30</span>, <span class="dv">1</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>sn_rotated <span class="op">=</span> cv2.warpAffine(starry_night, rotation_matrix, (cols, rows))</span>
+<span id="cb6-5"><a href="#cb6-5"></a>sn_rotated_rgb <span class="op">=</span> cv2.cvtColor(sn_rotated, cv2.COLOR_BGR2RGB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li>Finally, we show how an image can be resized (scaled up or down) using <code>opencv</code>. When an image is made larger, the pixels need to be interpolated to fill up the gaps; this can be done using a linear or cubic interpolation.</li>
+</ol>
+<div id="5dae05a8" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Resize the image by 20% in each direction, with cubic interpolation.</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>sn_resized <span class="op">=</span> cv2.resize(starry_night, <span class="va">None</span>,fx<span class="op">=</span><span class="fl">1.2</span>, fy<span class="op">=</span><span class="fl">1.2</span>, </span>
+<span id="cb7-3"><a href="#cb7-3"></a>                        interpolation <span class="op">=</span> cv2.INTER_CUBIC)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>sn_resized_rgb <span class="op">=</span> cv2.cvtColor(sn_resized, cv2.COLOR_BGR2RGB)</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co"># Uncomment this line to save the new image and compare with the original.</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># cv2.imwrite('data/test_sn.jpg', sn_resized)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Figure <a href="#fig-starry-night-transformations" class="quarto-xref">Figure&nbsp;<span>9.3</span></a> displays the four transformed images using <code>matplotlib</code>. Take note of the axes dimensions for the resized image; although the displayed image appears to be the same size as the others, it is not, due to the resizing.</p>
+<div id="cell-fig-starry-night-transformations" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display">
+<div id="fig-starry-night-transformations" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-starry-night-transformations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="09-vision_files/figure-html/fig-starry-night-transformations-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-starry-night-transformations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.3: Image transformations
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><br></p>
+<p>There are several other image processing steps that can be very helpful to know about. These include <a href="https://docs.opencv.org/4.13.0/d4/d13/tutorial_py_filtering.html">smoothing</a>, <a href="https://docs.opencv.org/4.13.0/d7/d4d/tutorial_py_thresholding.html">thresholding</a>, and <a href="https://docs.opencv.org/4.13.0/d9/d61/tutorial_py_morphological_ops.html">morphological operations</a> such as erosion, dilation, opening and closing. Please refer to linked pages on the opencv documentation website for examples and details.</p>
 </section>
-<section id="working-with-masks" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="working-with-masks"><span class="header-section-number">9.3</span> Working with Masks</h2>
-<p>When working in a computer vision project, we often need to extract parts of the image to work with, or to modify. This is typically done using masks. Masks are black-and-white images that identify the foreground (white) and the background (black).</p>
-<p>Let us work with the following image of Lionel Messi (<a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>), and see how we can use masks and colour selection to outline the ball.</p>
-<div id="cell-fig-messi-orig" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div id="fig-messi-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<section id="working-with-masks" class="level3">
+<h3 class="anchored" data-anchor-id="working-with-masks">Working with Masks</h3>
+<p>When working in a computer vision project, we often need to extract parts of the image to work with, or to modify. This is typically done using masks. Masks are black-and-white images that identify the foreground (white) and the background (black). This is also sometimes referred to as binary thresholding.</p>
+<p>Let us work with the following image of Lionel Messi (<a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>), and see how we can use masks and colour selection to outline the ball.</p>
+<div id="cell-fig-messi-orig" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div id="fig-messi-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-messi-orig-output-1.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="480">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.3: Lionel Messi, footballer.
+Figure&nbsp;9.4: Lionel Messi, footballer.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div id="exm-messi-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 9.2 (Creating a mask for the football)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 9.3 (Creating a mask for the football)</strong></span> </p>
 <p>After reading the image into Python, we are going to use a colour picker to identify the colour of the ball. The following website provides a useful tool for us to upload an image, and isolate the RGB representaion of the colour we wish to pick out: <a href="https://redketchup.io/color-picker" class="uri">https://redketchup.io/color-picker</a></p>
 <p>Using this website, we learn that the RGB representation we want is <span class="math inline">\((244, 251, 95)\)</span>. It should be clear that there is a range of values corresponding to the yellow of the ball. To accommodate this range, we convert the colour representation to HSV (Hue-Saturation-Value), using a function from <code>cv2</code>.</p>
-<div id="5c02b6ac" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># R=244, G=251, B=95</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>cv2.cvtColor(np.uint8([[[<span class="dv">95</span>, <span class="dv">251</span>, <span class="dv">244</span> ]]]), cv2.COLOR_BGR2HSV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div id="a2270b9f" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># R=244, G=251, B=95</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>cv2.cvtColor(np.uint8([[[<span class="dv">95</span>, <span class="dv">251</span>, <span class="dv">244</span> ]]]), cv2.COLOR_BGR2HSV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>array([[[ 31, 158, 251]]], dtype=uint8)</code></pre>
 </div>
 </div>
 <p>The resulting tuple corresponds to the HSV representation of the ball’s colour. The first coordinate corresponds to the hue. We use it to set a range of values to pick up in the image.</p>
-<div id="21720a21" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>messi <span class="op">=</span> cv2.imread(<span class="st">'data/messi5.jpg'</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>hsv <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2HSV)</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># define range of yellow color in HSV, using H=31, S=158, V=251 as the reference.</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>lower_yellow <span class="op">=</span> np.array([<span class="dv">21</span>,  <span class="dv">100</span>, <span class="dv">100</span>])</span>
-<span id="cb6-6"><a href="#cb6-6"></a>upper_yellow <span class="op">=</span> np.array([<span class="dv">41</span>, <span class="dv">255</span>, <span class="dv">255</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="343c867f" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messi <span class="op">=</span> cv2.imread(<span class="st">'data/messi5.jpg'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>hsv <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2HSV)</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># define range of yellow color in HSV, using H=31, S=158, V=251 as the reference.</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>lower_yellow <span class="op">=</span> np.array([<span class="dv">21</span>,  <span class="dv">100</span>, <span class="dv">100</span>])</span>
+<span id="cb10-6"><a href="#cb10-6"></a>upper_yellow <span class="op">=</span> np.array([<span class="dv">41</span>, <span class="dv">255</span>, <span class="dv">255</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The final line of code to create the mask is the following.</p>
-<div id="cell-fig-messi-mask" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Threshold the HSV image to get only blue colors</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>mask1 <span class="op">=</span> cv2.inRange(hsv, lower_yellow, upper_yellow)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>plt.imshow(mask1, cmap<span class="op">=</span><span class="st">'gray'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-fig-messi-mask" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Threshold the HSV image to get only blue colors</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>mask1 <span class="op">=</span> cv2.inRange(hsv, lower_yellow, upper_yellow)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>plt.imshow(mask1, cmap<span class="op">=</span><span class="st">'gray'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-messi-mask" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-mask" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-messi-mask-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.4: Mask for football, and other yellow segments.
+Figure&nbsp;9.5: Mask for football, and other yellow segments.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Compare the black-and-white image in <a href="#fig-messi-mask" class="quarto-xref">Figure&nbsp;<span>9.4</span></a> with the original one in <a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>. The white regions below correspond to yellow coloured sections in the original image. The white pixels take the value 255, while the black pixels are 0.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Take note of where the origin is: at the top-left corner. The x-values increase to the right from there; y-values increase downward from there.</p>
-</div>
-</div>
+<p>Compare the black-and-white image in <a href="#fig-messi-mask" class="quarto-xref">Figure&nbsp;<span>9.5</span></a> with the original one in <a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>. The white regions below correspond to yellow coloured sections in the original image. The white pixels take the value 255, while the black pixels are 0.</p>
 <p>Just before we close this example, we are going to modify the numpy array corresponding to this mask, to encompass the whole ball, not just the yellow segments.</p>
-<div id="ae2b3234" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>mask1[:, :<span class="dv">330</span>] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>mask1[:, <span class="dv">405</span>:] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e06f37bb" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>mask1[:, :<span class="dv">330</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>mask1[:, <span class="dv">405</span>:] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p>The next section of code identifies contours around the ball region, computes the convex hull around these points and then draws this on the original image (see <a href="#fig-messi-mask-2" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>).</p>
-<div id="cell-fig-messi-mask-2" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a>contours, _ <span class="op">=</span> cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span>
-<span id="cb9-4"><a href="#cb9-4"></a></span>
-<span id="cb9-5"><a href="#cb9-5"></a>largest_contour <span class="op">=</span> <span class="bu">max</span>(contours, key<span class="op">=</span>cv2.contourArea)</span>
-<span id="cb9-6"><a href="#cb9-6"></a>hull <span class="op">=</span> cv2.convexHull(largest_contour)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>cv2.drawContours(messi, [hull], <span class="op">-</span><span class="dv">1</span>, (<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">255</span>), thickness<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb9-8"><a href="#cb9-8"></a></span>
-<span id="cb9-9"><a href="#cb9-9"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br> The next section of code identifies contours around the ball region, computes the convex hull around these points and then draws this on the original image (see <a href="#fig-messi-mask-2" class="quarto-xref">Figure&nbsp;<span>9.6</span></a>).</p>
+<div id="cell-fig-messi-mask-2" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a>contours, _ <span class="op">=</span> cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a>largest_contour <span class="op">=</span> <span class="bu">max</span>(contours, key<span class="op">=</span>cv2.contourArea)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>hull <span class="op">=</span> cv2.convexHull(largest_contour)</span>
+<span id="cb13-7"><a href="#cb13-7"></a>cv2.drawContours(messi, [hull], <span class="op">-</span><span class="dv">1</span>, (<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">255</span>), thickness<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-messi-mask-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-mask-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-mask-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-messi-mask-2-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-mask-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: Lionel Messi with outline of ball
+Figure&nbsp;9.6: Lionel Messi with outline of ball
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="modifying-perspective-of-images" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="modifying-perspective-of-images"><span class="header-section-number">9.4</span> Modifying Perspective of Images</h2>
-<p>There are situations where we need to transform the perspective of an image, in order to identify objects better, or to perform OCR better. To do so, we need to provide a map of four points from the original image (in the same plane), and the corresponding four points in the transformed image. Here are a couple of examples.</p>
+<section id="modifying-perspective-of-images" class="level3">
+<h3 class="anchored" data-anchor-id="modifying-perspective-of-images">Modifying Perspective of Images</h3>
+<p>There are situations where we need to transform the perspective of an image, in order to identify objects better, or to perform OCR better. To do so, we need to provide a map of four points from the original image (in the same plane), and the corresponding four points in the transformed image. At its heart, this is still a transformation, just like a rotation or a translation, but the transformation will not preserve lengths and angles. Here are a couple of examples.</p>
 <div id="exm-sudoku-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 9.3 (Sudoku perspective transform)</strong></span> </p>
-<p>Here is an example of transforming the perspective of a sudoku board from a newspaper. The coordinates that result in the red quadrilateral in <a href="#fig-sudoku-orig" class="quarto-xref">Figure&nbsp;<span>9.6</span></a> were obtained by manual inspection; this process typically requires a little trial and error.</p>
-<div id="cell-fig-sudoku-orig" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>sudoku <span class="op">=</span> cv2.imread(<span class="st">'data/sudoku.png'</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co"># Coordinates of original reference points</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">73</span>,<span class="dv">85</span>], [<span class="dv">350</span>, <span class="dv">88</span>], [<span class="dv">355</span>, <span class="dv">360</span>], [<span class="dv">48</span>, <span class="dv">357</span>]])</span>
-<span id="cb10-5"><a href="#cb10-5"></a></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co"># Create a polygon (clockwise) from reference points.</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>pts <span class="op">=</span> np.array(pts1, np.int32)</span>
-<span id="cb10-8"><a href="#cb10-8"></a>img2 <span class="op">=</span> cv2.polylines(sudoku, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span> )</span>
-<span id="cb10-9"><a href="#cb10-9"></a>plt.imshow(img2)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="theorem-title"><strong>Example 9.4 (Sudoku perspective transform)</strong></span> </p>
+<p>Here is an example of transforming the perspective of a sudoku board from a newspaper. The coordinates that result in the red quadrilateral in <a href="#fig-sudoku-orig" class="quarto-xref">Figure&nbsp;<span>9.7</span></a> were obtained by manual inspection; this process typically requires a little trial and error.</p>
+<div id="cell-fig-sudoku-orig" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>sudoku <span class="op">=</span> cv2.imread(<span class="st">'data/sudoku.png'</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co"># Coordinates of original reference points</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">73</span>,<span class="dv">85</span>], [<span class="dv">350</span>, <span class="dv">88</span>], [<span class="dv">355</span>, <span class="dv">360</span>], [<span class="dv">48</span>, <span class="dv">357</span>]])</span>
+<span id="cb14-5"><a href="#cb14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co"># Create a polygon (clockwise) from reference points.</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>pts <span class="op">=</span> np.array(pts1, np.int32)</span>
+<span id="cb14-8"><a href="#cb14-8"></a>img2 <span class="op">=</span> cv2.polylines(sudoku, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span> )</span>
+<span id="cb14-9"><a href="#cb14-9"></a>plt.imshow(img2)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sudoku-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sudoku-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sudoku-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-sudoku-orig-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: Sudoku reference points
+Figure&nbsp;9.7: Sudoku reference points
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The critical functions are <code>cv2.getPerspectiveTransform</code> and <code>cv2.warpPerspective</code>. The output of the transformed figure is shown on the right of <a href="#fig-sudoku-warped" class="quarto-xref">Figure&nbsp;<span>9.7</span></a>. It would be much easier to perform OCR on the figure on the right.</p>
-<div id="cell-fig-sudoku-warped" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># destination coordinates of original reference points.</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">300</span>],[<span class="dv">0</span>,<span class="dv">300</span>]])</span>
-<span id="cb11-3"><a href="#cb11-3"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
-<span id="cb11-4"><a href="#cb11-4"></a>dst <span class="op">=</span> cv2.warpPerspective(sudoku ,M,(<span class="dv">300</span>,<span class="dv">300</span>))</span>
-<span id="cb11-5"><a href="#cb11-5"></a> </span>
-<span id="cb11-6"><a href="#cb11-6"></a>plt.subplot(<span class="dv">121</span>),plt.imshow(sudoku),plt.title(<span class="st">'Input'</span>)</span>
-<span id="cb11-7"><a href="#cb11-7"></a>plt.subplot(<span class="dv">122</span>),plt.imshow(dst),plt.title(<span class="st">'Output'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The critical functions are <code>cv2.getPerspectiveTransform</code> and <code>cv2.warpPerspective</code>. The output of the transformed figure is shown on the right of <a href="#fig-sudoku-warped" class="quarto-xref">Figure&nbsp;<span>9.8</span></a>. It would be much easier to perform OCR on the figure on the right.</p>
+<div id="cell-fig-sudoku-warped" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># destination coordinates of original reference points.</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">300</span>],[<span class="dv">0</span>,<span class="dv">300</span>]])</span>
+<span id="cb15-3"><a href="#cb15-3"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>sudoku_dst <span class="op">=</span> cv2.warpPerspective(sudoku ,M,(<span class="dv">300</span>,<span class="dv">300</span>))</span>
+<span id="cb15-5"><a href="#cb15-5"></a> </span>
+<span id="cb15-6"><a href="#cb15-6"></a>plt.subplot(<span class="dv">121</span>),plt.imshow(sudoku),plt.title(<span class="st">'Input'</span>)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>plt.subplot(<span class="dv">122</span>),plt.imshow(sudoku_dst),plt.title(<span class="st">'Output'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sudoku-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sudoku-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sudoku-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-sudoku-warped-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.7: Sudoku original and transformed
+Figure&nbsp;9.8: Sudoku original and transformed
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<p>For our second example, we turn to a screen capture of a football game telecast. Our goal is to switch the view from that in <a href="#fig-football-orig" class="quarto-xref">Figure&nbsp;<span>9.8</span></a> to a top-down view of the field.</p>
-<div id="cell-fig-football-orig" class="cell" data-execution_count="13">
-<div class="cell-output cell-output-display" data-execution_count="12">
-<div id="fig-football-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<p>For our second example, we turn to a screen capture of a football game telecast. Our goal is to switch the view from that in <a href="#fig-football-orig" class="quarto-xref">Figure&nbsp;<span>9.9</span></a> to a top-down view of the field.</p>
+<div id="cell-fig-football-orig" class="cell" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div id="fig-football-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-football-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-football-orig-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="480">
+<img src="09-vision_files/figure-html/fig-football-orig-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="360">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-football-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.8: Football match screen capture
+Figure&nbsp;9.9: Football match screen capture
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div id="exm-football-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 9.4 (Football screen capture)</strong></span> </p>
+<p><span class="theorem-title"><strong>Example 9.5 (Football screen capture)</strong></span> </p>
 <p>Once again, it should be emphasised that the coordinates to be chosen require some trial and error.</p>
-<div id="b1f44da3" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>football1 <span class="op">=</span> cv2.imread(<span class="st">'data/football1.png'</span>)</span>
-<span id="cb12-2"><a href="#cb12-2"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">118</span>]])</span>
-<span id="cb12-3"><a href="#cb12-3"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">100</span>], [<span class="dv">45</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">100</span>]])</span>
-<span id="cb12-4"><a href="#cb12-4"></a></span>
-<span id="cb12-5"><a href="#cb12-5"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
-<span id="cb12-6"><a href="#cb12-6"></a>dst <span class="op">=</span> cv2.warpPerspective(football1, M, (<span class="dv">504</span>, <span class="dv">360</span>))</span>
-<span id="cb12-7"><a href="#cb12-7"></a></span>
-<span id="cb12-8"><a href="#cb12-8"></a>pts <span class="op">=</span> np.array([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">119</span>]], np.int32)</span>
-<span id="cb12-9"><a href="#cb12-9"></a>pts <span class="op">=</span> pts.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb12-10"><a href="#cb12-10"></a>img2 <span class="op">=</span> cv2.polylines(football1, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="87e4c690" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>football1 <span class="op">=</span> cv2.imread(<span class="st">'data/football1.png'</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">118</span>]])</span>
+<span id="cb16-3"><a href="#cb16-3"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">100</span>], [<span class="dv">45</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">100</span>]])</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
+<span id="cb16-6"><a href="#cb16-6"></a>dst <span class="op">=</span> cv2.warpPerspective(football1, M, (<span class="dv">504</span>, <span class="dv">360</span>))</span>
+<span id="cb16-7"><a href="#cb16-7"></a></span>
+<span id="cb16-8"><a href="#cb16-8"></a>pts <span class="op">=</span> np.array([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">119</span>]], np.int32)</span>
+<span id="cb16-9"><a href="#cb16-9"></a>pts <span class="op">=</span> pts.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb16-10"><a href="#cb16-10"></a>img2 <span class="op">=</span> cv2.polylines(football1, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>From <a href="#fig-football-warped" class="quarto-xref">Figure&nbsp;<span>9.9</span></a>, it should be clear that only the plane of the <em>field</em> is transformed. The crowd in the stands, and even the players on the field, are in a different 2-D plane, and hence appear distorted.</p>
-<div id="cell-fig-football-warped" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>)) </span>
-<span id="cb13-2"><a href="#cb13-2"></a>gs <span class="op">=</span> fig.add_gridspec(<span class="dv">1</span>, <span class="dv">2</span>, width_ratios<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">1</span>]) </span>
-<span id="cb13-3"><a href="#cb13-3"></a></span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="co"># First subplot</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>ax1 <span class="op">=</span> fig.add_subplot(gs[<span class="dv">0</span>])</span>
-<span id="cb13-6"><a href="#cb13-6"></a>ax1.imshow(cv2.cvtColor(img2, cv2.COLOR_BGR2RGB))</span>
-<span id="cb13-7"><a href="#cb13-7"></a>ax1.set_title(<span class="st">'Original Screen capture'</span>)</span>
-<span id="cb13-8"><a href="#cb13-8"></a></span>
-<span id="cb13-9"><a href="#cb13-9"></a><span class="co"># Second subplot</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a>ax2 <span class="op">=</span> fig.add_subplot(gs[<span class="dv">1</span>])</span>
-<span id="cb13-11"><a href="#cb13-11"></a>ax2.imshow(cv2.cvtColor(dst[:<span class="dv">300</span>, :<span class="dv">200</span>], cv2.COLOR_BGR2RGB))</span>
-<span id="cb13-12"><a href="#cb13-12"></a>ax2.set_title(<span class="st">'Transformed Image'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>From <a href="#fig-football-warped" class="quarto-xref">Figure&nbsp;<span>9.10</span></a>, it should be clear that only the plane of the <em>field</em> is transformed. The crowd in the stands, and even the players on the field, are in a different 2-D plane, and hence appear distorted.</p>
+<div id="cell-fig-football-warped" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display">
-<div id="fig-football-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-football-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-football-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-football-warped-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-football-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.9: Football match transformed
+Figure&nbsp;9.10: Football match transformed
 </figcaption>
 </figure>
 </div>
@@ -619,8 +668,116 @@ Figure&nbsp;9.9: Football match transformed
 </div>
 </div>
 </section>
-<section id="computer-vision-tasks" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="computer-vision-tasks"><span class="header-section-number">9.5</span> Computer Vision Tasks</h2>
+</section>
+<section id="edge-detection" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="edge-detection"><span class="header-section-number">9.3</span> Edge Detection</h2>
+<p>In an image, an edge could refer to a discontinuity in surface colour, surface depth, surface direction, or illumination (see <a href="#fig-edge-examples" class="quarto-xref">Figure&nbsp;<span>9.11</span></a>).</p>
+<div id="fig-edge-examples" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-edge-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/edge_examples.png" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-edge-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.11: Examples of edges in images, taken from <a href="http://vision.stanford.edu/teaching/cs131_fall1718/files/06_notes.pdf">Stanford notes</a>.
+</figcaption>
+</figure>
+</div>
+<p>Almost all edge detection methods rely on computation of the gradient of pixel values. If there is a contiguous sharp change along a line, it is indicative of an edge.</p>
+<div id="exm-sudoku-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 9.6 (Sudoku edge detection)</strong></span> </p>
+<p>The Sobel edge detection technique is one of the most straigtforward to understand. It can be used to detect vertical or horizontal edges. Let us apply this technique to the perspective-transformed Sudoku image from <a href="#exm-sudoku-1" class="quarto-xref">Example&nbsp;<span>9.4</span></a>.</p>
+<p>Edge detection is almost always performed on the grayscale version of an image. In the code segment below, <code>sobelx</code> and <code>sobely</code> now contain the vertical (in the <code>x</code>-direction) and the horizontal (in the <code>y</code>-direction) edges.</p>
+<div id="6c38dd7a" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dst_gray <span class="op">=</span> cv2.cvtColor(sudoku_dst, cv2.COLOR_BGR2GRAY)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>sobelx <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">1</span>, <span class="dv">0</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>sobely <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">0</span>, <span class="dv">1</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="#fig-sudoku-edges" class="quarto-xref">Figure&nbsp;<span>9.12</span></a> displays the resulting edges from the Sobel technique.</p>
+<div id="cell-fig-sudoku-edges" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>plt.subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),plt.imshow(sobelx, cmap <span class="op">=</span> <span class="st">'gray'</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>plt.title(<span class="st">'Sobelx: vertical edges'</span>), plt.xticks([]), plt.yticks([])</span>
+<span id="cb18-3"><a href="#cb18-3"></a>plt.subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>),plt.imshow(sobely, cmap <span class="op">=</span> <span class="st">'gray'</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>plt.title(<span class="st">'Sobely: horizontal edges'</span>), plt.xticks([]), plt.yticks([])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-sudoku-edges" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sudoku-edges-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="09-vision_files/figure-html/fig-sudoku-edges-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-edges-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.12: Sudoku vertical and horizontal edges
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Most edges in real-life images are not as perfect as those in a Sudoku table. The Canny edge detection technique relies on a multi-step approach to identify edges in any and all directions. Just like the Sobel approach, the Canny edge detection technique identifies pixels where the gradient changes sharply with edges. However, in the next step, based on two input parameters provided by the user, weak edges are dropped, and strong edges are retained. The ones in the middle are only retained if they are connected to a strong edge.</p>
+<div id="exm-messi-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
+<p><span class="theorem-title"><strong>Example 9.7 (Canny edge detection of ball)</strong></span> </p>
+<p>Earlier in <a href="#exm-messi-1" class="quarto-xref">Example&nbsp;<span>9.3</span></a>, we used the colour of the ball to locate it within the image. In this example, we are going to use Canny edge detection. First, take a look at the application of the algorithm to the grayscale version of the image, in <a href="#fig-messi-canny" class="quarto-xref">Figure&nbsp;<span>9.13</span></a>. Play around with the two parameters (150 and 200) to see the effect on the number of edges produced.</p>
+<div id="cell-fig-messi-canny" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>messi_gray <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2GRAY)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>messi_canny_edge <span class="op">=</span> cv2.Canny(messi_gray, <span class="dv">150</span>, <span class="dv">200</span>)</span>
+<span id="cb19-3"><a href="#cb19-3"></a>plt.imshow(messi_canny_edge, cmap<span class="op">=</span><span class="st">'gray'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-messi-canny" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-messi-canny-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="09-vision_files/figure-html/fig-messi-canny-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-canny-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.13: Lionel Messi, Canny edge
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The next step involves the use of Hough transforms. When applied to edges, this transform can be used to pick out lines that follow any parametric form, e.g. lines, quadratic curves, ellipses and circles. Since we know the ball is a circle, we are going to use the Hough transform to pick it out from the edge map.</p>
+<div id="a5d83fa0" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>blurred <span class="op">=</span> cv2.GaussianBlur(messi_gray, (<span class="dv">9</span>, <span class="dv">9</span>), <span class="dv">2</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a></span>
+<span id="cb20-3"><a href="#cb20-3"></a>circles <span class="op">=</span> cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb20-4"><a href="#cb20-4"></a>                            minDist<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb20-5"><a href="#cb20-5"></a>                            param1<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb20-6"><a href="#cb20-6"></a>                            param2<span class="op">=</span><span class="dv">22</span>,      <span class="co"># low threshold to start, 22 works best</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a>                            minRadius<span class="op">=</span><span class="dv">18</span>,</span>
+<span id="cb20-8"><a href="#cb20-8"></a>                            maxRadius<span class="op">=</span><span class="dv">38</span>)</span>
+<span id="cb20-9"><a href="#cb20-9"></a></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="bu">print</span>(circles)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[[297.5 169.5  35.2]
+  [361.5 313.5  28.4]
+  [231.5  96.5  20.5]]]</code></pre>
+</div>
+</div>
+<p>Three circles have been located in the image! Can you think of contextual information you can use to rule out the erroneous balls? <a href="#fig-messi-hough" class="quarto-xref">Figure&nbsp;<span>9.14</span></a> marks out all three circles found.</p>
+<div id="cell-fig-messi-hough" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>circles_rounded <span class="op">=</span> np.uint16(np.around(circles))</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="cf">for</span> i, c <span class="kw">in</span> <span class="bu">enumerate</span>(circles_rounded[<span class="dv">0</span>, :]): </span>
+<span id="cb22-3"><a href="#cb22-3"></a>    cv2.circle(messi, (c[<span class="dv">0</span>], c[<span class="dv">1</span>]), c[<span class="dv">2</span>], (<span class="dv">0</span>, <span class="dv">255</span>, <span class="dv">0</span>), <span class="dv">2</span>)     <span class="co"># circle </span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>    cv2.putText(messi, <span class="bu">str</span>(i), (c[<span class="dv">0</span>], c[<span class="dv">1</span>]),                  <span class="co"># label each one </span></span>
+<span id="cb22-5"><a href="#cb22-5"></a>                cv2.FONT_HERSHEY_SIMPLEX, <span class="fl">0.6</span>, (<span class="dv">255</span>,<span class="dv">255</span>,<span class="dv">0</span>), <span class="dv">2</span>)</span>
+<span id="cb22-6"><a href="#cb22-6"></a></span>
+<span id="cb22-7"><a href="#cb22-7"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))</span>
+<span id="cb22-8"><a href="#cb22-8"></a>plt.title(<span class="st">'Detected circles (numbered)'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-messi-hough" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-messi-hough-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="09-vision_files/figure-html/fig-messi-hough-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-hough-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.14: Circles detected with Hough transform
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="computer-vision-demonstrations" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="computer-vision-demonstrations"><span class="header-section-number">9.4</span> Computer Vision Demonstrations</h2>
 <p>Just as we observed there are numerous NLP tasks, the field of computer vision has made great strides in several tasks. Among them are:</p>
 <ol type="1">
 <li>Object detection</li>
@@ -632,19 +789,170 @@ Figure&nbsp;9.9: Football match transformed
 <li>Text detection/extraction</li>
 </ol>
 <p>Almost all the models that perform well in the above tasks are deep learning models. In the next few sections, we are going to practice running/configuring some of the above models. Although these models are already trained, it is a little tricky to find the resources and parameters to get them up and running.</p>
-<p>There are three repositories of interest:</p>
+<p>Before beginning, download the following three repositories and unzip them into the <em>same folder</em>:</p>
 <ol type="1">
-<li><code>opencv</code>: This contains example images and videos, and configuration files for several models.</li>
-<li><code>opencv_extra</code>: This contains more configuration details for the models, along with routines to download model weights.</li>
+<li><a href="https://github.com/opencv/opencv">OpenCV main repository</a></li>
+<li><a href="https://github.com/opencv/opencv_extra">OpenCV extra repository</a></li>
+<li><a href="https://github.com/opencv/opencv_zoo">OpenCV model zoo repository</a></li>
+</ol>
+<p>For instance, your folder structure may now be :</p>
+<pre><code>|-01-lecture.ipynb
+|-... other files
+|-opencv/
+|-opencv_extra/
+|-opencv_zoo/</code></pre>
+<ol type="1">
+<li><code>opencv</code>: This repository contains example images and videos, and configuration files for several models. It also contains the routines to download models.</li>
+<li><code>opencv_extra</code>: This contains more configuration details for the models.</li>
 <li><code>opencv_zoo</code>: This contains a smaller range of models, along with the model weights.</li>
 </ol>
-<p>For our course, we have pre-downloaded some models for us to play around with, <code>models</code>. However, the general approach to start working on one of these models is as follows:</p>
-<ol type="1">
-<li>Download the model weights using <code>opencv_extra/testdata/dnn/download_models.py</code></li>
-<li>Figure out what other configuration files/parameters are needed for this model. Sometimes information is in <code>opencv/samples/dnn/models.yml</code>. At other times, you may need to figure it out from the github repository for the particular model.</li>
-<li>Test it out using one of the sample scripts from <code>opencv/samples/dnn/*.py</code></li>
-<li>Once you have that working, inspect the script to obtain details on how to call the model programmatically, and proceed from there.</li>
-</ol>
+<section id="models-from-opencv-repository" class="level3">
+<h3 class="anchored" data-anchor-id="models-from-opencv-repository">Models from OpenCV Repository</h3>
+<p>First, we demonstrate how to download models using the script in <code>opencv</code>. Open up a terminal, activate your virtual environment and navigate into <code>opencv/samples/dnn</code>.</p>
+<p>Next, check inside <code>models.yml</code> for the model that you intend to use. The list of models available are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model Type</th>
+<th>Model Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Object Detection</td>
+<td>opencv_fd</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>yolov8x</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>yolov8s</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>yolov8n</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>yolov8m</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>yolov8l</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>yolov5l</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>yolov4</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>yolov4-tiny</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>yolov3</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>tiny-yolo-voc</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>yolov8</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>ssd_caffe</td>
+</tr>
+<tr class="even">
+<td>Object Detection</td>
+<td>ssd_tf</td>
+</tr>
+<tr class="odd">
+<td>Object Detection</td>
+<td>faster_rcnn_tf</td>
+</tr>
+<tr class="even">
+<td>Image Classification</td>
+<td>squeezenet</td>
+</tr>
+<tr class="odd">
+<td>Image Classification</td>
+<td>googlenet</td>
+</tr>
+<tr class="even">
+<td>Semantic Segmentation</td>
+<td>enet</td>
+</tr>
+<tr class="odd">
+<td>Semantic Segmentation</td>
+<td>fcn8s</td>
+</tr>
+<tr class="even">
+<td>Semantic Segmentation</td>
+<td>fcnresnet101</td>
+</tr>
+</tbody>
+</table>
+<p>For this demonstration, we shall aim to download and run the GOOGLENET image classification model. Run the following command to download the model weights for GOOGLENET:</p>
+<pre><code>python .\download_models.py --save_dir GOOGLENET googlenet</code></pre>
+<p>Apart from listing all the models available for download, <code>models.yml</code> also contains the precise configuration settings to run this particular model. For full reference, here is the section corresponding to GOOGLENET:</p>
+<pre><code># Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet
+googlenet:
+  load_info:
+    url: "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel"
+    sha1: "405fc5acd08a3bb12de8ee5e23a96bec22f08204"
+  model: "bvlc_googlenet.caffemodel"
+  config: "bvlc_googlenet.prototxt"
+  mean: [104, 117, 123]
+  scale: 1.0
+  width: 224
+  height: 224
+  rgb: false
+  classes: "classification_classes_ILSVRC2012.txt"
+  sample: "classification"</code></pre>
+<p>The important parameters to take note are:</p>
+<ul>
+<li><code>model</code>: Refers to the file containing the model weights (which we just downloaded)</li>
+<li><code>config</code>: Configuration parameters. This file is usually present in the <code>opencv_extra</code> repository.<br>
+</li>
+<li><code>mean, scale, width, height, rgb</code>: Arguments that need to be included when calling the python script object_detection.py.</li>
+<li><code>sample</code>: The python script to call, to demonstrate the use of this model.</li>
+<li><code>classes</code>: GOOGLENET is an object classification model. The specified file here contains the labels to be used. The file is present in the <code>opencv/samples/data/dnn</code> directory.</li>
+</ul>
+<p>The final step is to call the python script that demonstrates the use of this model. You may have to modify the paths to the image files to match those on your laptop, but you should then see the labelled image, similar to <a href="#fig-googlenet-output" class="quarto-xref">Figure&nbsp;<span>9.15</span></a>.</p>
+<pre><code>python classification.py --model GOOGLENET/405fc5acd08a3bb12de8ee5e23a96bec22f08204/bvlc_googlenet.caffemodel \
+--config /home/viknesh/NUS/coursesTaught/ind5003-book/opencv_extra/testdata/dnn/bvlc_googlenet.prototxt \
+--width 224 --height 224 --classes ../data/dnn/classification_classes_ILSVRC2012.txt \
+--mean 104 117 123 --input /home/viknesh/NUS/coursesTaught/ind5003-book/data/cars.jpg</code></pre>
+<div id="fig-googlenet-output" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-googlenet-output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figs/googlenet_output.png" class="img-fluid figure-img" style="width:65.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-googlenet-output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.15: Googlenet labelled output
+</figcaption>
+</figure>
+</div>
+<p>Utilising the sample models can be a little tricky, because one has to search for the right files to use, and the precise configuration to use, but it is an useful step in learning about the capabilities of vision models.</p>
+</section>
+<section id="models-from-opencv-model-zoo" class="level3">
+<h3 class="anchored" data-anchor-id="models-from-opencv-model-zoo">Models from OpenCV Model Zoo</h3>
+<p>The openCV model zoo contains model weights that can be used directly. There is no need for any further downloads. Open up a terminal, activate your virtual environment, and navigate to the <code>opencv_zoo/models/face_detection_yunet/</code> folder. Then run the following command:</p>
+<pre><code>python demo.py </code></pre>
+</section>
+</section>
+<section id="summary" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.5</span> Summary</h2>
+<p>Our chapter is a very brief introduction to vision models. I encourage you to explore the sample models to understand the capabilities and the various tasks they have been trained for.</p>
+<p>In real-life projects, there will undoubtedly be a large amount of pre-processing required before the models can be applied to each image. While the initial section of the chapter touches on these steps, you should read up on the details, and follow-up with the websites to become more adept at image manipulation and processing with <code>opencv</code>.</p>
 </section>
 <section id="references" class="level2" data-number="9.6">
 <h2 data-number="9.6" class="anchored" data-anchor-id="references"><span class="header-section-number">9.6</span> References</h2>
