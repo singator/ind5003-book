@@ -630,6 +630,13 @@ of models available are:
 | Semantic Segmentation | fcn8s      |
 | Semantic Segmentation | fcnresnet101 |
 
+For this demonstration, we shall aim to download and run the GOOGLENET image
+classification model. In your terminal, run the following command:
+
+
+````
+````
+
 ### Models from OpenCV Model Zoo
 
 
