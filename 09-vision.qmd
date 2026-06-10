@@ -597,7 +597,6 @@ For instance, your folder structure may now be :
 2. `opencv_extra`: This contains more configuration details for the models.
 3. `opencv_zoo`: This contains a smaller range of models, along with the model weights.
 
-
 ### Models from OpenCV Repository
 
 First, we demonstrate how to download models using the script in `opencv`. Open
@@ -631,28 +630,86 @@ of models available are:
 | Semantic Segmentation | fcnresnet101 |
 
 For this demonstration, we shall aim to download and run the GOOGLENET image
-classification model. In your terminal, run the following command:
-
+classification model. Run the following command to download the model weights
+for GOOGLENET:
 
 ````
+python .\download_models.py --save_dir GOOGLENET googlenet
 ````
+
+Apart from listing all the models available for download, `models.yml` also
+contains the precise configuration settings to run this particular model. For
+full reference, here is the section corresponding to GOOGLENET:
+
+````
+# Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet
+googlenet:
+  load_info:
+    url: "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel"
+    sha1: "405fc5acd08a3bb12de8ee5e23a96bec22f08204"
+  model: "bvlc_googlenet.caffemodel"
+  config: "bvlc_googlenet.prototxt"
+  mean: [104, 117, 123]
+  scale: 1.0
+  width: 224
+  height: 224
+  rgb: false
+  classes: "classification_classes_ILSVRC2012.txt"
+  sample: "classification"
+````
+
+The important parameters to take note are:
+
+* `model`: Refers to the file containing the model weights (which we just downloaded)
+* `config`: Configuration parameters. This file is usually present in the `opencv_extra`
+  repository.  
+* `mean, scale, width, height, rgb`: Arguments that need to be included when calling the 
+  python script object_detection.py. 
+* `sample`: The python script to call, to demonstrate the use of this model.
+* `classes`: GOOGLENET is an object classification model. The specified file
+  here contains the labels to be used. The file is present in the
+  `opencv/samples/data/dnn` directory.
+
+The final step is to call the python script that demonstrates the use of this
+model. You may have to modify the paths to the image files to match those on
+your laptop, but you should then see the labelled image, similar to 
+@fig-googlenet-output.
+
+````
+python classification.py --model GOOGLENET/405fc5acd08a3bb12de8ee5e23a96bec22f08204/bvlc_googlenet.caffemodel \
+--config /home/viknesh/NUS/coursesTaught/ind5003-book/opencv_extra/testdata/dnn/bvlc_googlenet.prototxt \
+--width 224 --height 224 --classes ../data/dnn/classification_classes_ILSVRC2012.txt \
+--mean 104 117 123 --input /home/viknesh/NUS/coursesTaught/ind5003-book/data/cars.jpg
+````
+
+![Googlenet labelled output](figs/googlenet_output.png){width=65% #fig-googlenet-output}
+
+Utilising the sample models can be a little tricky, because one has to search
+for the right files to use, and the precise configuration to use, but it is an
+useful step in learning about the capabilities of vision models.
 
 ### Models from OpenCV Model Zoo
 
+The openCV model zoo contains model weights that can be used directly. There is
+no need for any further downloads. Open up a terminal, activate your virtual
+environment, and navigate to the `opencv_zoo/models/face_detection_yunet/`
+folder. Then run the following command:
 
+````
+python demo.py 
+````
 
-For our course, we have pre-downloaded some models for us to play around with,
-`models`. However, the general approach to start working on one of these models
-is as follows:
+## Summary
 
-1. Download the model weights using `opencv_extra/testdata/dnn/download_models.py`
-2. Figure out what other configuration files/parameters are needed for this
-   model. Sometimes information is in `opencv/samples/dnn/models.yml`. At other
-   times, you may need to figure it out from the github repository for the
-   particular model.
-3. Test it out using one of the sample scripts from `opencv/samples/dnn/*.py`
-4. Once you have that working, inspect the script to obtain details on how to
-   call the model programmatically, and proceed from there.
+Our chapter is a very brief introduction to vision models. I encourage you to
+explore the sample models to understand the capabilities and the various tasks
+they have been trained for.
+
+In real-life projects, there will undoubtedly be a large amount of
+pre-processing required before the models can be applied to each image. While
+the initial section of the chapter touches on these steps, you should read up
+on the details, and follow-up with the websites to become more adept at image
+manipulation and processing with `opencv`.
 
 ## References
 
