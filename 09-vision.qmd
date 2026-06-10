@@ -373,10 +373,10 @@ figure on the right.
 # destination coordinates of original reference points.
 pts2 = np.float32([[0,0],[300,0],[300,300],[0,300]])
 M = cv2.getPerspectiveTransform(pts1,pts2)
-dst = cv2.warpPerspective(sudoku ,M,(300,300))
+sudoku_dst = cv2.warpPerspective(sudoku ,M,(300,300))
  
 plt.subplot(121),plt.imshow(sudoku),plt.title('Input')
-plt.subplot(122),plt.imshow(dst),plt.title('Output');
+plt.subplot(122),plt.imshow(sudoku_dst),plt.title('Output');
 ```
 :::
 
@@ -443,14 +443,124 @@ ax2.set_title('Transformed Image');
 
 ## Edge Detection
 
+In an image, an edge could refer to a discontinuity in surface colour, surface
+depth, surface direction, or illumination (see @fig-edge-examples).
 
-- Sobel
-- Canny
-- Hough transform
+![Examples of edges in images, taken from [Stanford notes](http://vision.stanford.edu/teaching/cs131_fall1718/files/06_notes.pdf).](figs/edge_examples.png){width=75% #fig-edge-examples}
 
-## Computer Vision Tasks
+Almost all edge detection methods rely on computation of the gradient of pixel
+values. If there is a contiguous sharp change along a line, it is indicative of
+an edge. 
 
-Just as we observed there are numerous NLP tasks, the field of computer vision has made great strides in several tasks. Among them are:
+::: {#exm-sudoku-2 style="background-color: #D5D1D164; padding: 20px"}
+### Sudoku edge detection
+\index{Sudoku!Edge detection}
+
+The Sobel edge detection technique is one of the most straigtforward to
+understand. It can be used to detect vertical or horizontal edges. Let us apply
+this technique to the perspective-transformed Sudoku image from @exm-sudoku-1.
+
+Edge detection is almost always performed on the grayscale version of an image.
+In the code segment below, `sobelx` and `sobely` now contain the vertical (in
+the `x`-direction) and the horizontal (in the `y`-direction) edges.
+
+```{python}
+dst_gray = cv2.cvtColor(sudoku_dst, cv2.COLOR_BGR2GRAY)
+sobelx = cv2.Sobel(dst_gray, cv2.CV_64F, 1, 0,ksize=5)
+sobely = cv2.Sobel(dst_gray, cv2.CV_64F, 0, 1,ksize=5)
+```
+
+@fig-sudoku-edges displays the resulting edges from the Sobel technique.
+
+```{python}
+#| fig-align: center
+#| fig-cap: "Sudoku vertical and horizontal edges"
+#| label: fig-sudoku-edges
+#| fig-pos: 'ht'
+
+plt.subplot(1,2,1),plt.imshow(sobelx, cmap = 'gray')
+plt.title('Sobelx: vertical edges'), plt.xticks([]), plt.yticks([])
+plt.subplot(1,2,2),plt.imshow(sobely, cmap = 'gray')
+plt.title('Sobely: horizontal edges'), plt.xticks([]), plt.yticks([]);
+```
+
+:::
+
+Most edges in real-life images are not as perfect as those in a Sudoku table.
+The Canny edge detection technique relies on a multi-step approach to identify
+edges in any and all directions. Just like the Sobel approach, the Canny edge
+detection technique identifies pixels where the gradient changes sharply with
+edges. However, in the next step, based on two input parameters provided by the
+user, weak edges are dropped, and strong edges are retained. The ones in the
+middle are only retained if they are connected to a strong edge. 
+
+::: {#exm-messi-2 style="background-color: #D5D1D164; padding: 20px"}
+### Canny edge detection of ball
+\index{Lionel Messi!Canny edge}
+
+Earlier in @exm-messi-1, we used the colour of the ball to locate it within the
+image. In this example, we are going to use Canny edge detection. First, take a
+look at the application of the algorithm to the grayscale version of the image,
+in @fig-messi-canny. Play around with the two parameters (150 and 200) to see
+the effect on the number of edges produced.
+
+```{python}
+#| fig-align: center
+#| fig-cap: "Lionel Messi, Canny edge"
+#| label: fig-messi-canny
+#| fig-pos: 'ht'
+
+messi_gray = cv2.cvtColor(messi, cv2.COLOR_BGR2GRAY)
+messi_canny_edge = cv2.Canny(messi_gray, 150, 200)
+plt.imshow(messi_canny_edge, cmap='gray')
+
+```
+
+The next step involves the use of Hough transforms. When applied to edges, this
+transform can be used to pick out lines that follow any parametric form, e.g.
+lines, quadratic curves, ellipses and circles. Since we know the ball is a
+circle, we are going to use the Hough transform to pick it out from the edge
+map.
+
+```{python}
+blurred = cv2.GaussianBlur(messi_gray, (9, 9), 2)
+
+circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1,
+                            minDist=50,
+                            param1=50,
+                            param2=22,      # low threshold to start, 22 works best
+                            minRadius=18,
+                            maxRadius=38)
+
+print(circles)
+```
+
+Three circles have been located in the image! Can you think of contextual
+information you can use to rule out the erroneous balls? @fig-messi-hough marks
+out all three circles found.
+
+```{python}
+#| fig-align: center
+#| fig-cap: "Circles detected with Hough transform"
+#| label: fig-messi-hough
+#| fig-pos: 'ht'
+
+circles_rounded = np.uint16(np.around(circles))
+for i, c in enumerate(circles_rounded[0, :]): 
+	cv2.circle(messi, (c[0], c[1]), c[2], (0, 255, 0), 2)     # circle 
+	cv2.putText(messi, str(i), (c[0], c[1]),                  # label each one 
+	            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,0), 2)
+
+plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))
+plt.title('Detected circles (numbered)');
+```
+
+:::
+
+## Computer Vision Demonstrations
+
+Just as we observed there are numerous NLP tasks, the field of computer vision
+has made great strides in several tasks. Among them are:
 
 1. Object detection
 2. Object classification
@@ -465,14 +575,64 @@ models. In the next few sections, we are going to practice running/configuring
 some of the above models. Although these models are already trained, it is a
 little tricky to find the resources and parameters to get them up and running.
 
-There are three repositories of interest:
+Before beginning, download the following three repositories and unzip them into
+the *same folder*:
 
-1. `opencv`: This contains example images and videos, and configuration files
-   for several models.
-2. `opencv_extra`: This contains more configuration details for the models,
-   along with routines to download model weights.
-3. `opencv_zoo`: This contains a smaller range of models, along with the model
-   weights.
+1. [OpenCV main repository](https://github.com/opencv/opencv)
+2. [OpenCV extra repository](https://github.com/opencv/opencv_extra)
+3. [OpenCV model zoo repository](https://github.com/opencv/opencv_zoo)
+
+For instance, your folder structure may now be :
+
+````
+|-01-lecture.ipynb
+|-... other files
+|-opencv/
+|-opencv_extra/
+|-opencv_zoo/
+````
+
+1. `opencv`: This repository contains example images and videos, and configuration files
+   for several models. It also contains the routines to download models. 
+2. `opencv_extra`: This contains more configuration details for the models.
+3. `opencv_zoo`: This contains a smaller range of models, along with the model weights.
+
+
+### Models from OpenCV Repository
+
+First, we demonstrate how to download models using the script in `opencv`. Open
+up a terminal, activate your virtual environment and navigate into
+`opencv/samples/dnn`. 
+
+Next, check inside `models.yml` for the model that you intend to use. The list
+of models available are:
+
+| Model Type | Model Name      |
+|------------|-----------------|
+| Object Detection | opencv_fd |
+| Object Detection | yolov8x   |
+| Object Detection | yolov8s   |
+| Object Detection | yolov8n   |
+| Object Detection | yolov8m   |
+| Object Detection | yolov8l   |
+| Object Detection | yolov5l   |
+| Object Detection | yolov4    |
+| Object Detection | yolov4-tiny |
+| Object Detection | yolov3      |
+| Object Detection | tiny-yolo-voc |
+| Object Detection | yolov8    |
+| Object Detection | ssd_caffe |
+| Object Detection | ssd_tf    |
+| Object Detection | faster_rcnn_tf |
+| Image Classification  | squeezenet |
+| Image Classification  | googlenet  |
+| Semantic Segmentation | enet       | 
+| Semantic Segmentation | fcn8s      |
+| Semantic Segmentation | fcnresnet101 |
+
+### Models from OpenCV Model Zoo
+
+
 
 For our course, we have pre-downloaded some models for us to play around with,
 `models`. However, the general approach to start working on one of these models
