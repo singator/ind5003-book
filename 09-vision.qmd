@@ -597,7 +597,7 @@ For instance, your folder structure may now be :
 2. `opencv_extra`: This contains more configuration details for the models.
 3. `opencv_zoo`: This contains a smaller range of models, along with the model weights.
 
-### Models from OpenCV Repository
+### Models from OpenCV Repository {#sec-09-opencvmodels}
 
 First, we demonstrate how to download models using the script in `opencv`. Open
 up a terminal, activate your virtual environment and navigate into
@@ -633,15 +633,17 @@ For this demonstration, we shall aim to download and run the GOOGLENET image
 classification model. Run the following command to download the model weights
 for GOOGLENET:
 
-````
+```{python}
+#| eval: false
 python .\download_models.py --save_dir GOOGLENET googlenet
-````
+```
 
 Apart from listing all the models available for download, `models.yml` also
 contains the precise configuration settings to run this particular model. For
 full reference, here is the section corresponding to GOOGLENET:
 
-````
+```{python}
+#| eval: false
 # Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet
 googlenet:
   load_info:
@@ -656,7 +658,7 @@ googlenet:
   rgb: false
   classes: "classification_classes_ILSVRC2012.txt"
   sample: "classification"
-````
+```
 
 The important parameters to take note are:
 
@@ -675,12 +677,13 @@ model. You may have to modify the paths to the image files to match those on
 your laptop, but you should then see the labelled image, similar to 
 @fig-googlenet-output.
 
-````
+```{python}
+#| eval: false
 python classification.py --model GOOGLENET/405fc5acd08a3bb12de8ee5e23a96bec22f08204/bvlc_googlenet.caffemodel \
 --config /home/viknesh/NUS/coursesTaught/ind5003-book/opencv_extra/testdata/dnn/bvlc_googlenet.prototxt \
 --width 224 --height 224 --classes ../data/dnn/classification_classes_ILSVRC2012.txt \
 --mean 104 117 123 --input /home/viknesh/NUS/coursesTaught/ind5003-book/data/cars.jpg
-````
+```
 
 ![Googlenet labelled output](figs/googlenet_output.png){width=65% #fig-googlenet-output}
 
@@ -695,9 +698,10 @@ no need for any further downloads. Open up a terminal, activate your virtual
 environment, and navigate to the `opencv_zoo/models/face_detection_yunet/`
 folder. Then run the following command:
 
-````
+```{python}
+#| eval: false
 python demo.py 
-````
+```
 
 ## Summary
 
@@ -730,3 +734,35 @@ version can be found here: [Computer Vision: Applications and Algorithms](https:
 1. [opencv](https://github.com/opencv/opencv)
 2. [opencv-extra](https://github.com/opencv/opencv_extra)
 3. [opencv model zoo](https://github.com/opencv/opencv_zoo)
+
+## Exercises
+
+1.  In @sec-09-opencvmodels, we downloaded and used the GOOGLENET model. Follow the procedure to 
+    download and apply the YOLOv4-tiny model to the same image.
+2.  Use the VIT (vision transformer tracker) to track one of players in [this video](vids/obj_tracking_data.mp4). 
+    The tracker can be found in the opencv model zoo.
+3.  Use Canny edge detection, and then a perspective transform, to create
+    @fig-sudoku-exercise, starting from the Sudoku image:
+ 
+```{python}
+#| fig-align: center
+#| fig-cap: "Sudoku exercise"
+#| label: fig-sudoku-exercise
+#| fig-pos: 'ht'
+#| echo: false
+
+sudoku = cv2.imread('data/sudoku.png')
+sudoku_gray = cv2.cvtColor(sudoku, cv2.COLOR_BGR2GRAY)
+edges = cv2.Canny(sudoku_gray, threshold1=50, threshold2=150, apertureSize=3)
+
+pts1 = np.float32([[70,82], [495, 85], [515, 515], [30, 515]])
+pts = np.array(pts1, np.int32)
+pts2 = np.float32([[0,0],[400,0],[400,400],[0,400]])
+M = cv2.getPerspectiveTransform(pts1,pts2)
+sudoku_straight = cv2.warpPerspective(edges,M, (400, 400))
+plt.imshow(sudoku_straight, cmap='gray')
+```
+
+4.  Rotate The Starry Night image 45 degrees clockwise about the top-left corner of the image. 
+    Display the result using matplotlib, ensuring the colours appear correct.
+5.  Use the colour picker to isolate the blue regions of Messi's Barcelona jersey. 
