@@ -966,3 +966,21 @@ on LIME and Shaply values.
 1. [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/): A comprehensive textbook on interpreting machine learning models. See this book for more information about LIME and SHAPLY values.
 2. [LIME](https://github.com/marcotcr/lime): Full documentation on LIME
    * [Video introduction to LIME](https://www.youtube.com/watch?v=hUnRCxnydCc)
+
+## Exercises
+
+1.  Refer back to the train-test-split that was used in @exm-heart-failure-2. 
+    Instead of using all columns, use only `age`, `ejection_fraction`, `serum_creatinine`, 
+    `serum_sodium` and `time` to fit a decision tree classifier with `max_depth` = 2. Report the F1
+    score for this classifier on the test set.
+2.  Use the `clf` object from @exm-heart-failure-2 to return the predicted probability of `DEATH_EVENT=1`
+    for row 0 of the `X_train` dataset.
+3.  Consider the confusion matrix in @fig-confusion-training. Extract the 4 observations corresponding to
+    to the top-right entry in the table.
+4.  In medical settings, it is usually more important not to miss a true positive. This corresponds to the 
+    recall measure. Modify the code in @exm-heart-failure-6 to score the model using `recall`. How do the 
+    test set precision, recall and F1-score change?
+5.  The grid search in @exm-heart-failure-6 only tuned `max_depth`. Extend it
+    to also search over n_estimators using values `[10, 20, 50, 100]`. You will
+    need to modify the `param_grid` dictionary. Report the best combination of 
+    `(max_depth, n_estimators)` and the resulting test accuracy.
