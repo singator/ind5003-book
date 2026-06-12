@@ -301,6 +301,7 @@ window.Quarto = {
   <li><a href="#computer-vision-demonstrations" id="toc-computer-vision-demonstrations" class="nav-link" data-scroll-target="#computer-vision-demonstrations"><span class="header-section-number">9.4</span> Computer Vision Demonstrations</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.5</span> Summary</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.6</span> References</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">9.7</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -339,7 +340,7 @@ window.Quarto = {
 <p><a href="https://www.cs.ubc.ca/~lowe/vision.html">Here</a> is an old page with a more comprehensive list of applications.</p>
 <p>In computer vision, the goal is to get a computer to perceive the world as <em>we</em> see it. This is not easy even for us humans to do - we can get fooled by optical illusions such as the ones below. In general though, for us, it is possible to do things like pick out faces that we recognise from a photograph of a crowd. But how can we get a computer to do it?</p>
 <p>In this chapter, we shall begin with techniques for processing images. Although computer vision models are impressive, their performance can be typically be improved greatly by pre-processing images before applying the ready-to-use models. Toward the end of the chapter, we shall demonstrate how to call various models.</p>
-<div id="5952bf55" class="cell" data-execution_count="1">
+<div id="957e7692" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> cv2</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -402,7 +403,7 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>Instead of reading the image file with <code>cv2</code> and then using <code>matplotlib</code>, we can display the image with <code>cv2</code> as well. The following code should open up The Starry Night image in a new window on your computer. Press <code>q</code> to close the window.</p>
-<div id="18fff660" class="cell" data-execution_count="4">
+<div id="38cd59c1" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># plotting with cv2.imshow returns the correct colours.</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Hit any key on the keyboard to close window (do not hit the "X" button)</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
@@ -423,14 +424,14 @@ Note
 <ol type="1">
 <li>First, we are going to convert the colorspace to grayscale. Several computer vision techniques work only on grayscale images, so this is a common step to be aware of. Take note that grayscale images are numpy arrays with shape <span class="math inline">\(R \times C\)</span>, whereas RGB/BGR images are stored as arrays with shape <span class="math inline">\(R \times C \times 3\)</span>.</li>
 </ol>
-<div id="2c6cbbbd" class="cell" data-execution_count="5">
+<div id="f25c28ca" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># create grayscale version of image</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>sn_grayscale <span class="op">=</span> cv2.cvtColor(starry_night, cv2.COLOR_BGR2GRAY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="1">
 <li>Second, we shall demonstrate how to translate an image. In the code for this procedure, take note that the origin (ie. the (0,0) coordinate) is at the top-left corner. The x-values increase to the right from there until the number of columns; y-values increase downward from there until the number of rows.</li>
 </ol>
-<div id="ddc95db9" class="cell" data-execution_count="6">
+<div id="5667e4fc" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rows,cols <span class="op">=</span> starry_night.shape[:<span class="dv">2</span>]</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># Create RGB version of translated image, moved 400 pixels to the right, and</span></span>
@@ -444,7 +445,7 @@ Note
 <ol start="3" type="1">
 <li>The third code snippet demonstrates how to rotate an image. For this, and the previous step, we require a transformation matrix, that we then apply to the image using <code>cv2.warpAffine</code>.</li>
 </ol>
-<div id="9e0f3d0a" class="cell" data-execution_count="7">
+<div id="959e8988" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Create RGB version of image, rotated 30 degrees anti-clockwise, about it's </span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="co"># centre.</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>rotation_matrix <span class="op">=</span> cv2.getRotationMatrix2D((<span class="fl">0.5</span><span class="op">*</span>cols, <span class="fl">0.5</span><span class="op">*</span>rows), <span class="dv">30</span>, <span class="dv">1</span>)</span>
@@ -454,7 +455,7 @@ Note
 <ol start="4" type="1">
 <li>Finally, we show how an image can be resized (scaled up or down) using <code>opencv</code>. When an image is made larger, the pixels need to be interpolated to fill up the gaps; this can be done using a linear or cubic interpolation.</li>
 </ol>
-<div id="5dae05a8" class="cell" data-execution_count="8">
+<div id="173429ff" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Resize the image by 20% in each direction, with cubic interpolation.</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>sn_resized <span class="op">=</span> cv2.resize(starry_night, <span class="va">None</span>,fx<span class="op">=</span><span class="fl">1.2</span>, fy<span class="op">=</span><span class="fl">1.2</span>, </span>
 <span id="cb7-3"><a href="#cb7-3"></a>                        interpolation <span class="op">=</span> cv2.INTER_CUBIC)</span>
@@ -503,7 +504,7 @@ Figure&nbsp;9.4: Lionel Messi, footballer.
 <p><span class="theorem-title"><strong>Example 9.3 (Creating a mask for the football)</strong></span> </p>
 <p>After reading the image into Python, we are going to use a colour picker to identify the colour of the ball. The following website provides a useful tool for us to upload an image, and isolate the RGB representaion of the colour we wish to pick out: <a href="https://redketchup.io/color-picker" class="uri">https://redketchup.io/color-picker</a></p>
 <p>Using this website, we learn that the RGB representation we want is <span class="math inline">\((244, 251, 95)\)</span>. It should be clear that there is a range of values corresponding to the yellow of the ball. To accommodate this range, we convert the colour representation to HSV (Hue-Saturation-Value), using a function from <code>cv2</code>.</p>
-<div id="a2270b9f" class="cell" data-execution_count="11">
+<div id="ebd8ed8a" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># R=244, G=251, B=95</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>cv2.cvtColor(np.uint8([[[<span class="dv">95</span>, <span class="dv">251</span>, <span class="dv">244</span> ]]]), cv2.COLOR_BGR2HSV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
@@ -511,7 +512,7 @@ Figure&nbsp;9.4: Lionel Messi, footballer.
 </div>
 </div>
 <p>The resulting tuple corresponds to the HSV representation of the ball’s colour. The first coordinate corresponds to the hue. We use it to set a range of values to pick up in the image.</p>
-<div id="343c867f" class="cell" data-execution_count="12">
+<div id="d69584c4" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messi <span class="op">=</span> cv2.imread(<span class="st">'data/messi5.jpg'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a>hsv <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2HSV)</span>
 <span id="cb10-3"><a href="#cb10-3"></a></span>
@@ -539,7 +540,7 @@ Figure&nbsp;9.5: Mask for football, and other yellow segments.
 </div>
 <p>Compare the black-and-white image in <a href="#fig-messi-mask" class="quarto-xref">Figure&nbsp;<span>9.5</span></a> with the original one in <a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>. The white regions below correspond to yellow coloured sections in the original image. The white pixels take the value 255, while the black pixels are 0.</p>
 <p>Just before we close this example, we are going to modify the numpy array corresponding to this mask, to encompass the whole ball, not just the yellow segments.</p>
-<div id="e06f37bb" class="cell" data-execution_count="14">
+<div id="0c54b664" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>mask1[:, :<span class="dv">330</span>] <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>mask1[:, <span class="dv">405</span>:] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -639,7 +640,7 @@ Figure&nbsp;9.9: Football match screen capture
 <div id="exm-football-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 9.5 (Football screen capture)</strong></span> </p>
 <p>Once again, it should be emphasised that the coordinates to be chosen require some trial and error.</p>
-<div id="87e4c690" class="cell" data-execution_count="19">
+<div id="50ddb95a" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>football1 <span class="op">=</span> cv2.imread(<span class="st">'data/football1.png'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">118</span>]])</span>
 <span id="cb16-3"><a href="#cb16-3"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">100</span>], [<span class="dv">45</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">100</span>]])</span>
@@ -687,7 +688,7 @@ Figure&nbsp;9.11: Examples of edges in images, taken from <a href="http://vision
 <p><span class="theorem-title"><strong>Example 9.6 (Sudoku edge detection)</strong></span> </p>
 <p>The Sobel edge detection technique is one of the most straigtforward to understand. It can be used to detect vertical or horizontal edges. Let us apply this technique to the perspective-transformed Sudoku image from <a href="#exm-sudoku-1" class="quarto-xref">Example&nbsp;<span>9.4</span></a>.</p>
 <p>Edge detection is almost always performed on the grayscale version of an image. In the code segment below, <code>sobelx</code> and <code>sobely</code> now contain the vertical (in the <code>x</code>-direction) and the horizontal (in the <code>y</code>-direction) edges.</p>
-<div id="6c38dd7a" class="cell" data-execution_count="21">
+<div id="efb6e921" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dst_gray <span class="op">=</span> cv2.cvtColor(sudoku_dst, cv2.COLOR_BGR2GRAY)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>sobelx <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">1</span>, <span class="dv">0</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb17-3"><a href="#cb17-3"></a>sobely <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">0</span>, <span class="dv">1</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -734,7 +735,7 @@ Figure&nbsp;9.13: Lionel Messi, Canny edge
 </div>
 </div>
 <p>The next step involves the use of Hough transforms. When applied to edges, this transform can be used to pick out lines that follow any parametric form, e.g. lines, quadratic curves, ellipses and circles. Since we know the ball is a circle, we are going to use the Hough transform to pick it out from the edge map.</p>
-<div id="a5d83fa0" class="cell" data-execution_count="24">
+<div id="1f120383" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>blurred <span class="op">=</span> cv2.GaussianBlur(messi_gray, (<span class="dv">9</span>, <span class="dv">9</span>), <span class="dv">2</span>)</span>
 <span id="cb20-2"><a href="#cb20-2"></a></span>
 <span id="cb20-3"><a href="#cb20-3"></a>circles <span class="op">=</span> cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp<span class="op">=</span><span class="dv">1</span>,</span>
@@ -751,7 +752,20 @@ Figure&nbsp;9.13: Lionel Messi, Canny edge
   [231.5  96.5  20.5]]]</code></pre>
 </div>
 </div>
-<p>Three circles have been located in the image! Can you think of contextual information you can use to rule out the erroneous balls? <a href="#fig-messi-hough" class="quarto-xref">Figure&nbsp;<span>9.14</span></a> marks out all three circles found.</p>
+<p>Three circles have been located in the image! <a href="#fig-messi-hough" class="quarto-xref">Figure&nbsp;<span>9.14</span></a> marks out all three circles found.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Can you think of contextual information you can use to rule out the erroneous balls?</p>
+</div>
+</div>
 <div id="cell-fig-messi-hough" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>circles_rounded <span class="op">=</span> np.uint16(np.around(circles))</span>
 <span id="cb22-2"><a href="#cb22-2"></a><span class="cf">for</span> i, c <span class="kw">in</span> <span class="bu">enumerate</span>(circles_rounded[<span class="dv">0</span>, :]): </span>
@@ -806,8 +820,8 @@ Figure&nbsp;9.14: Circles detected with Hough transform
 <li><code>opencv_extra</code>: This contains more configuration details for the models.</li>
 <li><code>opencv_zoo</code>: This contains a smaller range of models, along with the model weights.</li>
 </ol>
-<section id="models-from-opencv-repository" class="level3">
-<h3 class="anchored" data-anchor-id="models-from-opencv-repository">Models from OpenCV Repository</h3>
+<section id="sec-09-opencvmodels" class="level3">
+<h3 class="anchored" data-anchor-id="sec-09-opencvmodels">Models from OpenCV Repository</h3>
 <p>First, we demonstrate how to download models using the script in <code>opencv</code>. Open up a terminal, activate your virtual environment and navigate into <code>opencv/samples/dnn</code>.</p>
 <p>Next, check inside <code>models.yml</code> for the model that you intend to use. The list of models available are:</p>
 <table class="caption-top table">
@@ -901,22 +915,26 @@ Figure&nbsp;9.14: Circles detected with Hough transform
 </tbody>
 </table>
 <p>For this demonstration, we shall aim to download and run the GOOGLENET image classification model. Run the following command to download the model weights for GOOGLENET:</p>
-<pre><code>python .\download_models.py --save_dir GOOGLENET googlenet</code></pre>
+<div id="21a999be" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>python .\download_models.py <span class="op">--</span>save_dir GOOGLENET googlenet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Apart from listing all the models available for download, <code>models.yml</code> also contains the precise configuration settings to run this particular model. For full reference, here is the section corresponding to GOOGLENET:</p>
-<pre><code># Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet
-googlenet:
-  load_info:
-    url: "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel"
-    sha1: "405fc5acd08a3bb12de8ee5e23a96bec22f08204"
-  model: "bvlc_googlenet.caffemodel"
-  config: "bvlc_googlenet.prototxt"
-  mean: [104, 117, 123]
-  scale: 1.0
-  width: 224
-  height: 224
-  rgb: false
-  classes: "classification_classes_ILSVRC2012.txt"
-  sample: "classification"</code></pre>
+<div id="dbfdab2d" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>googlenet:</span>
+<span id="cb25-3"><a href="#cb25-3"></a>  load_info:</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    url: <span class="st">"http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel"</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>    sha1: <span class="st">"405fc5acd08a3bb12de8ee5e23a96bec22f08204"</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a>  model: <span class="st">"bvlc_googlenet.caffemodel"</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a>  config: <span class="st">"bvlc_googlenet.prototxt"</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>  mean: [<span class="dv">104</span>, <span class="dv">117</span>, <span class="dv">123</span>]</span>
+<span id="cb25-9"><a href="#cb25-9"></a>  scale: <span class="fl">1.0</span></span>
+<span id="cb25-10"><a href="#cb25-10"></a>  width: <span class="dv">224</span></span>
+<span id="cb25-11"><a href="#cb25-11"></a>  height: <span class="dv">224</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a>  rgb: false</span>
+<span id="cb25-13"><a href="#cb25-13"></a>  classes: <span class="st">"classification_classes_ILSVRC2012.txt"</span></span>
+<span id="cb25-14"><a href="#cb25-14"></a>  sample: <span class="st">"classification"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>The important parameters to take note are:</p>
 <ul>
 <li><code>model</code>: Refers to the file containing the model weights (which we just downloaded)</li>
@@ -927,10 +945,12 @@ googlenet:
 <li><code>classes</code>: GOOGLENET is an object classification model. The specified file here contains the labels to be used. The file is present in the <code>opencv/samples/data/dnn</code> directory.</li>
 </ul>
 <p>The final step is to call the python script that demonstrates the use of this model. You may have to modify the paths to the image files to match those on your laptop, but you should then see the labelled image, similar to <a href="#fig-googlenet-output" class="quarto-xref">Figure&nbsp;<span>9.15</span></a>.</p>
-<pre><code>python classification.py --model GOOGLENET/405fc5acd08a3bb12de8ee5e23a96bec22f08204/bvlc_googlenet.caffemodel \
---config /home/viknesh/NUS/coursesTaught/ind5003-book/opencv_extra/testdata/dnn/bvlc_googlenet.prototxt \
---width 224 --height 224 --classes ../data/dnn/classification_classes_ILSVRC2012.txt \
---mean 104 117 123 --input /home/viknesh/NUS/coursesTaught/ind5003-book/data/cars.jpg</code></pre>
+<div id="c6a9c88a" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>python classification.py <span class="op">--</span>model GOOGLENET<span class="op">/</span><span class="dv">405</span><span class="er">fc5acd08a3bb12de8ee5e23a96bec22f08204</span><span class="op">/</span>bvlc_googlenet.caffemodel <span class="op">\</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="op">--</span>config <span class="op">/</span>home<span class="op">/</span>viknesh<span class="op">/</span>NUS<span class="op">/</span>coursesTaught<span class="op">/</span>ind5003<span class="op">-</span>book<span class="op">/</span>opencv_extra<span class="op">/</span>testdata<span class="op">/</span>dnn<span class="op">/</span>bvlc_googlenet.prototxt <span class="op">\</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="op">--</span>width <span class="dv">224</span> <span class="op">--</span>height <span class="dv">224</span> <span class="op">--</span>classes ..<span class="op">/</span>data<span class="op">/</span>dnn<span class="op">/</span>classification_classes_ILSVRC2012.txt <span class="op">\</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="op">--</span>mean <span class="dv">104</span> <span class="dv">117</span> <span class="dv">123</span> <span class="op">--</span><span class="bu">input</span> <span class="op">/</span>home<span class="op">/</span>viknesh<span class="op">/</span>NUS<span class="op">/</span>coursesTaught<span class="op">/</span>ind5003<span class="op">-</span>book<span class="op">/</span>data<span class="op">/</span>cars.jpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div id="fig-googlenet-output" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-googlenet-output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -946,7 +966,9 @@ Figure&nbsp;9.15: Googlenet labelled output
 <section id="models-from-opencv-model-zoo" class="level3">
 <h3 class="anchored" data-anchor-id="models-from-opencv-model-zoo">Models from OpenCV Model Zoo</h3>
 <p>The openCV model zoo contains model weights that can be used directly. There is no need for any further downloads. Open up a terminal, activate your virtual environment, and navigate to the <code>opencv_zoo/models/face_detection_yunet/</code> folder. Then run the following command:</p>
-<pre><code>python demo.py </code></pre>
+<div id="dfb7fe9b" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>python demo.py </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="summary" class="level2" data-number="9.5">
@@ -976,6 +998,33 @@ Figure&nbsp;9.15: Googlenet labelled output
 <li><a href="https://github.com/opencv/opencv_extra">opencv-extra</a></li>
 <li><a href="https://github.com/opencv/opencv_zoo">opencv model zoo</a></li>
 </ol>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">9.7</span> Exercises</h2>
+<ol type="1">
+<li>In <a href="#sec-09-opencvmodels" class="quarto-xref"><span>Section 9.4.1</span></a>, we downloaded and used the GOOGLENET model. Follow the procedure to download and apply the YOLOv4-tiny model to the same image.</li>
+<li>Use the VIT (vision transformer tracker) to track one of players in <a href="vids/obj_tracking_data.mp4">this video</a>. The tracker can be found in the opencv model zoo.</li>
+<li>Use Canny edge detection, and then a perspective transform, to create <a href="#fig-sudoku-exercise" class="quarto-xref">Figure&nbsp;<span>9.16</span></a>, starting from the Sudoku image:</li>
+</ol>
+<div id="cell-fig-sudoku-exercise" class="cell" data-execution_count="30">
+<div class="cell-output cell-output-display">
+<div id="fig-sudoku-exercise" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sudoku-exercise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="09-vision_files/figure-html/fig-sudoku-exercise-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-exercise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.16: Sudoku exercise
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Rotate The Starry Night image 45 degrees clockwise about the top-left corner of the image. Display the result using matplotlib, ensuring the colours appear correct.</li>
+<li>Use the colour picker to isolate the blue regions of Messi’s Barcelona jersey.</li>
+</ol>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -983,7 +1032,6 @@ Figure&nbsp;9.15: Googlenet labelled output
 Szeliski, Richard. 2022. <em>Computer Vision: Algorithms and Applications</em>. Springer Nature.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
