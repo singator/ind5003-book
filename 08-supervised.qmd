@@ -226,7 +226,7 @@ $$
 We can combine precision and recall into one score using their harmonic mean:
 $$
 F1 = 2 \times \frac{\text{precision} \times \text{recall}}{\text{precision} +
-\text{receall}}
+\text{recall}}
 $$
 
 Roughly, the F1 score is a summary of how good the classifier is in terms of

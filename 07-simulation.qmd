@@ -1122,9 +1122,10 @@ First, we write a function that will generate two groups of data, and then
 computes and returns the decision for a $t$-test.
 
 ```{python}
+rng_power = default_rng(4545)
 def generate_one_sample(alpha, delta_m, sd1, n):
-    X = np.random.randn(n)*sd1
-    Y = np.random.randn(n)*sd1 + delta_m
+    X = rng_power.standard_normal(n)*sd1
+    Y = rng_power.standard_normal(n)*sd1 + delta_m
     
     ts2 = stats.ttest_ind(X, Y)
     if ts2.pvalue < alpha:
@@ -1207,3 +1208,19 @@ Here are some general guidelines to begin with your simulation model:
 
 1. [Python documentation on classes](https://docs.python.org/3.10/tutorial/classes.html)
 
+
+## Exercises
+
+1.  Re-run the codes in @exm-power-1 to recommend an appropriate sample size if
+    the investigator wishes to detect a difference in means of 1, with power of
+    at least 0.9, when testing at $\alpha=5\%$, but if the standard deviation
+    is known to be 2.5?
+2.  Report a 80% confidence interval for the power for the recommended sample
+    size in question 1.
+3.  Similar to the class definition for a circle, define a Python class for an 
+    ellipse. The class should include a method for computing the area of an
+    ellipse.
+4.  Modify the Boltzmann model in @exm-boltzmann-5 to compute a 95% confidence
+    interval for the Gini coefficient after 100 steps.
+5.  Implement the code for the Insurance claims (see @exm-insurance-1). Return
+    a 90% confidence interval for the probability that claims exceed 12000.
