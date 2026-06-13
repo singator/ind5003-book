@@ -416,7 +416,7 @@ Geometrically, cosine similarity measures the size of the angle between vectors 
 
 ![Cosine similarity between documents, from @jm3](figs/term-doc-shakespeare-4.png){#fig-cos-sim-jm width=70%}
 
-### Dense Embeddings
+### Dense Embeddings {#sec-04-dense}
 
 One of the drawbacks of sparse vectors is that they are very long (the length
 of the vocabulary), and most entries in the vector will be 0. As a result,
@@ -1008,3 +1008,21 @@ we can conclude that the prepositions place great attention on their objects, e.
 3. [Using sklearn to perform LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html): We can also use scikit-learn
    to perform LDA.
 4. [Visualising LDA](https://github.com/bmabey/pyLDAvis): Contains sample notebooks for the visualisation.
+
+## Exercises
+
+1.  For the toy example in @exm-tfidf-01 and @exm-tfidf-02, re-run the tf-idf
+    vectoriser twice: once without stopword removal, and once with `min_df = 2`. 
+    Compare the output in terms of vocabulary size and pairwise cosine
+    similarity of documents.
+2.  In @sec-04-dense, we used a function `word_analogy`. Use the function to
+    complete the analogy task for these inputs:
+    * `man` is to `CEO` as `woman` is to _____ .
+    * `dog` is to `puppy` as `cat` is to _____ .
+    How well do the embeddings perform?
+3.  Modify @exm-wine-reviews-lda to use 10 topics. Do the resulting topics make
+    sense?
+4.  From the LDA output from @exm-wine-reviews-lda (with 5 topics), retrieve the
+    five words with the highest probability for each topic. 
+5.  Using the retrieval model in @exm-wine-reviews-2, pick one of the wine
+    reviews, then retrieve the five most similar reviews to it.

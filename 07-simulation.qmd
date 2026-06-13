@@ -991,6 +991,9 @@ page
 
 ```
 
+You should observe an application just like the one in #fig-mesa-vis.
+
+![Mesa visualisation](figs/07-simulation-mesa-vis.png){#fig-mesa-vis fig-align=center width=50%}
 
 :::
 

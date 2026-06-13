@@ -535,9 +535,12 @@ circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1,
 print(circles)
 ```
 
-Three circles have been located in the image! Can you think of contextual
-information you can use to rule out the erroneous balls? @fig-messi-hough marks
+Three circles have been located in the image! @fig-messi-hough marks
 out all three circles found.
+
+::: {.callout-note}
+ Can you think of contextual information you can use to rule out the erroneous balls? 
+:::
 
 ```{python}
 #| fig-align: center

@@ -1091,3 +1091,17 @@ explained. It is written by one of the foremost experts in time series
 forecasting methods. The reference is @hyndman2018forecasting.
 
 * [Forecasting: Principles and Practice](https://otexts.com/fpp3/)
+
+## Exercises
+
+1.  Create a lag plot, with 8 lags, of the Australian electricity data in
+    `qauselec.csv`.
+2.  Extract the residuals from applying the seasonal naive model to the
+    Australian electricity data, and compare the residual plots to the 
+    ones in @fig-arima-diag.
+3.  Apply the auto ARIMA procedure to the housing sales data, and inspect the 
+    residuals.
+4.  Apply the ETS (M,A,A) model to the Australian electricity data. Compare the 
+    RMSE and residuals to the ETS model fitted in @exm-aus-elec-5.
+5.  Apply the auto ARIMA procedure directly to the tourism data, and compare it
+    to the theta model and the seasonal decomposition one in @exm-tourism-2.
