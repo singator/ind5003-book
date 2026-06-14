@@ -309,6 +309,7 @@ window.Quarto = {
   <li><a href="#sec-nlp-applications" id="toc-sec-nlp-applications" class="nav-link" data-scroll-target="#sec-nlp-applications"><span class="header-section-number">4.8</span> Applications</a></li>
   <li><a href="#interpretation-of-neural-models" id="toc-interpretation-of-neural-models" class="nav-link" data-scroll-target="#interpretation-of-neural-models"><span class="header-section-number">4.9</span> Interpretation of Neural Models</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4.10</span> References</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">4.11</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -718,8 +719,8 @@ Figure&nbsp;4.3: Cosine similarity between documents, from <span class="citation
 </figure>
 </div>
 </section>
-<section id="dense-embeddings" class="level3">
-<h3 class="anchored" data-anchor-id="dense-embeddings">Dense Embeddings</h3>
+<section id="sec-04-dense" class="level3">
+<h3 class="anchored" data-anchor-id="sec-04-dense">Dense Embeddings</h3>
 <p>One of the drawbacks of sparse vectors is that they are very long (the length of the vocabulary), and most entries in the vector will be 0. As a result, researchers worked on methods that would pack the information in the vectors into shorter ones. Instead of working on representations of the documents, the methods aimed to create representations of each token (or word) in the vocabulary. These are referred to as <em>embeddings</em>.</p>
 <p>Here, we shall discuss word2vec (<span class="citation" data-cites="mikolov2013distributed">Mikolov, Sutskever, et al. (<a href="references.html#ref-mikolov2013distributed" role="doc-biblioref">2013</a>)</span>), but take note that there are others. GLoVe (<span class="citation" data-cites="pennington2014glove">Pennington, Socher, and Manning (<a href="references.html#ref-pennington2014glove" role="doc-biblioref">2014</a>)</span>) was invented soon after, but the most common embeddings used today arise from Deep Learning models. The most widely used version is BERT (see the video references below, as well as <span class="citation" data-cites="devlin2019bert">Devlin et al. (<a href="references.html#ref-devlin2019bert" role="doc-biblioref">2019</a>)</span>).</p>
 <p>The approach in word2vec deviates considerably from tf-idf, in that the goal is to obtain a numeric representation of a word, <em>in the context of it’s surrounding words</em>. Consider this statement:</p>
@@ -1458,6 +1459,21 @@ Figure&nbsp;4.11: Visualising attention in transformer heads, from <span class="
 <li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html">Using sklearn to perform LDA</a>: We can also use scikit-learn to perform LDA.</li>
 <li><a href="https://github.com/bmabey/pyLDAvis">Visualising LDA</a>: Contains sample notebooks for the visualisation.</li>
 </ol>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="exercises"><span class="header-section-number">4.11</span> Exercises</h2>
+<ol type="1">
+<li>For the toy example in <a href="#exm-tfidf-01" class="quarto-xref">Example&nbsp;<span>4.3</span></a> and <a href="#exm-tfidf-02" class="quarto-xref">Example&nbsp;<span>4.4</span></a>, re-run the tf-idf vectoriser twice: once without stopword removal, and once with <code>min_df = 2</code>. Compare the output in terms of vocabulary size and pairwise cosine similarity of documents.</li>
+<li>In <a href="#sec-04-dense" class="quarto-xref"><span>Section 4.5.3</span></a>, we used a function <code>word_analogy</code>. Use the function to complete the analogy task for these inputs:
+<ul>
+<li><code>man</code> is to <code>CEO</code> as <code>woman</code> is to _____ .</li>
+<li><code>dog</code> is to <code>puppy</code> as <code>cat</code> is to _____ . How well do the embeddings perform?</li>
+</ul></li>
+<li>Modify <a href="#exm-wine-reviews-lda" class="quarto-xref">Example&nbsp;<span>4.8</span></a> to use 10 topics. Do the resulting topics make sense?</li>
+<li>From the LDA output from <a href="#exm-wine-reviews-lda" class="quarto-xref">Example&nbsp;<span>4.8</span></a> (with 5 topics), retrieve the five words with the highest probability for each topic.</li>
+<li>Using the retrieval model in <a href="#exm-wine-reviews-2" class="quarto-xref">Example&nbsp;<span>4.7</span></a>, pick one of the wine reviews, then retrieve the five most similar reviews to it.</li>
+</ol>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -1492,7 +1508,6 @@ Pennington, Jeffrey, Richard Socher, and Christopher D Manning. 2014. <span>“G
 Sun, Xiaofei, Diyi Yang, Xiaoya Li, Tianwei Zhang, Yuxian Meng, Han Qiu, Guoyin Wang, Eduard Hovy, and Jiwei Li. 2021. <span>“Interpreting Deep Learning Models in Natural Language Processing: A Review.”</span> <em>arXiv Preprint arXiv:2110.10470</em>.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
