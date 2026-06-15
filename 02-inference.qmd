@@ -1261,14 +1261,14 @@ domain expertise.
 
 ## Exercises
 
-1.  From the political association data, extract the standardised residuals (under
+1.  From the Job satisfaction data in @exm-job-income-1, extract the standardised residuals (under
     independence), and create a QQ-plot.
 2.  Instead of using ANOVA, perform three 2-sample t-tests to compare the means
     of the three groups in the Tartar dataset. What is the difference between the 
     two procedures? Is there any difference in the result in this case?
 3.  What is the interpretation of $\gamma$ implied by the text?
-4.  For the political association data, collapse the categories to obtain a 2-by-2
+4.  For the Job satisfaction data in @exm-job-income-1, collapse the categories to obtain a 2-by-2
     table, and then compute a 95% confidence interval for the Odds Ratio from the 
     resulting table.
-5.  Apply the Fisher Exact test to the political association data. How does it work
+5.  Apply the Fisher Exact test to the the Job satisfaction data in @exm-job-income-1. How does it work
     in this case?
