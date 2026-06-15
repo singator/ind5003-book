@@ -4,6 +4,7 @@ Active items planned for the next revision of the textbook.
 
 ## Pending
 
-- [ ] **Exercises** — add exercises at the end of each chapter.
+- [x] **Exercises** — add exercises at the end of each chapter. *(Done and verified — all exercises reference existing datasets)*
 - [ ] **Discrete Event Simulation** — extend Chapter 7 (Simulation) with a DES section, likely using SimPy (already referenced in Ch. 7 references).
-- [ ] **Computer Vision expansion** — Chapter 9 currently stops before demonstrating any DNN-based models (object detection, face detection, tracking); needs working code examples using OpenCV Zoo / opencv_extra.
+- [x] **Computer Vision expansion** — Chapter 9 now includes a DNN section (GoogLeNet image classification via `opencv`, YuNet face detection via `opencv_zoo`).
+
