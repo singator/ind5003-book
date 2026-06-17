@@ -4,9 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ind5003"
-version = "0.1.0"
+version = "0.1.1"
 description = "Helper utilities for the IND5003 Data Analytics course at NUS"
+readme = "PKG_README.md"
 requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "Vik Gopal", email = "vik.gopal@nus.edu.sg" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Text Processing :: Linguistic",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
 dependencies = [
     "numpy",
     "pandas",
