@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ind5003"
+version = "0.1.0"
+description = "Helper utilities for the IND5003 Data Analytics course at NUS"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "scipy",
+    "statsmodels",
+    "scikit-learn",
+]
+
+[tool.setuptools.packages.find]
+include = ["ind5003*"]

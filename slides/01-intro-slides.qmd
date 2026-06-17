@@ -1,123 +1,155 @@
 ---
 title: "Introduction to Python"
-format: 
+format:
   beamer:
     aspectratio: 169
     theme: Boadilla
     navigation: empty
     colortheme: lily
-    footer: "ST2137-2420"
+    footer: "IND5003"
 
 execute:
   echo: true
 ---
 
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+```
+
+## History of Python {.smaller}
+
+* General-purpose, **interpreted** language — no compilation step needed.
+* Created in the 1980s by Guido van Rossum at CWI (Netherlands).
+  Named after *Monty Python's Flying Circus*.
+* Python 3.0 (2008) broke backward-compatibility with Python 2 — always use Python 3.
+* Rich ecosystem: `scikit-learn`, `transformers`, `tensorflow` are now
+  standard frameworks for data science and ML.
+
+::: {.callout-important}
+For our class, please ensure that you are using Python 3.14.
+:::
+
+## Setting Up {.smaller}
+
+* **Virtual environments** let you keep multiple Python/package versions on the
+  same machine without conflicts.
+* Steps (see Canvas videos for your OS):
+  1. Download Python from <https://www.python.org/downloads/>
+  2. Create a virtual environment for this course.
+  3. Install Jupyter Lab inside the environment.
+
+::: {.callout-important}
+Even if you are using Anaconda / Spyder / VSCode, you still need a virtual environment.
+:::
+
+## Jupyter Lab {.smaller}
+
+![Jupyter Lab interface](../figs/jupyter_lab2.png){fig-align="center" width=60%}
+
+* **Markdown cells** — formatted text and equations.
+* **Code cells** — Python code; run with `Ctrl-Enter`.
+
 ## Easter Egg {.smaller}
 
-```{python}
+Every Python installation ships with *The Zen of Python*:
+
+```{python py-easter}
 import this
 ```
 
-## Introduction {.smaller}
+## Native Data Structures {.smaller}
 
-In interactive mode, Python can serve as a calculator. Try out the following commands:
+Three built-in container types, distinguished by their brackets:
 
-```{python}
-2 + 2
+| Type | Brackets | Mutable? |
+|------|----------|----------|
+| List | `[ ]` | Yes |
+| Tuple | `( )` | No |
+| Dictionary | `{ }` | Yes |
 
-17/ 3
-
-w = 4.0
-h = w * 2.3
+```{python py-structs}
+x_list  = [1, 2, 3]
+x_tuple = (1, 2, 3)
+x_dict  = {'a': 1, 'b': 2, 'c': 3}
 ```
 
-Strings can be created using single or double quotes, and they are indexed starting from 0.
+## Mutability {.smaller}
 
-```{python}
-word = 'Python'
-word[0]
+* **Mutable** objects (lists, dicts): individual elements can be overwritten.
+* **Immutable** objects (tuples, strings): elements cannot be changed in-place.
+
+```{python py-mutable}
+x = [1, 3, 5, 7, 8, 9, 10]
+x[3] = 17
+print(x)
+```
+
+```{python py-immutable}
+#| eval: false
+x_tuple = (1, 3, 5, 6, 8, 9, 10)
+x_tuple[3] = 17   # TypeError!
 ```
 
 ## Slice Operator {.smaller}
 
-The slice operator ':' is used in Python to pick out subsequences from collections of items. Here's a pictorial representation of how slice indices should be envisioned:
+![Positive and negative indices](../figs/python_slice.png){fig-align="center" width=50%}
 
-![Indexing with the slice operator](../figs/python_slice.png){fig-align="center" width=40%} 
+* Python indexes from **0**; negative indices count from the end.
+* `obj[a:b]` returns indices `a, a+1, …, b-1` (end-point **excluded**).
 
-Try to guess what these will output before running them.
-
-```{python}
-#| eval: false
-word[0::2]
-word[-3:-1]
-word[1::2]
+```{python py-slice}
+char_list = ['P', 'y', 't', 'h', 'o', 'n']
+char_list[0]          # first element
 ```
 
-## Inbuilt Data Structures
+## For Loops {.smaller}
 
-There are three main types of containers for data in Python. They can be
-distinguished by the character that denotes them:
+* Python uses **indentation** (not braces) to define code blocks.
+* Lists, tuples, dicts and strings are all **iterables**.
 
-* `[  ]` for lists.
-* `(  )` for tuples.
-* `{  }` for dictionaries.
-
-## Iterables {.smaller}
-
-Lists, tuples and dictionaries are *iterables*. When you know an object is an
-iterable, it can be *iterated over* in `for` loops. This is a convenient
-concept in Python.
-
-```{python}
-# the object xr is not a list, but it is an iterable.
-xr = range(1, 11, 2)
-xr
-
-# convert to a list
-list(xr)
-
-# iterate over xr
-for xx in xr:
-    print(xx)
+```{python py-forloop}
+x = [1, 3, 5, 17, 8, 9, 10]
+for i in x[:2]:
+    print(f"The current element is {i}.")
 ```
 
-## Dictionaries {.smaller}
+* f-strings `f"... {variable} ..."` are the recommended way to embed
+  values in strings.
 
-Dictionaries contain keys and values tied to them. We can retrieve values
-through their associated keys, or we can iterate over all items in the
-dictionary.
+## Iterating Dictionaries {.smaller}
 
-```{python}
-comics = {'marvel': 1, 'dc':0}
+```{python py-dict-iter}
+dict1 = {'holmes': 'male', 'watson': 'male',
+         'hudson': 'female', 'moriarty': 'male', 'adler': 'female'}
 
-#for x,y in comics.items():
-#for x,(k,v) in enumerate(comics.items()):
-for _,y in comics.items():
-    print(f"This leaves only {y}.")
+for key in dict1.keys():
+    print(f"The gender of {key} is {dict1[key]}")
 ```
-
-::: {.callout-note}
-* Note the use of `_`, enumerate and *f-strings*.
-:::
 
 ## Strings {.smaller}
 
-Text data in Python is handled with `str` objects. A string object is an
-**immutable** sequence of characters. Here are some useful string methods and
-properties:
+* `str` is an **immutable** sequence of characters.
+* Useful methods: `find`, `replace`, `join`, `lower`, `isupper`, `title` …
 
- * catenating (joining) strings.
- * finding sub-strings.
- * iterating over strings.
- * converting to lower/upper-case.
-
-```{python}
+```{python py-str-find}
 test_str = "Where in the World is Carmen san Diego?"
+test_str.find('Carmen')      # returns the position index
 ```
 
-## String Operations: Iteration {.smaller}
+```{python py-str-replace}
+test_str.replace('Carmen', 'John')
+```
 
-```{python}
+## String Operations: Join & Iterate {.smaller}
+
+```{python py-str-join}
+print("Where shall " "we " "go today?")
+# Alternative: ' '.join(["Where", "shall", "we", "go", "today?"])
+```
+
+```{python py-str-iter}
 count = 0
 for x in test_str:
     if x.isupper():
@@ -125,234 +157,272 @@ for x in test_str:
 print(f"There were {count} upper-case characters in the sentence.")
 ```
 
-## String Operations: Joining {.smaller}
+## Functions {.smaller}
 
-```{python}
-x = "Where shall "
-y = "we "
-print("Where shall " "we " "go today?")
+* Use the `def` keyword to define a reusable function.
+* The function body is **indented**; no `return` needed for side-effects.
 
-# also works - the '+' operator is overloaded to work with strings
-"Where " + "shall" +" we go" + " today?"
+```{python py-fn}
+def test_function(x):
+    print('You typed', x)
 
-# join using another character
-':'.join(["Where", "shall", "we", "go", "today?"])
+test_function('hello IND5003')
 ```
 
-## String Operations: Find/replace {.smaller}
+## Modules and Packages {.smaller}
 
-```{python}
-test_str.find('Carmen')
-```
+* A **module** is a `.py` file with definitions and statements.
+* A **package** is a collection of modules.
+* Access objects with **dot notation** after importing.
 
-```{python}
-test_str.replace('Carmen', 'John')
-```
+:::: {.columns}
 
-```{python}
-#| echo: false
-import numpy as np
-import pandas as pd
+::: {.column width="48%"}
 
-from itables import show
-```
-
-## Numpy arrays {.smaller}
-
-Each array has several attributes. These include:
-
-* `ndim`: the number of axes/dimensions.
-* `shape`: a tuple describing the length of each dimension.
-* `size`: the total number of elements in the array. This is a product of the integers in the shape attribute.
-
-```{python}
-#| collapse: true
-arr = np.array([(1.5, 2, 3), (4, 5, 6)])
-
-print(arr.ndim)
-print(arr.shape)
-print(arr.size)
-```
-
-## Array Creation: Int sequence {.smaller}
-
-`np.arange()` creates a sequence of integers, with a specified separation.
-
-```{python}
-seq = np.arange(0, 10, 3)
-seq
-```
-
-## Array Creation: Reshaping {.smaller}
-
-```{python}
-# seq.shape
-col_vect = seq.reshape(4,1)
-col_vect
-```
-
-## Array Creation: Real sequence {.smaller}
-
-```{python}
-#| scrolled: true
-arr_real = np.linspace(start = 0.2, stop = 3.3, num = 24).reshape(2, 3, 4)  
-arr_real
-```
-
-## Slice Operator in Multiple Dimensions {.smaller}
-
-* Use comma separated slice notation. 
-* Missing indices are considered complete slices for those dimensions.
-* When printing, the *last* axis will be printed left-to-right, and 
-  the second last axis will be printed from top-to-bottom. 
-
-Try to guess what each will return before you run it:
-
-```{python}
-#| eval: false
-arr_real[1,2,3]
-arr_real[0, 2, ::-1]
-arr_real[1, 0:3:2]
-arr_real[:,2,:]
-```
-
-## Basic Operations:  Random numbers {.smaller}
-
-```{python}
-# Setting a seed allows for reproducibility of random number generation
-# across sessions.
-rng = np.random.default_rng(1361)
-a = rng.uniform(size=(3,5))
-b = rng.uniform(size=(3,5))
-b
-```
-## Basic Operations:  Element-wise  {.smaller}
-
-```{python}
-# Element-wise addition.
-a + b 
-```
-
-```{python}
-# Element-wise multiplication: NOT matrix multiplication.
-a * b
-```
-
-## Basic Operations:  Matrix mult.  {.smaller}
-
-```{python}
-# Matrix multiplication (need to transpose "b" to match get the right dimensions).
-# We can also do "a @ b.T".
-a.dot(b.T)
+```{python py-mod1}
+import math
+math.exp(2)
 ```
 
 :::
 
-## Basic Operations:  Axis-wise Operations {.smaller}
+::: {.column width="48%"}
 
-```{python}
-arr_real.shape
+```{python py-mod2}
+from math import pi
+pi
 ```
 
-## Basic Operations:  "1st" axis  {.smaller}
+:::
 
-```{python}
-arr_real.mean(axis = 0) # mean across the 0th ("first") axis
+::::
+
+## NumPy: ndarray {.smaller}
+
+* Core object: `ndarray` — *n*-dimensional array of **homogeneous** data.
+* Key attributes:
+
+| Attribute | Meaning |
+|-----------|---------|
+| `ndim` | number of axes/dimensions |
+| `shape` | length of each axis (tuple) |
+| `size` | total number of elements |
+
+```{python np-attrs}
+arr = np.array([(1.5, 2, 3), (4, 5, 6)])
+print(arr.ndim, arr.shape, arr.size)
 ```
 
-## Basic Operations:  "2nd" axis  {.smaller}
+## Array Creation: Integer Sequences {.smaller}
 
-```{python}
-arr_real.mean(axis = 1)
+`np.arange()` creates a sequence with a specified step.
+
+```{python np-arange}
+seq = np.arange(0, 10, 3)
+seq
 ```
 
-## Pandas Series  {.smaller}
+Note: `shape (4,)` (1-D) $\neq$ `shape (4,1)` (2-D column vector).
 
-A *Series* is a one-dimensional labeled array. 
+```{python np-reshape}
+col_vect = seq.reshape(4, 1)
+col_vect
+```
 
-```{python}
-year = pd.Series(list(range(2010, 2013) ) * 3)
+## Array Creation: Real Sequences & Placeholders {.smaller}
 
-team = ["Barcelona", "RealMadrid", "Valencia"] * 3
-team.sort()
-team = pd.Series(team)
+`np.linspace()` creates evenly-spaced **real** numbers.
 
-wins = pd.Series([30, 28, 32, 29, 32, 26, 21, 17, 19])
-draws = pd.Series([6, 7, 4, 5, 4, 7, 8, 10, 8])
+```{python np-linspace}
+arr_real = np.linspace(start=0.2, stop=3.3, num=24).reshape(2, 3, 4)
+arr_real
+```
+
+```{python np-zeros}
+np.zeros((3, 5))         # placeholder; np.ones() also available
+```
+
+## Slicing ndarray {.smaller}
+
+* Use **comma-separated** slice notation across axes.
+* Omitting an axis returns a complete slice for that dimension.
+
+```{python np-sliceex}
+#| eval: false
+arr_real[1, 2, 3]
+arr_real[0, 2, ::-1]
+arr_real[1, 0:3:2]
+arr_real[:, 2, :]
+```
+
+When printing: last axis → left-to-right, second-last → top-to-bottom.
+
+## Boolean Indexing {.smaller}
+
+Use a boolean array to select elements meeting a condition.
+
+```{python np-bool1}
+arr_real > 3
+```
+
+```{python np-bool2}
+arr_real[arr_real > 3]
+```
+
+## Random Numbers {.smaller}
+
+* Use a **seed** (`default_rng(seed)`) for reproducibility across sessions.
+
+```{python np-rng}
+rng = np.random.default_rng(1361)
+a = rng.uniform(size=(3, 5))
+b = rng.uniform(size=(3, 5))
+b
+```
+
+## Element-wise vs. Matrix Operations {.smaller}
+
+```{python np-ewise}
+a + b          # element-wise addition
+```
+
+```{python np-emult}
+a * b          # element-wise multiplication (NOT matrix mult.)
+```
+
+```{python np-matmul}
+a.dot(b.T)     # matrix multiplication; equivalent: a @ b.T
+```
+
+## Axis-wise Operations {.smaller}
+
+* `axis=0`: collapse **rows** (operate down columns).
+* `axis=1`: collapse **columns** (operate across rows).
+
+```{python np-ax0}
+arr_real.mean(axis=0)          # shape: (3, 4)
+```
+
+```{python np-ax1}
+arr_real[0].mean(axis=1)       # row means of first "layer"
+```
+
+```{python np-argmax}
+arr_real[0].mean(axis=1).argmax()   # index of row with largest mean
+```
+
+## Common ndarray Methods {.smaller}
+
+| Method | Example |
+|--------|---------|
+| `shape` | `arr.shape` |
+| `T` | `arr.T` |
+| `mean(axis=)` | `arr.mean(axis=0)` |
+| `sum(axis=)` | `arr.sum(axis=1)` |
+| `argmax(axis=)` | `arr.argmax(axis=0)` |
+| `reshape(dims)` | `arr.reshape((5, 1))` |
+
+## Pandas Series {.smaller}
+
+* A **Series** is a 1-D labeled array; labels form the **index**.
+
+```{python pd-series}
+year   = pd.Series(list(range(2010, 2013)) * 3)
+team   = pd.Series(sorted(["Barcelona", "RealMadrid", "Valencia"] * 3))
+wins   = pd.Series([30, 28, 32, 29, 32, 26, 21, 17, 19])
+draws  = pd.Series([6, 7, 4, 5, 4, 7, 8, 10, 8])
 losses = pd.Series([2, 3, 2, 4, 2, 5, 9, 11, 11])
-```
 
-## Accessing Values {.smaller}
-
-* To access particular values, we can use the slice operator.
-
-```{python}
 wins[0:6:2]
 ```
 
-* If we specify an index, we can use it to access values in the Series.
+## Pandas DataFrame {.smaller}
 
-```{python}
-s = pd.Series(rng.uniform(size=5), 
-             index=['a', 'b', 'c', 'd', 'e'])
-s[['a', 'c']] 
-```
+* A **DataFrame** is a 2-D labeled structure; columns can be **different types**.
+* Index = row labels (axis 0); columns = column labels (axis 1).
 
-* Be careful when you combine the slice operator with label-based indexing.
-
-```{python}
-s['a':'d']
-```
-
-## DataFrames {.smaller}
-
-* A *DataFrame* is a 2-dimensional labeled data structure with possibly **different** data types. 
-  * The *index* of a DataFrame refers to the row labels (axis 0). 
-  * The *columns* refer to the column labels (axis 1).
-* DataFrames can be constructed from Series, dictionaries, lists and 2-d arrays.
-
-```{python}
-laliga = pd.DataFrame({'Year': year,
-              'Team': team,
-              'Wins': wins,
-              'Draws': draws,
-              'Losses': losses
+```{python pd-df}
+laliga = pd.DataFrame({
+    'Year': year, 'Team': team,
+    'Wins': wins, 'Draws': draws, 'Losses': losses
 })
-happ = pd.read_csv('../data/happiness_report.csv', header=0, na_values='NA')
+laliga.head()
 ```
 
-## Indexing and Selecting Data {.smaller}
+## Reading Data {.smaller}
 
-The `.loc` is primarily label-based. Inputs to `.loc` are 
+```{python pd-read}
+happ = pd.read_csv('data/happiness_report.csv', header=0, na_values='NA')
+happ.head(3)
+```
 
-* a single label,
-* a list of labels,
-* a slice object, 
-* a boolean array.
+* `head()`, `tail()` and `info()` are the first things to run on a new dataset.
 
-The `.iloc` is primarily an integer-based input. Inputs to `.iloc` are 
+## Selecting Data {.smaller}
 
-* a single integer,
-* a list of integers,
-* a slice object, 
-* a boolean array.
+* Select columns by passing a list of names.
 
+```{python pd-sel-col}
+happ[['GDP', 'Freedom']].head()
+```
+
+::: {.callout-warning}
+`happ[0:10, 2:4]` does **not** work — DataFrames are not NumPy arrays.
+Use `.loc` / `.iloc` instead.
+:::
+
+## .loc and .iloc {.smaller}
+
+:::: {.columns}
+
+::: {.column width="48%"}
+
+`.loc` — **label-based** (end-point **inclusive**):
+
+```{python pd-loc}
+happ.loc[2:10:4,
+         "GDP":"Generosity":2]
+```
+
+:::
+
+::: {.column width="48%"}
+
+`.iloc` — **integer-based** (end-point **exclusive**):
+
+```{python pd-iloc}
+happ.iloc[2:11:4, 3:8:2]
+```
+
+:::
+
+::::
 
 ## Filtering Data {.smaller}
 
-* Here is how we can filter the data with a boolean array.
+Use a boolean array to retrieve rows satisfying a condition.
 
-```{python}
+```{python pd-filter1}
 happiest = happ[happ['Happiness.Score'] > 6.95]
-```
-
-```{python}
 happiest.Country.unique()
 ```
 
-* We can also combine Boolean indices.
+Combine conditions with `&` (AND) or `|` (OR):
 
-```{python}
-# Top 3 happiest countries in 2015
+```{python pd-filter2}
 happ[(happ.Year == 2015) & (happ['Happiness.Rank'] <= 3)]
+```
+
+## Missing Values {.smaller}
+
+* `.info()` reports non-null counts for each column.
+* `.dropna()` returns a **new** DataFrame without missing-value rows.
+
+```{python pd-miss}
+happ.info()
+```
+
+```{python pd-dropna}
+new_df = happ.dropna()
+new_df.shape
 ```

@@ -1,768 +1,431 @@
 ---
 title: "Statistical Inference"
-format: 
+format:
   beamer:
     aspectratio: 169
     theme: Boadilla
     navigation: empty
     colortheme: lily
-    footer: "ST2137-2420"
+    footer: "IND5003"
 
 execute:
   echo: true
 ---
 
-## Introduction {.smaller}
-
-* In statistics, we often wish to make inference about a *population*, using a *sample*. 
-
-* The sample typically has uncertainty associated with it, because the precise
-  values will differ each time we draw a sample from the population. 
-
-* The process of utilising the observations from the sample to make conclusions
-  regarding population characteristics, is known as **statistical inference**. 
-
-* This topic introduces two main techniques for statistical inference in common application contexts. 
-
-* The two techniques are (1) hypothesis tests and (2) confidence intervals.
-
-## Hypothesis Tests {.smaller}
-
-You might have been introduced to hypothesis tests in an introductory course before, but just to get us all on the same page, here is the general approach for conducting a hypothesis test:
-
-- Step 1: Assumptions
-- Step 2: State the hypotheses and significance level
-- Step 3: Compute the test statistic
-- Step 4: Compute the $p$-value
-- Step 5: State your conclusion
-
-## Confidence Intervals {.smaller}
-
-* Instead of yielding a binary reject/do-not-reject result, they return an
-  interval that contains the plausible values for the population parameter. 
-
-::: {.callout-note}
-Sample estimate $\pm$ margin of error
-:::
-
-* For instance, if we observe $x_1, \ldots, x_n$ from a Normal distribution,
-  and wish to estimate the mean of the distribution, the 95% confidence
-  interval based on the the $t$ distribution is
-
-\begin{equation*}
-\bar{x} \pm t_{0.025, n-1} \times \frac{s}{\sqrt{n}}
-\end{equation*}
-
-* $\bar{x}$ is the sample mean,
-* $s$ is the sample standard deviation, and 
-* $t_{0.025, n-1}$ is the 0.025-quantile from the $t$ distribution with $n-1$ degrees
-of freedom.
-
-## 2-sample Tests {.smaller}
-
-* Suppose that $X_1,X_2,\ldots,X_{n_1}$ are independent observations from group 1,
-* $Y_1, \ldots Y_{n_2}$ are independent observations from group 2. 
-* It is assumed that 
-
-\begin{eqnarray}
-X_i &\sim& N(\mu_1,\, \sigma^2),\; i=1,\ldots,n_1 \\
-Y_j &\sim& N(\mu_2,\, \sigma^2),\; j=1,\ldots,n_2
-\end{eqnarray}
-
-The null and alternative hypotheses would be 
-
-\begin{eqnarray}
-H_0: & \mu_1 = \mu_2 \\
-H_1: & \mu_1 \ne \mu_2
-\end{eqnarray}
-
-## 2-sample Tests {.smaller}
-
-The test statistic for this test is:
-
-$$
-T_1 = \frac{(\bar{X} - \bar{Y}) - 0 }{s_p\sqrt{1/n_1 + 1/n_2} }
-$$
-
-where
-
-\begin{equation*}
-s^2_p = \frac{(n_1 - 1)s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 -2 }
-\end{equation*}
-
-## 2-sample Tests {.smaller}
-
-Under $H_0$, the test statistic $T_1$ follows a $t$-distribution with $n_1 +
-n_2 -2$ degrees of freedom. When we use a software to apply the test above, it
-will typically also return a confidence interval, computed as
-
-\begin{equation*}
-(\bar{X} - \bar{Y}) \pm t_{n_1 + n_2 -2, 1 - \alpha/2} \times s_p\sqrt{1/n_1 + 1/n_2}
-\end{equation*}
-
 ```{python}
 #| echo: false
 import pandas as pd
 import numpy as np
-
 from scipy import stats
-
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 import statsmodels.stats.multicomp as mc
-
 import seaborn as sns
 import matplotlib.pyplot as plt
-from itables import show
-%matplotlib inline
+from ind5003 import inference
 ```
 
-## Example: Abalone Measurements
+## What is Statistical Inference? {.smaller}
 
-```{python}
-abl = pd.read_csv("../data/abalone_sub.csv")
-abl.head()
-```
+* We wish to learn about a **population** using a **sample**.
+* Two main techniques:
+  1. **Hypothesis tests** — binary reject/do-not-reject decision.
+  2. **Confidence intervals** — a range of plausible values for the parameter.
+* CIs are generally preferred: they convey *how large* an effect is, not just
+  whether it exists.
 
-## Example: Abalone Measurements
+## Hypothesis Test: 5 Steps {.smaller}
 
-```{python}
+1. **Assumptions** — state what the test requires to be valid.
+2. **Hypotheses & significance level** — write $H_0$ and $H_1$ in terms of the
+   *population parameter*; choose $\alpha$ (commonly 5%).
+3. **Test statistic** — a measure of deviation from $H_0$; larger $\Rightarrow$
+   more evidence against $H_0$.
+4. **$p$-value** — probability of data as extreme as observed, *under $H_0$*.
+   Closer to 0 $\Rightarrow$ stronger evidence against $H_0$.
+5. **Conclusion** — reject $H_0$ if $p < \alpha$; otherwise do not reject $H_0$.
+
+::: {.callout-note}
+The 5% level traces back to Fisher: "1 error in 20 is acceptable."
+Adapt $\alpha$ to your problem.
+:::
+
+## Confidence Intervals {.smaller}
+
+Almost all CIs take the form:
+
+$$
+\text{Sample estimate} \;\pm\; \text{margin of error}
+$$
+
+For a Normal population mean, the 95% CI is:
+
+$$
+\bar{x} \;\pm\; t_{0.025,\,n-1} \times \frac{s}{\sqrt{n}}
+$$
+
+where $\bar{x}$ is the sample mean, $s$ the sample s.d., and $t_{0.025,n-1}$ the
+0.025-quantile of the $t_{n-1}$ distribution.
+
+## Independent 2-sample $t$-test: When? {.smaller}
+
+Use when observations in one group give *no information* about the other:
+
+* Random assignment of units to treatments (experimental study).
+* Random samples drawn independently from two groups
+  (e.g. smokers vs. non-smokers).
+
+Assumptions:
+
+$$
+X_i \sim N(\mu_1, \sigma^2),\quad Y_j \sim N(\mu_2, \sigma^2)
+$$
+
+$$
+H_0: \mu_1 = \mu_2 \qquad H_1: \mu_1 \ne \mu_2
+$$
+
+## 2-sample $t$-test: Test Statistic {.smaller}
+
+$$
+T_1 = \frac{(\bar{X} - \bar{Y})}{s_p\sqrt{1/n_1 + 1/n_2}}, \qquad
+s^2_p = \frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1+n_2-2}
+$$
+
+* Under $H_0$, $T_1 \sim t_{n_1+n_2-2}$.
+* The 95% CI for $\mu_1 - \mu_2$ is:
+
+$$
+(\bar{X}-\bar{Y}) \;\pm\; t_{n_1+n_2-2,\,0.025} \times s_p\sqrt{1/n_1+1/n_2}
+$$
+
+::: {.callout-important}
+Validate assumptions **before** interpreting the result.
+:::
+
+## Abalone Dataset: Running the Test {.smaller}
+
+50 male and 50 female abalone records. Goal: compare viscera weight by gender.
+
+```{python inf-abl-load}
+abl = pd.read_csv("data/abalone_sub.csv")
 x = abl.viscera[abl.gender == "F"]
 y = abl.viscera[abl.gender == "M"]
 
 t_out = stats.ttest_ind(y, x)
 ci_95 = t_out.confidence_interval()
-
-print(f"The p-value for the test is {t_out.pvalue:.3f}.")
-print(f"The actual value of the test statistic is {t_out.statistic:.3f}.")
-print(f"The upper and lower limits of the CI are ({ci_95[0]:.3f}, {ci_95[1]:.3f}).")
+print(f"p-value: {t_out.pvalue:.3f}")
+print(f"95% CI: ({ci_95[0]:.3f}, {ci_95[1]:.3f})")
 ```
 
-## Assessing Normality
+## Checking Normality: Histograms {.smaller}
 
-Histograms of data from a Normal distribution should appear symmetric and
-bell-shaped. The tails on both sides should come down at a moderate pace.
+* A histogram of Normal data should be **symmetric and bell-shaped**.
+* Long right (left) tail $\Rightarrow$ right-skewed (left-skewed).
 
-![](../figs/summ_data-05.png){fig-align="center" width=40%} 
+![Sample histograms: skewness](../figs/summ_data-05.png){fig-align="center" width=50%}
 
-## Assessing Normality
+## Checking Normality: Histograms (cont'd) {.smaller}
 
-Histograms from Abalone Measurements data
-
-```{python}
-sns.displot(abl, x='viscera', col='gender', kind='hist', 
-            stat='density', binwidth=0.1, height=4, 
-	    aspect=1.2)
+```{python inf-abl-hist}
+#| fig-align: center
+#| out-width: 60%
+sns.displot(abl, x='viscera', col='gender', kind='hist',
+            stat='density', binwidth=0.1, height=2.2, aspect=1.1);
 ```
 
-## Assessing Normality
+## Checking Normality: QQ-plots {.smaller}
 
-A QQ-plot plots the standardized sample quantiles against the theoretical
-quantiles of a N(0; 1) distribution.  If they fall on a straight line, then we
-would say that there is evidence that the data came from a normal distribution.
+* Plots standardised sample quantiles vs $N(0,1)$ theoretical quantiles.
+* Points on a straight line $\Rightarrow$ evidence for Normality.
+* Look at the **tails**: are they fatter or thinner than Normal?
 
-:::: {.columns}
-
-::: {.column width="50%"}
-
-![](../figs/fig-qq-1-3.png){fig-align="center"}
-
-:::
-
-::: {.column width="50%"}
-
-![](../figs/fig-qq-1-4.png){fig-align="center"}
-
-:::
-
-::::
-
-## Assessing Normality
-
-QQ-plots from Abalone Measurements data
-
-```{python}
-f, axs = plt.subplots(1, 2, figsize=(10,4))
-tmp = plt.subplot(121)
-sm.qqplot(x, line="q", ax=tmp)
-tmp.set_title('Females')
-tmp = plt.subplot(122)
-sm.qqplot(y, line="q", ax=tmp)
-tmp.set_title('Males')
+```{python inf-abl-qq}
+#| fig-align: center
+#| out-width: 40%
+f, axs = plt.subplots(1, 2, figsize=(7, 2.8))
+sm.qqplot(x, line="q", ax=axs[0]); axs[0].set_title('Females')
+sm.qqplot(y, line="q", ax=axs[1]); axs[1].set_title('Males');
 ```
 
-## Assessing Equal Variance
+## Checking Equal Variance {.smaller}
 
-If the larger s.d is more than twice the smaller one, than we should not use
-the equal variance form of the test.
+* Both groups must have the **same variance** $\sigma^2$ for the pooled test.
+* Rule of thumb: if $\max(s_1, s_2) / \min(s_1, s_2) > 2$, use Welch's test
+  (unequal variances).
 
-```{python}
+```{python inf-abl-var}
 abl.groupby('gender').describe()
 ```
 
-## Paired Sample Tests
+## Paired Sample Test: When? {.smaller}
 
-The data in a paired sample test also arises from two groups, but the two
-groups are not independent.
+Use when the two measurements on each unit are **correlated**:
 
-### Example: Reaction time of drivers
-
-Consider a study on 32 drivers sampled from a driving school. Each driver is
-put in a simulation of a driving situation, where a target flashes red and
-green at random periods. Whenever the driver sees red, he/she has to press a
-brake button.
-
-For each driver, the study is carried out twice - at one of the repetitions,
-the individual carries on a phone conversation while at the other, the driver
-listens to the radio. Each measurement falls under one of two groups - "phone"
-or "radio", but the measurements for driver $i$ are clearly related. 
-
-*Some people might just have a slower/faster baseline reaction time!*
-
-## Paired Sample Tests - Formal Set-up
-
-Suppose that we observe $X_1, \ldots , X_n$ independent observations from group
-1 and $Y_1, \ldots, Y_n$ independent observations from group 2. However the pair 
-$(X_i, Y_i)$ are correlated. Similar to the previous section, it is assumed that
-
-\begin{eqnarray}
-X_i &\sim& N(\mu_1,\, \sigma_1^2),\; i=1,\ldots,n \\
-Y_j &\sim& N(\mu_2,\, \sigma_2^2),\; j=1,\ldots,n
-\end{eqnarray}
-
-## Paired Sample Tests
-
-We let $D_i = X_i - Y_i$ for $i=1, \ldots, n$. It follows that 
-$$
-D_i \sim N(\mu_1 - \mu_2,\; \sigma^2_1 + \sigma^2_2 - 2 cov(X_i, Y_i))
-$$
-The null and alternative hypotheses are stated in terms of the distribution of
-$D_i$:
-
-\begin{eqnarray*}
-H_0: & \mu_D = 0 \\
-H_1: & \mu_D \ne 0
-\end{eqnarray*}
-
-## Paired Sample Tests
-
-The test statistic for this test is:
-
-$$
-T_2 = \frac{\bar{D} - 0 }{s / \sqrt{n} }
-$$
-where 
-$$
-s^2 = \frac{\sum_{i=1}^n (D_i - \bar{D})^2}{(n - 1)}
-$$
-
-## Paired Sample Tests
-
-
-Under $H_0$, the test statistic $T_2 \sim t_{n - 1}$. When we use a software to
-apply the test above, it will typically also return a confidence interval,
-computed as
-
-$$
-\bar{D} \pm t_{n - 1, 1 - \alpha/2} \times s / \sqrt{n}
-$$
-
-
-## Example: Heart Rate Before/After Treadmill
-
-### p-value
-
-```{python}
-hr_df = pd.read_csv("../data/health_promo_hr.csv")
-p_test_out = stats.ttest_rel(hr_df.baseline, hr_df.after5)
-
-print(f"The p-value for the test is {p_test_out.pvalue:.2g}.")
-print(f"The difference in means is {hr_df.baseline.mean() - hr_df.after5.mean():.3f}.")
-```
-
-## Example: Heart Rate Before/After Treadmill
-
-### Plot
-
-```{python}
-#| echo: false
-
-ax1 = hr_df.plot(x='baseline', y='after5',kind='scatter', marker='o', edgecolor='blue', color='none')
-group_means = hr_df.loc[:, ['baseline', 'after5']].mean(axis=0)
-ax1.set_xlim(75, 105)
-ax1.set_ylim(75,105)
-ax1.plot([75,105], [75,105], color="lightblue", linestyle="dashed");
-ax1.scatter(group_means.iloc[0], group_means.iloc[1],  marker='o', edgecolor='blue', color='none', s=100);
-ax1.set_title('Agreement of after5 and baseline')
-```
-
-## ANoVA
-
-Generalises the $t$-test methodology to more than 2 groups. Hypothesis tests in
-the ANOVA framework require the assumption of Normality.
-
-## Example: Heifers
-
-### Boxplots
-
-```{python}
-heifers = pd.read_csv('../data/antibio.csv')
-sns.boxplot(heifers, x='type', y='org',);
-```
-
-## Example: Heifers
-
-### Summary Statistics
-
-```{python}
-heifers.groupby('type').describe()
-```
-
-## Heifers: Questions of Interest
-
-1. Is there any significant difference, at 5% level, between the mean decomposition
-   level of the groups?
-2. At 5% level, is the mean level for Enrofloxacin different from the control group?
-3. Pharmacologically speaking, Ivermectin and Fenbendazole are similar to each
-   other. Let us call this sub-group (A). They work differently than Enrofloxacin.
-   At 5% level, is there a significant difference between the mean from sub-group 
-   A and Enrofloxacin?
-
-## ANoVA - Formal Set-up
-
-In the One-Way ANOVA, we assume the following model:
-
-\begin{equation}
-Y_{ij}  = \mu + \alpha_i + e_{ij},\; i=1,\ldots,k,\; j=1,\ldots,n_i
-\end{equation}
-
-$$
-Y_{ij} \sim N(\mu + \alpha_i,\; \sigma^2)
-$$
-
-with constraint $\sum_{i=1}^k \alpha_i = 0$, or $\alpha_1= 0$ for identifiability purpose
-
-## ANoVA - Formal Set-up
-
-Deviation of an individual observation from the overall mean as the sum of
-within-group variability and between-group variability:
-
-$$
-Y_{ij} - \overline{\overline{Y}} = \underbrace{(Y_{ij} - \overline{Y_i})}_{\text{within}} + 
-\underbrace{(\overline{Y_i} - \overline{\overline{Y}})}_{\text{between}}
-$$
-
-If we square both sides of the above equation and sum over all observations, we
-arrive at the following equation; the essence of ANOVA:
-
-$$
-\sum_{i=1}^k \sum_{j=1}^{n_i} \left( Y_{ij} - \overline{\overline{Y}} \right)^2 =
-\sum_{i=1}^k \sum_{j=1}^{n_i} \left( Y_{ij} - \overline{Y_i} \right)^2 + 
-\sum_{i=1}^k \sum_{j=1}^{n_i} \left( \overline{Y_i} - 
-                                     \overline{\overline{Y}} \right)^2 
-$$
-
-## ANoVA - Formal Set-up
-
-The squared sums above are referred to as:
-$$
-SS_T = SS_W + SS_B
-$$
-
-And some additional definitions:
-
-1. The Between Mean Square:
-$$
-MS_B = \frac{SS_B}{k-1}
-$$
-2. The Within Mean Square:
-$$
-MS_W = \frac{SS_W}{n - k}
-$$
-
-The mean squares are estimates of the variability between and within groups.
-
-## $F$-Test in One-Way ANOVA
-
-The null and alternative hypotheses are:
-
-\begin{eqnarray*}
-H_0 &:& \alpha_i = 0 \text{ for all } i \\
-H_1 &:& \alpha_i \ne 0 \text{ for at least one } i
-\end{eqnarray*}
-
-The test statistic is given by 
-$$
-F = \frac{MS_B}{MS_W}
-$$
-
-Under $H_0$, the statistic $F$ follows an $F$ distribution with $k-1$ and $n-k$
-degrees of freedom.
-
-## $F$-Test in One-Way ANOVA
+* Same subject measured under both treatments (within-subject design).
+* Pairing removes **between-subject variability** from the comparison.
 
 ::: {.callout-note}
-**Assumptions**: 
-
-* The observations are independent of each other.
-* The errors are Normally distributed. The residuals are $Y_{ij} - \overline{Y_i}$
-* The variance within each group is the same.
+**Example — Reaction time of drivers:**
+32 drivers each drive twice — once while on a phone call, once listening to the radio.
+Measurements within a driver are correlated (baseline reaction speed differs by person).
+An independent $t$-test would be *wrong* here.
 :::
 
-## Example: Heifers (Cont'd)
+## Paired Test: Formal Setup {.smaller}
 
-### F-test
+Let $D_i = X_i - Y_i$ be the within-subject difference. Then:
 
-```{python}
-heifer_lm = ols('org ~ type', data=heifers).fit()
-anova_tab = sm.stats.anova_lm(heifer_lm, type=3,)
-anova_tab
+$$
+D_i \sim N(\mu_D, \sigma_D^2)
+$$
+
+$$
+H_0: \mu_D = 0 \qquad H_1: \mu_D \ne 0
+$$
+
+$$
+T_2 = \frac{\bar{D}}{s/\sqrt{n}} \;\sim\; t_{n-1} \text{ under } H_0
+$$
+
+95% CI: $\;\bar{D} \;\pm\; t_{n-1,\,0.025} \times s/\sqrt{n}$
+
+## Heart Rate: Before vs. After Treadmill {.smaller}
+
+Heart rate recorded for 12 days — before treadmill and 5 minutes after.
+
+```{python inf-hr}
+hr_df = pd.read_csv("data/health_promo_hr.csv")
+p_out = stats.ttest_rel(hr_df.baseline, hr_df.after5)
+print(f"p-value: {p_out.pvalue:.2g}")
+print(f"Mean difference: {hr_df.baseline.mean() - hr_df.after5.mean():.3f}")
 ```
 
-## Example: Heifers (Cont'd)
+## Heart Rate: Before vs. After Treadmill (cont'd) {.smaller}
 
-### Model Summary
+**Agreement plot** — points near the diagonal $\Rightarrow$ little difference.
 
-```{python}
-heifer_lm.summary()
-```
-
-## Example: Heifers (Cont'd)
-
-### Assumption Check
-
-```{python}
-f, axs = plt.subplots(1, 2, figsize=(10,4))
-tmp = plt.subplot(121)
-heifer_lm.resid.hist();
-tmp = plt.subplot(122)
-sm.qqplot(heifer_lm.resid, line="q", ax=tmp);
-```
-
-## Comparing specific groups
-
-1. Compute the estimate of the difference between the two means:
-$$
-\overline{Y_{i_1}} - \overline{Y_{i_2}}
-$$
-2. Compute the standard error of the above estimator:
-$$
-\sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
-$$
-3. Compute the $100(1- \alpha)%$ confidence interval as:
-$$
-\overline{Y_{i_1}} - \overline{Y_{i_2}} \pm 
-t_{n-k, \alpha/2}  \times
-\sqrt{MS_W \left( \frac{1}{n_{i_1}} + \frac{1}{n_{i_2}} \right) }
-$$
-
-## Example: Enrofloxacin vs. Control
-
-```{python}
-est1  = heifer_lm.params.iloc[2] - heifer_lm.params.iloc[1]
-MSW = heifer_lm.mse_resid
-df = heifer_lm.df_resid
-q1 = -stats.t.ppf(0.025, df)
-
-lower_ci = est1 - q1*np.sqrt(MSW * (1/6 + 1/4))
-upper_ci = est1 + q1*np.sqrt(MSW * (1/6 + 1/4))
-print(f"The 95% CI for the diff. between Enrofloxacin and control is ({lower_ci:.3f}, {upper_ci:.3f}).") 
-```
-
-## Contrast Estimation
-
-Comparison of a collection of $l_1$ groups with another collection of $l_2$
-groups. Consider $L$ such that 
-
-$$
-L = \sum_{i=1}^k c_i \overline{Y_i}, \text{ where } \sum_{i=1}^k c_i = 0
-$$
-
-Procedure for computing confidence intervals for a linear contrast:
-
-1. Compute the estimate of the contrast:
-$$
-L = \sum_{i=1}^k c_i \overline{Y_i}
-$$
-2. Compute the standard error of the above estimator:
-$$
-\sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
-$$
-3. Compute the $100(1- \alpha)%$ confidence interval as:
-$$
-L \pm
-t_{n-k, \alpha/2}  \times
-\sqrt{MS_W \sum_{i=1}^k \frac{c_i^2}{n_i} }
-$$
-
-## Example: Comparing collection of groups
-
-```{python}
-c1 = np.array([-1, 0.5, 0.5])
-n_vals = np.array([6, 6, 6,])
-L = np.sum(c1 * heifer_lm.params.iloc[2:5])
-
-MSW = heifer_lm.mse_resid
-df = heifer_lm.df_resid
-q1 = -stats.t.ppf(0.025, df)
-se1 = np.sqrt(MSW*np.sum(c1**2 / n_vals))
-
-lower_ci = L - q1*se1
-upper_ci = L + q1*se1
-print(f"The 95% CI for the diff. between the two groups is ({lower_ci:.3f}, {upper_ci:.3f}).") 
-```
-
-## Multiple Comparisons
-
-The procedures in the previous two subsections correspond to contrasts that we
-had specified before collecting or studying the data. If, instead, we wished to
-perform particular comparisons after studying the group means, or if we wish to
-compute all pairwise contrasts, then we need to adjust for the fact that we are
-conducting multiple tests. If we do not do so, the chance of making at least
-one false positive increases greatly.
-
-## Bonferroni
-
-The simplest method for correcting for multiple comparisons is to use the Bonferroni 
-correction. Suppose we wish to perform $m$ pairwise comparisons, either as a test or 
-by computing confidence intervals. If we wish to maintain the significance level
-of each test at $\alpha$, then we should perform each of the $m$ tests/confidence 
-intervals at $\alpha/m$.
-
-## TukeyHSD
-
-This procedure is known as Tukey's Honestly Significant Difference. It is designed 
-to construct confidence intervals for **all** pairwise comparisons. For the same 
-$\alpha$-level, Tukey's HSD method provides shorter confidence intervals than
-a Bonferroni correction for all pairwise comparisons.
-
-## Example: Multiple Comparisons
-
-```{python}
-cp = mc.MultiComparison(heifers.org, heifers.type)
-tk = cp.tukeyhsd()
-tk.plot_simultaneous();
-```
-
-## Categorical Variables
-
-There are two sub-types of categorical variables:
-
-* A categorical variable is *ordinal* if the observations can be ordered, but do not
-have specific quantitative values.
-* A categorical variable is *nominal* if the observations can be classified into
-categories, but the categories have no specific ordering.
-
-In this topic, we shall discuss techniques for identifying the presence, and for 
-measuring the strength, of the association between two categorical variables. 
-
-## Example: Chest Pain and Gender
-
-Suppose that 1073 NUH patients who were at high risk for cardiovascular disease
-(CVD) were randomly sampled. They were then queried on two things:
-
-1. Had they experienced the onset of severe chest pain in the preceding 6
-months? (yes/no)
-2. What was their gender? (male/female)
-
-The data can be summarised and presented in a *contingency table*.
-
-```{python}
+```{python inf-agree}
+#| fig-align: center
+#| out-width: 40%
 #| echo: false
+ax1 = hr_df.plot(x='baseline', y='after5', kind='scatter',
+                 figsize=(3.5, 2.8), edgecolor='blue', color='none')
+ax1.set_xlim(75, 105); ax1.set_ylim(75, 105)
+ax1.plot([75, 105], [75, 105], color="lightblue", linestyle="dashed");
+```
 
+## ANOVA: Comparing $>2$ Groups {.smaller}
+
+* The $t$-test compares **2** group means; ANOVA generalises to **$k \geq 2$**.
+* One-Way ANOVA model ($k$ groups, $n_i$ obs. in group $i$):
+
+$$
+Y_{ij} = \mu + \alpha_i + e_{ij}, \quad e_{ij} \overset{iid}{\sim} N(0,\sigma^2)
+$$
+
+* $\mu$: overall mean; $\alpha_i$: group effect (deviation from overall mean).
+* Constraint needed for identifiability: often $\alpha_1 = 0$ (treatment coding).
+
+## Tartar Dataset {.smaller}
+
+26 dogs in 3 groups: *Control*, *$P_2O_7$* (pyrosulphate), *HMP* (hexametaphosphate).
+Response: tartar index after 4 weeks.
+
+```{python inf-tartar-load}
+#| fig-align: center
+#| out-width: 55%
+#| echo: false
+tartar = pd.read_table("data/tartar.txt", sep=r"\s+")
+plt.figure(figsize=(4, 2.8))
+ax1 = sns.boxplot(tartar, x='treat', y='index')
+ax1.set_xlabel("Treatment"); ax1.set_ylabel("Tartar Index");
+```
+
+## ANOVA: SS Decomposition {.smaller}
+
+Total variation decomposes as **between** + **within** group variation:
+
+$$
+\underbrace{\sum_{i,j}(Y_{ij} - \bar{\bar{Y}})^2}_{SS_T} =
+\underbrace{\sum_{i,j}(Y_{ij} - \bar{Y}_i)^2}_{SS_W} +
+\underbrace{\sum_{i,j}(\bar{Y}_i - \bar{\bar{Y}})^2}_{SS_B}
+$$
+
+The **$F$-test statistic** is:
+
+$$
+F = \frac{MS_B}{MS_W} = \frac{SS_B/(k-1)}{SS_W/(n-k)} \;\sim\; F_{k-1,\,n-k} \text{ under } H_0
+$$
+
+Large $F$ $\Rightarrow$ between-group variation dominates $\Rightarrow$ evidence against $H_0$.
+
+## ANOVA Assumptions {.smaller}
+
+1. **Independence** — observations are independent (by experimental design).
+2. **Normality** — residuals $Y_{ij} - \bar{Y}_i$ should be approximately Normal.
+   Check with histograms and QQ-plots.
+3. **Equal variance** — $\sigma^2$ is the same across groups. Rule of thumb:
+   $\max(s_i)/\min(s_i) < 2$.
+
+::: {.callout-note}
+Non-parametric alternative: **Kruskal-Wallis test** (drops Normality assumption).
+:::
+
+## Tartar: Running ANOVA {.smaller}
+
+```{python inf-tartar-anova}
+tartar_lm = ols("index ~ C(treat, Treatment('Control'))",
+                data=tartar).fit()
+sm.stats.anova_lm(tartar_lm, type=3)
+```
+
+```{python inf-tartar-norm}
+#| fig-align: center
+#| out-width: 55%
+inference.check_normality(pd.Series(tartar_lm.resid_pearson))
+```
+
+## Comparing Two Specific Groups {.smaller}
+
+After a significant $F$-test, compare groups $i_1$ vs. $i_2$. The 95% CI is:
+
+$$
+(\bar{Y}_{i_1} - \bar{Y}_{i_2}) \;\pm\;
+t_{n-k,\,0.025} \times \sqrt{MS_W\!\left(\tfrac{1}{n_{i_1}} + \tfrac{1}{n_{i_2}}\right)}
+$$
+
+```{python inf-tartar-grps}
+est1 = tartar_lm.params.iloc[2] - tartar_lm.params.iloc[1]
+MSW  = tartar_lm.mse_resid
+df   = tartar_lm.df_resid
+q1   = -stats.t.ppf(0.025, df)
+
+lower = est1 - q1*np.sqrt(MSW*(1/8 + 1/9))
+upper = est1 + q1*np.sqrt(MSW*(1/8 + 1/9))
+print(f"95% CI (HMP - P2O7): ({lower:.3f}, {upper:.3f})")
+```
+
+## Multiple Comparisons {.smaller}
+
+If we run $m$ tests without adjustment, the family-wise false positive rate rises.
+
+**Bonferroni** — perform each of $m$ tests at level $\alpha/m$.
+Simplest, but conservative when $m$ is large.
+
+**Tukey HSD** — designed for **all pairwise comparisons**; shorter intervals
+than Bonferroni for the same $\alpha$.
+
+```{python inf-tukey}
+cp = mc.MultiComparison(tartar['index'], tartar['treat'])
+tk = cp.tukeyhsd()
+print(tk)
+```
+
+## Tukey HSD Plot {.smaller}
+
+```{python inf-tukey-plot}
+#| fig-align: center
+#| out-width: 70%
+tk.plot_simultaneous(comparison_name='Control', figsize=(6, 2.8));
+```
+
+Intervals that include 0 indicate no significant pairwise difference at the chosen $\alpha$.
+
+## Categorical Variables {.smaller}
+
+Two sub-types:
+
+* **Nominal** — categories with no natural ordering (e.g. gender, country).
+* **Ordinal** — ordered categories without exact numeric spacing
+  (e.g. satisfaction: *low / medium / high*).
+
+Data with two categorical variables is summarised in a **contingency table**.
+
+```{python inf-chest-tbl}
+#| fig-align: center
+#| out-width: 35%
 chest_array = np.array([[46, 474], [37, 516]])
-
-sns.heatmap(chest_array, annot=True, square=True, fmt='', 
+plt.figure(figsize=(3.5, 1.8))
+sns.heatmap(chest_array, annot=True, fmt='', square=True,
             xticklabels=['pain', 'no pain'],
-            yticklabels=['Male', 'Female'], 
-            cmap='Reds', cbar=False, );
+            yticklabels=['Male', 'Female'],
+            cmap='Reds', cbar=False);
 ```
 
-## $\chi^2$-Test for Independence 
+## $\chi^2$-Test for Independence {.smaller}
 
-The $\chi^2$-test uses the definition above to assess if two variables in a
-contingency table are associated. The null and alternative hypotheses are 
-
-\begin{eqnarray*}
-H_0 &:& \text{The two variables are indepdendent.}  \\
-H_1 &:& \text{The two variables are not indepdendent.}
-\end{eqnarray*}
-
-
-## $\chi^2$-Test for Independence 
-
-*Under $H_0$* (independence), we can derive a general formula for the expected count
-in each cell:
 $$
-\text{Expected count} = \frac{\text{Row total} \times \text{Column total}}{\text{Total sample size}}
+H_0: \text{the two variables are independent} \qquad
+H_1: \text{not independent (associated)}
 $$
 
-The formula for the $\chi^2$-test statistic (with continuity correction) is:
+Under $H_0$, estimate expected counts:
 $$
-\chi^2 = \sum \frac{|\text{expected} - \text{observed} |^2}{\text{expected count}} 
+\text{Expected}_{ij} = \frac{\text{Row}_i \times \text{Col}_j}{\text{Total}}
 $$
 
-The sum is taken over every cell in the table. Hence in a $2\times2$ table, as
-we have here, there would be 4 terms in the summation. 
+Test statistic:
+$$
+\chi^2 = \sum \frac{(\text{observed} - \text{expected})^2}{\text{expected}} \;\sim\; \chi^2_{(r-1)(c-1)}
+$$
 
-## Example: Chest Pain and Gender $\chi^2$ Test
+::: {.callout-note}
+Valid only when **all expected cell counts $\geq 5$**. Otherwise use Fisher's exact test.
+:::
 
+## $\chi^2$ and Fisher's Exact Test {.smaller}
 
-```{python}
-chisq_output = stats.chi2_contingency(chest_array, correction=False)
-
-print(f"The p-value is {chisq_output.pvalue:.3f}.")
-print(f"The test-statistic value is {chisq_output.statistic:.3f}.")
+```{python inf-chisq}
+chisq_out = stats.chi2_contingency(chest_array, correction=False)
+print(f"chi2 p-value: {chisq_out.pvalue:.3f}")
+print("Expected counts:")
+print(chisq_out.expected_freq)
 ```
 
-## Example: Chest Pain and Gender $\chi^2$ Test
-
-Expected cell counts
-
-```{python}
-chisq_output.expected_freq
+```{python inf-fisher}
+fe_out = stats.fisher_exact(chest_array)
+print(f"Fisher exact p-value: {fe_out.pvalue:.3f}")
 ```
 
-It is only suitable to use the $\chi^2$-test when all *expected cell counts*
-are larger than 5. If this condition fails, one recommendation is to use a
-continuity correction, which modifies the test statistic to be 
+## Odds Ratio {.smaller}
 
-$$
-\chi^2 = \sum \frac{(|\text{expected} - \text{observed}| - 0.5)^2}{\text{expected count}} 
-$$
+For a $2\times 2$ table with cells $n_{11}, n_{12}, n_{21}, n_{22}$:
 
-## Measures of Association
-
-Measures of association quantify how two random variables vary together. Here
-we touch on bivariate measures of association for contingency tables (two
-categorical variables).
-
-## Odds Ratio
-
-* Suppose we have $X$ and $Y$ to be Bernoulli random variables with (population)
-  success probabilities $p_1$ and $p_2$. 
-
-* We define the odds of success for $X$ to be $\frac{p_1}{1-p_1}$ and for $Y$ to
-  be $\frac{p_2}{1-p_2}$. 
-
-* In order to measure the strength of their association, we use the *odds ratio*:
-$$
-\frac{p_1/ (1-p_1)}{p_2/(1-p_2)}
-$$
-
-* The odds ratio can take on any value from 0 to $\infty$. A value of 1
-  indicates no association between $X$ and $Y$.
-
-* Due to the above asymmetry, we often use the log-odds-ratio instead, which
-  can take values from $-\infty$ to $\infty$:
-$$
-\log \frac{p_1/ (1-p_1)}{p_2/(1-p_2)} 
-$$
-
-* log-odds-ratio of 0 indicates no association between $X$ and $Y$.
-
-## Odds Ratio Confidence Interval
-
-To obtain a confidence interval for the odds-ratio, we work with the log-odds ratio and 
-then exponentiate the resulting interval. Here are the steps:
-
-1. The sample data in a 2x2 table can be labelled as $n_{11}, n_{12}, n_{21}, n_{22}$.
-2. The *sample* odds ratio is 
 $$
 \widehat{OR} = \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}}
 $$
-3. For a large sample size, it can be shown that $\log \widehat{OR}$ follows a Normal 
-   distribution. Hence a 95% confidence interval can be obtained through
-$$
-\log \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}} \pm z_{0.025} 
-\times ASE(\log \widehat{OR})
-$$
 
-where 
+* $OR = 1$: no association.
+* $OR \ne 1$: association present (direction depends on which group is in numerator).
+* Use **log-odds ratio** for symmetric interpretation: $\log OR = 0$ means no association.
 
-* the ASE (Asymptotic Standard Error) of the estimator is 
-$$
-\sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}} 
-$$
-
-## Example: Chest Pain and Gender Odds Ratio
-
-```{python}
+```{python inf-or}
 chest_tab2 = sm.stats.Table2x2(chest_array)
-
 chest_tab2.summary()
 ```
 
-## For Ordinal Variables
+## Ordinal Association: Kendall $\tau_b$ {.smaller}
 
-* A **pair of subjects** is *concordant* if the subject ranked higher on $X$ also 
-  ranks higher on $Y$. 
-* A **pair** is *discordant* if the subject ranking higher on $X$ ranks lower on $Y$.
-* A **pair** is *tied* if the subjects have the same classification on $X$ and/or $Y$.
+For two **ordinal** variables, measure monotone trend via concordant ($C$) and
+discordant ($D$) pairs:
 
-If we let 
-
-* $C$: number of concordant pairs in a dataset, and
-* $D$: number of discordant pairs in a dataset.
-
-1. Goodman-Kruskal $\gamma$ is computed as 
-$$
-\gamma = \frac{C - D}{C + D}
-$$
-2. Kendall $\tau_b$ is 
 $$
 \tau_b = \frac{C - D}{A}
 $$
 
-For both measures, values close to 0 indicate a very weak trend, while values 
-close to 1 (or -1) indicate a strong positive (negative) association.
+Values close to $\pm 1$ indicate strong monotone association; 0 indicates none.
 
-## Example: Job Satisfaction by Income
+```{python inf-tau}
+us_tab = np.array([[1,3,10,6],[2,3,10,7],[1,6,14,12],[0,1,9,11]])
+x_ord = []; y_ord = []
+for i in range(us_tab.shape[0]):
+    for j in range(us_tab.shape[1]):
+        for _ in range(us_tab[i, j]):
+            x_ord.append(i); y_ord.append(j)
 
-
-```{python}
-#| echo: false
-
-us_svy_tab = np.array([[1, 3, 10, 6], 
-                      [2, 3, 10, 7],
-                      [1, 6, 14, 12],
-                      [0, 1,  9, 11]])
-col_names = ['V. Diss', 'L. Diss', 'M. Sat', 'V. Sat']
-row_names = ['<15K', '15-25K', '25-40K', '>40K']
-sns.heatmap(us_svy_tab, annot=True, square=True, fmt='', 
-            xticklabels=col_names,
-            yticklabels=row_names, 
-            cmap='Reds', cbar=False, );
+result = stats.kendalltau(x_ord, y_ord, variant='b')
+print(f"tau_b = {result.statistic:.3f},  p-value = {result.pvalue:.3f}")
 ```
 
-## Example: Job Satisfaction by Income
-
-Converting data to long format and compute the metrics.
-
-```{python}
-dim1 = us_svy_tab.shape
-x = []; y=[]
-for i in range(0, dim1[0]):
-    for j in range(0, dim1[1]):
-        for k in range(0, us_svy_tab[i,j]):
-            x.append(i)
-            y.append(j)
-
-stats.kendalltau(x, y, variant='b')
-```
-
-## Summary: Comparing Means
-
-* (Unpaired) 2-sample t-test
-* Paired Sample Tests
-* One-way ANoVA
-  * F-test
-  * Comparing specific groups
-  * Multiple Comparisons
-
-## Summary: Categorical Variables
-
-* $\chi^2$-Test for Independence 
-* Measures of Association
-  * Odds Ratio
-  * Goodman-Kruskal $\gamma$ and Kendall $\tau_b$ for Ordinal Variables
+Income $\uparrow$ $\Rightarrow$ weak positive trend in job satisfaction ($\tau_b \approx 0.15$).

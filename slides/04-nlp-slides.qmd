@@ -1,0 +1,452 @@
+---
+title: "Natural Language Processing"
+format:
+  beamer:
+    aspectratio: 169
+    theme: Boadilla
+    navigation: empty
+    colortheme: lily
+    footer: "IND5003"
+
+execute:
+  echo: true
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+import string, os, pprint
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.neighbors import NearestNeighbors
+from sklearn.decomposition import LatentDirichletAllocation
+from staticvectors import StaticVectors
+import matplotlib.pyplot as plt
+import seaborn as sns
+from ind5003 import nlp
+
+pp = pprint.PrettyPrinter(indent=4, compact=True)
+rng = np.random.default_rng(5001)
+```
+
+## NLP: Where It Appears {.smaller}
+
+Natural Language Processing (NLP) enables machines to work with human language:
+
+* Predictive text on mobile devices.
+* Web search engines indexing unstructured text.
+* Machine translation (Google Translate, DeepL).
+* Sentiment analysis of reviews and social media.
+* Question answering, summarisation, text generation.
+
+## Why Is NLP Hard? {.smaller}
+
+Human language has deep ambiguity that is effortless for us but hard to codify:
+
+1. *He* **served** *the* **dish** — "served" and "dish" have multiple meanings.
+2. *The lost children were found by the **lake** / by the **search party**.*
+   The word "by" plays different grammatical roles.
+3. *The thieves stole the paintings.* **They** *were subsequently recovered /
+   arrested.* — co-reference resolution.
+4. *"Wow. Great job st@rbuck's. Best cup of coffee ever."*
+   — sarcasm detection.
+
+## Key Definitions {.smaller}
+
+| Term | Meaning |
+|------|---------|
+| **Corpus** | a collection of documents |
+| **Document** | a single unit (sentence, paragraph, essay, tweet) |
+| **Token / Term** | an element of a document (word, bigram, …) |
+| **Vocabulary** | the set of all distinct tokens in the corpus |
+| **Tokenisation** | splitting a document into tokens |
+
+**Example:**
+```
+"I am watching television."
+ → 'I', 'am', 'watching', 'television', '.'
+```
+
+## NLP Applications Covered {.smaller}
+
+1. **Topic Modelling** — unsupervised; identify salient topics automatically
+   (e.g. for routing customer feedback).
+2. **Information Retrieval** — unsupervised; return the most relevant documents
+   given a query string.
+3. **Sentiment Analysis** — classify the sentiment of a document
+   (positive / negative).
+
+## Wine Reviews Dataset {.smaller}
+
+~130,000 wine reviews from Kaggle, after deduplication.
+
+```{python nlp-wine-load}
+wine_reviews = pd.read_csv("data/winemag-data-130k-v2.csv", index_col=0)
+wine_reviews.drop_duplicates(inplace=True)
+print(wine_reviews.shape)
+wine_reviews[['variety','description']].head(3)
+```
+
+## Text Pre-processing: Steps {.smaller}
+
+A custom pre-processor for wine reviews:
+
+1. Convert to **lower-case**.
+2. Remove **punctuation** and **digits**.
+3. **Tokenise** (split into words) using NLTK.
+4. Remove **stop words** and very short words ($\leq 3$ characters).
+
+```{python nlp-preproc}
+def custom_preprocessor(x, min_length=3, stop_words=[]):
+    output = x.lower()
+    output = output.translate(
+        str.maketrans('', '', string.punctuation + '0123456789'))
+    tokens = word_tokenize(output)
+    return [y for y in tokens if y not in stop_words and len(y) > min_length]
+
+en_stop_words = stopwords.words('english')
+all_review_strings = wine_reviews.description.values
+all_tokenized = [custom_preprocessor(x, 3, en_stop_words)
+                 for x in all_review_strings]
+```
+
+## Stemming vs. Lemmatising {.smaller}
+
+Both reduce a word to its **root** form to avoid treating inflections separately:
+
+* **Stemming** — rule-based suffix removal; result may not be a real word.
+* **Lemmatising** — uses a lexicon; result is always a valid word.
+
+```{python nlp-stem-lemma}
+demo = 'Cats and ponies have a meeting'.split()
+porter = PorterStemmer()
+wn     = WordNetLemmatizer()
+print("Stems:   ", [porter.stem(w) for w in demo])
+print("Lemmas:  ", [wn.lemmatize(w) for w in demo])
+```
+
+```{python nlp-lemma-corpus}
+#| echo: false
+preprocessed_corpus = [[wn.lemmatize(w) for w in dd] for dd in all_tokenized]
+```
+
+## Sparse vs Dense Representations {.smaller}
+
+| | Sparse (tf-idf) | Dense (word2vec, GLoVe, BERT) |
+|-|---------|---------|
+| Vector length | vocabulary size (~thousands) | 100–1024 |
+| Sparsity | mostly zeros | all non-zero |
+| Encodes meaning | no | yes |
+| Needs training data | small | large |
+
+For simple IR and topic modelling, **tf-idf** works well.
+For semantic tasks, **dense embeddings** are superior.
+
+## Term Frequency: CountVectorizer {.smaller}
+
+```{python nlp-tfidf-toy}
+raw_docs = [
+    "Here are some very simple basic sentences.",
+    "They won't be very interesting, I'm afraid.",
+    "The point of these basic examples is to learn how basic text "
+    "counting works on very simple data, so that we are not afraid "
+    "when it comes to larger text documents. Sentences are here."]
+
+vectorizer1 = CountVectorizer(stop_words='english', min_df=1)
+dtm = vectorizer1.fit_transform(raw_docs)
+print(pd.DataFrame(dtm.toarray(),
+      columns=vectorizer1.get_feature_names_out()).iloc[:, :8])
+```
+
+## TF-IDF: Formula {.smaller}
+
+Raw counts favour longer documents. TF-IDF re-weights by inverse document
+frequency:
+
+$$
+w'_{i,j} = tf_{i,j} \times \left[\log\!\left(\frac{1+N}{1+df_i}\right) + 1\right]
+$$
+
+* $tf_{i,j}$: count of term $i$ in document $j$.
+* $df_i$: number of documents containing term $i$.
+* $N$: total number of documents.
+
+Final $w_{i,j}$ is normalised so each row has unit length.
+
+## TF-IDF: Code {.smaller}
+
+```{python nlp-tfidf-code}
+vectorizer2 = TfidfVectorizer(stop_words='english')
+dtm_tfidf   = vectorizer2.fit_transform(raw_docs)
+print(pd.DataFrame(dtm_tfidf.toarray(),
+      columns=vectorizer2.get_feature_names_out()).iloc[:, :8].round(3))
+```
+
+Each row is a **document vector** of unit length. Each column corresponds
+to a term in the vocabulary.
+
+## Cosine Similarity {.smaller}
+
+Measures the angle between two document vectors $\mathbf{v}$ and $\mathbf{w}$:
+
+$$
+\cos\theta = \frac{\sum_i v_i w_i}{\sqrt{\sum_i v_i^2}\,\sqrt{\sum_i w_i^2}}
+$$
+
+* $\cos\theta = 1$: identical direction (most similar).
+* $\cos\theta = 0$: orthogonal (no shared terms).
+
+Documents pointing in the same direction share similar vocabulary patterns,
+regardless of length.
+
+## Dense Embeddings: word2vec {.smaller}
+
+Motivation: sparse tf-idf vectors are long and carry no **semantic** information.
+
+word2vec learns a dense vector for each word by training a classifier to predict
+**context words** from a target word (or vice versa):
+
+$$
+\text{man} - \text{king} + \text{woman} \approx \text{queen}
+$$
+
+Vector arithmetic captures semantic analogies!
+
+The quality of embeddings is evaluated on analogy tasks:
+*X is to Y as Z is to \_\_\_ ?*
+
+## GLoVe: Loading and Analogy Task {.smaller}
+
+```{python nlp-glove-load}
+#| eval: false
+word_vectors = StaticVectors("neuml/glove-6B")
+nbrs = NearestNeighbors(n_neighbors=5, metric='cosine',
+                        algorithm='auto').fit(word_vectors.vectors)
+# Man is to king as woman is to ___?
+nlp.word_analogy(word_vectors, nbrs, 'man', 'king', 'woman')
+```
+
+```{python nlp-glove-load-real}
+#| echo: false
+word_vectors = StaticVectors("neuml/glove-6B")
+nbrs = NearestNeighbors(n_neighbors=5, metric='cosine',
+                        algorithm='auto').fit(word_vectors.vectors)
+nlp.word_analogy(word_vectors, nbrs, 'man', 'king', 'woman')
+```
+
+## t-SNE of GLoVe Embeddings {.smaller}
+
+Visualise the first 1000 most-common words in the embedding space.
+
+```{python nlp-tsne-glove}
+#| fig-align: center
+#| out-width: 70%
+from sklearn import manifold
+nn = 1000
+glove_1e3 = word_vectors.vectors[:nn, :]
+labels = pd.Series(list(word_vectors.tokens.keys())[:nn])
+tsne1 = manifold.TSNE(n_components=2, init='random', perplexity=10,
+                      metric='cosine', max_iter=5000, random_state=222, verbose=0)
+glove_t = tsne1.fit_transform(glove_1e3)
+plt.figure(figsize=(7, 3.5))
+sns.scatterplot(x=glove_t[:,0], y=glove_t[:,1], s=8)
+plt.title('t-SNE of GLoVe (1000 words)');
+```
+
+## Neural Language Models: Evolution {.smaller}
+
+:::: {.columns}
+
+::: {.column width="48%"}
+
+**Feed-forward networks** — fixed context window; already learned embeddings.
+
+**RNNs / LSTMs** — process words sequentially; can see preceding words.
+
+**Transformers** — each word attends to **all** preceding words in parallel.
+Massive speed-up in training; state of the art today.
+
+:::
+
+::: {.column width="48%"}
+
+![FFN language model](../figs/j_m_fig_7_17_ffn_training.png){width=90%}
+
+:::
+
+::::
+
+## Transformer: Self-Attention {.smaller}
+
+![Transformer training architecture](../figs/j_m_fig_10_18_training_transformer_lm.png){fig-align="center" width=70%}
+
+Key advantages:
+
+* Self-attention gives every word access to **all** other words in the context.
+* Training is **parallelisable** — unlike RNNs.
+* Enables disambiguation: *bank* (river) vs. *bank* (finance) from context.
+
+## Hugging Face Pipelines {.smaller}
+
+[Hugging Face](https://huggingface.co) makes pre-trained neural models
+accessible with minimal code via **pipelines**:
+
+| Task | Pipeline name |
+|------|--------------|
+| Sentiment analysis | `"sentiment-analysis"` |
+| Named entity recognition | `"ner"` |
+| Question answering | `"question-answering"` |
+| Summarisation | `"summarization"` |
+| Text generation | `"text-generation"` |
+| Zero-shot classification | `"zero-shot-classification"` |
+
+## Sentiment Analysis {.smaller}
+
+```{python nlp-sentiment}
+from transformers import pipeline
+classifier = pipeline("sentiment-analysis",
+    model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")
+
+classifier(["I love this course!",
+            "I absolutely detest this course."])
+```
+
+A fine-tuned BERT model returns a **label** (POSITIVE / NEGATIVE) and a
+**confidence score** for each input.
+
+## Wine Reviews: Applying Sentiment {.smaller}
+
+Sample 20 reviews from each variety, classify, then tabulate.
+
+```{python nlp-wine-sent}
+#| eval: false
+tmp_df = wine_reviews.head(0).copy()
+for x, vv in wine_reviews.groupby(wine_reviews.variety):
+    if vv.shape[0] >= 20:
+        vv = vv.sample(n=20, random_state=99)
+    tmp_df = pd.concat([tmp_df, vv], ignore_index=True)
+
+tmp_df['label'] = [classifier(r)[0]['label']
+                   for r in tmp_df.description]
+
+sent_counts = pd.crosstab(tmp_df.variety, tmp_df.label, margins=True)
+sent_counts['prop_pos'] = sent_counts.POSITIVE / sent_counts.All
+sent_counts.head()
+```
+
+Wine descriptions tend to be positive — look for varieties near 50% to find
+borderline cases worth investigating.
+
+## Information Retrieval {.smaller}
+
+**Goal**: given a query string, return the most relevant documents from a corpus.
+
+Approach using cosine similarity on tf-idf vectors:
+
+```{python nlp-ir-setup}
+wine_tfidf = TfidfVectorizer(stop_words='english')
+X2 = wine_tfidf.fit_transform(wine_reviews.description)
+
+wine_nbrs = NearestNeighbors(n_neighbors=8, metric='cosine',
+                             algorithm='auto').fit(X2)
+```
+
+```{python nlp-ir-query}
+query = wine_tfidf.transform(['acidic white chardonnay'])
+distances, indices = wine_nbrs.kneighbors(query, n_neighbors=3)
+for x in indices[0]:
+    pp.pprint(all_review_strings[x])
+```
+
+## Topic Modeling: LDA {.smaller}
+
+**Latent Dirichlet Allocation** assumes a generative process:
+
+1. There are $K$ latent **topics**; each document is a mixture of topics.
+2. Each topic is a **probability distribution** over the vocabulary.
+
+At the end, we obtain for each document: its topic weights.
+For each topic: the most salient terms. We **interpret** the topics manually.
+
+```{python nlp-lda-stopwords}
+#| echo: false
+en_stop_words = stopwords.words('english') + [
+    "flavors","years","wine","drink","fruits","fruit","finish",
+    "aromas","palate","feels","notes","oak","offers","like",
+    "bottling","nose","shows"]
+```
+
+## LDA: Training {.smaller}
+
+```{python nlp-lda-train}
+lda_obj = LatentDirichletAllocation(
+    n_components=5, random_state=41, max_iter=20,
+    learning_method='batch', n_jobs=2, verbose=0)
+
+wine_tfidf2 = TfidfVectorizer(stop_words=en_stop_words)
+X3 = wine_tfidf2.fit_transform(wine_reviews.description)
+lda_obj.fit(X3);
+```
+
+## LDA: Top Words per Topic {.smaller}
+
+```{python nlp-lda-words}
+feature_names = wine_tfidf2.get_feature_names_out()
+n_top = 10
+rows = []
+for topic in lda_obj.components_:
+    top_words = [feature_names[j] for j in topic.argsort()[-n_top:][::-1]]
+    rows.append(top_words)
+[','.join(x) for x in rows]
+```
+
+## LDA: Interpreting the Topics {.smaller}
+
+Human interpretation is required — domain knowledge matters here.
+
+| Topic | Probable theme |
+|-------|---------------|
+| 0 | Bold reds — dark fruit, tannins |
+| 1 | Structured medium-bodied wines — acidity, balance |
+| 2 | Sweet whites / Chardonnay — fruit, vanilla |
+| 3 | Lighter wines — red fruit and citrus |
+| 4 | Spiced reds — pepper character |
+
+::: {.callout-note}
+Use `pyLDAvis` for an interactive visualisation of topic distances and term
+weights (`pip install --no-deps pyLDAvis`).
+:::
+
+## LDA: Visualisation {.smaller}
+
+![LDA visualisation (static)](../figs/ldavis_random_state_41.png){fig-align="center" width=70%}
+
+* Circles = topics; distance between circles = distance between topic distributions (via MDS).
+* Topics 2 and 3 are close; topics 4 and 5 are distinct.
+
+## Interpreting Neural Models {.smaller}
+
+Neural models are often called **black boxes** — we do not always know
+*why* they make a particular prediction.
+
+**Approach 1 — Influential training instances:** Remove training examples
+one at a time; the examples whose removal most changes the prediction are
+considered influential.
+
+![Incorrect sentiment classification traced to ambivalent training examples](../figs/explaining_black_box_predictions.png){fig-align="center" width=65%}
+
+## Attention Visualisation {.smaller}
+
+For transformers, the **attention weights** can be inspected to understand
+which words the model focuses on.
+
+![BERT attention — prepositions attend to their objects](../figs/what_does_bert_clark_preposition.png){fig-align="center" width=70%}
+
+* *of* attends strongly to *Treasury* and *bonds*.
+* *in* attends strongly to *trading*.
+
+This confirms that BERT learns syntactic dependency structure.

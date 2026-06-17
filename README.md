@@ -22,8 +22,8 @@ virtual environment automatically, without needing reticulate.
 - Text, figures, and other content: © 2025 Vik Gopal, Tiong Wee Lim. Licensed under
   [CC BY-SA 4.0](https://creativecommons.org/licenses/by/4.0/). 
 - Code snippets: Licensed under the [MIT License](./LICENSE-CODE).
-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17451642.svg)](https://doi.org/10.5281/zenodo.17451642)[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](LICENSE)[![Code: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)](LICENSE-CODE)
+- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20725450.svg)](https://doi.org/10.5281/zenodo.20725450)[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](LICENSE)[![Code: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)](LICENSE-CODE)
 
 Please cite as:
 
-Gopal, V. and Lim, T.W. (2025) *Data Analytics for Sense-Making.* Zenodo. doi:10.5281/zenodo.17451642.
+Gopal, V. and Lim, T.W. (2025) *Data Analytics for Sense-Making.* Zenodo. doi:10.5281/zenodo.20725450.
