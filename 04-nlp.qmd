@@ -489,7 +489,7 @@ solve, while on the right, we have visualisations of GLoVe.
 
 ### Glove dense embeddings
 
-Here's how we can use `gensim` code to conduct the analogy task. First, we load
+In this section, we explore the analogy task with GLoVe vectors. First, we load
 400,000 GLoVe vectors, each representing a different word. Each vector is of
 length 300. We load the vectors from Hugging Face, just like we will later in 
 @sec-nlp-applications.
@@ -550,11 +550,6 @@ df2 = pd.DataFrame(glove_transformed, columns=['x','y'])
 df2['labels'] = labels
 ```
 
-You should get the same plot (@fig-tsne-glove) as us since we have set the same
-seed at the start of the cell, and when we initialise the transformer. Explore
-the resulting plot - notice how months of the year appear close together at the bottom left.
-Around the left as well, the calendar years appear as a group.
-
 ::: {.content-visible when-format="html"}
 
 ```{python}
@@ -563,6 +558,12 @@ fig = px.scatter(df2, x='x', y='y', text='labels', width=1024, height=960)
 fig.update_traces(textposition='top center')
 fig.show()
 ```
+
+You should get the same plot as us since we have set the same
+seed at the start of the cell, and when we initialise the transformer. Explore
+the resulting plot - notice how months of the year appear close together at the bottom left.
+Around the left as well, the calendar years appear as a group.
+
 
 :::
 
@@ -580,6 +581,12 @@ text labels.
 plt.figure(figsize=(8, 4))
 sns.scatterplot(data=df2, x="x", y="y")
 ```
+
+You should get the same plot (@fig-tsne-glove) as us since we have set the same
+seed at the start of the cell, and when we initialise the transformer. Explore
+the resulting plot - notice how months of the year appear close together at the bottom left.
+Around the left as well, the calendar years appear as a group.
+
 :::
 
 ::: {.callout-note}
@@ -1004,10 +1011,9 @@ we can conclude that the prepositions place great attention on their objects, e.
 ### Website References
 
 1. [Hugging Face course on transformers](https://huggingface.co/learn/nlp-course/chapter1/1)
-2. [Gensim documentation](https://radimrehurek.com/gensim/auto_examples/index.html): Contains tutorials as well.
-3. [Using sklearn to perform LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html): We can also use scikit-learn
+2. [Using sklearn to perform LDA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html): We can also use scikit-learn
    to perform LDA.
-4. [Visualising LDA](https://github.com/bmabey/pyLDAvis): Contains sample notebooks for the visualisation.
+3. [Visualising LDA](https://github.com/bmabey/pyLDAvis): Contains sample notebooks for the visualisation.
 
 ## Exercises
 
