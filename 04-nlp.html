@@ -789,7 +789,7 @@ Figure&nbsp;4.4: Self-supervised learning NLP, taken from <span class="citation"
 </div>
 </div>
 <div id="exm-glove-01" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
-<p><span class="theorem-title"><strong>Example 4.5 (Glove dense embeddings)</strong></span> Here’s how we can use <code>gensim</code> code to conduct the analogy task. First, we load 400,000 GLoVe vectors, each representing a different word. Each vector is of length 300. We load the vectors from Hugging Face, just like we will later in <a href="#sec-nlp-applications" class="quarto-xref"><span>Section 4.8</span></a>.</p>
+<p><span class="theorem-title"><strong>Example 4.5 (Glove dense embeddings)</strong></span> In this section, we explore the analogy task with GLoVe vectors. First, we load 400,000 GLoVe vectors, each representing a different word. Each vector is of length 300. We load the vectors from Hugging Face, just like we will later in <a href="#sec-nlp-applications" class="quarto-xref"><span>Section 4.8</span></a>.</p>
 <div id="52cadcb7" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>hf_token <span class="op">=</span> os.environ.get(<span class="st">'HF_TOKEN'</span>)</span>
 <span id="cb28-2"><a href="#cb28-2"></a>word_vectors <span class="op">=</span> StaticVectors(<span class="st">"neuml/glove-6B"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -832,7 +832,6 @@ Figure&nbsp;4.4: Self-supervised learning NLP, taken from <span class="citation"
 <span id="cb32-10"><a href="#cb32-10"></a>df2 <span class="op">=</span> pd.DataFrame(glove_transformed, columns<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
 <span id="cb32-11"><a href="#cb32-11"></a>df2[<span class="st">'labels'</span>] <span class="op">=</span> labels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You should get the same plot (<span class="quarto-unresolved-ref">?fig-tsne-glove</span>) as us since we have set the same seed at the start of the cell, and when we initialise the transformer. Explore the resulting plot - notice how months of the year appear close together at the bottom left. Around the left as well, the calendar years appear as a group.</p>
 <div id="e702fab3" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>fig <span class="op">=</span> px.scatter(df2, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, text<span class="op">=</span><span class="st">'labels'</span>, width<span class="op">=</span><span class="dv">1024</span>, height<span class="op">=</span><span class="dv">960</span>)</span>
 <span id="cb33-2"><a href="#cb33-2"></a>fig.update_traces(textposition<span class="op">=</span><span class="st">'top center'</span>)</span>
@@ -874,6 +873,7 @@ if (outputEl) {{
                         })                };            </script>        </div>
 </div>
 </div>
+<p>You should get the same plot as us since we have set the same seed at the start of the cell, and when we initialise the transformer. Explore the resulting plot - notice how months of the year appear close together at the bottom left. Around the left as well, the calendar years appear as a group.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1448,7 +1448,6 @@ Figure&nbsp;4.11: Visualising attention in transformer heads, from <span class="
 <h3 class="anchored" data-anchor-id="website-references">Website References</h3>
 <ol type="1">
 <li><a href="https://huggingface.co/learn/nlp-course/chapter1/1">Hugging Face course on transformers</a></li>
-<li><a href="https://radimrehurek.com/gensim/auto_examples/index.html">Gensim documentation</a>: Contains tutorials as well.</li>
 <li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html">Using sklearn to perform LDA</a>: We can also use scikit-learn to perform LDA.</li>
 <li><a href="https://github.com/bmabey/pyLDAvis">Visualising LDA</a>: Contains sample notebooks for the visualisation.</li>
 </ol>
