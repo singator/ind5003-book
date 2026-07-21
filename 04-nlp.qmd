@@ -722,14 +722,16 @@ for x,vv in wine_reviews.groupby(wine_reviews.variety):
 review_list = list(tmp_df.description)
 ```
 
-The next snippet computes the sentiment scores for those sampled reviews, and 
-uses a widget to keep track of progress of the iterations.
+The next snippet computes the sentiment scores for those sampled reviews. The 
+commented line uses a widget to keep track of progress of the iterations; use it 
+if you are running the code in a Python notebook.
 
 ```{python}
 tmp_df['score'] = 0.00
 tmp_df['label'] = ''
 
-for i, rr in tqdm(enumerate(review_list), total=len(review_list), desc="Classifying reviews"):
+#for i, rr in tqdm(enumerate(review_list), total=len(review_list), desc="Classifying reviews"):
+for i, rr in enumerate(review_list):
     tmp = classifier(rr)[0]
     tmp_df.loc[i, 'score'] = tmp['score']
     tmp_df.loc[i, 'label'] = tmp['label']
