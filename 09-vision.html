@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>9&nbsp; Computer Vision – Data Analytics for Sense-Making</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -58,7 +62,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -88,15 +91,16 @@ div.csl-indent {
 <link href="./08-supervised.html" rel="prev">
 <script src="site_libs/cookie-consent/cookie-consent.js"></script>
 <link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2b3a058f3f598cb5398490cdc55809d4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -138,10 +142,10 @@ gtag('config', 'G-K3T2VC9F47', { 'anonymize_ip': true});
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
   "notice_banner_type":"simple",
-  "consent_type":"implied",
+  "consent_type":"express",
   "palette":"light",
   "language":"en",
-  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "page_load_consent_levels":["strictly-necessary"],
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
@@ -153,7 +157,7 @@ cookieconsent.run({
   
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -166,7 +170,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -185,7 +189,7 @@ window.Quarto = {
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -340,15 +344,15 @@ window.Quarto = {
 <p><a href="https://www.cs.ubc.ca/~lowe/vision.html">Here</a> is an old page with a more comprehensive list of applications.</p>
 <p>In computer vision, the goal is to get a computer to perceive the world as <em>we</em> see it. This is not easy even for us humans to do - we can get fooled by optical illusions such as the ones below. In general though, for us, it is possible to do things like pick out faces that we recognise from a photograph of a crowd. But how can we get a computer to do it?</p>
 <p>In this chapter, we shall begin with techniques for processing images. Although computer vision models are impressive, their performance can be typically be improved greatly by pre-processing images before applying the ready-to-use models. Toward the end of the chapter, we shall demonstrate how to call various models.</p>
-<div id="7ea7fbd0" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> cv2</span>
+<div id="af54f87b" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> cv2</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> os</span>
 <span id="cb1-5"><a href="#cb1-5"></a></span>
 <span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> matplotlib <span class="im">import</span> colormaps</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML, Image, Video</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> IPython.display <span class="im">import</span> YouTubeVideo, display, HTML, Image, Video</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="image-processing" class="level2" data-number="9.2">
@@ -361,7 +365,7 @@ window.Quarto = {
 <p>Consider the painting <em>The Starry Night</em>. The original colours are shown in <a href="#fig-starry-night-orig" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>.</p>
 <div id="cell-fig-starry-night-orig" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
-<div id="fig-starry-night-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-starry-night-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-starry-night-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-starry-night-orig-output-1.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="240">
@@ -375,14 +379,14 @@ Figure&nbsp;9.1: Starry Night original colours
 </div>
 <p>However, if we use <code>cv2</code> to read the image before displaying, the colours will be reversed (see <a href="#fig-starry-night-cv2" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>).</p>
 <div id="cell-fig-starry-night-cv2" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>starry_night <span class="op">=</span> cv2.imread(<span class="st">'data/starry_night.jpg'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>starry_night <span class="op">=</span> cv2.imread(<span class="st">'data/starry_night.jpg'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="co"># Reversed (not correct)</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>plt.imshow(starry_night)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a>plt.imshow(starry_night)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-starry-night-cv2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-starry-night-cv2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-starry-night-cv2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-starry-night-cv2-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-starry-night-cv2-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="517" height="416">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-starry-night-cv2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.2: Starry Night reversed colour channels
@@ -403,13 +407,13 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>Instead of reading the image file with <code>cv2</code> and then using <code>matplotlib</code>, we can display the image with <code>cv2</code> as well. The following code should open up The Starry Night image in a new window on your computer. Press <code>q</code> to close the window.</p>
-<div id="748050e4" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># plotting with cv2.imshow returns the correct colours.</span></span>
+<div id="8fbb2943" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># plotting with cv2.imshow returns the correct colours.</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Hit any key on the keyboard to close window (do not hit the "X" button)</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a>cv2.imshow(<span class="st">'Starry Night'</span>, starry_night)</span>
 <span id="cb3-5"><a href="#cb3-5"></a>cv2.waitKey()</span>
-<span id="cb3-6"><a href="#cb3-6"></a>cv2.destroyWindow(<span class="st">'Starry Night'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6"></a>cv2.destroyWindow(<span class="st">'Starry Night'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ensure that the above works for you, because we are going to be using this approach (instead of matplotlib) to display the capture from your laptop camera in the later sections of this chapter.</p>
 </div>
@@ -424,15 +428,15 @@ Note
 <ol type="1">
 <li>First, we are going to convert the colorspace to grayscale. Several computer vision techniques work only on grayscale images, so this is a common step to be aware of. Take note that grayscale images are numpy arrays with shape <span class="math inline">\(R \times C\)</span>, whereas RGB/BGR images are stored as arrays with shape <span class="math inline">\(R \times C \times 3\)</span>.</li>
 </ol>
-<div id="da08ad60" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># create grayscale version of image</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>sn_grayscale <span class="op">=</span> cv2.cvtColor(starry_night, cv2.COLOR_BGR2GRAY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="151dc62e" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># create grayscale version of image</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>sn_grayscale <span class="op">=</span> cv2.cvtColor(starry_night, cv2.COLOR_BGR2GRAY)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="2" type="1">
 <li>Second, we shall demonstrate how to translate an image. In the code for this procedure, take note that the origin (ie. the (0,0) coordinate) is at the top-left corner. The x-values increase to the right from there until the number of columns; y-values increase downward from there until the number of rows.</li>
 </ol>
-<div id="e771946b" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rows,cols <span class="op">=</span> starry_night.shape[:<span class="dv">2</span>]</span>
+<div id="cd6ba946" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rows,cols <span class="op">=</span> starry_night.shape[:<span class="dv">2</span>]</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># Create RGB version of translated image, moved 400 pixels to the right, and</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="co"># 100 pixels down. The translation matrix must be of the form:</span></span>
@@ -440,36 +444,36 @@ Note
 <span id="cb5-6"><a href="#cb5-6"></a><span class="co">#   [0, 1, y-distance]]</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a>M <span class="op">=</span> np.float32([[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">400</span>],[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">100</span>]]) <span class="co"># Translation matrix</span></span>
 <span id="cb5-8"><a href="#cb5-8"></a>sn_translate <span class="op">=</span> cv2.warpAffine(starry_night, M, (cols, rows))</span>
-<span id="cb5-9"><a href="#cb5-9"></a>sn_translate_rgb <span class="op">=</span> cv2.cvtColor(sn_translate, cv2.COLOR_BGR2RGB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9"></a>sn_translate_rgb <span class="op">=</span> cv2.cvtColor(sn_translate, cv2.COLOR_BGR2RGB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="3" type="1">
 <li>The third code snippet demonstrates how to rotate an image. For this, and the previous step, we require a transformation matrix, that we then apply to the image using <code>cv2.warpAffine</code>.</li>
 </ol>
-<div id="427b2d34" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Create RGB version of image, rotated 30 degrees anti-clockwise, about it's </span></span>
+<div id="0873eb8e" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Create RGB version of image, rotated 30 degrees anti-clockwise, about it's </span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="co"># centre.</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>rotation_matrix <span class="op">=</span> cv2.getRotationMatrix2D((<span class="fl">0.5</span><span class="op">*</span>cols, <span class="fl">0.5</span><span class="op">*</span>rows), <span class="dv">30</span>, <span class="dv">1</span>)</span>
 <span id="cb6-4"><a href="#cb6-4"></a>sn_rotated <span class="op">=</span> cv2.warpAffine(starry_night, rotation_matrix, (cols, rows))</span>
-<span id="cb6-5"><a href="#cb6-5"></a>sn_rotated_rgb <span class="op">=</span> cv2.cvtColor(sn_rotated, cv2.COLOR_BGR2RGB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-5"><a href="#cb6-5"></a>sn_rotated_rgb <span class="op">=</span> cv2.cvtColor(sn_rotated, cv2.COLOR_BGR2RGB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="4" type="1">
 <li>Finally, we show how an image can be resized (scaled up or down) using <code>opencv</code>. When an image is made larger, the pixels need to be interpolated to fill up the gaps; this can be done using a linear or cubic interpolation.</li>
 </ol>
-<div id="ded7cc3e" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Resize the image by 20% in each direction, with cubic interpolation.</span></span>
+<div id="7b16e7cc" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Resize the image by 20% in each direction, with cubic interpolation.</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>sn_resized <span class="op">=</span> cv2.resize(starry_night, <span class="va">None</span>,fx<span class="op">=</span><span class="fl">1.2</span>, fy<span class="op">=</span><span class="fl">1.2</span>, </span>
 <span id="cb7-3"><a href="#cb7-3"></a>                        interpolation <span class="op">=</span> cv2.INTER_CUBIC)</span>
 <span id="cb7-4"><a href="#cb7-4"></a>sn_resized_rgb <span class="op">=</span> cv2.cvtColor(sn_resized, cv2.COLOR_BGR2RGB)</span>
 <span id="cb7-5"><a href="#cb7-5"></a><span class="co"># Uncomment this line to save the new image and compare with the original.</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># cv2.imwrite('data/test_sn.jpg', sn_resized)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># cv2.imwrite('data/test_sn.jpg', sn_resized)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Figure <a href="#fig-starry-night-transformations" class="quarto-xref">Figure&nbsp;<span>9.3</span></a> displays the four transformed images using <code>matplotlib</code>. Take note of the axes dimensions for the resized image; although the displayed image appears to be the same size as the others, it is not, due to the resizing.</p>
 <div id="cell-fig-starry-night-transformations" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
-<div id="fig-starry-night-transformations" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-starry-night-transformations" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-starry-night-transformations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-starry-night-transformations-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-starry-night-transformations-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="928" height="758">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-starry-night-transformations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.3: Image transformations
@@ -488,7 +492,7 @@ Figure&nbsp;9.3: Image transformations
 <p>Let us work with the following image of Lionel Messi (<a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>), and see how we can use masks and colour selection to outline the ball.</p>
 <div id="cell-fig-messi-orig" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display" data-execution_count="9">
-<div id="fig-messi-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-messi-orig-output-1.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="480">
@@ -504,32 +508,32 @@ Figure&nbsp;9.4: Lionel Messi, footballer.
 <p><span class="theorem-title"><strong>Example 9.3 (Creating a mask for the football)</strong></span> </p>
 <p>After reading the image into Python, we are going to use a colour picker to identify the colour of the ball. The following website provides a useful tool for us to upload an image, and isolate the RGB representaion of the colour we wish to pick out: <a href="https://redketchup.io/color-picker" class="uri">https://redketchup.io/color-picker</a></p>
 <p>Using this website, we learn that the RGB representation we want is <span class="math inline">\((244, 251, 95)\)</span>. It should be clear that there is a range of values corresponding to the yellow of the ball. To accommodate this range, we convert the colour representation to HSV (Hue-Saturation-Value), using a function from <code>cv2</code>.</p>
-<div id="7e080804" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># R=244, G=251, B=95</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>cv2.cvtColor(np.uint8([[[<span class="dv">95</span>, <span class="dv">251</span>, <span class="dv">244</span> ]]]), cv2.COLOR_BGR2HSV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c7e6ce91" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># R=244, G=251, B=95</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>cv2.cvtColor(np.uint8([[[<span class="dv">95</span>, <span class="dv">251</span>, <span class="dv">244</span> ]]]), cv2.COLOR_BGR2HSV)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>array([[[ 31, 158, 251]]], dtype=uint8)</code></pre>
 </div>
 </div>
 <p>The resulting tuple corresponds to the HSV representation of the ball’s colour. The first coordinate corresponds to the hue. We use it to set a range of values to pick up in the image.</p>
-<div id="291f6320" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messi <span class="op">=</span> cv2.imread(<span class="st">'data/messi5.jpg'</span>)</span>
+<div id="36426f6f" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messi <span class="op">=</span> cv2.imread(<span class="st">'data/messi5.jpg'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a>hsv <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2HSV)</span>
 <span id="cb10-3"><a href="#cb10-3"></a></span>
 <span id="cb10-4"><a href="#cb10-4"></a><span class="co"># define range of yellow color in HSV, using H=31, S=158, V=251 as the reference.</span></span>
 <span id="cb10-5"><a href="#cb10-5"></a>lower_yellow <span class="op">=</span> np.array([<span class="dv">21</span>,  <span class="dv">100</span>, <span class="dv">100</span>])</span>
-<span id="cb10-6"><a href="#cb10-6"></a>upper_yellow <span class="op">=</span> np.array([<span class="dv">41</span>, <span class="dv">255</span>, <span class="dv">255</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-6"><a href="#cb10-6"></a>upper_yellow <span class="op">=</span> np.array([<span class="dv">41</span>, <span class="dv">255</span>, <span class="dv">255</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The final line of code to create the mask is the following.</p>
 <div id="cell-fig-messi-mask" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Threshold the HSV image to get only blue colors</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Threshold the HSV image to get only blue colors</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>mask1 <span class="op">=</span> cv2.inRange(hsv, lower_yellow, upper_yellow)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>plt.imshow(mask1, cmap<span class="op">=</span><span class="st">'gray'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-3"><a href="#cb11-3"></a>plt.imshow(mask1, cmap<span class="op">=</span><span class="st">'gray'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-messi-mask" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-mask" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-messi-mask-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-messi-mask-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="575" height="371">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.5: Mask for football, and other yellow segments.
@@ -540,14 +544,14 @@ Figure&nbsp;9.5: Mask for football, and other yellow segments.
 </div>
 <p>Compare the black-and-white image in <a href="#fig-messi-mask" class="quarto-xref">Figure&nbsp;<span>9.5</span></a> with the original one in <a href="#fig-messi-orig" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>. The white regions below correspond to yellow coloured sections in the original image. The white pixels take the value 255, while the black pixels are 0.</p>
 <p>Just before we close this example, we are going to modify the numpy array corresponding to this mask, to encompass the whole ball, not just the yellow segments.</p>
-<div id="a042c675" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>mask1[:, :<span class="dv">330</span>] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>mask1[:, <span class="dv">405</span>:] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="87243d30" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>mask1[:, :<span class="dv">330</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>mask1[:, <span class="dv">405</span>:] <span class="op">=</span> <span class="dv">0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p><br> The next section of code identifies contours around the ball region, computes the convex hull around these points and then draws this on the original image (see <a href="#fig-messi-mask-2" class="quarto-xref">Figure&nbsp;<span>9.6</span></a>).</p>
 <div id="cell-fig-messi-mask-2" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#im2, contours= cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a></span>
 <span id="cb13-3"><a href="#cb13-3"></a>contours, _ <span class="op">=</span> cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span>
 <span id="cb13-4"><a href="#cb13-4"></a></span>
@@ -555,12 +559,12 @@ Figure&nbsp;9.5: Mask for football, and other yellow segments.
 <span id="cb13-6"><a href="#cb13-6"></a>hull <span class="op">=</span> cv2.convexHull(largest_contour)</span>
 <span id="cb13-7"><a href="#cb13-7"></a>cv2.drawContours(messi, [hull], <span class="op">-</span><span class="dv">1</span>, (<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">255</span>), thickness<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb13-8"><a href="#cb13-8"></a></span>
-<span id="cb13-9"><a href="#cb13-9"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-9"><a href="#cb13-9"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-messi-mask-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-mask-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-mask-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-messi-mask-2-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-messi-mask-2-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="575" height="371">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-mask-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.6: Lionel Messi with outline of ball
@@ -577,7 +581,7 @@ Figure&nbsp;9.6: Lionel Messi with outline of ball
 <p><span class="theorem-title"><strong>Example 9.4 (Sudoku perspective transform)</strong></span> </p>
 <p>Here is an example of transforming the perspective of a sudoku board from a newspaper. The coordinates that result in the red quadrilateral in <a href="#fig-sudoku-orig" class="quarto-xref">Figure&nbsp;<span>9.7</span></a> were obtained by manual inspection; this process typically requires a little trial and error.</p>
 <div id="cell-fig-sudoku-orig" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>sudoku <span class="op">=</span> cv2.imread(<span class="st">'data/sudoku.png'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>sudoku <span class="op">=</span> cv2.imread(<span class="st">'data/sudoku.png'</span>)</span>
 <span id="cb14-2"><a href="#cb14-2"></a></span>
 <span id="cb14-3"><a href="#cb14-3"></a><span class="co"># Coordinates of original reference points</span></span>
 <span id="cb14-4"><a href="#cb14-4"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">73</span>,<span class="dv">85</span>], [<span class="dv">350</span>, <span class="dv">88</span>], [<span class="dv">355</span>, <span class="dv">360</span>], [<span class="dv">48</span>, <span class="dv">357</span>]])</span>
@@ -585,12 +589,12 @@ Figure&nbsp;9.6: Lionel Messi with outline of ball
 <span id="cb14-6"><a href="#cb14-6"></a><span class="co"># Create a polygon (clockwise) from reference points.</span></span>
 <span id="cb14-7"><a href="#cb14-7"></a>pts <span class="op">=</span> np.array(pts1, np.int32)</span>
 <span id="cb14-8"><a href="#cb14-8"></a>img2 <span class="op">=</span> cv2.polylines(sudoku, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span> )</span>
-<span id="cb14-9"><a href="#cb14-9"></a>plt.imshow(img2)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-9"><a href="#cb14-9"></a>plt.imshow(img2)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sudoku-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sudoku-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sudoku-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-sudoku-orig-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-sudoku-orig-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="420" height="416">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.7: Sudoku reference points
@@ -601,18 +605,18 @@ Figure&nbsp;9.7: Sudoku reference points
 </div>
 <p>The critical functions are <code>cv2.getPerspectiveTransform</code> and <code>cv2.warpPerspective</code>. The output of the transformed figure is shown on the right of <a href="#fig-sudoku-warped" class="quarto-xref">Figure&nbsp;<span>9.8</span></a>. It would be much easier to perform OCR on the figure on the right.</p>
 <div id="cell-fig-sudoku-warped" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># destination coordinates of original reference points.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># destination coordinates of original reference points.</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">0</span>],[<span class="dv">300</span>,<span class="dv">300</span>],[<span class="dv">0</span>,<span class="dv">300</span>]])</span>
 <span id="cb15-3"><a href="#cb15-3"></a>M <span class="op">=</span> cv2.getPerspectiveTransform(pts1,pts2)</span>
 <span id="cb15-4"><a href="#cb15-4"></a>sudoku_dst <span class="op">=</span> cv2.warpPerspective(sudoku ,M,(<span class="dv">300</span>,<span class="dv">300</span>))</span>
 <span id="cb15-5"><a href="#cb15-5"></a> </span>
 <span id="cb15-6"><a href="#cb15-6"></a>plt.subplot(<span class="dv">121</span>),plt.imshow(sudoku),plt.title(<span class="st">'Input'</span>)</span>
-<span id="cb15-7"><a href="#cb15-7"></a>plt.subplot(<span class="dv">122</span>),plt.imshow(sudoku_dst),plt.title(<span class="st">'Output'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-7"><a href="#cb15-7"></a>plt.subplot(<span class="dv">122</span>),plt.imshow(sudoku_dst),plt.title(<span class="st">'Output'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sudoku-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sudoku-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sudoku-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-sudoku-warped-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-sudoku-warped-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="575" height="300">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.8: Sudoku original and transformed
@@ -625,7 +629,7 @@ Figure&nbsp;9.8: Sudoku original and transformed
 <p>For our second example, we turn to a screen capture of a football game telecast. Our goal is to switch the view from that in <a href="#fig-football-orig" class="quarto-xref">Figure&nbsp;<span>9.9</span></a> to a top-down view of the field.</p>
 <div id="cell-fig-football-orig" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display" data-execution_count="17">
-<div id="fig-football-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-football-orig" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-football-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="09-vision_files/figure-html/fig-football-orig-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="360">
@@ -640,8 +644,8 @@ Figure&nbsp;9.9: Football match screen capture
 <div id="exm-football-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 9.5 (Football screen capture)</strong></span> </p>
 <p>Once again, it should be emphasised that the coordinates to be chosen require some trial and error.</p>
-<div id="5fd92289" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>football1 <span class="op">=</span> cv2.imread(<span class="st">'data/football1.png'</span>)</span>
+<div id="d866e631" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>football1 <span class="op">=</span> cv2.imread(<span class="st">'data/football1.png'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2"></a>pts1 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">118</span>]])</span>
 <span id="cb16-3"><a href="#cb16-3"></a>pts2 <span class="op">=</span> np.float32([[<span class="dv">45</span>,<span class="dv">100</span>], [<span class="dv">45</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">220</span>], [<span class="dv">77</span>,<span class="dv">100</span>]])</span>
 <span id="cb16-4"><a href="#cb16-4"></a></span>
@@ -650,15 +654,15 @@ Figure&nbsp;9.9: Football match screen capture
 <span id="cb16-7"><a href="#cb16-7"></a></span>
 <span id="cb16-8"><a href="#cb16-8"></a>pts <span class="op">=</span> np.array([[<span class="dv">45</span>,<span class="dv">121</span>],[<span class="dv">48</span>,<span class="dv">238</span>],[<span class="dv">206</span>,<span class="dv">230</span>], [<span class="dv">155</span>,<span class="dv">119</span>]], np.int32)</span>
 <span id="cb16-9"><a href="#cb16-9"></a>pts <span class="op">=</span> pts.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb16-10"><a href="#cb16-10"></a>img2 <span class="op">=</span> cv2.polylines(football1, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-10"><a href="#cb16-10"></a>img2 <span class="op">=</span> cv2.polylines(football1, [pts], <span class="va">True</span>, (<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>From <a href="#fig-football-warped" class="quarto-xref">Figure&nbsp;<span>9.10</span></a>, it should be clear that only the plane of the <em>field</em> is transformed. The crowd in the stands, and even the players on the field, are in a different 2-D plane, and hence appear distorted.</p>
 <div id="cell-fig-football-warped" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display">
-<div id="fig-football-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-football-warped" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-football-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-football-warped-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-football-warped-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="798" height="400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-football-warped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.10: Football match transformed
@@ -688,22 +692,22 @@ Figure&nbsp;9.11: Examples of edges in images, taken from <a href="http://vision
 <p><span class="theorem-title"><strong>Example 9.6 (Sudoku edge detection)</strong></span> </p>
 <p>The Sobel edge detection technique is one of the most straigtforward to understand. It can be used to detect vertical or horizontal edges. Let us apply this technique to the perspective-transformed Sudoku image from <a href="#exm-sudoku-1" class="quarto-xref">Example&nbsp;<span>9.4</span></a>.</p>
 <p>Edge detection is almost always performed on the grayscale version of an image. In the code segment below, <code>sobelx</code> and <code>sobely</code> now contain the vertical (in the <code>x</code>-direction) and the horizontal (in the <code>y</code>-direction) edges.</p>
-<div id="13dfa8ff" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dst_gray <span class="op">=</span> cv2.cvtColor(sudoku_dst, cv2.COLOR_BGR2GRAY)</span>
+<div id="a0e7931a" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dst_gray <span class="op">=</span> cv2.cvtColor(sudoku_dst, cv2.COLOR_BGR2GRAY)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>sobelx <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">1</span>, <span class="dv">0</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>sobely <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">0</span>, <span class="dv">1</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-3"><a href="#cb17-3"></a>sobely <span class="op">=</span> cv2.Sobel(dst_gray, cv2.CV_64F, <span class="dv">0</span>, <span class="dv">1</span>,ksize<span class="op">=</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><a href="#fig-sudoku-edges" class="quarto-xref">Figure&nbsp;<span>9.12</span></a> displays the resulting edges from the Sobel technique.</p>
 <div id="cell-fig-sudoku-edges" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>plt.subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),plt.imshow(sobelx, cmap <span class="op">=</span> <span class="st">'gray'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>plt.subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),plt.imshow(sobelx, cmap <span class="op">=</span> <span class="st">'gray'</span>)</span>
 <span id="cb18-2"><a href="#cb18-2"></a>plt.title(<span class="st">'Sobelx: vertical edges'</span>), plt.xticks([]), plt.yticks([])</span>
 <span id="cb18-3"><a href="#cb18-3"></a>plt.subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>),plt.imshow(sobely, cmap <span class="op">=</span> <span class="st">'gray'</span>)</span>
-<span id="cb18-4"><a href="#cb18-4"></a>plt.title(<span class="st">'Sobely: horizontal edges'</span>), plt.xticks([]), plt.yticks([])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-4"><a href="#cb18-4"></a>plt.title(<span class="st">'Sobely: horizontal edges'</span>), plt.xticks([]), plt.yticks([])<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-sudoku-edges" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sudoku-edges" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sudoku-edges-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-sudoku-edges-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-sudoku-edges-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="540" height="276">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-edges-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.12: Sudoku vertical and horizontal edges
@@ -718,14 +722,14 @@ Figure&nbsp;9.12: Sudoku vertical and horizontal edges
 <p><span class="theorem-title"><strong>Example 9.7 (Canny edge detection of ball)</strong></span> </p>
 <p>Earlier in <a href="#exm-messi-1" class="quarto-xref">Example&nbsp;<span>9.3</span></a>, we used the colour of the ball to locate it within the image. In this example, we are going to use Canny edge detection. First, take a look at the application of the algorithm to the grayscale version of the image, in <a href="#fig-messi-canny" class="quarto-xref">Figure&nbsp;<span>9.13</span></a>. Play around with the two parameters (150 and 200) to see the effect on the number of edges produced.</p>
 <div id="cell-fig-messi-canny" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>messi_gray <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2GRAY)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>messi_gray <span class="op">=</span> cv2.cvtColor(messi, cv2.COLOR_BGR2GRAY)</span>
 <span id="cb19-2"><a href="#cb19-2"></a>messi_canny_edge <span class="op">=</span> cv2.Canny(messi_gray, <span class="dv">150</span>, <span class="dv">200</span>)</span>
-<span id="cb19-3"><a href="#cb19-3"></a>plt.imshow(messi_canny_edge, cmap<span class="op">=</span><span class="st">'gray'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3"></a>plt.imshow(messi_canny_edge, cmap<span class="op">=</span><span class="st">'gray'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-messi-canny" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-canny" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-canny-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-messi-canny-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-messi-canny-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="575" height="371">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-canny-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.13: Lionel Messi, Canny edge
@@ -735,8 +739,8 @@ Figure&nbsp;9.13: Lionel Messi, Canny edge
 </div>
 </div>
 <p>The next step involves the use of Hough transforms. When applied to edges, this transform can be used to pick out lines that follow any parametric form, e.g. lines, quadratic curves, ellipses and circles. Since we know the ball is a circle, we are going to use the Hough transform to pick it out from the edge map.</p>
-<div id="aaaf3ddb" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>blurred <span class="op">=</span> cv2.GaussianBlur(messi_gray, (<span class="dv">9</span>, <span class="dv">9</span>), <span class="dv">2</span>)</span>
+<div id="6832f2ef" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>blurred <span class="op">=</span> cv2.GaussianBlur(messi_gray, (<span class="dv">9</span>, <span class="dv">9</span>), <span class="dv">2</span>)</span>
 <span id="cb20-2"><a href="#cb20-2"></a></span>
 <span id="cb20-3"><a href="#cb20-3"></a>circles <span class="op">=</span> cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp<span class="op">=</span><span class="dv">1</span>,</span>
 <span id="cb20-4"><a href="#cb20-4"></a>                            minDist<span class="op">=</span><span class="dv">50</span>,</span>
@@ -745,7 +749,7 @@ Figure&nbsp;9.13: Lionel Messi, Canny edge
 <span id="cb20-7"><a href="#cb20-7"></a>                            minRadius<span class="op">=</span><span class="dv">18</span>,</span>
 <span id="cb20-8"><a href="#cb20-8"></a>                            maxRadius<span class="op">=</span><span class="dv">38</span>)</span>
 <span id="cb20-9"><a href="#cb20-9"></a></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="bu">print</span>(circles)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="bu">print</span>(circles)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[[297.5 169.5  35.2]
   [361.5 313.5  28.4]
@@ -767,19 +771,19 @@ Note
 </div>
 </div>
 <div id="cell-fig-messi-hough" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>circles_rounded <span class="op">=</span> np.uint16(np.around(circles))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>circles_rounded <span class="op">=</span> np.uint16(np.around(circles))</span>
 <span id="cb22-2"><a href="#cb22-2"></a><span class="cf">for</span> i, c <span class="kw">in</span> <span class="bu">enumerate</span>(circles_rounded[<span class="dv">0</span>, :]): </span>
 <span id="cb22-3"><a href="#cb22-3"></a>    cv2.circle(messi, (c[<span class="dv">0</span>], c[<span class="dv">1</span>]), c[<span class="dv">2</span>], (<span class="dv">0</span>, <span class="dv">255</span>, <span class="dv">0</span>), <span class="dv">2</span>)     <span class="co"># circle </span></span>
 <span id="cb22-4"><a href="#cb22-4"></a>    cv2.putText(messi, <span class="bu">str</span>(i), (c[<span class="dv">0</span>], c[<span class="dv">1</span>]),                  <span class="co"># label each one </span></span>
 <span id="cb22-5"><a href="#cb22-5"></a>                cv2.FONT_HERSHEY_SIMPLEX, <span class="fl">0.6</span>, (<span class="dv">255</span>,<span class="dv">255</span>,<span class="dv">0</span>), <span class="dv">2</span>)</span>
 <span id="cb22-6"><a href="#cb22-6"></a></span>
 <span id="cb22-7"><a href="#cb22-7"></a>plt.imshow(cv2.cvtColor(messi, cv2.COLOR_BGR2RGB))</span>
-<span id="cb22-8"><a href="#cb22-8"></a>plt.title(<span class="st">'Detected circles (numbered)'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-8"><a href="#cb22-8"></a>plt.title(<span class="st">'Detected circles (numbered)'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div id="fig-messi-hough" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-messi-hough" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-messi-hough-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-messi-hough-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-messi-hough-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="575" height="387">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-messi-hough-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.14: Circles detected with Hough transform
@@ -915,12 +919,12 @@ Figure&nbsp;9.14: Circles detected with Hough transform
 </tbody>
 </table>
 <p>For this demonstration, we shall aim to download and run the GOOGLENET image classification model. Run the following command to download the model weights for GOOGLENET:</p>
-<div id="6d10abbb" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>python .\download_models.py <span class="op">--</span>save_dir GOOGLENET googlenet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="07fad945" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>python .\download_models.py <span class="op">--</span>save_dir GOOGLENET googlenet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Apart from listing all the models available for download, <code>models.yml</code> also contains the precise configuration settings to run this particular model. For full reference, here is the section corresponding to GOOGLENET:</p>
-<div id="42eff9e2" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet</span></span>
+<div id="38c7d4be" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Googlenet from https://github.com/BVLC/caffe/tree/master/models/bvlc_googlenet</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>googlenet:</span>
 <span id="cb25-3"><a href="#cb25-3"></a>  load_info:</span>
 <span id="cb25-4"><a href="#cb25-4"></a>    url: <span class="st">"http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel"</span></span>
@@ -933,7 +937,7 @@ Figure&nbsp;9.14: Circles detected with Hough transform
 <span id="cb25-11"><a href="#cb25-11"></a>  height: <span class="dv">224</span></span>
 <span id="cb25-12"><a href="#cb25-12"></a>  rgb: false</span>
 <span id="cb25-13"><a href="#cb25-13"></a>  classes: <span class="st">"classification_classes_ILSVRC2012.txt"</span></span>
-<span id="cb25-14"><a href="#cb25-14"></a>  sample: <span class="st">"classification"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-14"><a href="#cb25-14"></a>  sample: <span class="st">"classification"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The important parameters to take note are:</p>
 <ul>
@@ -945,11 +949,11 @@ Figure&nbsp;9.14: Circles detected with Hough transform
 <li><code>classes</code>: GOOGLENET is an object classification model. The specified file here contains the labels to be used. The file is present in the <code>opencv/samples/data/dnn</code> directory.</li>
 </ul>
 <p>The final step is to call the python script that demonstrates the use of this model. You may have to modify the paths to the image files to match those on your laptop, but you should then see the labelled image, similar to <a href="#fig-googlenet-output" class="quarto-xref">Figure&nbsp;<span>9.15</span></a>.</p>
-<div id="1cd4dcfa" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>python classification.py <span class="op">--</span>model GOOGLENET<span class="op">/</span><span class="dv">405</span><span class="er">fc5acd08a3bb12de8ee5e23a96bec22f08204</span><span class="op">/</span>bvlc_googlenet.caffemodel <span class="op">\</span></span>
+<div id="079162fe" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>python classification.py <span class="op">--</span>model GOOGLENET<span class="op">/</span><span class="dv">405</span><span class="er">fc5acd08a3bb12de8ee5e23a96bec22f08204</span><span class="op">/</span>bvlc_googlenet.caffemodel <span class="op">\</span></span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="op">--</span>config <span class="op">/</span>home<span class="op">/</span>viknesh<span class="op">/</span>NUS<span class="op">/</span>coursesTaught<span class="op">/</span>ind5003<span class="op">-</span>book<span class="op">/</span>opencv_extra<span class="op">/</span>testdata<span class="op">/</span>dnn<span class="op">/</span>bvlc_googlenet.prototxt <span class="op">\</span></span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="op">--</span>width <span class="dv">224</span> <span class="op">--</span>height <span class="dv">224</span> <span class="op">--</span>classes ..<span class="op">/</span>data<span class="op">/</span>dnn<span class="op">/</span>classification_classes_ILSVRC2012.txt <span class="op">\</span></span>
-<span id="cb26-4"><a href="#cb26-4"></a><span class="op">--</span>mean <span class="dv">104</span> <span class="dv">117</span> <span class="dv">123</span> <span class="op">--</span><span class="bu">input</span> <span class="op">/</span>home<span class="op">/</span>viknesh<span class="op">/</span>NUS<span class="op">/</span>coursesTaught<span class="op">/</span>ind5003<span class="op">-</span>book<span class="op">/</span>data<span class="op">/</span>cars.jpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="op">--</span>mean <span class="dv">104</span> <span class="dv">117</span> <span class="dv">123</span> <span class="op">--</span><span class="bu">input</span> <span class="op">/</span>home<span class="op">/</span>viknesh<span class="op">/</span>NUS<span class="op">/</span>coursesTaught<span class="op">/</span>ind5003<span class="op">-</span>book<span class="op">/</span>data<span class="op">/</span>cars.jpg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="fig-googlenet-output" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -966,8 +970,8 @@ Figure&nbsp;9.15: Googlenet labelled output
 <section id="models-from-opencv-model-zoo" class="level3">
 <h3 class="anchored" data-anchor-id="models-from-opencv-model-zoo">Models from OpenCV Model Zoo</h3>
 <p>The openCV model zoo contains model weights that can be used directly. There is no need for any further downloads. Open up a terminal, activate your virtual environment, and navigate to the <code>opencv_zoo/models/face_detection_yunet/</code> folder. Then run the following command:</p>
-<div id="d8297204" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>python demo.py </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3d4fdc3a" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>python demo.py </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -1009,10 +1013,10 @@ Figure&nbsp;9.15: Googlenet labelled output
 </ol>
 <div id="cell-fig-sudoku-exercise" class="cell" data-execution_count="30">
 <div class="cell-output cell-output-display">
-<div id="fig-sudoku-exercise" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
+<div id="fig-sudoku-exercise" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sudoku-exercise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="09-vision_files/figure-html/fig-sudoku-exercise-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="09-vision_files/figure-html/fig-sudoku-exercise-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="424" height="416">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sudoku-exercise-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.16: Sudoku exercise
@@ -1027,7 +1031,7 @@ Figure&nbsp;9.16: Sudoku exercise
 </ol>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-szeliski2022computer" class="csl-entry" role="listitem">
 Szeliski, Richard. 2022. <em>Computer Vision: Algorithms and Applications</em>. Springer Nature.
 </div>
@@ -1036,239 +1040,243 @@ Szeliski, Richard. 2022. <em>Computer Vision: Algorithms and Applications</em>. 
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1276,185 +1284,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./08-supervised.html" class="pagination-link" aria-label="Supervised Learning">

@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>7&nbsp; Simulation – Data Analytics for Sense-Making</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -58,7 +62,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -77,7 +80,7 @@ div.csl-indent {
 }</style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -88,15 +91,16 @@ div.csl-indent {
 <link href="./06-ts.html" rel="prev">
 <script src="site_libs/cookie-consent/cookie-consent.js"></script>
 <link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2b3a058f3f598cb5398490cdc55809d4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/videojs/video.min.js"></script>
 <link href="site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -140,10 +144,10 @@ gtag('config', 'G-K3T2VC9F47', { 'anonymize_ip': true});
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
   "notice_banner_type":"simple",
-  "consent_type":"implied",
+  "consent_type":"express",
   "palette":"light",
   "language":"en",
-  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "page_load_consent_levels":["strictly-necessary"],
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
@@ -153,13 +157,13 @@ cookieconsent.run({
 });
 </script> 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -172,7 +176,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -191,7 +195,7 @@ window.Quarto = {
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -348,8 +352,8 @@ P(X=1) = P(X=0) = \frac{1}{2}
 P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 \]</span></p>
 <p>This rule tells us which events are more likely, and which are less likely.</p>
-<div id="67ce77a8" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> math <span class="im">import</span> pi </span>
+<div id="a2df321f" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> math <span class="im">import</span> pi </span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pprint</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> mesa</span>
@@ -364,7 +368,7 @@ P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 <span id="cb1-13"><a href="#cb1-13"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-14"><a href="#cb1-14"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-15"><a href="#cb1-15"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom, bernoulli, norm, expon, uniform</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom, bernoulli, norm, expon, uniform</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="discrete-random-variables" class="level3">
 <h3 class="anchored" data-anchor-id="discrete-random-variables">Discrete Random Variables</h3>
@@ -377,16 +381,16 @@ P(X=1) = \frac{2}{3},\quad P(X=0) = \frac{1}{3}
 <p>Discrete random variables are defined by their probability mass function (pmf), which is just a table or a function describing <span class="math inline">\(P(X=i)\)</span> for all possible <span class="math inline">\(i\)</span> values. Once we know the pmf of a random variable, we know everything about it - the mean, variance, quantiles, maximum values, etc.</p>
 <p>We can visualise a pmf using a bar-chart. <a href="#fig-pmf-biased-coin" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> contains the chart for the above biased coin.</p>
 <div id="cell-fig-pmf-biased-coin" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
 <span id="cb2-2"><a href="#cb2-2"></a>plt.bar([<span class="dv">0</span>,<span class="dv">1</span>], [<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="op">/</span><span class="dv">3</span>], tick_label<span class="op">=</span>[<span class="st">'0'</span>, <span class="st">'1'</span>], width<span class="op">=</span><span class="fl">0.3</span>)<span class="op">;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>plt.xlim(<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span>)<span class="op">;</span> </span>
 <span id="cb2-4"><a href="#cb2-4"></a>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">;</span> </span>
-<span id="cb2-5"><a href="#cb2-5"></a>plt.title(<span class="st">'pmf of </span><span class="ch">\'</span><span class="st">X</span><span class="ch">\'</span><span class="st"> random variable'</span> )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5"></a>plt.title(<span class="st">'pmf of </span><span class="ch">\'</span><span class="st">X</span><span class="ch">\'</span><span class="st"> random variable'</span> )<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-pmf-biased-coin" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pmf-biased-coin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-pmf-biased-coin-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-pmf-biased-coin-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="422" height="283">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pmf-biased-coin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.1: Pmf for a biased coin. Note that there are only two possible values of X. This is the support of this random variable.
@@ -397,15 +401,15 @@ Figure&nbsp;7.1: Pmf for a biased coin. Note that there are only two possible va
 </div>
 <p><a href="#fig-pmf-ten-tosses" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> displays the pmf for a random variable representing the total number of Heads after 10 tosses of that same coin. Suppose we call that new random variable <span class="math inline">\(Y\)</span>.</p>
 <div id="cell-fig-pmf-ten-tosses" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
 <span id="cb3-2"><a href="#cb3-2"></a>probs <span class="op">=</span> binom.pmf(np.arange(<span class="dv">0</span>, <span class="dv">11</span>), n<span class="op">=</span><span class="dv">10</span>, p<span class="op">=</span><span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>plt.bar(np.arange(<span class="dv">0</span>, <span class="dv">11</span>), probs)<span class="op">;</span>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>plt.title(<span class="st">'pmf of number of heads'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4"></a>plt.title(<span class="st">'pmf of number of heads'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-pmf-ten-tosses" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pmf-ten-tosses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-pmf-ten-tosses-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-pmf-ten-tosses-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="422" height="283">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pmf-ten-tosses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.2: Pmf for 10 tosses of a biased coin. Note that there are eleven possible values of Y.
@@ -420,7 +424,7 @@ Figure&nbsp;7.2: Pmf for 10 tosses of a biased coin. Note that there are eleven 
 <h3 class="anchored" data-anchor-id="continuous-random-variables">Continuous Random Variables</h3>
 <p>Continuous random variables are defined by what is known as a probability density function. Continuous random variables can take on an uncountable number of values, for instance, all real numbers in the interval <span class="math inline">\([0,1]\)</span>.</p>
 <div id="cell-fig-cts-rv" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, num<span class="op">=</span><span class="dv">100</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, num<span class="op">=</span><span class="dv">100</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>y <span class="op">=</span> norm.pdf(x)</span>
 <span id="cb4-3"><a href="#cb4-3"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">3</span>))</span>
 <span id="cb4-4"><a href="#cb4-4"></a>plt.subplot(<span class="dv">131</span>)</span>
@@ -439,12 +443,12 @@ Figure&nbsp;7.2: Pmf for 10 tosses of a biased coin. Note that there are eleven 
 <span id="cb4-17"><a href="#cb4-17"></a>plt.subplot(<span class="dv">133</span>)</span>
 <span id="cb4-18"><a href="#cb4-18"></a>plt.plot(x,y)</span>
 <span id="cb4-19"><a href="#cb4-19"></a>plt.ylim(<span class="dv">0</span>,<span class="fl">1.1</span>)</span>
-<span id="cb4-20"><a href="#cb4-20"></a>plt.title(<span class="st">'Uniform pdf'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-20"><a href="#cb4-20"></a>plt.title(<span class="st">'Uniform pdf'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-cts-rv" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cts-rv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-cts-rv-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-cts-rv-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="648" height="283">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cts-rv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.3: Continuous random variables
@@ -459,7 +463,7 @@ Figure&nbsp;7.3: Continuous random variables
 <h3 class="anchored" data-anchor-id="generating-random-variates">Generating Random Variates</h3>
 <p>With a computer, we can generate random variables from almost any distribution. There are built-in routines to generate from the ‘named’ distributions. For instance,</p>
 <div id="cell-fig-cts-hist" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">5003</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">5003</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a>yvals <span class="op">=</span> np.zeros((<span class="dv">3</span>,<span class="dv">300</span>))</span>
 <span id="cb5-4"><a href="#cb5-4"></a>yvals[<span class="dv">0</span>,:] <span class="op">=</span> rng.normal(size<span class="op">=</span><span class="dv">300</span>)</span>
@@ -472,12 +476,12 @@ Figure&nbsp;7.3: Continuous random variables
 <span id="cb5-11"><a href="#cb5-11"></a>    plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, i<span class="op">+</span><span class="dv">1</span>)</span>
 <span id="cb5-12"><a href="#cb5-12"></a>    plt.hist(yvals[i,:], density<span class="op">=</span><span class="va">True</span>, histtype<span class="op">=</span><span class="st">'step'</span>)</span>
 <span id="cb5-13"><a href="#cb5-13"></a>    plt.title(pdfs[i])</span>
-<span id="cb5-14"><a href="#cb5-14"></a>    plt.ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-14"><a href="#cb5-14"></a>    plt.ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-cts-hist" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cts-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-cts-hist-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-cts-hist-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="648" height="283">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cts-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.4: Histogram of random variables
@@ -585,8 +589,8 @@ X =
     &lt;statement-N&gt;</code></pre>
 <p>A class definition typically consists of function definitions and attributes. A special function within a class definition, <code>__init__()</code>, can be used to set the initial state of <em>instances</em> of a class. Think of a class definition as a template, and instances as copies made using that template.</p>
 <p>Consider the following class Circle.</p>
-<div id="ffeef5e5" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span> Circle:</span>
+<div id="2325fcf4" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span> Circle:</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">""" A simple class definition </span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">    </span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="co">    c0 = Circle()</span></span>
@@ -598,17 +602,17 @@ X =
 <span id="cb7-10"><a href="#cb7-10"></a>        </span>
 <span id="cb7-11"><a href="#cb7-11"></a>    <span class="kw">def</span> area(<span class="va">self</span>):</span>
 <span id="cb7-12"><a href="#cb7-12"></a>        <span class="co">""" Compute area of circle"""</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a>        <span class="cf">return</span> pi<span class="op">*</span>(<span class="va">self</span>.radius<span class="op">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-13"><a href="#cb7-13"></a>        <span class="cf">return</span> pi<span class="op">*</span>(<span class="va">self</span>.radius<span class="op">**</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can create multiple circles using this template. Note the use of the keyword <code>self</code> to refer to attributes of the instance.</p>
-<div id="c10c5be3" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>c1 <span class="op">=</span> Circle(<span class="fl">3.2</span>)</span>
+<div id="d6d0117d" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>c1 <span class="op">=</span> Circle(<span class="fl">3.2</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>c2 <span class="op">=</span> Circle(<span class="fl">4.0</span>)</span>
 <span id="cb8-3"><a href="#cb8-3"></a></span>
 <span id="cb8-4"><a href="#cb8-4"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
 <span id="cb8-5"><a href="#cb8-5"></a><span class="ss">The radius of c1 is </span><span class="sc">{</span>c1<span class="sc">.</span>radius<span class="sc">}</span><span class="ss"> and the radius of c2 is </span><span class="sc">{</span>c2<span class="sc">.</span>radius<span class="sc">}</span><span class="ss">.</span></span>
 <span id="cb8-6"><a href="#cb8-6"></a><span class="ss">The area of c1 is </span><span class="sc">{</span>c1<span class="sc">.</span>area()<span class="sc">:.3f}</span><span class="ss"> and the area of c2 is </span><span class="sc">{</span>c2<span class="sc">.</span>area()<span class="sc">:.3f}</span><span class="ss">.</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="ss">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 The radius of c1 is 3.2 and the radius of c2 is 4.0.
@@ -621,7 +625,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <h2 data-number="7.4" class="anchored" data-anchor-id="introduction-to-agent-based-models"><span class="header-section-number">7.4</span> Introduction to Agent Based Models</h2>
 <p>Agent-based models (ABM) consist of individual elements (agents) interacting with one another. One of the most common uses of an agent-based model is to understand how the behaviour of the system, as a whole, emerges from simple rules for the agents’ and their interactions. A very famous example is from the simulation software used to create battle scenes in The Lord of The Rings movies from the early 2000s.</p>
 <p>The following video was from an <a href="https://www.cnet.com/culture/entertainment/features/how-lord-of-the-rings-used-ai-to-change-big-screen-battles-forever/">article on the MASSIVE software</a>.</p>
-<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="data/lotr.mp4"></video></div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="data/lotr.mp4"></video></div>
 <p>Today, ABM are used in scenarios where the overall behaviour of a system is to complicated to predict by modeling the stages of interaction. Examples of these scenarios are:</p>
 <ol type="1">
 <li>COVID-19 modeling,</li>
@@ -663,8 +667,8 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <section id="agent-and-model-classes-v1" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="agent-and-model-classes-v1"><span class="header-section-number">7.5</span> Agent and Model Classes (v1)</h2>
 <p>The code below contains our initial definition for the agent class. The initialisation simply consists of setting the wealth for the agent. The <code>step</code> method defines that the agent will pick an agent (possibly itself) and transfer 1 unit of money to that agent.</p>
-<div id="08279213" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
+<div id="d56d02ac" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    <span class="co">"""An agent with fixed initial wealth."""</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a></span>
 <span id="cb10-4"><a href="#cb10-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model):</span>
@@ -679,7 +683,7 @@ The area of c1 is 32.170 and the area of c2 is 50.265.
 <span id="cb10-13"><a href="#cb10-13"></a>        <span class="cf">if</span> <span class="va">self</span>.wealth <span class="op">&gt;</span> <span class="dv">0</span>:</span>
 <span id="cb10-14"><a href="#cb10-14"></a>            other_agent <span class="op">=</span> <span class="va">self</span>.rng.choice(<span class="va">self</span>.model.agents)</span>
 <span id="cb10-15"><a href="#cb10-15"></a>            other_agent.wealth <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb10-16"><a href="#cb10-16"></a>            <span class="va">self</span>.wealth <span class="op">-=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-16"><a href="#cb10-16"></a>            <span class="va">self</span>.wealth <span class="op">-=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The diagram in <a href="#fig-agent-flow" class="quarto-xref">Figure&nbsp;<span>7.5</span></a> depicts the flow of events for each agent. It is useful to sketch such a flowchart when implementing agent-based models, since it allows for easier debugging and information sharing with colleagues.</p>
 <div id="fig-agent-flow" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -693,8 +697,8 @@ Figure&nbsp;7.5: Agent trajectory
 </figure>
 </div>
 <p>The next class defines the model itself. The initialisation of a model typically consists of populating it with various agents. At every time time step, the agents are shuffled, and then each of their <code>step</code> methods are executed in that order. The order changes at every time step. It is necessary to avoid running all agents’ steps at the same time to avoid clashes.</p>
-<div id="bc29c1bb" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<div id="5967cd02" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a></span>
 <span id="cb11-4"><a href="#cb11-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N, rng<span class="op">=</span><span class="va">None</span>):</span>
@@ -706,14 +710,14 @@ Figure&nbsp;7.5: Agent trajectory
 <span id="cb11-10"><a href="#cb11-10"></a></span>
 <span id="cb11-11"><a href="#cb11-11"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
 <span id="cb11-12"><a href="#cb11-12"></a>        <span class="co">"""Advance the model by one step."""</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-13"><a href="#cb11-13"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="exm-boltzmann-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.4 (Boltzmann model simple execution)</strong></span> </p>
 <p>The next cell creates a model with 10 agents, and runs the model for 100 steps. At the end of this run, we compute the proportion of customers with wealth 0. This is a simple initial metric that we define on the model. Once again, just as with the parameters of the model, the metrics we extract determine how well we can use the model.</p>
 <p>Remember that, to begin with, all agents had equal wealth. If this proportion is high, it indicates a severe imbalance in wealth distribution after 100 time steps.</p>
-<div id="6a169b9e" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>rng2 <span class="op">=</span> default_rng(<span class="dv">5023</span>)</span>
+<div id="130eff8c" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>rng2 <span class="op">=</span> default_rng(<span class="dv">5023</span>)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>all_wealth <span class="op">=</span> []</span>
 <span id="cb12-3"><a href="#cb12-3"></a>model <span class="op">=</span> MoneyModel(N<span class="op">=</span><span class="dv">10</span>, rng<span class="op">=</span>rng2)</span>
 <span id="cb12-4"><a href="#cb12-4"></a></span>
@@ -725,7 +729,7 @@ Figure&nbsp;7.5: Agent trajectory
 <span id="cb12-10"><a href="#cb12-10"></a>    all_wealth.append(agent.wealth)</span>
 <span id="cb12-11"><a href="#cb12-11"></a>    </span>
 <span id="cb12-12"><a href="#cb12-12"></a>prop <span class="op">=</span> (np.array(all_wealth) <span class="op">==</span> <span class="dv">0</span>).mean()</span>
-<span id="cb12-13"><a href="#cb12-13"></a><span class="bu">print</span>(<span class="ss">f"The proportion of agents with zero wealth is </span><span class="sc">{</span>prop<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="bu">print</span>(<span class="ss">f"The proportion of agents with zero wealth is </span><span class="sc">{</span>prop<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The proportion of agents with zero wealth is 0.400.</code></pre>
 </div>
@@ -734,8 +738,8 @@ Figure&nbsp;7.5: Agent trajectory
 <section id="data-collection" class="level3">
 <h3 class="anchored" data-anchor-id="data-collection">Data Collection</h3>
 <p>However, remember that when we perform simulations, we need to repeat the run multiple times, take the average, and then form a confidence interval. To prepare the mesa model to perform data collection, we write a function that, given a model, will compute the proportion of zero-wealth agents.</p>
-<div id="255c5aa2" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> compute_zero_prop(mesa_model):</span>
+<div id="e10a7845" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> compute_zero_prop(mesa_model):</span>
 <span id="cb14-2"><a href="#cb14-2"></a>    all_wealth <span class="op">=</span> []</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># Extract the results</span></span>
 <span id="cb14-4"><a href="#cb14-4"></a>    <span class="cf">for</span> agent <span class="kw">in</span> mesa_model.agents:</span>
@@ -743,14 +747,14 @@ Figure&nbsp;7.5: Agent trajectory
 <span id="cb14-6"><a href="#cb14-6"></a>    prop <span class="op">=</span> (np.array(all_wealth) <span class="op">==</span> <span class="dv">0</span>).mean()</span>
 <span id="cb14-7"><a href="#cb14-7"></a>    <span class="cf">return</span> prop</span>
 <span id="cb14-8"><a href="#cb14-8"></a></span>
-<span id="cb14-9"><a href="#cb14-9"></a>compute_zero_prop(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-9"><a href="#cb14-9"></a>compute_zero_prop(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>np.float64(0.4)</code></pre>
 </div>
 </div>
 <p>Next, we update the model class to define a data collector that calls the <code>compute_zero_prop()</code> function that we just defined. With Mesa, the data collector can be based on the model, or it could be a function that operates on individual agents.</p>
-<div id="d8f04af0" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<div id="03d9b3fa" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
 <span id="cb16-2"><a href="#cb16-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
 <span id="cb16-3"><a href="#cb16-3"></a></span>
 <span id="cb16-4"><a href="#cb16-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N, rng<span class="op">=</span><span class="va">None</span>):</span>
@@ -770,24 +774,24 @@ Figure&nbsp;7.5: Agent trajectory
 <span id="cb16-18"><a href="#cb16-18"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
 <span id="cb16-19"><a href="#cb16-19"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span>
 <span id="cb16-20"><a href="#cb16-20"></a>        <span class="co"># Collect data at every step</span></span>
-<span id="cb16-21"><a href="#cb16-21"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-21"><a href="#cb16-21"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="exm-boltzmann-3" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.5 (Boltzmann model data collection)</strong></span> </p>
 <p>We initialise the random number generator using a seed (not an <code>rng</code> object) and re-run the model. We can then retrieve the zero-wealth proprortion at <em>every step of the model</em>.</p>
-<div id="005426b1" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>model <span class="op">=</span> MoneyModel(N<span class="op">=</span><span class="dv">10</span>, rng<span class="op">=</span><span class="dv">35</span>)</span>
+<div id="e99c9e51" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>model <span class="op">=</span> MoneyModel(N<span class="op">=</span><span class="dv">10</span>, rng<span class="op">=</span><span class="dv">35</span>)</span>
 <span id="cb17-2"><a href="#cb17-2"></a></span>
 <span id="cb17-3"><a href="#cb17-3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb17-4"><a href="#cb17-4"></a>    model.step()</span>
 <span id="cb17-5"><a href="#cb17-5"></a>    </span>
 <span id="cb17-6"><a href="#cb17-6"></a>df_output <span class="op">=</span> model.datacollector.get_model_vars_dataframe()</span>
-<span id="cb17-7"><a href="#cb17-7"></a>df_output.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-7"><a href="#cb17-7"></a>df_output.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -796,23 +800,23 @@ Figure&nbsp;7.5: Agent trajectory
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>0.3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>0.4</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>0.3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>0.4</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>0.5</td>
 </tr>
 </tbody>
@@ -831,8 +835,8 @@ Figure&nbsp;7.5: Agent trajectory
 <div id="exm-boltzmann-4" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.6 (Boltzmann model multiple iterations)</strong></span> </p>
 <p>In this example, we shall run the model for <em>50 iterations</em>. Remember that each iteration consists of a fresh set of 100 time steps.</p>
-<div id="b3002dfb" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
+<div id="67cd2d13" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
 <span id="cb18-2"><a href="#cb18-2"></a></span>
 <span id="cb18-3"><a href="#cb18-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
 <span id="cb18-4"><a href="#cb18-4"></a>    MoneyModel,</span>
@@ -843,22 +847,22 @@ Figure&nbsp;7.5: Agent trajectory
 <span id="cb18-9"><a href="#cb18-9"></a>    data_collection_period<span class="op">=-</span><span class="dv">1</span></span>
 <span id="cb18-10"><a href="#cb18-10"></a>    <span class="co">#display_progress=True,</span></span>
 <span id="cb18-11"><a href="#cb18-11"></a>)</span>
-<span id="cb18-12"><a href="#cb18-12"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-12"><a href="#cb18-12"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"72ec5cc2243f4c86a648ced2e70e61d2","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"1cf56dcccc914c1eaf796b61e7e2d0f5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
 <div id="cell-fig-prop-zero-mult-iterations" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>results_df.zero_prop.hist(grid<span class="op">=</span><span class="va">False</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>results_df.zero_prop.hist(grid<span class="op">=</span><span class="va">False</span>, </span>
 <span id="cb19-2"><a href="#cb19-2"></a>                          bins<span class="op">=</span>np.arange(<span class="fl">0.10</span>, <span class="fl">1.00</span>, <span class="fl">0.05</span>),</span>
-<span id="cb19-3"><a href="#cb19-3"></a>                          figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3"></a>                          figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-prop-zero-mult-iterations" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-prop-zero-mult-iterations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-prop-zero-mult-iterations-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-prop-zero-mult-iterations-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="356" height="263">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-prop-zero-mult-iterations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.6: Proportion of zero wealth agents, over 100 iterations
@@ -868,16 +872,16 @@ Figure&nbsp;7.6: Proportion of zero wealth agents, over 100 iterations
 </div>
 </div>
 <p>We can see from <a href="#fig-prop-zero-mult-iterations" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> that the proportion of agents with zero income is considerably higher than the 0.0 that the population began with.</p>
-<div id="455f9b82" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>ttest_out <span class="op">=</span> stats.ttest_1samp(results_df.zero_prop, <span class="fl">0.0</span>).confidence_interval()</span>
+<div id="4a5951e1" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>ttest_out <span class="op">=</span> stats.ttest_1samp(results_df.zero_prop, <span class="fl">0.0</span>).confidence_interval()</span>
 <span id="cb20-2"><a href="#cb20-2"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
 <span id="cb20-3"><a href="#cb20-3"></a><span class="ss">The 95% CI for the mean proportion of agents with zero income is</span></span>
 <span id="cb20-4"><a href="#cb20-4"></a><span class="ss">(</span><span class="sc">{</span>ttest_out[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ttest_out[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">)</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="ss">       """</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="ss">       """</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 The 95% CI for the mean proportion of agents with zero income is
-(0.416, 0.476)
+(0.412, 0.476)
        </code></pre>
 </div>
 </div>
@@ -906,8 +910,8 @@ Figure&nbsp;7.7: Lorenz curve
 <p>Here is an interactive visualisation from Our World in Data on Gini coefficient values around the world, across time.</p>
 <iframe width="780" height="500" src="https://ourworldindata.org/grapher/economic-inequality-gini-index?tab=map" title="Our World in Data"></iframe>
 <p>The <a href="https://en.wikipedia.org/wiki/Gini_coefficient">Wikipedia page</a> on Gini coefficient contains a formula for computing Gini coefficient, given the income of all agents. After implementing it, we include it in the model class, along with our earlier metric.</p>
-<div id="785958cc" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> compute_gini(model):</span>
+<div id="479f0e6a" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> compute_gini(model):</span>
 <span id="cb22-2"><a href="#cb22-2"></a>    agent_wealths <span class="op">=</span> [agent.wealth <span class="cf">for</span> agent <span class="kw">in</span> model.agents]</span>
 <span id="cb22-3"><a href="#cb22-3"></a>    x <span class="op">=</span> <span class="bu">sorted</span>(agent_wealths)</span>
 <span id="cb22-4"><a href="#cb22-4"></a>    N <span class="op">=</span> model.num_agents</span>
@@ -935,7 +939,7 @@ Figure&nbsp;7.7: Lorenz curve
 <span id="cb22-26"><a href="#cb22-26"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
 <span id="cb22-27"><a href="#cb22-27"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span>
 <span id="cb22-28"><a href="#cb22-28"></a>        <span class="co"># Collect data at every step</span></span>
-<span id="cb22-29"><a href="#cb22-29"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-29"><a href="#cb22-29"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="data-collection-1" class="level3">
@@ -944,8 +948,8 @@ Figure&nbsp;7.7: Lorenz curve
 <div id="exm-boltzmann-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.7 (Boltzmann model data collection)</strong></span> </p>
 <p>We shall use the <code>batch_run</code> to run 50 iterations, and then create a summary visualisation of the evolution of Gini coefficient for each iteration.</p>
-<div id="a4a3d123" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
+<div id="acbf5d15" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>params <span class="op">=</span> {<span class="st">"N"</span>: <span class="dv">10</span>}</span>
 <span id="cb23-2"><a href="#cb23-2"></a></span>
 <span id="cb23-3"><a href="#cb23-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
 <span id="cb23-4"><a href="#cb23-4"></a>    MoneyModel,</span>
@@ -955,26 +959,26 @@ Figure&nbsp;7.7: Lorenz curve
 <span id="cb23-8"><a href="#cb23-8"></a>    number_processes<span class="op">=</span><span class="dv">1</span>,</span>
 <span id="cb23-9"><a href="#cb23-9"></a>    data_collection_period<span class="op">=</span><span class="dv">1</span></span>
 <span id="cb23-10"><a href="#cb23-10"></a>    <span class="co">#display_progress=True,</span></span>
-<span id="cb23-11"><a href="#cb23-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-11"><a href="#cb23-11"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"ccefa834eada42229701c46edee22424","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"ea0fb4377f1c4baca01be7b163428cd4","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
 <p>We would like to inspect how the inequality varies over the time steps. Hence, at each time step, we obtain the lower and upper quantiles along with the median and plot them.</p>
 <div id="cell-fig-gini-coef" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb24-2"><a href="#cb24-2"></a>grp_by_step <span class="op">=</span> results_df.Gini.groupby(results_df.Step).describe()</span>
 <span id="cb24-3"><a href="#cb24-3"></a><span class="co">#grp_by_step.head()</span></span>
 <span id="cb24-4"><a href="#cb24-4"></a></span>
 <span id="cb24-5"><a href="#cb24-5"></a>grp_by_step[[<span class="st">'25%'</span>, <span class="st">'50%'</span>, <span class="st">'75%'</span>]].plot(style<span class="op">=</span>[<span class="st">'--'</span>, <span class="st">'-'</span>, <span class="st">'--'</span>])</span>
-<span id="cb24-6"><a href="#cb24-6"></a>plt.ylim([<span class="dv">0</span>, <span class="dv">1</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-6"><a href="#cb24-6"></a>plt.ylim([<span class="dv">0</span>, <span class="dv">1</span>])<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-gini-coef" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gini-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-gini-coef-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-gini-coef-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="571" height="434">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gini-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.8: Evolution of Gini coefficient
@@ -993,8 +997,8 @@ Figure&nbsp;7.8: Evolution of Gini coefficient
 <h3 class="anchored" data-anchor-id="adding-a-spatial-component">Adding a spatial component</h3>
 <p>Next we introduce another critical component of agent-based modeling - the spatial component. We retain the Gini coefficient computation, but we are going to modify the model behaviour such that agents only exchange money if the other agent is nearby. The <code>MultiGrid</code> defines a rectangular grid, indexed by <code>[x, y]</code>, where <code>[0, 0]</code> is assumed to be at bottom-left and <code>[width - 1, height - 1]</code> is the top-right. If a grid is toroidal, the top and bottom, and left and right, edges wrap to each other.</p>
 <p>In the loop to create agents, the agents are added to a random x- and y- cell of the grid.</p>
-<div id="7dcffc33" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
+<div id="20e9974d" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">class</span> MoneyModel(mesa.Model):</span>
 <span id="cb25-2"><a href="#cb25-2"></a>    <span class="co">"""A model with some number of agents."""</span></span>
 <span id="cb25-3"><a href="#cb25-3"></a></span>
 <span id="cb25-4"><a href="#cb25-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N, width, height, rng<span class="op">=</span><span class="va">None</span>):</span>
@@ -1018,7 +1022,7 @@ Figure&nbsp;7.8: Evolution of Gini coefficient
 <span id="cb25-22"><a href="#cb25-22"></a></span>
 <span id="cb25-23"><a href="#cb25-23"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
 <span id="cb25-24"><a href="#cb25-24"></a>        <span class="va">self</span>.datacollector.collect(<span class="va">self</span>)</span>
-<span id="cb25-25"><a href="#cb25-25"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-25"><a href="#cb25-25"></a>        <span class="va">self</span>.agents.shuffle_do(<span class="st">"step"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we turn to the agent class. The new version defines methods to <code>move()</code> and to <code>give_money()</code>. Within the <code>move</code> method, we define that the agent could move to a neighbouring cell. With mesa, it is possible to define a couple of types of neighbourhoods: Moore and Von Neumann. In this case, we use the Moore neighbourghood (see <a href="#fig-moore-nbhd" class="quarto-xref">Figure&nbsp;<span>7.9</span></a>).</p>
 <div id="fig-moore-nbhd" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -1037,8 +1041,8 @@ Figure&nbsp;7.9: Moore neighbourhood
 <li>Remove the agent itself from the list of neighbours, so that an agent will not give money to itself.</li>
 <li>Choose one of the neighbouring agents at random and give money to it.</li>
 </ol>
-<div id="a14a8b51" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
+<div id="837eb1b5" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">class</span> MoneyAgent(mesa.Agent):</span>
 <span id="cb26-2"><a href="#cb26-2"></a>    <span class="co">"""An agent with fixed initial wealth."""</span></span>
 <span id="cb26-3"><a href="#cb26-3"></a></span>
 <span id="cb26-4"><a href="#cb26-4"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model):</span>
@@ -1067,14 +1071,14 @@ Figure&nbsp;7.9: Moore neighbourhood
 <span id="cb26-27"><a href="#cb26-27"></a>    <span class="kw">def</span> step(<span class="va">self</span>):</span>
 <span id="cb26-28"><a href="#cb26-28"></a>        <span class="va">self</span>.move()</span>
 <span id="cb26-29"><a href="#cb26-29"></a>        <span class="cf">if</span> <span class="va">self</span>.wealth <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb26-30"><a href="#cb26-30"></a>            <span class="va">self</span>.give_money()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-30"><a href="#cb26-30"></a>            <span class="va">self</span>.give_money()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="data-collection-2" class="level3">
 <h3 class="anchored" data-anchor-id="data-collection-2">Data Collection</h3>
 <p>As an example of how the code works, the next code cell runs a <em>single</em> iteration with 100 agents in a 10x10 grid (see <a href="#fig-gini-coef-2" class="quarto-xref">Figure&nbsp;<span>7.10</span></a>).</p>
 <div id="cell-fig-gini-coef-2" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>model <span class="op">=</span> MoneyModel(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>model <span class="op">=</span> MoneyModel(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
 <span id="cb27-2"><a href="#cb27-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb27-3"><a href="#cb27-3"></a>    model.step()</span>
 <span id="cb27-4"><a href="#cb27-4"></a></span>
@@ -1082,12 +1086,12 @@ Figure&nbsp;7.9: Moore neighbourhood
 <span id="cb27-6"><a href="#cb27-6"></a></span>
 <span id="cb27-7"><a href="#cb27-7"></a><span class="co"># Plot the Gini coefficient over time</span></span>
 <span id="cb27-8"><a href="#cb27-8"></a>g <span class="op">=</span> sns.lineplot(data<span class="op">=</span>gini)</span>
-<span id="cb27-9"><a href="#cb27-9"></a>g.<span class="bu">set</span>(title<span class="op">=</span><span class="st">"Gini Coefficient over Time"</span>, ylabel<span class="op">=</span><span class="st">"Gini Coefficient"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-9"><a href="#cb27-9"></a>g.<span class="bu">set</span>(title<span class="op">=</span><span class="st">"Gini Coefficient over Time"</span>, ylabel<span class="op">=</span><span class="st">"Gini Coefficient"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-gini-coef-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gini-coef-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-gini-coef-2-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-gini-coef-2-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="589" height="431">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gini-coef-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.10: Evolution of Gini coefficient
@@ -1099,8 +1103,8 @@ Figure&nbsp;7.10: Evolution of Gini coefficient
 <div id="exm-boltzmann-6" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.8 (Boltzmann model data collection)</strong></span> </p>
 <p>Now we run the spatial model for 50 iterations.</p>
-<div id="3fb025bf" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>params <span class="op">=</span> {<span class="st">"width"</span>: <span class="dv">10</span>, <span class="st">"height"</span>: <span class="dv">10</span>, <span class="st">"N"</span>: <span class="bu">range</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">5</span>)}</span>
+<div id="bba6a85e" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>params <span class="op">=</span> {<span class="st">"width"</span>: <span class="dv">10</span>, <span class="st">"height"</span>: <span class="dv">10</span>, <span class="st">"N"</span>: <span class="bu">range</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">5</span>)}</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a>results <span class="op">=</span> mesa.batch_run(</span>
 <span id="cb28-4"><a href="#cb28-4"></a>    MoneyModel,</span>
@@ -1110,11 +1114,11 @@ Figure&nbsp;7.10: Evolution of Gini coefficient
 <span id="cb28-8"><a href="#cb28-8"></a>    number_processes<span class="op">=</span><span class="dv">1</span>,</span>
 <span id="cb28-9"><a href="#cb28-9"></a>    data_collection_period<span class="op">=</span><span class="dv">1</span><span class="co">#,</span></span>
 <span id="cb28-10"><a href="#cb28-10"></a>    <span class="co">#display_progress=True,</span></span>
-<span id="cb28-11"><a href="#cb28-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-11"><a href="#cb28-11"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>For a visualisation of the results, we shall compute the mean Gini coefficient at each time step, grouped by <code>N</code>.</p>
 <div id="cell-fig-gini-over-time-steps" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb29-2"><a href="#cb29-2"></a>grp_by_step <span class="op">=</span> results_df.Gini.groupby([results_df.Step, results_df.N]).describe()</span>
 <span id="cb29-3"><a href="#cb29-3"></a>grp_by_step.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb29-4"><a href="#cb29-4"></a></span>
@@ -1127,12 +1131,12 @@ Figure&nbsp;7.10: Evolution of Gini coefficient
 <span id="cb29-11"><a href="#cb29-11"></a>plt.xlabel(<span class="st">'Step'</span>)</span>
 <span id="cb29-12"><a href="#cb29-12"></a>plt.ylabel(<span class="st">'Gini'</span>)</span>
 <span id="cb29-13"><a href="#cb29-13"></a>plt.title(<span class="st">'Gini vs Step by N (number of agents)'</span>)<span class="op">;</span></span>
-<span id="cb29-14"><a href="#cb29-14"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-14"><a href="#cb29-14"></a>plt.legend()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-gini-over-time-steps" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gini-over-time-steps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-gini-over-time-steps-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img">
+<img src="07-simulation_files/figure-html/fig-gini-over-time-steps-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="821" height="523">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gini-over-time-steps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.11: Evolution of Gini over time steps
@@ -1146,8 +1150,8 @@ Figure&nbsp;7.11: Evolution of Gini over time steps
 <p>The next example shows how we can use <code>mesa</code> to generate an interactive visualisation of how the model evolves step-by-step.</p>
 <div id="exm-boltzmann-7" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.9 (Boltzmann model visualisation)</strong></span> </p>
-<div id="44e322f5" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="im">from</span> mesa.visualization <span class="im">import</span> SolaraViz, SpaceRenderer, make_plot_component</span>
+<div id="0adf1730" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="im">from</span> mesa.visualization <span class="im">import</span> SolaraViz, SpaceRenderer, make_plot_component</span>
 <span id="cb30-2"><a href="#cb30-2"></a><span class="im">from</span> mesa.visualization.components <span class="im">import</span> AgentPortrayalStyle</span>
 <span id="cb30-3"><a href="#cb30-3"></a></span>
 <span id="cb30-4"><a href="#cb30-4"></a><span class="kw">def</span> agent_portrayal(agent):</span>
@@ -1188,7 +1192,7 @@ Figure&nbsp;7.11: Evolution of Gini over time steps
 <span id="cb30-39"><a href="#cb30-39"></a>)</span>
 <span id="cb30-40"><a href="#cb30-40"></a></span>
 <span id="cb30-41"><a href="#cb30-41"></a><span class="co"># This is required to render the visualization in the Jupyter notebook</span></span>
-<span id="cb30-42"><a href="#cb30-42"></a>page</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-42"><a href="#cb30-42"></a>page</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You should observe an application just like the one in #fig-mesa-vis.</p>
 <div id="fig-mesa-vis" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -1222,24 +1226,24 @@ Figure&nbsp;7.12: Mesa visualisation
 <section id="n-gram-models" class="level3">
 <h3 class="anchored" data-anchor-id="n-gram-models">N-gram models</h3>
 <p>Here is an example of how we can simulate from distributions to generate random (nonsensical) sentences that are “similar” to actual sentences from a text. If your code returns an error, you may have to download the <code>genesis</code> text first (using the commented out code).</p>
-<div id="9fb2cfdf" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="co">#nltk.download('genesis')</span></span>
+<div id="f9f780c3" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="co">#nltk.download('genesis')</span></span>
 <span id="cb31-2"><a href="#cb31-2"></a></span>
 <span id="cb31-3"><a href="#cb31-3"></a>kjv <span class="op">=</span> nltk.corpus.genesis.words(<span class="st">'english-kjv.txt'</span>)</span>
 <span id="cb31-4"><a href="#cb31-4"></a>bg <span class="op">=</span> nltk.bigrams(kjv)</span>
-<span id="cb31-5"><a href="#cb31-5"></a>cfd <span class="op">=</span> nltk.ConditionalFreqDist(bg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-5"><a href="#cb31-5"></a>cfd <span class="op">=</span> nltk.ConditionalFreqDist(bg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The object <code>cfd</code> contains information on the distribution of words that come after. For instance, these are the words that come after “she”:</p>
-<div id="8715f000" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>cfd[<span class="st">'she'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4b930f49" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>cfd[<span class="st">'she'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>FreqDist({'said': 22, 'was': 14, 'bare': 14, 'called': 13, 'conceived': 11, 'had': 11, 'saw': 6, 'shall': 5, 'is': 5, 'went': 5, ...})</code></pre>
 </div>
 </div>
 <p>The object <code>kjv</code> contains all the words and punctuations from the King James Bible. Here are the first 20 words:</p>
-<div id="92a7ae44" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>, compact<span class="op">=</span><span class="va">True</span>,)</span>
-<span id="cb34-2"><a href="#cb34-2"></a>pp.pprint(<span class="st">' '</span>.join(kjv[:<span class="dv">20</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e72708c1" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>, compact<span class="op">=</span><span class="va">True</span>,)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>pp.pprint(<span class="st">' '</span>.join(kjv[:<span class="dv">20</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>('In the beginning God created the heaven and the earth . And the earth was '
  'without form , and void')</code></pre>
@@ -1247,15 +1251,15 @@ Figure&nbsp;7.12: Mesa visualisation
 </div>
 <p>Next, we extract all bigrams and create a dictionary of frequency distributions. Each frequency distribution tabulates the occurences of the <em>next</em> word.</p>
 <p>Suppose we are interested in what words/tokens come after the word ‘And’ in the bible:</p>
-<div id="31307a2a" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>pp.pprint(cfd[<span class="st">'And'</span>].keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="69f0527c" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>pp.pprint(cfd[<span class="st">'And'</span>].keys())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>dict_keys(['the', 'God', 'let', 'to', 'on', 'every', 'out', 'a', 'Adam', 'they', 'he', 'when', 'I', 'unto', 'she', 'Abel', 'in', 'Cain', 'now', 'Lamech', 'Adah', 'his', 'Zillah', 'all', 'Seth', 'Enos', 'Cainan', 'Mahalaleel', 'Jared', 'Enoch', 'Methuselah', 'Noah', 'it', 'this', ',', 'of', 'take', 'surely', 'you', 'with', 'Ham', 'Shem', 'Cush', 'Resen', 'Mizraim', 'Pathrusim', 'Canaan', 'Arphaxad', 'Joktan', 'Hadoram', 'Obal', 'Ophir', 'their', 'Salah', 'Eber', 'Peleg', 'Reu', 'Serug', 'Nahor', 'Terah', 'Haran', 'Abram', 'there', 'Pharaoh', 'Lot', 'Melchizedek', 'blessed', 'also', 'thou', 'Sarai', 'Hagar', 'ye', 'Abraham', 'as', 'Ishmael', 'said', 'Sarah', 'while', 'Abimelech', 'yet', 'Isaac', 'Chesed', 'Bethuel', 'Ephron', 'after', 'if', 'Rebekah', 'my', 'before', 'her', 'Jokshan', 'these', 'Mishma', 'Jacob', 'Esau', 'make', 'by', 'tarry', 'give', 'that', 'thy', 'thither', 'Laban', 'Leah', 'Bilhah', 'Rachel', 'Zilpah', 'Reuben', 'afterwards', 'your', 'hast', 'Mizpah', 'early', 'so', 'say', 'Dinah', 'Shechem', 'Hamor', 'Israel', 'Bashemath', 'Aholibamah', 'Timna', 'Dishon', 'Bela', 'Jobab', 'Husham', 'Hadad', 'Samlah', 'Saul', 'Baalhanan', 'Joseph', 'Judah', 'Er', 'Onan', 'Tamar', 'afterward', 'we', 'for', 'bring', 'other', 'put', 'our', 'told', 'one', 'forty'])</code></pre>
 </div>
 </div>
 <p>Thus ‘the’ is the most likely word after ‘And’. The second most likely pairing would be ‘And the’, and so on. We can convert this into a pmf, just by normalising to ensure that it sums to 1. Then we are ready to generate a pairing once we know that the first word is ‘And’. With the second word, we turn to its frequency distribution and simulate the third word, and so on.</p>
-<div id="6dee1ee8" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">1361</span>)</span>
+<div id="6addd2b8" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a>rng <span class="op">=</span> default_rng(<span class="dv">1361</span>)</span>
 <span id="cb38-2"><a href="#cb38-2"></a></span>
 <span id="cb38-3"><a href="#cb38-3"></a><span class="kw">def</span> generate_model(cfdist, word, num<span class="op">=</span><span class="dv">15</span>):</span>
 <span id="cb38-4"><a href="#cb38-4"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num):</span>
@@ -1266,7 +1270,7 @@ Figure&nbsp;7.12: Mesa visualisation
 <span id="cb38-9"><a href="#cb38-9"></a>        pp <span class="op">=</span> pp <span class="op">/</span> np.<span class="bu">sum</span>(pp)</span>
 <span id="cb38-10"><a href="#cb38-10"></a>        word <span class="op">=</span> rng.choice(choices, size<span class="op">=</span><span class="dv">1</span>, p <span class="op">=</span> pp)[<span class="dv">0</span>]</span>
 <span id="cb38-11"><a href="#cb38-11"></a>        </span>
-<span id="cb38-12"><a href="#cb38-12"></a>generate_model(cfd, <span class="st">'God'</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-12"><a href="#cb38-12"></a>generate_model(cfd, <span class="st">'God'</span>, <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>God amongst the daughter of his hands , to Jacob </code></pre>
 </div>
@@ -1299,8 +1303,8 @@ determines my Type I error.</li>
 <div id="exm-power-1" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 7.10 (Power analysis with simulation)</strong></span> </p>
 <p>First, we write a function that will generate two groups of data, and then computes and returns the decision for a <span class="math inline">\(t\)</span>-test.</p>
-<div id="cb22fee4" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>rng_power <span class="op">=</span> default_rng(<span class="dv">4545</span>)</span>
+<div id="6091c02c" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>rng_power <span class="op">=</span> default_rng(<span class="dv">4545</span>)</span>
 <span id="cb40-2"><a href="#cb40-2"></a><span class="kw">def</span> generate_one_sample(alpha, delta_m, sd1, n):</span>
 <span id="cb40-3"><a href="#cb40-3"></a>    X <span class="op">=</span> rng_power.standard_normal(n)<span class="op">*</span>sd1</span>
 <span id="cb40-4"><a href="#cb40-4"></a>    Y <span class="op">=</span> rng_power.standard_normal(n)<span class="op">*</span>sd1 <span class="op">+</span> delta_m</span>
@@ -1309,11 +1313,11 @@ determines my Type I error.</li>
 <span id="cb40-7"><a href="#cb40-7"></a>    <span class="cf">if</span> ts2.pvalue <span class="op">&lt;</span> alpha:</span>
 <span id="cb40-8"><a href="#cb40-8"></a>        <span class="cf">return</span> <span class="dv">1</span> <span class="co"># 1 means reject H0</span></span>
 <span id="cb40-9"><a href="#cb40-9"></a>    <span class="cf">else</span>:</span>
-<span id="cb40-10"><a href="#cb40-10"></a>        <span class="cf">return</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-10"><a href="#cb40-10"></a>        <span class="cf">return</span> <span class="dv">0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we run multiple iterations of that function and plot a graph depicting how the rejection probability varies with the sample size.</p>
 <div id="cell-fig-power" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>n_vals <span class="op">=</span> np.arange(<span class="dv">5</span>, <span class="dv">50</span>, step<span class="op">=</span><span class="dv">4</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a>n_vals <span class="op">=</span> np.arange(<span class="dv">5</span>, <span class="dv">50</span>, step<span class="op">=</span><span class="dv">4</span>)</span>
 <span id="cb41-2"><a href="#cb41-2"></a></span>
 <span id="cb41-3"><a href="#cb41-3"></a>power_est <span class="op">=</span> []</span>
 <span id="cb41-4"><a href="#cb41-4"></a><span class="cf">for</span> n_ <span class="kw">in</span> n_vals:</span>
@@ -1323,12 +1327,12 @@ determines my Type I error.</li>
 <span id="cb41-8"><a href="#cb41-8"></a>    </span>
 <span id="cb41-9"><a href="#cb41-9"></a>ax <span class="op">=</span> plt.plot(n_vals, power_est, <span class="st">'go-'</span>)</span>
 <span id="cb41-10"><a href="#cb41-10"></a>plt.hlines(<span class="fl">0.9</span>, n_vals[<span class="dv">0</span>], n_vals[<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'b'</span>, linestyles<span class="op">=</span><span class="st">'dotted'</span>)</span>
-<span id="cb41-11"><a href="#cb41-11"></a>plt.title(<span class="st">'Power Estimates'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-11"><a href="#cb41-11"></a>plt.title(<span class="st">'Power Estimates'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-power" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="ht" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-power-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="07-simulation_files/figure-html/fig-power-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="07-simulation_files/figure-html/fig-power-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="571" height="431">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-power-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.13: Power analysis using simulation
@@ -1412,7 +1416,7 @@ Figure&nbsp;7.13: Power analysis using simulation
 </ol>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-dragulescu2002statistical" class="csl-entry" role="listitem">
 Dragulescu, Adrian A, and Victor M Yakovenko. 2002. <span>“Statistical Mechanics of Money, Income, and Wealth: A Short Survey.”</span> <em>arXiv Preprint Cond-Mat/0211175</em>.
 </div>
@@ -1421,242 +1425,246 @@ Dragulescu, Adrian A, and Victor M Yakovenko. 2002. <span>“Statistical Mechani
 
 </main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"18700398d3894d418dd6f63928334d7f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"199727f0b3e547f994f71efa9890d1b2":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_7b6ebeea95054bcfba90a8fed6c1f99b","placeholder":"​","style":"IPY_MODEL_93aff3fe822e43f18d911f62e0506193","tabbable":null,"tooltip":null,"value":" 50/50 [00:00&lt;00:00, 139.39it/s]"}},"36a38783cd974240b09c4b6bd776ab36":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"3a46716154494df2b69c9eac53d2038c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"42cfe67543fd4910938993635798bdd0":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"4b0a837287f04621aa58ae6aeda1ce26":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"58158dfe514b488b82b4e16a14c4ad5f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_7cf0bf545f2a4090a6f9335b2cc920f5","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_a76dbd67236e490cb7e93f366bb08e1f","tabbable":null,"tooltip":null,"value":50}},"72ec5cc2243f4c86a648ced2e70e61d2":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_f74c1c74f4af42de8c7a09940905d809","IPY_MODEL_827a702d217446349d70dace80c077ea","IPY_MODEL_199727f0b3e547f994f71efa9890d1b2"],"layout":"IPY_MODEL_73edf3b3fbe44b91ad2386d63d0501be","tabbable":null,"tooltip":null}},"73edf3b3fbe44b91ad2386d63d0501be":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"7b6ebeea95054bcfba90a8fed6c1f99b":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"7cf0bf545f2a4090a6f9335b2cc920f5":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"827a702d217446349d70dace80c077ea":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_36a38783cd974240b09c4b6bd776ab36","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_3a46716154494df2b69c9eac53d2038c","tabbable":null,"tooltip":null,"value":50}},"88abc96b35534d6abbe82194618810bc":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"93aff3fe822e43f18d911f62e0506193":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"a76dbd67236e490cb7e93f366bb08e1f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"aa7d8d059476460aabc6d085c3bc1081":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"c6eb01d064e0424c993234bf44994c17":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_ee58acc31e78410f8a0ffeca03f46f37","placeholder":"​","style":"IPY_MODEL_4b0a837287f04621aa58ae6aeda1ce26","tabbable":null,"tooltip":null,"value":"100%"}},"ccefa834eada42229701c46edee22424":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_c6eb01d064e0424c993234bf44994c17","IPY_MODEL_58158dfe514b488b82b4e16a14c4ad5f","IPY_MODEL_f3660904830943aca66ee2f4decdce38"],"layout":"IPY_MODEL_aa7d8d059476460aabc6d085c3bc1081","tabbable":null,"tooltip":null}},"ee58acc31e78410f8a0ffeca03f46f37":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"f3660904830943aca66ee2f4decdce38":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_42cfe67543fd4910938993635798bdd0","placeholder":"​","style":"IPY_MODEL_fad63ccab0cd470e9b4fa87615d40dc8","tabbable":null,"tooltip":null,"value":" 50/50 [00:00&lt;00:00, 136.38it/s]"}},"f74c1c74f4af42de8c7a09940905d809":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_88abc96b35534d6abbe82194618810bc","placeholder":"​","style":"IPY_MODEL_18700398d3894d418dd6f63928334d7f","tabbable":null,"tooltip":null,"value":"100%"}},"fad63ccab0cd470e9b4fa87615d40dc8":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}}},"version_major":2,"version_minor":0}
+{"state":{"0ad71da80a6148eb8a8f16fdb8af16ad":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_cb5c9a176c254f4f8a9fc9be33dd251f","placeholder":"​","style":"IPY_MODEL_d415be2d09ef432a9bca586de03ea76f","tabbable":null,"tooltip":null,"value":" 50/50 [00:01&lt;00:00, 47.96it/s]"}},"1cf56dcccc914c1eaf796b61e7e2d0f5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_7f9029e546d142a5b8e6315cfb34774e","IPY_MODEL_6b2614d15efe4bdfb5481ba05e84695f","IPY_MODEL_76b1073f3d7544c2b6bb8764e8f02a70"],"layout":"IPY_MODEL_bfa95f4be6de4d1daff8a088af3d84f7","tabbable":null,"tooltip":null}},"21f1850ff6bc4872b7c69a293f3c4cb4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"247df7d23415436880c4f9ba61f9dfab":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_498b9082b13e46a2a1c110ebc7f2353c","placeholder":"​","style":"IPY_MODEL_5124cc9100d142e18f8fd586d7e7b1e1","tabbable":null,"tooltip":null,"value":"100%"}},"498b9082b13e46a2a1c110ebc7f2353c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5124cc9100d142e18f8fd586d7e7b1e1":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"55ea327f68794ea69a32d8f3cbd81765":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"6b2614d15efe4bdfb5481ba05e84695f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_75a1dad9c9bb427a8397ce7e65c4e3c8","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_55ea327f68794ea69a32d8f3cbd81765","tabbable":null,"tooltip":null,"value":50}},"75a1dad9c9bb427a8397ce7e65c4e3c8":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"76899d6dc2ec4fb5bbe0bc930b1254d9":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"76b1073f3d7544c2b6bb8764e8f02a70":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_76899d6dc2ec4fb5bbe0bc930b1254d9","placeholder":"​","style":"IPY_MODEL_b2abdbeeff06415793c8efe94ab9e42e","tabbable":null,"tooltip":null,"value":" 50/50 [00:00&lt;00:00, 51.70it/s]"}},"77fc6c4a76f6461e92251d78070fd863":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_d69ca6b9127749609a75770e150a02c4","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_aa720b7106f040d190ff2272c17c06a6","tabbable":null,"tooltip":null,"value":50}},"7f9029e546d142a5b8e6315cfb34774e":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_21f1850ff6bc4872b7c69a293f3c4cb4","placeholder":"​","style":"IPY_MODEL_fff33b0f305d406a927143a8878dad73","tabbable":null,"tooltip":null,"value":"100%"}},"aa720b7106f040d190ff2272c17c06a6":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"b2abdbeeff06415793c8efe94ab9e42e":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"bd774c7c230e4b20b6d3cde471851c45":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"bfa95f4be6de4d1daff8a088af3d84f7":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"cb5c9a176c254f4f8a9fc9be33dd251f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d415be2d09ef432a9bca586de03ea76f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"d69ca6b9127749609a75770e150a02c4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"ea0fb4377f1c4baca01be7b163428cd4":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_247df7d23415436880c4f9ba61f9dfab","IPY_MODEL_77fc6c4a76f6461e92251d78070fd863","IPY_MODEL_0ad71da80a6148eb8a8f16fdb8af16ad"],"layout":"IPY_MODEL_bd774c7c230e4b20b6d3cde471851c45","tabbable":null,"tooltip":null}},"fff33b0f305d406a927143a8878dad73":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1664,185 +1672,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./06-ts.html" class="pagination-link" aria-label="Time Series Analysis">

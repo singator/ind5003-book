@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>8&nbsp; Supervised Learning – Data Analytics for Sense-Making</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -21,8 +24,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +37,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -58,7 +62,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -88,15 +91,16 @@ div.csl-indent {
 <link href="./07-simulation.html" rel="prev">
 <script src="site_libs/cookie-consent/cookie-consent.js"></script>
 <link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2b3a058f3f598cb5398490cdc55809d4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -138,10 +142,10 @@ gtag('config', 'G-K3T2VC9F47', { 'anonymize_ip': true});
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
   "notice_banner_type":"simple",
-  "consent_type":"implied",
+  "consent_type":"express",
   "palette":"light",
   "language":"en",
-  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "page_load_consent_levels":["strictly-necessary"],
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
@@ -153,7 +157,7 @@ cookieconsent.run({
   
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -166,7 +170,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -185,7 +189,7 @@ window.Quarto = {
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -436,8 +440,8 @@ x_{n,1} &amp; x_{n,2} &amp; \ldots &amp; x_{n,d}
 y_1 &amp; y_2 &amp; \ldots &amp; y_n
 \end{bmatrix}^T
 \]</span></p>
-<div id="5e3994bf" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div id="8a39d907" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
@@ -458,7 +462,7 @@ y_1 &amp; y_2 &amp; \ldots &amp; y_n
 <span id="cb1-19"><a href="#cb1-19"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> permutation_importance</span>
 <span id="cb1-20"><a href="#cb1-20"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsRegressor</span>
 <span id="cb1-21"><a href="#cb1-21"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> PartialDependenceDisplay, partial_dependence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> PartialDependenceDisplay, partial_dependence</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -584,10 +588,10 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <li><code>time</code>: follow-up period (days)</li>
 <li><code>DEATH_EVENT</code>: if the patient died during the follow-up period (boolean). This is the categorical outcome that we wish to predict.</li>
 </ul>
-<div id="b29cc6a7" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hf <span class="op">=</span> pd.read_csv(<span class="st">"data/heart+failure+clinical+records/"</span><span class="op">+</span></span>
+<div id="de825304" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>hf <span class="op">=</span> pd.read_csv(<span class="st">"data/heart+failure+clinical+records/"</span><span class="op">+</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>                 <span class="st">"heart_failure_clinical_records_dataset.csv"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="bu">print</span>(hf.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="bu">print</span>(hf.head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    age  anaemia  creatinine_phosphokinase  diabetes  ejection_fraction  \
 0  75.0        0                       582         0                 20   
@@ -616,22 +620,22 @@ MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|
 <h3 class="anchored" data-anchor-id="sec-08-dec-tree">Decision Tree</h3>
 <p>To begin our journey into supervised learning, we shall fit a decision tree to this dataset. A decision tree consists of a hierarchal set of rules, that when followed, will return a prediction for an individual observation. Each is a (typically binary) split of one of the features in the observation. One of the main advantages of decision tree classifiers is that they are easy to interpret. However, some disadvantages are that: They tend to overfit to a dataset, and they have high variability. This latter point means that a small change in the training data <em>could</em> lead to vastly different predictions. Although in this example we focus on classification, a decision tree can also be used for regression.</p>
 <p>In this first example, we shall only split the data into a test and training set. We shall fit the tree using the training set, and then apply the model to the test set.</p>
-<div id="408d6e44" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>y <span class="op">=</span> hf.DEATH_EVENT</span>
+<div id="17b140a9" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>y <span class="op">=</span> hf.DEATH_EVENT</span>
 <span id="cb4-2"><a href="#cb4-2"></a>X <span class="op">=</span> hf.iloc[:, <span class="dv">0</span>:<span class="dv">12</span>]</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a>clf <span class="op">=</span> tree.DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4"></a>clf <span class="op">=</span> tree.DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>max_depth</code> of a decision is the maximum number of splits down each branch of a tree. If it is not specified, it is possible that the splits continue until the terminal nodes are homogeneous. This could result in overfitting of the tree to this particular dataset.</p>
-<div id="43f068c9" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>X_train,X_test,y_train,y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, </span>
-<span id="cb5-2"><a href="#cb5-2"></a>                                                 random_state<span class="op">=</span><span class="dv">41</span>, stratify<span class="op">=</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="162d9ff0" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>X_train,X_test,y_train,y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>                                                 random_state<span class="op">=</span><span class="dv">41</span>, stratify<span class="op">=</span>y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>train_test_split</code> divides the data into a training and test set. When doing so, the function will attempt to ensure that the proportion of classes in both the training and test sets are roughly equal to the proportion in the overall dataset.</p>
-<div id="63d0584f" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the overall data is </span><span class="sc">{</span>y<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
+<div id="d64e6a67" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the overall data is </span><span class="sc">{</span>y<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the training data is </span><span class="sc">{</span>y_train<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the test data is </span><span class="sc">{</span>y_test<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="bu">print</span>(<span class="ss">f"The proportion of 1's in the test data is </span><span class="sc">{</span>y_test<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The proportion of 1's in the overall data is 0.321.
 The proportion of 1's in the training data is 0.321.
@@ -641,12 +645,12 @@ The proportion of 1's in the test data is 0.320.</code></pre>
 <div id="exm-heart-failure-2" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.2 (Heart failure decision tree)</strong></span> </p>
 <p>All estimators in <code>sklearn</code> have a <code>.fit()</code> method. This routine will use the data to estimate the optimal parameters for the particular model, which in this case is a decision tree.</p>
-<div id="0b3798d9" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>clf.fit(X_train, y_train,)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="7048044d" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>clf.fit(X_train, y_train,)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice that when we call the <code>.fit()</code> method, there is no output object returned; it is just that the parameters in the <code>clf</code> object are updated. We can now use the trained model to make predictions. In this case, we attempt to predict <code>DEATH_EVENT</code> for a randomly selected row in the training data.</p>
-<div id="db69386f" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>clf.predict_proba(X_train.sample(random_state<span class="op">=</span><span class="dv">3005</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b9ff310b" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>clf.predict_proba(X_train.sample(random_state<span class="op">=</span><span class="dv">3005</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>array([[0.66666667, 0.33333333]])</code></pre>
 </div>
@@ -654,13 +658,13 @@ The proportion of 1's in the test data is 0.320.</code></pre>
 </div>
 <p>We can visualise the fitted decision tree as follows. This is an important step in understanding and interpreting the fitted model.</p>
 <div id="cell-fig-heart-dt" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>plt.figure(figsize <span class="op">=</span>(<span class="dv">18</span>, <span class="dv">6</span>))</span>
-<span id="cb11-2"><a href="#cb11-2"></a>tree.plot_tree(clf,feature_names<span class="op">=</span>X.columns, filled<span class="op">=</span><span class="va">True</span>, max_depth<span class="op">=</span><span class="dv">2</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>plt.figure(figsize <span class="op">=</span>(<span class="dv">18</span>, <span class="dv">6</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>tree.plot_tree(clf,feature_names<span class="op">=</span>X.columns, filled<span class="op">=</span><span class="va">True</span>, max_depth<span class="op">=</span><span class="dv">2</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-heart-dt" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-heart-dt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-heart-dt-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="08-supervised_files/figure-html/fig-heart-dt-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="1358" height="463">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heart-dt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.2: Heart failure decision tree
@@ -684,7 +688,7 @@ p_0(1 - p_0)
 <p><span class="theorem-title"><strong>Example 8.3 (Heart failure classification scores)</strong></span> </p>
 <p>Performance of classification algorithms are usually presented in the form of a <em>confusion matrix</em>. First we display the results for the training set in <a href="#fig-confusion-training" class="quarto-xref">Figure&nbsp;<span>8.3</span></a>.</p>
 <div id="cell-fig-confusion-training" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>y_pred_train <span class="op">=</span> clf.predict(X_train)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>y_pred_train <span class="op">=</span> clf.predict(X_train)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>ConfusionMatrixDisplay.from_predictions(y_train, y_pred_train, </span>
 <span id="cb12-3"><a href="#cb12-3"></a>                                        text_kw<span class="op">=</span>{<span class="st">'size'</span>: <span class="st">'xx-large'</span>},</span>
 <span id="cb12-4"><a href="#cb12-4"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
@@ -695,7 +699,7 @@ p_0(1 - p_0)
 <span id="cb12-9"><a href="#cb12-9"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
 <span id="cb12-10"><a href="#cb12-10"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
 <span id="cb12-11"><a href="#cb12-11"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb12-12"><a href="#cb12-12"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="ss">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ##: For training set:
@@ -710,7 +714,7 @@ The f1-score (for cat. 1) is 0.882
 <div id="fig-confusion-training" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-confusion-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-confusion-training-output-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="08-supervised_files/figure-html/fig-confusion-training-output-2.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="504" height="429">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.3: Confusion matrix, training set
@@ -721,7 +725,7 @@ Figure&nbsp;8.3: Confusion matrix, training set
 </div>
 <p>Next, we display the results for the test set in <a href="#fig-confusion-test" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>.</p>
 <div id="cell-fig-confusion-test" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>y_pred_test <span class="op">=</span> clf.predict(X_test)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>y_pred_test <span class="op">=</span> clf.predict(X_test)</span>
 <span id="cb14-2"><a href="#cb14-2"></a>ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test,  </span>
 <span id="cb14-3"><a href="#cb14-3"></a>                                        text_kw<span class="op">=</span>{<span class="st">'size'</span>: <span class="st">'xx-large'</span>},</span>
 <span id="cb14-4"><a href="#cb14-4"></a>                                        labels<span class="op">=</span>clf.classes_, cmap<span class="op">=</span><span class="st">'bone'</span>)<span class="op">;</span></span>
@@ -732,22 +736,22 @@ Figure&nbsp;8.3: Confusion matrix, training set
 <span id="cb14-9"><a href="#cb14-9"></a><span class="ss">The precision (for cat. 1) is </span><span class="sc">{</span>precision_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
 <span id="cb14-10"><a href="#cb14-10"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
 <span id="cb14-11"><a href="#cb14-11"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="ss">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ##: For test set:
 ----
-The accuracy (for cat. 1) is 0.747
-The precision (for cat. 1) is 0.619
-The recall (for cat. 1) is 0.542
-The f1-score (for cat. 1) is 0.578
+The accuracy (for cat. 1) is 0.760
+The precision (for cat. 1) is 0.636
+The recall (for cat. 1) is 0.583
+The f1-score (for cat. 1) is 0.609
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div id="fig-confusion-test" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-confusion-test-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-confusion-test-output-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="08-supervised_files/figure-html/fig-confusion-test-output-2.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="496" height="429">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-test-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.4: Confusion matrix, test set
@@ -777,7 +781,7 @@ Figure&nbsp;8.4: Confusion matrix, test set
 <p><span class="theorem-title"><strong>Example 8.4 (Heart failure permutation based)</strong></span> </p>
 <p>Here is how we can use <code>sklearn</code> to obtain the importance of variables based on permutating the values to break the relationship.</p>
 <div id="cell-fig-var-impt-perm" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>result <span class="op">=</span> permutation_importance(clf, X_test, y_test,  </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>result <span class="op">=</span> permutation_importance(clf, X_test, y_test,  </span>
 <span id="cb16-2"><a href="#cb16-2"></a>                                n_repeats<span class="op">=</span><span class="dv">30</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb16-3"><a href="#cb16-3"></a></span>
 <span id="cb16-4"><a href="#cb16-4"></a>sorted_importances_idx <span class="op">=</span> result.importances_mean.argsort()</span>
@@ -789,12 +793,12 @@ Figure&nbsp;8.4: Confusion matrix, test set
 <span id="cb16-10"><a href="#cb16-10"></a>ax.set_title(<span class="st">"Permutation Importances (test set)"</span>)</span>
 <span id="cb16-11"><a href="#cb16-11"></a>ax.axvline(x<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">"k"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
 <span id="cb16-12"><a href="#cb16-12"></a>ax.set_xlabel(<span class="st">"Decrease in accuracy score"</span>)</span>
-<span id="cb16-13"><a href="#cb16-13"></a>ax.figure.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-13"><a href="#cb16-13"></a>ax.figure.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-var-impt-perm" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-var-impt-perm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-var-impt-perm-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="08-supervised_files/figure-html/fig-var-impt-perm-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="661" height="470">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-var-impt-perm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.5: Variable importance, permutation approach
@@ -811,15 +815,15 @@ Figure&nbsp;8.5: Variable importance, permutation approach
 <div id="exm-heart-failure-5" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.5 (Heart failure partial dependence)</strong></span> </p>
 <p>In order to obtain PDP plots, the features need to be float-point, not integer. The following code snippets converts <code>creatinine_phosphokinase</code> and <code>serum_sodium</code> into floats.</p>
-<div id="b1805365" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>X_train2 <span class="op">=</span> X_train.copy()</span>
+<div id="c86400fd" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>X_train2 <span class="op">=</span> X_train.copy()</span>
 <span id="cb17-2"><a href="#cb17-2"></a></span>
 <span id="cb17-3"><a href="#cb17-3"></a>X_train2[<span class="st">'creatinine_phosphokinase'</span>] <span class="op">=</span> X_train2[<span class="st">'creatinine_phosphokinase'</span>].astype(<span class="bu">float</span>)</span>
-<span id="cb17-4"><a href="#cb17-4"></a>X_train2[<span class="st">'serum_sodium'</span>] <span class="op">=</span> X_train2[<span class="st">'serum_sodium'</span>].astype(<span class="bu">float</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-4"><a href="#cb17-4"></a>X_train2[<span class="st">'serum_sodium'</span>] <span class="op">=</span> X_train2[<span class="st">'serum_sodium'</span>].astype(<span class="bu">float</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we can create and display the PDP plots for 5 individual features, and one double-feature.</p>
 <div id="cell-fig-var-impt-pdp" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">3</span>, nrows<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">3</span>, nrows<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb18-2"><a href="#cb18-2"></a>features_info <span class="op">=</span> {</span>
 <span id="cb18-3"><a href="#cb18-3"></a>    <span class="st">"features"</span>: [<span class="st">"age"</span>, <span class="st">"creatinine_phosphokinase"</span>, <span class="st">"platelets"</span>, </span>
 <span id="cb18-4"><a href="#cb18-4"></a>                 <span class="st">"serum_creatinine"</span>, <span class="st">"serum_sodium"</span>, (<span class="st">"age"</span>, <span class="st">"serum_creatinine"</span>),</span>
@@ -832,12 +836,12 @@ Figure&nbsp;8.5: Variable importance, permutation approach
 <span id="cb18-11"><a href="#cb18-11"></a>    <span class="op">**</span>features_info,</span>
 <span id="cb18-12"><a href="#cb18-12"></a>    ax<span class="op">=</span>ax,</span>
 <span id="cb18-13"><a href="#cb18-13"></a>    contour_kw <span class="op">=</span> {<span class="st">'cmap'</span>: <span class="st">"Reds"</span>}</span>
-<span id="cb18-14"><a href="#cb18-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-14"><a href="#cb18-14"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-var-impt-pdp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="ht">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-var-impt-pdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-var-impt-pdp-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="ht">
+<img src="08-supervised_files/figure-html/fig-var-impt-pdp-output-1.png" class="quarto-figure quarto-figure-center figure-img" data-fig-pos="ht" width="1163" height="587">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-var-impt-pdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.6: Variable importance, partial dependence
@@ -863,26 +867,26 @@ Figure&nbsp;8.6: Variable importance, partial dependence
 <div id="exm-heart-failure-6" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.6 (Heart failure grid search)</strong></span> </p>
 <p>Earlier, in <a href="#exm-heart-failure-3" class="quarto-xref">Example&nbsp;<span>8.3</span></a>, we noticed that our decision tree had been overfitting to the data. In this example, we try to identify the optimal <code>max_depth</code> parameter for the trees by testing models with different depths, ranging from 1 to 10, and identifying the one with the best generalised error.</p>
-<div id="5eedeb70" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
+<div id="ec14f008" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="co">#list(p_range)</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a>cv_search <span class="op">=</span> GridSearchCV(RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, random_state<span class="op">=</span><span class="dv">21</span>), </span>
 <span id="cb19-4"><a href="#cb19-4"></a>                         return_train_score<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb19-5"><a href="#cb19-5"></a>                         param_grid <span class="op">=</span>{<span class="st">'max_depth'</span>: p_range},</span>
 <span id="cb19-6"><a href="#cb19-6"></a>                         scoring <span class="op">=</span> <span class="st">'accuracy'</span>, cv<span class="op">=</span> <span class="dv">5</span>, verbose<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb19-7"><a href="#cb19-7"></a>cv_search.fit(X_train, y_train)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-7"><a href="#cb19-7"></a>cv_search.fit(X_train, y_train)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 5 folds for each of 10 candidates, totalling 50 fits</code></pre>
 </div>
 </div>
 <p>After calling the <code>.fit()</code> method, the optimal parameters are available for persual:</p>
-<div id="b79ba89d" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>cv_search.best_estimator_<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="299a73e0" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>cv_search.best_estimator_<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>It is also possible, at this point, to extract the training and test scores for each cross-validation set, and to then plot the validation curve.</p>
 <div id="cell-fig-valid-curve" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>train_means <span class="op">=</span> cv_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>train_means <span class="op">=</span> cv_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
 <span id="cb22-2"><a href="#cb22-2"></a>train_sd <span class="op">=</span> cv_search.cv_results_[<span class="st">'std_train_score'</span>]</span>
 <span id="cb22-3"><a href="#cb22-3"></a></span>
 <span id="cb22-4"><a href="#cb22-4"></a>test_means <span class="op">=</span> cv_search.cv_results_[<span class="st">'mean_test_score'</span>]</span>
@@ -896,12 +900,12 @@ Figure&nbsp;8.6: Variable importance, partial dependence
 <span id="cb22-12"><a href="#cb22-12"></a>                 color<span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
 <span id="cb22-13"><a href="#cb22-13"></a></span>
 <span id="cb22-14"><a href="#cb22-14"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)<span class="op">;</span>plt.ylabel(<span class="st">'Accuracy'</span>)<span class="op">;</span></span>
-<span id="cb22-15"><a href="#cb22-15"></a>plt.xlabel(<span class="st">'Complexity'</span>)<span class="op">;</span>plt.title(<span class="st">'Validation Curve'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-15"><a href="#cb22-15"></a>plt.xlabel(<span class="st">'Complexity'</span>)<span class="op">;</span>plt.title(<span class="st">'Validation Curve'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-valid-curve" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-valid-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-valid-curve-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img">
+<img src="08-supervised_files/figure-html/fig-valid-curve-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="597" height="449">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-valid-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.7: Validation curve, random forest
@@ -919,13 +923,13 @@ Figure&nbsp;8.7: Validation curve, random forest
 <div id="exm-heart-failure-7" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.7 (Heart failure random forest classification scores)</strong></span> </p>
 <p>In this example, we use the optimal <code>max_depth</code> to fit a random forest, and assess the test error.</p>
-<div id="d040e9b7" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, max_depth<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">40</span>)</span>
-<span id="cb23-2"><a href="#cb23-2"></a>rf.fit(X_train, y_train)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c332873c" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">20</span>, max_depth<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">40</span>)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>rf.fit(X_train, y_train)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The following code returns the error from the training error.</p>
-<div id="46d26f16" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>y_pred_train <span class="op">=</span> rf.predict(X_train)</span>
+<div id="9d9fedf9" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>y_pred_train <span class="op">=</span> rf.predict(X_train)</span>
 <span id="cb24-2"><a href="#cb24-2"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a><span class="ss">For training set:</span></span>
 <span id="cb24-4"><a href="#cb24-4"></a><span class="ss">-----------------</span></span>
@@ -933,7 +937,7 @@ Figure&nbsp;8.7: Validation curve, random forest
 <span id="cb24-6"><a href="#cb24-6"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
 <span id="cb24-7"><a href="#cb24-7"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
 <span id="cb24-8"><a href="#cb24-8"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_train, y_pred_train)<span class="sc">:.3f}</span></span>
-<span id="cb24-9"><a href="#cb24-9"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="ss">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 For training set:
@@ -946,8 +950,8 @@ The f1-score (for cat. 1) is 0.864
 </div>
 </div>
 <p>Here is the test error.</p>
-<div id="9e1d69b4" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>y_pred_test <span class="op">=</span> rf.predict(X_test)</span>
+<div id="a4a4b1c3" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>y_pred_test <span class="op">=</span> rf.predict(X_test)</span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="bu">print</span>(<span class="ss">f"""</span></span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="ss">For test set:</span></span>
 <span id="cb26-4"><a href="#cb26-4"></a><span class="ss">-------------</span></span>
@@ -955,7 +959,7 @@ The f1-score (for cat. 1) is 0.864
 <span id="cb26-6"><a href="#cb26-6"></a><span class="ss">The recall (for cat. 1) is </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
 <span id="cb26-7"><a href="#cb26-7"></a><span class="ss">The accuracy (for cat. 1) is </span><span class="sc">{</span>accuracy_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
 <span id="cb26-8"><a href="#cb26-8"></a><span class="ss">The f1-score (for cat. 1) is </span><span class="sc">{</span>f1_score(y_test, y_pred_test)<span class="sc">:.3f}</span></span>
-<span id="cb26-9"><a href="#cb26-9"></a><span class="ss">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="ss">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 For test set:
@@ -974,8 +978,8 @@ The f1-score (for cat. 1) is 0.711
 <section id="regression" class="level2" data-number="8.7">
 <h2 data-number="8.7" class="anchored" data-anchor-id="regression"><span class="header-section-number">8.7</span> Regression</h2>
 <p>Just to demonstrate the use of random forests for regression, we return to the Taiwan dataset. In our scoring, instead of using RMSE or MAE, we shall use the <span class="math inline">\(R^2\)</span>. First, we read the Taiwan data into Python and transform each column to have mean 0 and sd 1.</p>
-<div id="833c2242" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>re2 <span class="op">=</span> pd.read_csv(<span class="st">"data/taiwan_dataset.csv"</span>)</span>
+<div id="81d4ca94" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>re2 <span class="op">=</span> pd.read_csv(<span class="st">"data/taiwan_dataset.csv"</span>)</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a>X_re <span class="op">=</span> re2.loc[:, [<span class="st">'trans_date'</span>, <span class="st">'house_age'</span>, <span class="st">'dist_MRT'</span>, </span>
 <span id="cb28-4"><a href="#cb28-4"></a>                   <span class="st">'num_stores'</span>, <span class="st">'Xs'</span>, <span class="st">'Ys'</span>]]</span>
@@ -985,25 +989,25 @@ The f1-score (for cat. 1) is 0.711
 <span id="cb28-8"><a href="#cb28-8"></a></span>
 <span id="cb28-9"><a href="#cb28-9"></a>Xre_train,Xre_test, yre_train,yre_test <span class="op">=</span> train_test_split(X_re_scaled, </span>
 <span id="cb28-10"><a href="#cb28-10"></a>                                                          y_re, test_size<span class="op">=</span><span class="fl">0.2</span>, </span>
-<span id="cb28-11"><a href="#cb28-11"></a>                                                          random_state<span class="op">=</span><span class="dv">41</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-11"><a href="#cb28-11"></a>                                                          random_state<span class="op">=</span><span class="dv">41</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="random-forest-regressor" class="level3">
 <h3 class="anchored" data-anchor-id="random-forest-regressor">Random Forest Regressor</h3>
 <p>Next, we set up a grid search to set up a random forest regressor.</p>
-<div id="000b5d56" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
+<div id="7af6558c" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>p_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">1</span>)</span>
 <span id="cb29-2"><a href="#cb29-2"></a>rf_search <span class="op">=</span> GridSearchCV(RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">43</span>), </span>
 <span id="cb29-3"><a href="#cb29-3"></a>                         {<span class="st">'max_depth'</span>: p_range}, </span>
 <span id="cb29-4"><a href="#cb29-4"></a>                         scoring<span class="op">=</span><span class="st">'r2'</span>, cv<span class="op">=</span><span class="dv">5</span>, verbose<span class="op">=</span><span class="dv">1</span>, return_train_score<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb29-5"><a href="#cb29-5"></a>rf_search.fit(Xre_train, yre_train,)</span>
-<span id="cb29-6"><a href="#cb29-6"></a>rf_search.best_estimator_<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-6"><a href="#cb29-6"></a>rf_search.best_estimator_<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 5 folds for each of 10 candidates, totalling 50 fits</code></pre>
 </div>
 </div>
 <p>Here is the validation curve, that will allow us to decide on the optimal maximum depth, using 10 trees.</p>
 <div id="cell-fig-taiwan-random-forest" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>train_means <span class="op">=</span> rf_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>train_means <span class="op">=</span> rf_search.cv_results_[<span class="st">'mean_train_score'</span>]</span>
 <span id="cb31-2"><a href="#cb31-2"></a>train_sd <span class="op">=</span> rf_search.cv_results_[<span class="st">'std_train_score'</span>]</span>
 <span id="cb31-3"><a href="#cb31-3"></a></span>
 <span id="cb31-4"><a href="#cb31-4"></a>test_means <span class="op">=</span> rf_search.cv_results_[<span class="st">'mean_test_score'</span>]</span>
@@ -1018,12 +1022,12 @@ The f1-score (for cat. 1) is 0.711
 <span id="cb31-13"><a href="#cb31-13"></a>                 color<span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
 <span id="cb31-14"><a href="#cb31-14"></a></span>
 <span id="cb31-15"><a href="#cb31-15"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)<span class="op">;</span>plt.ylabel(<span class="st">'R2'</span>)<span class="op">;</span></span>
-<span id="cb31-16"><a href="#cb31-16"></a>plt.xlabel(<span class="st">'Complexity'</span>)<span class="op">;</span>plt.title(<span class="st">'Validation Curve'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-16"><a href="#cb31-16"></a>plt.xlabel(<span class="st">'Complexity'</span>)<span class="op">;</span>plt.title(<span class="st">'Validation Curve'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-taiwan-random-forest" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-taiwan-random-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-taiwan-random-forest-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img">
+<img src="08-supervised_files/figure-html/fig-taiwan-random-forest-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="589" height="449">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-taiwan-random-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.8: Validation curve, random forest for Taiwan data
@@ -1035,11 +1039,11 @@ Figure&nbsp;8.8: Validation curve, random forest for Taiwan data
 <div id="exm-taiwan-data-14" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.8 (Taiwan data random forest regression)</strong></span> </p>
 <p>Based on <a href="#fig-taiwan-random-forest" class="quarto-xref">Figure&nbsp;<span>8.8</span></a>, we shall fit a model with 10 trees and <code>max_depth</code> 2, and assess the <span class="math inline">\(R^2\)</span> on the test set.</p>
-<div id="44b183d9" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>rf1 <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, max_depth <span class="op">=</span> <span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">89</span>)</span>
+<div id="7d2ef1ab" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>rf1 <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">10</span>, max_depth <span class="op">=</span> <span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">89</span>)</span>
 <span id="cb32-2"><a href="#cb32-2"></a>rf1.fit(Xre_train, yre_train)</span>
 <span id="cb32-3"><a href="#cb32-3"></a>yrf_pred <span class="op">=</span> rf1.predict(Xre_test)</span>
-<span id="cb32-4"><a href="#cb32-4"></a>r2_score(yre_test, yrf_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-4"><a href="#cb32-4"></a>r2_score(yre_test, yrf_pred)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>0.5487486857968205</code></pre>
 </div>
@@ -1073,17 +1077,17 @@ Figure&nbsp;8.9: LIME
 <div id="exm-taiwan-data-15" class="theorem example" style="background-color: #D5D1D164; padding: 20px">
 <p><span class="theorem-title"><strong>Example 8.9 (Taiwan data LIME)</strong></span> </p>
 <p>Now we return to our dataset on real estate transations and attempt to understand the prediction made for a particular instance:</p>
-<div id="88cc23ea" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>re_scaler.inverse_transform(Xre_test[<span class="dv">4</span>, :].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)).<span class="bu">round</span>()</span>
+<div id="c2c48691" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>re_scaler.inverse_transform(Xre_test[<span class="dv">4</span>, :].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)).<span class="bu">round</span>()</span>
 <span id="cb34-2"><a href="#cb34-2"></a><span class="co">#X_re.mean(axis=0).round(3)</span></span>
-<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#Xre_test[4, :].round(4)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#Xre_test[4, :].round(4)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>array([[2013.,   12., 1144.,    4.,    0.,    3.]])</code></pre>
 </div>
 </div>
 <p>First we instantiate an explainer object, and then provide it with the instance we wish to explain.</p>
-<div id="7bc95cfa" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>explainer <span class="op">=</span> lime_tabular.LimeTabularExplainer(</span>
+<div id="feff05d2" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>explainer <span class="op">=</span> lime_tabular.LimeTabularExplainer(</span>
 <span id="cb36-2"><a href="#cb36-2"></a>    training_data<span class="op">=</span>np.array(Xre_train),</span>
 <span id="cb36-3"><a href="#cb36-3"></a>    feature_names<span class="op">=</span>X_re.columns,</span>
 <span id="cb36-4"><a href="#cb36-4"></a>    mode<span class="op">=</span><span class="st">'regression'</span>,</span>
@@ -1091,15 +1095,15 @@ Figure&nbsp;8.9: LIME
 <span id="cb36-6"><a href="#cb36-6"></a>exp <span class="op">=</span> explainer.explain_instance(</span>
 <span id="cb36-7"><a href="#cb36-7"></a>    data_row<span class="op">=</span>Xre_test[<span class="dv">4</span>, :], </span>
 <span id="cb36-8"><a href="#cb36-8"></a>    predict_fn<span class="op">=</span>rf1.predict,</span>
-<span id="cb36-9"><a href="#cb36-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-9"><a href="#cb36-9"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="cell-fig-taiwan-lime" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>exp.as_pyplot_figure()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>exp.as_pyplot_figure()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="fig-taiwan-lime" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-taiwan-lime-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="08-supervised_files/figure-html/fig-taiwan-lime-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img">
+<img src="08-supervised_files/figure-html/fig-taiwan-lime-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="746" height="431">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-taiwan-lime-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
@@ -1109,21 +1113,21 @@ Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
 </div>
 </div>
 <p>Here is how we can interpret the plot in <a href="#fig-taiwan-lime" class="quarto-xref">Figure&nbsp;<span>8.10</span></a>. In terms of importance to the prediction <em>of this particular instance</em>, <code>dist_MRT</code> is the highest. The local model that has been fit has been constrained to make as close a prediction as possible to the original model. However, it may fall short. In this case, the original predicted value was 29.58. However, the value predicted by the local approximation was:</p>
-<div id="5854f406" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="bu">print</span>(<span class="ss">f"The value predicted by the local approximation was: </span><span class="sc">{</span>exp<span class="sc">.</span>local_pred[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8b5e2949" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="bu">print</span>(<span class="ss">f"The value predicted by the local approximation was: </span><span class="sc">{</span>exp<span class="sc">.</span>local_pred[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The value predicted by the local approximation was: 33.970</code></pre>
+<pre><code>The value predicted by the local approximation was: 33.747</code></pre>
 </div>
 </div>
 <p>The numbers in the bar chart essentially decompose this prediction from the local model:</p>
-<div id="9f540f30" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>s <span class="op">=</span> <span class="fl">0.0</span></span>
+<div id="e7335b5e" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>s <span class="op">=</span> <span class="fl">0.0</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a><span class="cf">for</span> x,y <span class="kw">in</span> exp.local_exp[<span class="dv">1</span>]:</span>
 <span id="cb40-3"><a href="#cb40-3"></a>    s <span class="op">+=</span> y</span>
 <span id="cb40-4"><a href="#cb40-4"></a></span>
-<span id="cb40-5"><a href="#cb40-5"></a>s <span class="op">+</span> exp.intercept[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-5"><a href="#cb40-5"></a>s <span class="op">+</span> exp.intercept[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
-<pre><code>np.float64(33.96999641686381)</code></pre>
+<pre><code>np.float64(33.74709124579852)</code></pre>
 </div>
 </div>
 <p>This means that, from the values, we can see that the <code>dist_MRT</code>, which was close to the average distance, had a negative impact on the price. So too did <code>house_age</code>. Meanwhile, longitude and latitude had a positive impact on the price.</p>
@@ -1132,8 +1136,8 @@ Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
 <section id="ice-plots" class="level3">
 <h3 class="anchored" data-anchor-id="ice-plots">ICE plots</h3>
 <p>ICE plots are conditional versions of PDP. Instead of <em>averaging</em> over all instances in the training set, a single line is generated for each instance corresponding to features other than the one under study. This allows us to inspect if the relationship between the response and the feature is consistent across the data.</p>
-<div id="0ca9b65a" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, nrows<span class="op">=</span><span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
+<div id="70eb27d2" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>_, ax <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, nrows<span class="op">=</span><span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb42-2"><a href="#cb42-2"></a>features_info <span class="op">=</span> {</span>
 <span id="cb42-3"><a href="#cb42-3"></a>    <span class="st">"features"</span>: [<span class="dv">1</span>,<span class="dv">2</span>], <span class="co"># no names in the array; 1 and 2 correspond to house_age and dist_MRT</span></span>
 <span id="cb42-4"><a href="#cb42-4"></a>    <span class="st">"kind"</span>: <span class="st">"both"</span>,</span>
@@ -1143,11 +1147,11 @@ Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
 <span id="cb42-8"><a href="#cb42-8"></a>    Xre_train,</span>
 <span id="cb42-9"><a href="#cb42-9"></a>    <span class="op">**</span>features_info,</span>
 <span id="cb42-10"><a href="#cb42-10"></a>    ax<span class="op">=</span>ax</span>
-<span id="cb42-11"><a href="#cb42-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-11"><a href="#cb42-11"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="08-supervised_files/figure-html/cell-31-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="08-supervised_files/figure-html/cell-31-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="1163" height="395"></p>
 </figure>
 </div>
 </div>
@@ -1161,7 +1165,7 @@ Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
 </section>
 <section id="references" class="level2" data-number="8.10">
 <h2 data-number="8.10" class="anchored" data-anchor-id="references"><span class="header-section-number">8.10</span> References</h2>
-<p>One of the best textbook references for this topic is <span class="citation" data-cites="hastie2009introduction">Hastie, Tibshirani, and Friedman (<a href="references.html#ref-hastie2009introduction" role="doc-biblioref">2009</a>)</span>. For more information on interpretable machine learning, refer to <span class="citation" data-cites="molnar2020interpretable">Molnar (<a href="references.html#ref-molnar2020interpretable" role="doc-biblioref">2020</a>)</span>. It is very comprehensive, with much more details on LIME and Shaply values.</p>
+<p>One of the best textbook references for this topic is <span class="citation" data-cites="hastie2009introduction">Hastie et al. (<a href="references.html#ref-hastie2009introduction" role="doc-biblioref">2009</a>)</span>. For more information on interpretable machine learning, refer to <span class="citation" data-cites="molnar2020interpretable">Molnar (<a href="references.html#ref-molnar2020interpretable" role="doc-biblioref">2020</a>)</span>. It is very comprehensive, with much more details on LIME and Shaply values.</p>
 <section id="website-and-video-references" class="level3">
 <h3 class="anchored" data-anchor-id="website-and-video-references">Website and video references</h3>
 <ol type="1">
@@ -1191,9 +1195,9 @@ Figure&nbsp;8.10: LIME Explanation for Taiwan data instance
 </ol>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-hastie2009introduction" class="csl-entry" role="listitem">
-Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <span>“An Introduction to Statistical Learning.”</span>
+Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>An Introduction to Statistical Learning</em>.
 </div>
 <div id="ref-molnar2020interpretable" class="csl-entry" role="listitem">
 Molnar, Christoph. 2020. <em>Interpretable Machine Learning</em>. Lulu. com.
@@ -1203,239 +1207,243 @@ Molnar, Christoph. 2020. <em>Interpretable Machine Learning</em>. Lulu. com.
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1443,185 +1451,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./07-simulation.html" class="pagination-link" aria-label="Simulation">
