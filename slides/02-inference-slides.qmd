@@ -129,7 +129,7 @@ print(f"95% CI: ({ci_95[0]:.3f}, {ci_95[1]:.3f})")
 
 ```{python inf-abl-hist}
 #| fig-align: center
-#| out-width: 60%
+#| out-width: 50%
 sns.displot(abl, x='viscera', col='gender', kind='hist',
             stat='density', binwidth=0.1, height=2.2, aspect=1.1);
 ```
@@ -143,7 +143,8 @@ sns.displot(abl, x='viscera', col='gender', kind='hist',
 ```{python inf-abl-qq}
 #| fig-align: center
 #| out-width: 40%
-f, axs = plt.subplots(1, 2, figsize=(7, 2.8))
+#| echo: false
+f, axs = plt.subplots(1, 2, figsize=(6, 2.0))
 sm.qqplot(x, line="q", ax=axs[0]); axs[0].set_title('Females')
 sm.qqplot(y, line="q", ax=axs[1]); axs[1].set_title('Males');
 ```
@@ -237,7 +238,7 @@ Response: tartar index after 4 weeks.
 #| out-width: 55%
 #| echo: false
 tartar = pd.read_table("data/tartar.txt", sep=r"\s+")
-plt.figure(figsize=(4, 2.8))
+plt.figure(figsize=(4, 2.2))
 ax1 = sns.boxplot(tartar, x='treat', y='index')
 ax1.set_xlabel("Treatment"); ax1.set_ylabel("Tartar Index");
 ```
@@ -280,12 +281,6 @@ tartar_lm = ols("index ~ C(treat, Treatment('Control'))",
 sm.stats.anova_lm(tartar_lm, type=3)
 ```
 
-```{python inf-tartar-norm}
-#| fig-align: center
-#| out-width: 55%
-inference.check_normality(pd.Series(tartar_lm.resid_pearson))
-```
-
 ## Comparing Two Specific Groups {.smaller}
 
 After a significant $F$-test, compare groups $i_1$ vs. $i_2$. The 95% CI is:
@@ -316,7 +311,10 @@ Simplest, but conservative when $m$ is large.
 **Tukey HSD** — designed for **all pairwise comparisons**; shorter intervals
 than Bonferroni for the same $\alpha$.
 
+## Multiple Comparisons (cont'd) {.smaller}
+
 ```{python inf-tukey}
+#| out-width: 55%
 cp = mc.MultiComparison(tartar['index'], tartar['treat'])
 tk = cp.tukeyhsd()
 print(tk)
@@ -327,7 +325,7 @@ print(tk)
 ```{python inf-tukey-plot}
 #| fig-align: center
 #| out-width: 70%
-tk.plot_simultaneous(comparison_name='Control', figsize=(6, 2.8));
+tk.plot_simultaneous(comparison_name='Control', figsize=(5, 2.5));
 ```
 
 Intervals that include 0 indicate no significant pairwise difference at the chosen $\alpha$.
@@ -345,6 +343,7 @@ Data with two categorical variables is summarised in a **contingency table**.
 ```{python inf-chest-tbl}
 #| fig-align: center
 #| out-width: 35%
+#| echo: false
 chest_array = np.array([[46, 474], [37, 516]])
 plt.figure(figsize=(3.5, 1.8))
 sns.heatmap(chest_array, annot=True, fmt='', square=True,
@@ -404,28 +403,3 @@ $$
 chest_tab2 = sm.stats.Table2x2(chest_array)
 chest_tab2.summary()
 ```
-
-## Ordinal Association: Kendall $\tau_b$ {.smaller}
-
-For two **ordinal** variables, measure monotone trend via concordant ($C$) and
-discordant ($D$) pairs:
-
-$$
-\tau_b = \frac{C - D}{A}
-$$
-
-Values close to $\pm 1$ indicate strong monotone association; 0 indicates none.
-
-```{python inf-tau}
-us_tab = np.array([[1,3,10,6],[2,3,10,7],[1,6,14,12],[0,1,9,11]])
-x_ord = []; y_ord = []
-for i in range(us_tab.shape[0]):
-    for j in range(us_tab.shape[1]):
-        for _ in range(us_tab[i, j]):
-            x_ord.append(i); y_ord.append(j)
-
-result = stats.kendalltau(x_ord, y_ord, variant='b')
-print(f"tau_b = {result.statistic:.3f},  p-value = {result.pvalue:.3f}")
-```
-
-Income $\uparrow$ $\Rightarrow$ weak positive trend in job satisfaction ($\tau_b \approx 0.15$).
